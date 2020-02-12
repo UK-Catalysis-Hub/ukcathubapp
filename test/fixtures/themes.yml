@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  short: MyString
+  name: MyString
+  lead: MyString
+  phase: 1
+  used: MyString
+
+two:
+  short: MyString
+  name: MyString
+  lead: MyString
+  phase: 1
+  used: MyString

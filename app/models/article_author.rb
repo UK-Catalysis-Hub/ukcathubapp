@@ -1,0 +1,2 @@
+class ArticleAuthor < ApplicationRecord
+end

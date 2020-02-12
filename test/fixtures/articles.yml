@@ -1,0 +1,51 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  reference_count: 1
+  publisher: MyString
+  issue: MyString
+  license: MyString
+  pub_print_year: 1
+  pub_print_month: 1
+  pub_print_day: 1
+  doi: MyString
+  pub_type: MyString
+  page: MyString
+  title: MyString
+  volume: MyString
+  pub_ol_year: 1
+  pub_ol_month: 1
+  pub_ol_day: 1
+  container_title: MyString
+  link: MyString
+  references_count: MyString
+  journal_issue: MyString
+  url: MyString
+  abstract: MyString
+  status: MyString
+  comment: MyString
+
+two:
+  reference_count: 1
+  publisher: MyString
+  issue: MyString
+  license: MyString
+  pub_print_year: 1
+  pub_print_month: 1
+  pub_print_day: 1
+  doi: MyString
+  pub_type: MyString
+  page: MyString
+  title: MyString
+  volume: MyString
+  pub_ol_year: 1
+  pub_ol_month: 1
+  pub_ol_day: 1
+  container_title: MyString
+  link: MyString
+  references_count: MyString
+  journal_issue: MyString
+  url: MyString
+  abstract: MyString
+  status: MyString
+  comment: MyString

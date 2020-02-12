@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Affiliation:</strong>
+  <%= @affiliation_link.affiliation_id %>
+</p>
+
+<p>
+  <strong>Doi:</strong>
+  <%= @affiliation_link.doi %>
+</p>
+
+<p>
+  <strong>Author:</strong>
+  <%= @affiliation_link.author_id %>
+</p>
+
+<p>
+  <strong>Sequence:</strong>
+  <%= @affiliation_link.sequence %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @affiliation_link.address_id %>
+</p>
+
+<%= link_to 'Edit', edit_affiliation_link_path(@affiliation_link) %> |
+<%= link_to 'Back', affiliation_links_path %>

@@ -1,0 +1,2 @@
+class Affiliation < ApplicationRecord
+end

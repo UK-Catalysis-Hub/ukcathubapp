@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  add_01: MyString
+  add_02: MyString
+  add_03: MyString
+  add_04: MyString
+  country: MyString
+  affiliation_id: 1
+
+two:
+  add_01: MyString
+  add_02: MyString
+  add_03: MyString
+  add_04: MyString
+  country: MyString
+  affiliation_id: 1

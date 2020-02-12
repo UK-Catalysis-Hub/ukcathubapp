@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Doi:</strong>
+  <%= @article_author.doi %>
+</p>
+
+<p>
+  <strong>Author:</strong>
+  <%= @article_author.author_id %>
+</p>
+
+<p>
+  <strong>Author count:</strong>
+  <%= @article_author.author_count %>
+</p>
+
+<p>
+  <strong>Author order:</strong>
+  <%= @article_author.author_order %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @article_author.status %>
+</p>
+
+<p>
+  <strong>Sequence:</strong>
+  <%= @article_author.sequence %>
+</p>
+
+<p>
+  <strong>Article:</strong>
+  <%= @article_author.article_id %>
+</p>
+
+<%= link_to 'Edit', edit_article_author_path(@article_author) %> |
+<%= link_to 'Back', article_authors_path %>

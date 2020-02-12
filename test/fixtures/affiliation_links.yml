@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  affiliation_id: 1
+  doi: MyString
+  author_id: 1
+  sequence: MyString
+  address_id: 1
+
+two:
+  affiliation_id: 1
+  doi: MyString
+  author_id: 1
+  sequence: MyString
+  address_id: 1

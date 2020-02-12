@@ -1,0 +1,2 @@
+class ArticleTheme < ApplicationRecord
+end

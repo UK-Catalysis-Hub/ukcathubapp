@@ -1,0 +1,71 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Articles</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Reference count</th>
+      <th>Publisher</th>
+      <th>Issue</th>
+      <th>License</th>
+      <th>Pub print year</th>
+      <th>Pub print month</th>
+      <th>Pub print day</th>
+      <th>Doi</th>
+      <th>Pub type</th>
+      <th>Page</th>
+      <th>Title</th>
+      <th>Volume</th>
+      <th>Pub ol year</th>
+      <th>Pub ol month</th>
+      <th>Pub ol day</th>
+      <th>Container title</th>
+      <th>Link</th>
+      <th>References count</th>
+      <th>Journal issue</th>
+      <th>Url</th>
+      <th>Abstract</th>
+      <th>Status</th>
+      <th>Comment</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @articles.each do |article| %>
+      <tr>
+        <td><%= article.reference_count %></td>
+        <td><%= article.publisher %></td>
+        <td><%= article.issue %></td>
+        <td><%= article.license %></td>
+        <td><%= article.pub_print_year %></td>
+        <td><%= article.pub_print_month %></td>
+        <td><%= article.pub_print_day %></td>
+        <td><%= article.doi %></td>
+        <td><%= article.pub_type %></td>
+        <td><%= article.page %></td>
+        <td><%= article.title %></td>
+        <td><%= article.volume %></td>
+        <td><%= article.pub_ol_year %></td>
+        <td><%= article.pub_ol_month %></td>
+        <td><%= article.pub_ol_day %></td>
+        <td><%= article.container_title %></td>
+        <td><%= article.link %></td>
+        <td><%= article.references_count %></td>
+        <td><%= article.journal_issue %></td>
+        <td><%= article.url %></td>
+        <td><%= article.abstract %></td>
+        <td><%= article.status %></td>
+        <td><%= article.comment %></td>
+        <td><%= link_to 'Show', article %></td>
+        <td><%= link_to 'Edit', edit_article_path(article) %></td>
+        <td><%= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Article', new_article_path %>

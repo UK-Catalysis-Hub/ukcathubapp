@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  doi: MyString
+  author_id: 1
+  author_count: MyString
+  author_order: 1
+  status: MyString
+  sequence: MyString
+  article_id: 1
+
+two:
+  doi: MyString
+  author_id: 1
+  author_count: MyString
+  author_order: 1
+  status: MyString
+  sequence: MyString
+  article_id: 1

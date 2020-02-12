@@ -1,0 +1,2 @@
+class AffiliationLink < ApplicationRecord
+end

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Doi:</strong>
+  <%= @article_theme.doi %>
+</p>
+
+<p>
+  <strong>Phase:</strong>
+  <%= @article_theme.phase %>
+</p>
+
+<p>
+  <strong>Collaboration:</strong>
+  <%= @article_theme.collaboration %>
+</p>
+
+<p>
+  <strong>Theme:</strong>
+  <%= @article_theme.theme_id %>
+</p>
+
+<p>
+  <strong>Project year:</strong>
+  <%= @article_theme.project_year %>
+</p>
+
+<%= link_to 'Edit', edit_article_theme_path(@article_theme) %> |
+<%= link_to 'Back', article_themes_path %>

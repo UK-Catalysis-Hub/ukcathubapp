@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Institution:</strong>
+  <%= @affiliation.institution %>
+</p>
+
+<p>
+  <strong>Department:</strong>
+  <%= @affiliation.department %>
+</p>
+
+<p>
+  <strong>Faculty:</strong>
+  <%= @affiliation.faculty %>
+</p>
+
+<p>
+  <strong>Work group:</strong>
+  <%= @affiliation.work_group %>
+</p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @affiliation.country %>
+</p>
+
+<%= link_to 'Edit', edit_affiliation_path(@affiliation) %> |
+<%= link_to 'Back', affiliations_path %>
