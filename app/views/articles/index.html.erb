@@ -15,7 +15,7 @@
       <% @articles.each do |article| %>
         <tr>
           <td>
-            <b>Title:</b> <%= article.title %> (<%= article.pub_ol_year %>)
+            <b>Title:</b> <%= article.title %> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>)
             <br><b>Authors (<%= article.authors.count %>):</b>
             <% x = article.article_authors.all
                disp_names = ""

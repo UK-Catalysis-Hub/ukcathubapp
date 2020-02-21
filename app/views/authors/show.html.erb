@@ -1,29 +1,36 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <p>
+    <strong>Full name:</strong>
+    <%= @author.full_name %>
+  </p>
 
-<p>
-  <strong>Full name:</strong>
-  <%= @author.full_name %>
-</p>
+  <p>
+    <strong>Last name:</strong>
+    <%= @author.last_name %>
+  </p>
 
-<p>
-  <strong>Last name:</strong>
-  <%= @author.last_name %>
-</p>
+  <p>
+    <strong>Given name:</strong>
+    <%= @author.given_name %>
+  </p>
 
-<p>
-  <strong>Given name:</strong>
-  <%= @author.given_name %>
-</p>
+  <p>
+    <strong>Orcid:</strong>
+    <%= @author.orcid %>
+  </p>
 
-<p>
-  <strong>Orcid:</strong>
-  <%= @author.orcid %>
-</p>
+  <p>
+    <strong>Articles:</strong>
+    <%
+      art_list = ""
+      for art in @author.articles.all.order(:title)
+        art_list += ' ' + link_to(art.title, art)
+      end
+    %>
+    <%= art_list.html_safe %>
+  </p>
 
-<p>
-  <strong>Articles:</strong>
-  <%= @author.articles %>
-</p>
-
-<%= link_to 'Edit', edit_author_path(@author) %> |
-<%= link_to 'Back', authors_path %>
+  <%= link_to 'Edit', edit_author_path(@author), :class => "btn btn-primary btn-sm" %> |
+  <%= link_to 'Back', authors_path, :class => "btn btn-secondary btn-sm" %>
+</div>
