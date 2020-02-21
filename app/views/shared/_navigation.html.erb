@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-blue">
   <a class="navbar-brand" href="/specimens" title="Publications Explorer">
-     <%= link_to image_tag('572px-Books_Silhouette.svg.png',height: '32')%> <strong>  Publications Explorer</strong>
+     <%= link_to image_tag('album')%> <strong>Publications Explorer</strong>
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -9,10 +9,10 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li>
-	<%= link_to image_tag('album.svg'), {:controller => 'articles', :action => 'index'}, {:class => "nav-link active", title: "View articles"}%>
+	<%= link_to image_tag('articles.svg'), {:controller => 'articles', :action => 'index'}, {:class => "nav-link active", title: "View articles"}%>
       </li>
       <li>
-	<%= link_to image_tag('list.svg'), {:controller => 'authors', :action => 'index'}, {:class => "nav-link active", title: "View authors"} %>
+	<%= link_to image_tag('author.svg'), {:controller => 'authors', :action => 'index'}, {:class => "nav-link active", title: "View authors"} %>
       </li>
     </ul>
     <div class="col-sm-3 col-md-3 pull-right">

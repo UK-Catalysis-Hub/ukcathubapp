@@ -6,7 +6,6 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th>Full name</th>
       <th>Last name</th>
       <th>Given name</th>
       <th>Orcid</th>
@@ -21,7 +20,7 @@
         <td><%= author.last_name %></td>
         <td><%= author.given_name %></td>
         <td><%= author.orcid %></td>
-        <td><%= author.articles %></td>
+        <td><%= author.articles.count %></td>
         <td><%= link_to 'Show', author, :class => "btn btn-primary btn-sm" %></td>
         <td><%= link_to 'Edit', edit_author_path(author), :class => "btn btn-success btn-sm" %></td>
         <td><%= link_to 'Destroy', author, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-sm" %></td>

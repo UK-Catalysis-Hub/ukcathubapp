@@ -1,36 +1,45 @@
 <div class="container">
-<p id="notice"><%= notice %></p>
+  <p id="notice"><%= notice %></p>
 
-<h1>UK Catalysis Hub Articles</h1>
+  <h1>UK Catalysis Hub Articles</h1>
 
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th>Title</th>
-      <th>Year</th>
-      <th>Journal</th>
-      <th>DOI</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @articles.each do |article| %>
+  <table class="table">
+    <thead class="thead-light">
       <tr>
-        <td><%= article.title %></td>
-        <td><%= article.pub_ol_year %></td>
-        <td><%= article.container_title %></td>
-        <td><%= article.doi %></td>
-        <td><%= link_to 'Show', article, :class => "btn btn-primary btn-sm" %></td>
-        <td><%= link_to 'Edit', edit_article_path(article), :class => "btn btn-success btn-sm" %></td>
-        <td><%= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-sm" %></td>
+        <th>Article</th>
+        <th colspan="3"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
-
-<%= link_to 'New Article', new_article_path %>
-
+    <tbody>
+      <% @articles.each do |article| %>
+        <tr>
+          <td>
+            <b>Title:</b> <%= article.title %> (<%= article.pub_ol_year %>)
+            <br><b>Authors (<%= article.authors.count %>):</b>
+            <% x = article.article_authors.all
+               disp_names = ""
+               for auth in x
+                 pr_name = auth.author.given_name
+                 pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
+                 pr_name += auth.author.last_name
+                 if disp_names =="" then
+                   disp_names = link_to(pr_name, auth.author)
+                 else
+                   disp_names += ', '.html_safe + link_to(pr_name, auth.author)
+                 end
+               end %>
+            <%= disp_names.to_s.html_safe %>
+            <br><%= article.container_title %>
+            <b>DOI: </b><%= article.doi %>
+          </td>
+          <td><%= link_to 'Show', article, :class => "btn btn-primary btn-sm" %></td>
+          <td><%= link_to 'Edit', edit_article_path(article), :class => "btn btn-success btn-sm" %></td>
+          <td><%= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-sm" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+  <%= link_to 'New Article', new_article_path, :class => "btn btn-success btn-sm" %>
 </div>
