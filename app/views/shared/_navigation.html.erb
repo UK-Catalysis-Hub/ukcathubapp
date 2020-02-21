@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-blue">
+  <a class="navbar-brand" href="/specimens" title="Publications Explorer">
+     <%= link_to image_tag('572px-Books_Silhouette.svg.png',height: '32')%> <strong>  Publications Explorer</strong>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li>
+	<%= link_to image_tag('album.svg'), {:controller => 'articles', :action => 'index'}, {:class => "nav-link active", title: "View articles"}%>
+      </li>
+      <li>
+	<%= link_to image_tag('list.svg'), {:controller => 'authors', :action => 'index'}, {:class => "nav-link active", title: "View authors"} %>
+      </li>
+    </ul>
+    <div class="col-sm-3 col-md-3 pull-right">
+			<%= form_tag({:controller => "articles", :action => "index"}, :method => "get", :id => 'searchForm', :class => 'navbar-form', :enforce_utf8 => false) do%>
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Search" name="search" id="search" value="<%=@search%>" onchange="javascript:$('#searchForm').submit();">
+					<div class="input-group-btn" title="You can search by free text or use lucene query syntax like /country:Japan AND /locality:Tosa AND /institutionCode:ANSP">
+						<%= button_tag(type: "submit", name:"", class: "btn btn-default") do %>
+							<i class="fas fa-search h4 text-body"></i>
+						<% end %>
+					</div>
+				</div>
+			<% end %>
+		</div>
+
+
+
+  </div>
+</nav>

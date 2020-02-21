@@ -1,9 +1,10 @@
+<div class="container">
 <p id="notice"><%= notice %></p>
 
-<h1>Authors</h1>
+<h1>UK Catalysis Hub Authors</h1>
 
-<table>
-  <thead>
+<table class="table">
+  <thead class="thead-light">
     <tr>
       <th>Full name</th>
       <th>Last name</th>
@@ -17,19 +18,18 @@
   <tbody>
     <% @authors.each do |author| %>
       <tr>
-        <td><%= author.full_name %></td>
         <td><%= author.last_name %></td>
         <td><%= author.given_name %></td>
         <td><%= author.orcid %></td>
         <td><%= author.articles %></td>
-        <td><%= link_to 'Show', author %></td>
-        <td><%= link_to 'Edit', edit_author_path(author) %></td>
-        <td><%= link_to 'Destroy', author, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', author, :class => "btn btn-primary btn-sm" %></td>
+        <td><%= link_to 'Edit', edit_author_path(author), :class => "btn btn-success btn-sm" %></td>
+        <td><%= link_to 'Destroy', author, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-sm" %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
-
+</div>
 <%= link_to 'New Author', new_author_path %>
