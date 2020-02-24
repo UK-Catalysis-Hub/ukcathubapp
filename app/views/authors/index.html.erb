@@ -6,24 +6,18 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th>Last name</th>
-      <th>Given name</th>
-      <th>Orcid</th>
+      <th>Author</th>
       <th>Articles</th>
-      <th colspan="3"></th>
+      <th>ORCID</th>
     </tr>
   </thead>
 
   <tbody>
     <% @authors.each do |author| %>
       <tr>
-        <td><%= author.last_name %></td>
-        <td><%= author.given_name %></td>
-        <td><%= author.orcid %></td>
-        <td><%= author.articles.count %></td>
-        <td><%= link_to 'Show', author, :class => "btn btn-primary btn-sm" %></td>
-        <td><%= link_to 'Edit', edit_author_path(author), :class => "btn btn-success btn-sm" %></td>
-        <td><%= link_to 'Destroy', author, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-sm" %></td>
+        <td><%= link_to(author.full_name, author) %> </td>
+        <th> <%= author.articles.count %> </td>
+        <th> <%= author.orcid %></td>
       </tr>
     <% end %>
   </tbody>

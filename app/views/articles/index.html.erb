@@ -30,7 +30,7 @@
                end %>
             <%= disp_names.to_s.html_safe %>
             <br><%= article.container_title %>
-            <b>DOI: </b><%= article.doi %>
+            <b>DOI: </b><%= article.doi %> <%= article.pub_type %> 
           </td>
         </tr>
       <% end %>

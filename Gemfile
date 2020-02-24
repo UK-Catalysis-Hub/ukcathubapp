@@ -65,3 +65,6 @@ gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
 #pagination
 gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap4'
+
+#facets search
+gem 'forty_facets'
