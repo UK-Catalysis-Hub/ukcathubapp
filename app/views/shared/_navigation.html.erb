@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-blue">
-  <a class="navbar-brand" href="/specimens" title="Publications Explorer">
-     <%= link_to image_tag('album')%> <strong>Publications Explorer</strong>
+<nav class="navbar navbar-expand flex-column flex-md-row bd-navbar">
+  <a class="navbar-brand" title="Publications Explorer" href="/articles">
+     <%= image_tag('album')%> <strong>Home</strong>
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -15,7 +15,7 @@
 	<%= link_to image_tag('author.svg'), {:controller => 'authors', :action => 'index'}, {:class => "nav-link active", title: "View authors"} %>
       </li>
     </ul>
-    <div class="col-sm-3 col-md-3 pull-right">
+    <!-- <div class="col-sm-3 col-md-3 pull-right">
 			<%= form_tag({:controller => "articles", :action => "index"}, :method => "get", :id => 'searchForm', :class => 'navbar-form', :enforce_utf8 => false) do%>
 				<div class="input-group">
 					<input type="text" class="form-control" placeholder="Search" name="search" id="search" value="<%=@search%>" onchange="javascript:$('#searchForm').submit();">
@@ -25,10 +25,7 @@
 						<% end %>
 					</div>
 				</div>
-			<% end %>
+			<% end %> -->
 		</div>
-
-
-
   </div>
 </nav>

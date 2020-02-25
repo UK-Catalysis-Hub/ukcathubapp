@@ -17,13 +17,23 @@ h3, h4 {
 
 /* navbar */
 .navbar {
-    background-color: #0C86C6;
-    border-color: #0C86C6;
+    background-color: #77b35d;
+    border-color: #77b35d;
 }
 /* Title */
 .navbar .navbar-brand {
     color: #FFFFFF;
     font-family: 'Titillium Web', serif;
+}
+.navbar-brand:hover {
+  color: #FFFFFF;
+  background-color: #abd19b;
+  border-color: #abd19b;
+}
+/*nav-link*/
+.nav-link:hover {
+  background-color: #abd19b;
+  border-color: #abd19b;
 }
 
 /* tooltip */
@@ -75,13 +85,27 @@ h3, h4 {
 }
 
 footer {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+ padding-top: 1rem;
+ padding-bottom: 1rem;
+ height: 80px;
+ line-height: 60px; /* Vertically center the text there */
+ background-color: #f5f5f5;
 }
 
 footer p {
-  margin-bottom: .25rem;
+ margin-bottom: .2rem;
 }
+
+.footer {
+  position: float-right;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 80px;
+  line-height: 60px; /* Vertically center the text there */
+  background-color: #f5f5f5;
+}
+
 
 .img-container {
     margin: auto;
@@ -139,23 +163,6 @@ footer p {
   margin-right: auto;
 }
 
-body {
-   font-family: 'Open Sans', serif;
-}
-
-h2 {
-  color: #205692;
-  font-family: 'Titillium Web', serif;
-  font-weight: semi-bold;
-  font-size: 28px;
-}
-
-h3, h4 {
-  font-family: 'Open Sans', serif;
-  font-weight: semi-bold;
-  font-size: 20px;
-}
-
 .card-text {
   font-family: 'Open Sans', serif;
   font-size: 14px;
@@ -188,6 +195,7 @@ h3, h4 {
 	font-weight: bold;
 	padding-top: 20px;
 	}
+
 .arrow.top:after {
   bottom: -20px;
   top: auto;

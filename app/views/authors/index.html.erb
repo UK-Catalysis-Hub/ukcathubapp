@@ -1,28 +1,26 @@
 <div class="container">
-<p id="notice"><%= notice %></p>
-
-<h1>UK Catalysis Hub Authors</h1>
-<%= will_paginate @authors, renderer: WillPaginate::ActionView::BootstrapLinkRenderer  %>
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th>Author</th>
-      <th>Articles</th>
-      <th>ORCID</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @authors.each do |author| %>
+  <p id="notice"><%= notice %></p>
+  <h1>UK Catalysis Hub Authors</h1>
+  <%= will_paginate @authors, renderer: WillPaginate::ActionView::BootstrapLinkRenderer  %>
+  <table class="table">
+    <thead class="thead-light">
       <tr>
-        <td><%= link_to(author.full_name, author) %> </td>
-        <th> <%= author.articles.count %> </td>
-        <th> <%= author.orcid %></td>
+        <th>Author</th>
+        <th>Articles</th>
+        <th>ORCID</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
+    <tbody>
+      <% @authors.each do |author| %>
+        <tr>
+          <td><%= link_to(author.full_name, author) %> </td>
+          <th> <%= author.articles.count %> </td>
+          <th> <%= author.orcid %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+  <%= link_to 'New Author', new_author_path, :class => "btn btn-success btn-sm"  %>
 </div>
-<%= link_to 'New Author', new_author_path %>
