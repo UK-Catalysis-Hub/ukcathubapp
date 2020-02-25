@@ -13,6 +13,7 @@
     <%= @theme.phase %>
   </p>
   <%= render partial: 'articles/articles_list', locals: {articles: @theme.articles }%>
+  <%= render partial: 'authors/authors_list', locals: {authors: @theme.get_authors }%>
   <br/>
   <%= link_to 'Edit', edit_theme_path(@theme) %> |
   <%= link_to 'Back', themes_path %>

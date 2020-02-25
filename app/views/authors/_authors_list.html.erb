@@ -1,0 +1,39 @@
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <% #= will_paginate @authors, renderer: WillPaginate::ActionView::BootstrapLinkRenderer  %>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th>Author (<%= authors.length() %>)</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <% authors.each do |author| %>
+        <tr>
+          <td>
+            <%
+              expertise = []
+              expertise_lnks = ""
+              author.articles.each do |art|
+                art.article_themes.each do |art_theme|
+                  if not expertise.include?(art_theme.theme.short) then
+                    expertise.push(art_theme.theme.short)
+                    if expertise_lnks == "" then
+                      expertise_lnks = link_to(art_theme.theme.short, art_theme.theme)
+                    else
+                      expertise_lnks += ", ".html_safe + link_to(art_theme.theme.short, art_theme.theme)
+                    end
+                  end
+                end
+              end
+            %>
+            <%= link_to(author.full_name, author) %> <b>Expertise:</b> <%= expertise_lnks %>
+            <b>Articles: </b> <%= author.articles.count %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+</div>
