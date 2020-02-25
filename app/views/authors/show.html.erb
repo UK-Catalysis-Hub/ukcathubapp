@@ -30,7 +30,25 @@
     %>
     <%= art_list.html_safe %>
   </p>
-
+  <%
+    expertise = []
+    expertise_lnks = ""
+    @author.articles.each do |art|
+      art.article_themes.each do |art_theme|
+        if not expertise.include?(art_theme.theme.short) then
+          expertise.push(art_theme.theme.short)
+          if expertise_lnks == "" then
+            expertise_lnks = link_to(art_theme.theme.short, art_theme.theme)
+          else
+            expertise_lnks += ", ".html_safe + link_to(art_theme.theme.short, art_theme.theme)
+          end
+        end
+      end
+    end
+  %>
+  <p>
+    <strong>Expertise:</strong> <%= expertise_lnks  %>
+  </p>
   <%= link_to 'Edit', edit_author_path(@author), :class => "btn btn-primary btn-sm" %> |
   <%= link_to 'Back', authors_path, :class => "btn btn-secondary btn-sm" %>
 </div>

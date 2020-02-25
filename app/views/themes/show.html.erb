@@ -1,7 +1,7 @@
 <div class="container">
   <p id="notice"><%= notice %></p>
   <p>
-    <strong>Theme:</strong>   <%= @theme.name %>
+    <h2>Theme:  <%= @theme.name %></h2>
   </p>
 
   <p>
@@ -12,7 +12,7 @@
     <strong>Phase:</strong>
     <%= @theme.phase %>
   </p>
-  <%= @theme.articles %>
+  <%= render partial: 'articles/articles_list', locals: {articles: @theme.articles }%>
   <br/>
   <%= link_to 'Edit', edit_theme_path(@theme) %> |
   <%= link_to 'Back', themes_path %>
