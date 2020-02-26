@@ -9,10 +9,16 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li>
-	<%= link_to image_tag('articles.svg'), {:controller => 'articles', :action => 'index'}, {:class => "nav-link active", title: "View articles"}%>
+	       <%= link_to image_tag('books2.svg'), {:controller => 'articles', :action => 'index'}, {:class => "nav-link active", title: "View Publications"}%>
       </li>
       <li>
-	<%= link_to image_tag('author.svg'), {:controller => 'authors', :action => 'index'}, {:class => "nav-link active", title: "View authors"} %>
+	       <%= link_to image_tag('users.svg'), {:controller => 'authors', :action => 'index'}, {:class => "nav-link active", title: "View authors"} %>
+      </li>
+      <li>
+	       <%= link_to image_tag('institution.svg'), {:controller => 'affiliations', :action => 'index'}, {:class => "nav-link active", title: "View affiliations"} %>
+      </li>
+      <li>
+         <%= link_to image_tag('expert.svg'), {:controller => 'themes', :action => 'index'}, {:class => "nav-link active", title: "View experts"} %>
       </li>
     </ul>
     <!-- <div class="col-sm-3 col-md-3 pull-right">
