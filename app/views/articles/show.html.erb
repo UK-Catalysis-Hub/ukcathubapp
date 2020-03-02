@@ -33,41 +33,6 @@
      <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
   </p>
   <p>
-    <strong>Reference count:</strong>
-    <%= @article.reference_count %>
-  </p>
-
-  <p>
-    <strong>Publisher:</strong>
-    <%= @article.publisher %>
-  </p>
-
-  <p>
-    <strong>Issue:</strong>
-    <%= @article.issue %>
-  </p>
-
-  <p>
-    <strong>License:</strong>
-    <%= @article.license %>
-  </p>
-
-  <p>
-    <strong>Pub print year:</strong>
-    <%= @article.pub_print_year %>
-  </p>
-
-  <p>
-    <strong>Pub print month:</strong>
-    <%= @article.pub_print_month %>
-  </p>
-
-  <p>
-    <strong>Pub print day:</strong>
-    <%= @article.pub_print_day %>
-  </p>
-
-  <p>
     <strong>Doi:</strong>
     <%= @article.doi %>
   </p>
@@ -76,72 +41,104 @@
     <strong>Pub type:</strong>
     <%= @article.pub_type %>
   </p>
+  <div class="accordion" id="accordionExample">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Publisher
+          </button>
+        </h5>
+      </div>
 
-  <p>
-    <strong>Page:</strong>
-    <%= @article.page %>
-  </p>
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+          <p>
+            <strong>Publisher:</strong>
+            <%= @article.publisher %>
+          </p>
+          <p>
+            <strong>Issue:</strong>
+            <%= @article.issue %>
+          </p>
 
-
-  <p>
-    <strong>Volume:</strong>
-    <%= @article.volume %>
-  </p>
-
-  <p>
-    <strong>Pub ol year:</strong>
-    <%= @article.pub_ol_year %>
-  </p>
-
-  <p>
-    <strong>Pub ol month:</strong>
-    <%= @article.pub_ol_month %>
-  </p>
-
-  <p>
-    <strong>Pub ol day:</strong>
-    <%= @article.pub_ol_day %>
-  </p>
-
-  <p>
-    <strong>Container title:</strong>
-    <%= @article.container_title %>
-  </p>
-
-  <p>
-    <strong>Link:</strong>
-    <%= @article.link %>
-  </p>
-
-  <p>
-    <strong>References count:</strong>
-    <%= @article.references_count %>
-  </p>
-
-  <p>
-    <strong>Journal issue:</strong>
-    <%= @article.journal_issue %>
-  </p>
-
-  <p>
-    <strong>Url:</strong>
-    <%= @article.url %>
-  </p>
-
-  <p>
-    <strong>Abstract:</strong>
-    <%= @article.abstract %>
-  </p>
-
-  <p>
-    <strong>Status:</strong>
-    <%= @article.status %>
-  </p>
-
-  <p>
-    <strong>Comment:</strong>
-    <%= @article.comment %>
-  </p>
+          <p>
+            <strong>License:</strong>
+            <%= @article.license %>
+          </p>
+          <p>
+            <strong>Publication date(s):</strong>
+            <%
+              p_date_s = ""
+              if @article.pub_print_year != nil then
+                p_date_s = "%04d" % @article.pub_print_year
+              end
+              if @article.pub_print_month != nil then
+                p_date_s += "/%02d" % @article.pub_print_month
+              end
+              if @article.pub_print_day != nil then
+                p_date_s += "/%02d" % @article.pub_print_day
+              end
+              if p_date_s != "" then
+                p_date_s += " (print) "
+              end
+              o_date_s = ""
+              if @article.pub_ol_year != nil then
+                o_date_s = "%04d" % @article.pub_ol_year
+              end
+              if @article.pub_ol_month != nil then
+                o_date_s += "/%02d" % @article.pub_ol_month
+              end
+              if @article.pub_ol_day != nil then
+                o_date_s += "/%02d" % @article.pub_ol_day
+              end
+              if o_date_s != "" then
+                o_date_s += " (online)"
+              end
+            %>
+            <%= p_date_s + o_date_s %>
+          </p>
+          <p>
+            <strong>Pages:</strong>
+            <%= @article.page %>
+          </p>
+          <p>
+            <strong>Volume:</strong>
+            <%= @article.volume %>
+            <strong>Issue:</strong>
+            <%= @article.journal_issue %>
+          </p>
+          <p>
+            <strong>Journal:</strong>
+            <%= @article.container_title %>
+          </p>
+          <p>
+            <strong>Link:</strong>
+            <%= link_to @article.link, @article.link, target: "_blank", rel: "nofollow"  %>
+          </p>
+            <strong>URL:</strong>
+            <%= link_to @article.url, @article.url.html_safe, target: "_blank", rel: "nofollow" %>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Abstract
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+        <div class="card-body">
+          <p>
+            <%= @article.abstract.html_safe %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
   <%= link_to 'Edit', edit_article_path(@article), :class => "btn btn-primary btn-sm" %>
   <%= link_to 'Back', articles_path, :class => "btn btn-secondary btn-sm" %>
 </div>
