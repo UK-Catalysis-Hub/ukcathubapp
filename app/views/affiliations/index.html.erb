@@ -1,35 +1,27 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Affiliations</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Institution</th>
-      <th>Department</th>
-      <th>Faculty</th>
-      <th>Work group</th>
-      <th>Country</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @affiliations.each do |affiliation| %>
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <h1>Affiliations</h1>
+  <table>
+    <thead>
       <tr>
-        <td><%= affiliation.institution %></td>
-        <td><%= affiliation.department %></td>
-        <td><%= affiliation.faculty %></td>
-        <td><%= affiliation.work_group %></td>
-        <td><%= affiliation.country %></td>
-        <td><%= link_to 'Show', affiliation %></td>
-        <td><%= link_to 'Edit', edit_affiliation_path(affiliation) %></td>
-        <td><%= link_to 'Destroy', affiliation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Institution</th>
+        <th>Department</th>
+        <th>Faculty</th>
+        <th>Work group</th>
+        <th>Country</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
-
-<%= link_to 'New Affiliation', new_affiliation_path %>
+    <tbody>
+      <% @affiliations.each do |affiliation| %>
+        <tr>
+          <td><%= affiliation.institution %></td>
+          <td><%= affiliation.department %></td>
+          <td><%= affiliation.faculty %></td>
+          <td><%= affiliation.work_group %></td>
+          <td><%= affiliation.country %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
