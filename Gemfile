@@ -53,18 +53,6 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-
-# bootstrap gems
-gem 'jquery-rails', '~> 4.3', '>= 4.3.5'
-gem 'popper_js', '~> 1.14', '>= 1.14.5'
-gem 'bootstrap', '~> 4.0'
-
-#jquery-ui
-gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
-
 #pagination
 gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap4'
-
-#facets search
-gem 'forty_facets'

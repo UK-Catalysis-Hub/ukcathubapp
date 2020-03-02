@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>UK Catalysis Hub &middot; Publications DB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) : "Publications &middot; UK Catalysis Hub".html_safe %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Publications DB from UK Catalysis Hub" %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha256-rByPlHULObEjJ6XQxW/flG2r+22R5dKiAoef+aXWfik=" crossorigin="anonymous" />
-    <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= favicon_link_tag asset_path('ukch_mini_logo.png') %>
   </head>
+
   <body>
     <header>
-      <%= render 'shared/navigation' %>
+      <%= render 'layouts/navigation' %>
     </header>
     <main role="main">
-      <%= yield %>
+        <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
-    <%= render 'shared/footer' %>
   </body>
 </html>
