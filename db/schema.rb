@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_112954) do
+ActiveRecord::Schema.define(version: 2020_03_04_093251) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -29,8 +29,9 @@ ActiveRecord::Schema.define(version: 2020_02_12_112954) do
     t.integer "author_id"
     t.string "sequence"
     t.integer "address_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.integer "article_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "affiliations", force: :cascade do |t|
@@ -60,9 +61,10 @@ ActiveRecord::Schema.define(version: 2020_02_12_112954) do
     t.integer "phase"
     t.string "collaboration"
     t.integer "theme_id"
+    t.integer "article_id"
     t.integer "project_year"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "articles", force: :cascade do |t|
@@ -99,6 +101,18 @@ ActiveRecord::Schema.define(version: 2020_02_12_112954) do
     t.string "given_name"
     t.string "orcid"
     t.string "articles"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "datasets", force: :cascade do |t|
+    t.string "dataset_complete"
+    t.string "dataset_description"
+    t.string "dataset_doi"
+    t.string "dataset_enddate"
+    t.string "dataset_location"
+    t.string "dataset_name"
+    t.string "dataset_startdate"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

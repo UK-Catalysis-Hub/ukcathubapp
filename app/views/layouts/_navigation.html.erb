@@ -19,6 +19,9 @@
       <li>
          <%= link_to image_tag('expert.svg'), {:controller => 'themes', :action => 'index'}, {:class => "nav-link active", title: "View experts"} %>
       </li>
+      <li>
+         <%= link_to image_tag('database.svg'), {:controller => 'datasets', :action => 'index'}, {:class => "nav-link active", title: "View datasets"} %>
+      </li>
     </ul>
     <!-- <div class="col-sm-3 col-md-3 pull-right">
   		<%= form_tag({:controller => "articles", :action => "index"}, :method => "get", :id => 'searchForm', :class => 'navbar-form', :enforce_utf8 => false) do%>
