@@ -1,0 +1,2 @@
+class ArticleDataset < ApplicationRecord
+end

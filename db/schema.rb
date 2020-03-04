@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_093251) do
+ActiveRecord::Schema.define(version: 2020_03_04_143311) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -52,6 +52,14 @@ ActiveRecord::Schema.define(version: 2020_03_04_093251) do
     t.string "status"
     t.string "sequence"
     t.integer "article_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "article_datasets", force: :cascade do |t|
+    t.string "doi"
+    t.integer "article_id"
+    t.integer "dataset_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -109,12 +117,12 @@ ActiveRecord::Schema.define(version: 2020_03_04_093251) do
     t.string "dataset_complete"
     t.string "dataset_description"
     t.string "dataset_doi"
-    t.string "dataset_enddate"
+    t.datetime "dataset_enddate"
     t.string "dataset_location"
     t.string "dataset_name"
-    t.string "dataset_startdate"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "dataset_startdate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "themes", force: :cascade do |t|

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :article_datasets
   resources :datasets
   get 'home/index'
   resources :articles

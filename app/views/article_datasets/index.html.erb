@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Article Datasets</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Doi</th>
+      <th>Article</th>
+      <th>Dataset</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @article_datasets.each do |article_dataset| %>
+      <tr>
+        <td><%= article_dataset.doi %></td>
+        <td><%= article_dataset.article_id %></td>
+        <td><%= article_dataset.dataset_id %></td>
+        <td><%= link_to 'Show', article_dataset %></td>
+        <td><%= link_to 'Edit', edit_article_dataset_path(article_dataset) %></td>
+        <td><%= link_to 'Destroy', article_dataset, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Article Dataset', new_article_dataset_path %>
