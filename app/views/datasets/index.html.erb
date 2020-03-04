@@ -1,41 +1,30 @@
 <div class="container">
   <p id="notice"><%= notice %></p>
-
-  <h1>Datasets</h1>
-
   <table class="table">
     <thead class="thead-light">
       <tr>
-        <th>Dataset complete</th>
-        <th>Dataset description</th>
-        <th>Dataset doi</th>
-        <th>Dataset enddate</th>
-        <th>Dataset location</th>
-        <th>Dataset name</th>
-        <th>Dataset startdate</th>
-        <th colspan="3"></th>
+        <th>Datasets</th>
       </tr>
     </thead>
 
     <tbody>
       <% @datasets.each do |dataset| %>
         <tr>
-          <td><%= dataset.dataset_complete %></td>
-          <td><%= dataset.dataset_description %></td>
-          <td><%= dataset.dataset_doi %></td>
-          <td><%= dataset.dataset_enddate %></td>
-          <td><%= dataset.dataset_location %></td>
-          <td><%= dataset.dataset_name %></td>
-          <td><%= dataset.dataset_startdate %></td>
-          <td><%= link_to 'Show', dataset %></td>
-          <td><%= link_to 'Edit', edit_dataset_path(dataset) %></td>
-          <td><%= link_to 'Destroy', dataset, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td>
+            <b>Title:</b><%= dataset.dataset_name %> <b>Date:</b> <%= dataset.dataset_startdate %> <br>
+            <b>Description:</b> <%= dataset.dataset_description %> <br>
+            <b>DOI:</b> <%= dataset.dataset_doi %>
+            <b>Location:</b> <%= link_to dataset.dataset_location, dataset.dataset_location.html_safe, target: "_blank", rel: "nofollow" %>
+            <% if dataset.articles != [] then %>
+              <% dataset.articles.each do | article | %>
+               <br><b>Article:</b> <%= link_to article.title, article %>
+              <% end %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
-
   <br>
-
   <%= link_to 'New Dataset', new_dataset_path %>
 </div>
