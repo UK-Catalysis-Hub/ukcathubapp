@@ -1,31 +1,31 @@
-<div class="container">
+ <div class="container">
   <p id="notice"><%= notice %></p>
 
   <p>
-    <strong>Institution:</strong>
+    <strong>Affiliation:</strong>
     <%= @affiliation.institution %>
   </p>
-
-  <p>
-    <strong>Department:</strong>
-    <%= @affiliation.department %>
-  </p>
-
-  <p>
-    <strong>Faculty:</strong>
-    <%= @affiliation.faculty %>
-  </p>
-
-  <p>
-    <strong>Work group:</strong>
-    <%= @affiliation.work_group %>
-  </p>
-
   <p>
     <strong>Country:</strong>
     <%= @affiliation.country %>
   </p>
+  <%
+    addr_list = []
+    @affiliation.addresses.each do |affi_address|
+      if not addr_list.include?(affi_address)
+        addr_list.push(affi_address)
+      end
+    end
+  %>
 
-  <%# = link_to 'Edit', edit_affiliation_path(@affiliation) %> 
-  <%# = link_to 'Back', affiliations_path %>
+  <% addr_list.each do |unique_add| %>
+    <br><strong>Address:</strong>
+    <br><%= link_to unique_add.add_01, unique_add %>
+    <br><%= unique_add.add_02 %>
+    <br><%= unique_add.add_03 %>
+    <br><%= unique_add.add_04 %>
+    <br><%= unique_add.country %>
+  <% end %>
+  <% #= link_to 'Edit', edit_affiliation_path(@affiliation) %>
+  <% #= link_to 'Back', affiliations_path %>
 </div>
