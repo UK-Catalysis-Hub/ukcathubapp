@@ -28,7 +28,7 @@
         <%= render partial: 'authors/authors_list', locals: {authors: @theme.get_authors }%>
       </div>
       <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-        <p>Institutions</p>
+        <%= render partial: 'affiliations/affiliations_list', locals: {affiliations: @theme.get_affiliations }%>
       </div>
     </div>
   </div>

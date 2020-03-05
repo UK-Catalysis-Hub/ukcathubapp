@@ -1,0 +1,47 @@
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th>Affiliations (<%= affiliations.length() %>)</th>
+        <th>Country</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% affiliations.each do |affiliation| %>
+        <tr>
+          <td>
+            <%
+              str_affiliation = affiliation.institution
+              (affiliation.department == nil) ? nil : str_affiliation += ", " + affiliation.department
+              (affiliation.faculty == nil) ? nil : str_affiliation += ", " + affiliation.faculty
+              (affiliation.work_group == nil) ? nil : str_affiliation += ", " + affiliation.work_group
+            %>
+            <%= link_to str_affiliation, affiliation %>
+          </td>
+          <td>
+            <%= affiliation.country %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% affiliations.each do |affiliation| %>
+  <% curr_inst = affiliation.institution %>
+    <tr>
+      <td>
+        <%
+          str_affiliation = affiliation.institution
+          (affiliation.department == nil) ? nil : str_affiliation += ", " + affiliation.department
+          (affiliation.faculty == nil) ? nil : str_affiliation += ", " + affiliation.faculty
+          (affiliation.work_group == nil) ? nil : str_affiliation += ", " + affiliation.work_group
+        %>
+        <%= link_to str_affiliation, affiliation %>
+      </td>
+      <td>
+        <%= affiliation.country %>
+      </td>
+    </tr>
+  <% end %>
+</div>
