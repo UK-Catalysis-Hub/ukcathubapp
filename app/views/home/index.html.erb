@@ -8,7 +8,8 @@
       <canvas class="my-4 w-100" id="myChart" width="90" height="38"></canvas>
       <h2>Latest publications </h2>
       <div class="table-responsive">
-        <%= render partial: 'articles/articles_list', locals: {articles: @articles }%>
+        <%= render partial: 'articles/articles_list', locals: {articles: @latest_articles }%>
+        <%= render partial: 'articles/articles_list', locals: {articles: @cited_articles }%>
       </div>
     </main>
   </div>

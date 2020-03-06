@@ -33,10 +33,11 @@
      <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
   </p>
   <p>
-    <strong>Doi:</strong>
-    <%= @article.doi %>
+    <strong>DOI:</strong> <%= @article.doi %>
   </p>
-
+  <p>
+    <strong>Citations:</strong> <%= @article.reference_count %>
+  </p>
   <p>
     <strong>Pub type:</strong>
     <%= @article.pub_type %>

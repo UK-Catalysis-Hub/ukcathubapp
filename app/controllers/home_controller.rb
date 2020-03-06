@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   def index
-    @articles = Article.latest
+    @latest_articles = Article.latest
+    @cited_articles = Article.most_cited
   end
 end
