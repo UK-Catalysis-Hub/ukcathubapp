@@ -14,4 +14,7 @@ class Article < ApplicationRecord
   #relationships to dataset
   has_many :article_datasets
   has_many :datasets, through: :article_datasets
+
+  scope :active, -> {where(status: "Added")  }
+  scope :latest, -> {where(status: "Added").order('created_at DESC').order('id DESC').limit(10)  }
 end
