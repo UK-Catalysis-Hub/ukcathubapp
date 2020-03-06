@@ -1,5 +1,6 @@
 <div class="container">
-  <p id="notice"><%= notice %></p>
+  <p id="notice">
+    <%= notice %></p>
   <p>
     <strong>Dataset name:</strong>
     <%= @dataset.dataset_name %>
@@ -12,30 +13,27 @@
     <strong>Dataset description:</strong>
     <%= @dataset.dataset_description %>
   </p>
-
   <p>
     <strong>Dataset doi:</strong>
     <%= @dataset.dataset_doi %>
   </p>
-
   <p>
     <strong>Dataset enddate:</strong>
     <%= @dataset.dataset_enddate %>
   </p>
-
   <p>
     <strong>Dataset location:</strong>
     <%= link_to @dataset.dataset_location, @dataset.dataset_location %>
   </p>
-
   <p>
     <strong>Dataset startdate:</strong>
     <%= @dataset.dataset_startdate %>
   </p>
-    <% @dataset.articles.each do | article | %>
-     <p><b>Article:</b> <%= link_to article.title, article %></p>
-    <% end %>
-
+  <% @dataset.articles.each do | article | %>
+    <p>
+     <b>Article:</b> <%= link_to article.title, article %>
+    </p>
+  <% end %>
   <%= link_to 'Edit', edit_dataset_path(@dataset) %> |
   <%= link_to 'Back', datasets_path %>
 </div>
