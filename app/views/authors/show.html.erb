@@ -49,6 +49,23 @@
   <p>
     <strong>Expertise:</strong> <%= expertise_lnks  %>
   </p>
+  <%
+    affiliation = []
+    affiliation_lnks = ""
+    @author.affiliations.each do |afi|
+      if not affiliation.include?(afi) then
+        affiliation.push(afi)
+        if affiliation_lnks == "" then
+          affiliation_lnks = link_to(afi.institution, afi)
+        else
+          affiliation_lnks += ", ".html_safe + link_to(afi.institution, afi)
+        end
+      end
+    end
+  %>
+  <p>
+    <strong>Affiliations:</strong> <%= affiliation_lnks  %>
+  </p>
   <%= link_to 'Edit', edit_author_path(@author), :class => "btn btn-primary btn-sm" %> |
   <%= link_to 'Back', authors_path, :class => "btn btn-secondary btn-sm" %>
 </div>
