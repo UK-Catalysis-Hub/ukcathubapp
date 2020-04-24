@@ -1,0 +1,17 @@
+<!--Display a filtered list of articles -->
+<div id="filtered_artilcle_list" class="container">
+  <p id="notice"><%= notice %></p>
+  <% #= will_paginate articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+  <table class="table">
+    <tbody>
+      <% articles.each do |article| %>
+        <tr>
+          <td>
+            <b><%= link_to(article.title, article) %> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>)</b>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+</div>
