@@ -2,88 +2,23 @@
 <div class="container">
   <div class="row">
     <main role="main">
-	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-		<h1 class="h2">Publications per Year</h1>
+	<h2 class="mt-4">Latest Data on Articles</h2>
+	<div class="row mb-3">
+		<div class="col-sm-6 col-lg-6 themed-grid-col">
+			<%= render partial: 'articles/articles_top', locals: {articles: @cited_articles }%>
+		</div>
+		<div class="col-6 col-lg-6 themed-grid-col">
+			<%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%>
+		</div>
 	</div>
-	<canvas class="my-4 w-100" id="myChart" width="90" height="38"></canvas>
-	<h2>Latest publications </h2>
-	<div class="table-responsive">
-		<%= render partial: 'articles/articles_list', locals: {articles: @latest_articles }%>
-		<%= render partial: 'articles/articles_list', locals: {articles: @cited_articles }%>
+	<div class="row mb-3">
+		<div class="col-6 col-sm-4 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
+		<div class="col-6 col-sm-4 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
+		<div class="col-6 col-sm-4 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
 	</div>
-	<div class="container">
-	  <div class="card-deck mb-3 text-center">
-	    <div class="card mb-4 shadow-sm">
-	      <div class="card-header">
-		<h4 class="my-0 font-weight-normal">Cited</h4>
-	      </div>
-	      <div class="card-body">
-		<%= render partial: 'articles/articles_list', locals: {articles: @cited_articles }%>
-		<button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
-	      </div>
-	    </div>
-	    <div class="card mb-4 shadow-sm">
-	      <div class="card-header">
-		<h4 class="my-0 font-weight-normal">Recent</h4>
-	      </div>
-	      <div class="card-body">
-		<%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%>
-		<button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<div class="container">
-	  <div class="card-deck mb-3 text-center">
-	    <div class="card mb-4 shadow-sm">
-	      <div class="card-header">
-		<h4 class="my-0 font-weight-normal">Free</h4>
-	      </div>
-	      <div class="card-body">
-		<h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-		<ul class="list-unstyled mt-3 mb-4">
-		  <li>10 users included</li>
-		  <li>2 GB of storage</li>
-		  <li>Email support</li>
-		  <li>Help center access</li>
-		</ul>
-		<button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
-	      </div>
-	    </div>
-	    <div class="card mb-4 shadow-sm">
-	      <div class="card-header">
-		<h4 class="my-0 font-weight-normal">Pro</h4>
-	      </div>
-	      <div class="card-body">
-		<h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
-		<ul class="list-unstyled mt-3 mb-4">
-		  <li>20 users included</li>
-		  <li>10 GB of storage</li>
-		  <li>Priority email support</li>
-		  <li>Help center access</li>
-		</ul>
-		<button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
-	      </div>
-	    </div>
-	    <div class="card mb-4 shadow-sm">
-	      <div class="card-header">
-		<h4 class="my-0 font-weight-normal">Cited</h4>
-	      </div>
-	      <div class="card-body">
-		<%= render partial: 'articles/articles_list', locals: {articles: @cited_articles }%>
-		<button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
-	      </div>
-	    </div>
-	    <div class="card mb-4 shadow-sm">
-	      <div class="card-header">
-		<h4 class="my-0 font-weight-normal">Recent</h4>
-	      </div>
-	      <div class="card-body">
-		<%= render partial: 'articles/articles_list', locals: {articles: @latest_articles }%>
-		<button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
-	      </div>
-	    </div>
-	  </div>
+	<div class="row mb-3">
+		<div class="col-6 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
+		<div class="col-6 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
 	</div>
     </main>
   </div>
