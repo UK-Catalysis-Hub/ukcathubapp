@@ -2,16 +2,15 @@
 <div class="container">
   <div class="row">
     <main role="main">
-	<h2 class="mt-4">Latest Data on Articles</h2>
 	<div class="row mb-3">
 		<div class="col-sm-6 col-lg-4 themed-grid-col">
-      <h3 class="h3-sm"> Top Publishing Authors</h3>
-      <% @authors_list = Article.active.joins(:authors).select("authors.id, full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(10) %>
+      <b> Top Publishing Authors</b>
+      <% @authors_list = Article.active.joins(:authors).select("authors.id, full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(5) %>
 			<%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
 		</div>
 		<div class="col-6 col-lg-8 themed-grid-col">
-      <h3 class="h3-sm"> Most Cited Papers</h3>
-			<%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited }%>
+      <b> Most Cited Papers<small class="text-muted"> (According to Cross Ref) </small></b>
+			<%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
 		</div>
 	</div>
 	<div class="row mb-3">
@@ -20,8 +19,11 @@
 		<div class="col-6 col-sm-4 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
 	</div>
 	<div class="row mb-3">
-		<div class="col-6 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
-		<div class="col-6 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
+		<div class="col-8 themed-grid-col">
+      <b> Most Recent Papers<small class="text-muted"> (According publication date) </small></b>
+      <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
+    </div>
+		<div class="col-4 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
 	</div>
     </main>
   </div>
