@@ -13,7 +13,14 @@
       <% articles.each do |article| %>
         <tr>
           <td>
-            <%= link_to(article.title[0,99], article) %>
+            <%
+              if article.title.length > 100 then
+                  a_title = article.title[0,96] + "..."
+              else
+                  a_title = article.title
+              end
+            %>
+            <%= link_to(a_title, article) %>
           </td>
           <td>
             <%= article.reference_count %>

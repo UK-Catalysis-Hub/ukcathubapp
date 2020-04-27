@@ -6,11 +6,11 @@
 	<div class="row mb-3">
 		<div class="col-sm-6 col-lg-4 themed-grid-col">
       <h3 class="h3-sm"> Top Publishing Authors</h3>
-      <% @authors_list = Article.active.joins(:authors).select("full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(10) %>
+      <% @authors_list = Article.active.joins(:authors).select("authors.id, full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(10) %>
 			<%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
 		</div>
 		<div class="col-6 col-lg-8 themed-grid-col">
-      <h3> Most Cited Papers</h3>
+      <h3 class="h3-sm"> Most Cited Papers</h3>
 			<%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited }%>
 		</div>
 	</div>

@@ -12,7 +12,7 @@
       <% authors.each do |author| %>
         <tr>
           <td>
-            <%= author.full_name %>
+            <%= link_to(author.full_name, controller: "authors", action: "show", id: author.id) %>
           </td>
           <td>
             <%= author.article_count %>
