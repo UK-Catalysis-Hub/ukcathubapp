@@ -3,11 +3,20 @@
   <p id="notice"><%= notice %></p>
   <% #= will_paginate articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
   <table class="table table-sm table-striped table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th>Article</th>
+        <th>Citations</th>
+      </tr>
+    </thead>
     <tbody>
       <% articles.each do |article| %>
         <tr>
           <td>
-            <b><%= link_to(article.title, article) %> (<%= article.reference_count %>)</b>
+            <%= link_to(article.title[0,99], article) %>
+          </td>
+          <td>
+            <%= article.reference_count %>
           </td>
         </tr>
       <% end %>
