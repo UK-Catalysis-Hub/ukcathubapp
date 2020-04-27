@@ -4,10 +4,11 @@
     <main role="main">
 	<h2 class="mt-4">Latest Data on Articles</h2>
 	<div class="row mb-3">
-		<div class="col-sm-6 col-lg-6 themed-grid-col">
-			<%= render partial: 'articles/articles_top', locals: {articles: @cited_articles }%>
+		<div class="col-sm-6 col-lg-4 themed-grid-col">
+      <% @authors_list = Article.active.joins(:authors).select("full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(10) %>
+			<%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
 		</div>
-		<div class="col-6 col-lg-6 themed-grid-col">
+		<div class="col-6 col-lg-8 themed-grid-col">
 			<%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%>
 		</div>
 	</div>

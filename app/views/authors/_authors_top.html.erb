@@ -1,0 +1,25 @@
+<!--Display a filtered list of authors -->
+<div id="filtered_author_list" class="container">
+  <p id="notice"><%= notice %></p>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th>Author</th>
+        <th>Articles</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% authors.each do |author| %>
+        <tr>
+          <td>
+            <%= author.full_name %>
+          </td>
+          <td>
+            <%= author.article_count %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+</div>
