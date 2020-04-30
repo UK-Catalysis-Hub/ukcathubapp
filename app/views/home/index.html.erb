@@ -3,18 +3,34 @@
   <div class="row">
     <main role="main">
 	<div class="row mb-3">
-		<div class="col-sm-6 col-lg-4 themed-grid-col">
+		<div class="col-sm-6 col-lg-4 themed-grid-col shadow-sm">
       <b> Top Publishing Authors</b>
       <% @authors_list = Article.active.joins(:authors).select("authors.id, full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(5) %>
 			<%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
 		</div>
-		<div class="col-6 col-lg-8 themed-grid-col">
+		<div class="col-sm-6 col-lg-8 themed-grid-col shadow-sm">
       <b> Most Cited Papers<small class="text-muted"> (According to Cross Ref) </small></b>
 			<%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
 		</div>
 	</div>
 	<div class="row mb-3">
-		<div class="col-6 col-sm-4 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
+    <div class="col-sm-4">
+			<div class="card mb-4 shadow-sm">
+				<div class='img-container1'>
+					<%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%>
+				</div>
+				<div class="card-body">
+					<p class="card-text"> </p>
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="btn-group">
+							buttons
+						</div>
+						<small class="text-muted">something else </small>
+					</div>
+				</div>
+			</div>
+    </div><!--col-sm-4-->
+
 		<div class="col-6 col-sm-4 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
 		<div class="col-6 col-sm-4 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
 	</div>
