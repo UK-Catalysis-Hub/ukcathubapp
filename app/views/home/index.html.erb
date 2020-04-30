@@ -60,6 +60,34 @@
         </div> <!-- info box -->
       </div>
     </div>
+    <div class="row px-1 my-3">
+      <div class="col-sm-6 col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Recent publications*</h5>
+          </div>
+          <div class="card-body p-0">
+            <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
+          </div>
+          <div class="card-footer text-muted">
+            *According to publication date
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Publications per author</h5>
+          </div>
+          <div class="card-body p-0">
+            <%= image_tag('pubs_per_author_1.png', width: '80%', class: "rounded mx-auto d-block") %>
+          </div>
+          <div class="card-footer text-muted">
+            *Number of publications published
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="row px-1 my-3">
       <div class="col-sm-6 col-lg-4">
@@ -78,22 +106,6 @@
       <div class="col-sm-6 col-lg-8">
         <div class="card">
           <div class="card-header">
-            <h5 class="card-title">Recent publications*</h5>
-          </div>
-          <div class="card-body p-0">
-            <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
-          </div>
-          <div class="card-footer text-muted">
-            *According to publication date
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row px-1 my-3">
-      <div class="col-sm-6 col-lg-8">
-        <div class="card">
-          <div class="card-header">
             <h5 class="card-title">Most cited publications*</h5>
           </div>
           <div class="card-body p-0">
@@ -104,21 +116,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-lg-4">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title">Most cited authors</h5>
-          </div>
-          <div class="card-body p-0">
-            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
-          </div>
-          <div class="card-footer text-muted">
-            By citations in [co-]authored publications (Cross Ref)
-          </div>
-        </div>
-      </div>
     </div>
-
 
     <div class="row mb-3">
       <div class="col-sm-4">
