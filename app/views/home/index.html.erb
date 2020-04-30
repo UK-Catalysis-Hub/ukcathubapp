@@ -2,7 +2,7 @@
 <% @authors_list = Article.active.joins(:authors).select("authors.id, full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(5) %>
 <div class="container">
   <main role="main">
-    <div class="row"><!-- Qucik info row -->
+    <div class="row my-1"><!-- Qucik info row -->
       <div class="col-sm-3 col-6">
         <div class="container"><!-- info box -->
           <div class="row bg-primary  rounded border-primary">
@@ -60,65 +60,110 @@
         </div> <!-- info box -->
       </div>
     </div>
-    <div class="row">
-    	<div class="row mb-3">
-    		<div class="col-sm-6 col-lg-4 themed-grid-col shadow-sm">
-          <b> Top Publishing Authors</b>
-    			<%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
-    		</div>
-    		<div class="col-sm-6 col-lg-8 themed-grid-col shadow-sm">
-          <b> Most Cited Papers<small class="text-muted"> (According to Cross Ref) </small></b>
-    			<%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
-    		</div>
-    	</div>
+
+    <div class="row px-1 my-3">
+      <div class="col-sm-6 col-lg-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Top publishing authors</h5>
+          </div>
+          <div class="card-body p-0">
+            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
+          </div>
+          <div class="card-footer text-muted">
+            By number of papers [co-]authored
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Recent publications*</h5>
+          </div>
+          <div class="card-body p-0">
+            <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
+          </div>
+          <div class="card-footer text-muted">
+            *According to publication date
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row px-1 my-3">
+      <div class="col-sm-6 col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Most cited publications*</h5>
+          </div>
+          <div class="card-body p-0">
+            <%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
+          </div>
+          <div class="card-footer text-muted">
+            *According to Cross Ref
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Most cited authors</h5>
+          </div>
+          <div class="card-body p-0">
+            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
+          </div>
+          <div class="card-footer text-muted">
+            By citations in [co-]authored publications (Cross Ref)
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     	<div class="row mb-3">
         <div class="col-sm-4">
-    			<div class="card mb-4 shadow-sm">
-    				<div class='img-container1'>
-    					<%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%>
-    				</div>
-    				<div class="card-body">
-    					<p class="card-text"> </p>
-    					<div class="d-flex justify-content-between align-items-center">
-    						<div class="btn-group">
-    							buttons
-    						</div>
-    						<small class="text-muted">something else </small>
-    					</div>
-    				</div>
-    			</div>
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Most cited authors</h5>
+            </div>
+            <div class="card-body p-0">
+              <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
+            </div>
+            <div class="card-footer text-muted">
+              By citations in [co-]authored publications (Cross Ref)
+            </div>
+          </div>
         </div><!--col-sm-4-->
 
     		<div class="col-6 col-sm-4 themed-grid-col">
-          <div class="card mb-4 shadow-sm">
+          <div class="card">
             <div class="card-header">
-              title
+              <h5 class="card-title">Most cited authors</h5>
             </div>
-            <div class="card-body">
-              <%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%>
-              <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
+            <div class="card-body p-0">
+              <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
+            </div>
+            <div class="card-footer text-muted">
+              By citations in [co-]authored publications (Cross Ref)
             </div>
           </div>
         </div>
 
     		<div class="col-6 col-sm-4 themed-grid-col">
           <div class="card">
-            <div class="card-header border-0">
-              <h1 class="card-title">Articles</h1>
+            <div class="card-header">
+              <h5 class="card-title">Most cited authors</h5>
             </div>
-            <div class="card-body table-responsive p-0">
-              <%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%>
+            <div class="card-body p-0">
+              <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
             </div>
-          </div> <!-- /.card -->
+            <div class="card-footer text-muted">
+              By citations in [co-]authored publications (Cross Ref)
+            </div>
+          </div>
         </div>
     	</div>
-    	<div class="row mb-3">
-    		<div class="col-8 themed-grid-col">
-          <b> Most Recent Papers<small class="text-muted"> (According publication date) </small></b>
-          <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
-        </div>
-    		<div class="col-4 themed-grid-col"><%= render partial: 'articles/articles_top', locals: {articles: @latest_articles }%></div>
-    	</div>
+
     </main>
   </div>
 </div>
