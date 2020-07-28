@@ -74,10 +74,10 @@
       <div class="col-sm-6 col-lg-4">
         <div class="card">
           <div class="card-header">
-            <h6 style= "margin:auto">Publications per author</h6>
+            <h6 style= "margin:auto">Publications by theme</h6>
           </div>
           <div class="card-body p-0">
-            <%= image_tag('pubs_per_author_1.png', width: '75%', class: "rounded mx-auto d-block") %>
+            <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true %>
           </div>
         </div>
       </div>
@@ -132,10 +132,10 @@
   		<div class="col-6 col-sm-4 themed-grid-col">
         <div class="card">
           <div class="card-header">
-            <h6 style= "margin:auto">Most cited authors</h6>
+            <h6 style= "margin:auto">Publications by theme</h6>
           </div>
           <div class="card-body p-0">
-            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
+            <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true %>
           </div>
         </div>
       </div>
