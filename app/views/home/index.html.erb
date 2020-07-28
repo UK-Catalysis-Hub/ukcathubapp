@@ -77,7 +77,7 @@
             <h6 style= "margin:auto">Publications by theme</h6>
           </div>
           <div class="card-body p-0">
-            <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true %>
+            <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true,  legend: "right" %>
           </div>
         </div>
       </div>
