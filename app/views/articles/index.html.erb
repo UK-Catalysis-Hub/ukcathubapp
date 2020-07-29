@@ -2,6 +2,8 @@
   <p id="notice"><%= notice %></p>
 
   <h1>UK Catalysis Hub Articles</h1>
+  <h3><%= @articles.count%> matching publications found</h3>
+  
   <%= will_paginate @articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
   <table class="table">
     <thead class="thead-light">

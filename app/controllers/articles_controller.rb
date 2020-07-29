@@ -1,9 +1,26 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
 
+  class ArticleSearch < FortyFacets::FacetSearch
+    model 'Article' # which model to search for
+    text :title   # filter by a generic string entered by the user
+    scope :active   # only return articles which are in the scope 'active'
+    #range :pub_year, name: 'YearPublished' # filter by ranges for decimal fields
+    facet :pub_year, name: 'YearPublished', order: :pub_year # additionally order values in the year field
+    facet :container_title, name: 'Publisher', order: :name
+    #facet :genres, name: 'Genre' # generate a filter with all values of 'genre' occuring in the result
+    facet [:themes, :name], name: 'Theme' # generate a filter several belongs_to 'hops' away
+
+    orders 'Title' => :title,
+           'pub_year, newest first' => "pub_year desc",
+           'pub_year, oldest first' => {pub_year: :asc, title: :asc}
+    #custom :for_manual_handling
+  end
+
   # GET /articles
   # GET /articles.json
   def index
+    @search = ArticleSearch.new(params) # this initializes your search object from the request params
     @articles = Article.active.paginate(:page => params[:page], :per_page => 10)
   end
 

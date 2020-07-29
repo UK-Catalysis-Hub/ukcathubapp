@@ -57,6 +57,10 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap4'
 
-# Create beautiful JavaScript charts with one line of Ruby.
+# Create JavaScript charts in Ruby on Rails.
 # https://github.com/ankane/chartkick
 gem "chartkick"
+
+# Gem for enabling faceted search
+# https://github.com/FortySource/forty_facets
+gem 'forty_facets'
