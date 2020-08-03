@@ -2,8 +2,29 @@
   <p id="notice"><%= notice %></p>
 
   <h1>UK Catalysis Hub Articles</h1>
-  <h3><%= @articles.count%> matching publications found</h3>
-  
+  <div class="searchbox">
+    <h3><%= @articles.count%> publications found</h3>
+    <div class="col-md-6">
+      <h3 class="well-title">
+        Filter
+        <%= link_to 'reset', '?', class: 'btn btn-default btn-sm pull-right' %>
+      </h3>
+      <div class="well">
+        <div class="row search-inputs">
+          <%= form_tag nil, method: :get do %>
+            <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
+            <div class="col-md-4">
+              <% title_filter = @search.filter(:title) %>
+              <%= text_field_tag 'search[title]', title_filter.value, class: 'form-control', placeholder: title_filter.name %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
   <%= will_paginate @articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
   <table class="table">
     <thead class="thead-light">
