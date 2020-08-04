@@ -7,7 +7,7 @@ class ArticlesController < ApplicationController
     scope :active   # only return articles which are in the scope 'active'
     #range :pub_year, name: 'YearPublished' # filter by ranges for decimal fields
     facet :pub_year, name: 'YearPublished', order: :pub_year # additionally order values in the year field
-    facet :container_title, name: 'Publisher', order: :name
+    facet :container_title, name: 'Publisher'#, order: :container_title
     #facet :genres, name: 'Genre' # generate a filter with all values of 'genre' occuring in the result
     facet [:themes, :name], name: 'Theme' # generate a filter several belongs_to 'hops' away
 

@@ -16,8 +16,9 @@
               <% title_filter = @search.filter(:title) %>
               <%= text_field_tag 'search[title]', title_filter.value, class: 'form-control', placeholder: title_filter.name %>
             </div>
+            <br>
             <!-- Sort order by year -->
-            <div class="col-md-3">
+            <div class="col-md-4">
               <a class="btn btn-success" data-toggle="dropdown" href="#" role="button">
                 sort by:
                 <%= @search.order.title if @search.order %>
@@ -30,8 +31,45 @@
                   </li>
                 <% end %>
               </ul>
-              <br/>
             </div>
+            <div class="row">
+              <% [:container_title].each do |filter_name| %>
+                <% filter = @search.filter(filter_name) %>
+                <div class="col-md-4">
+                  <div class="filter">
+                    <div class="filter-title">
+                      <%= filter.name %>
+                      <span class="small text-muted">
+                        <%= "(#{filter.facet.length})" %>
+                      </span>
+                    </div>
+                    <div class="filter-values">
+                      <ul class="selected">
+                        <% filter.selected.each do |entity| %>
+                          <% display = entity %>
+                          <li>
+                            <%= link_to display, filter.remove(entity).path %>
+                          </li>
+                        <% end %>
+                      </ul>
+                      <ul class="selectable">
+                        <% filter.facet.reject(&:selected).each do |facet_value| %>
+                          <% entity = facet_value.entity %>
+                          <li>
+                            <% display = entity %>
+                            <%= link_to display, filter.add(entity).path %>
+                            <span class="count">
+                              <%= "(#{facet_value.count})" %>
+                            </span>
+                          </li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <br/>
           <% end %>
     </div>
     <br/>

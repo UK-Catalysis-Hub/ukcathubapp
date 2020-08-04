@@ -68,3 +68,40 @@ label {
   margin-bottom: 10px;
   padding-bottom: 10px;
   border-bottom: 1px dashed #999;}
+
+.filter{
+  margin-bottom: 20px;
+  .filter-title{
+    font-size: 110%;
+    font-weight: bold;
+  }
+  .filter-values{
+    margin-top: 5;
+    border: 1px solid gray-light;
+    border-width: 1px 0 0 0;
+    .selected{
+      border: 1px solid gray-lighter;
+      border-width: 0 1 0 0;
+      list-style: none;
+      padding-left: 0;}
+      a{
+        &:before{
+          content: 'x';
+          margin-right: 5px;}
+        }
+    .selectable{
+      max-height: 200px;
+      overflow: scroll;
+      background-color: white;
+      list-style: none;
+      padding-left: 0;}
+      li{
+        a{
+          color: gray;
+          font-size: 90%;}
+        .count{
+          color: gray-light;
+          font-size: 70%;}
+        }
+      }
+    }
