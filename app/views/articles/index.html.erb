@@ -1,25 +1,40 @@
-<div class="container">
   <p id="notice"><%= notice %></p>
 
   <h1>UK Catalysis Hub Articles</h1>
-  <div class="row search-inputs">
-    <div class="col">
-      <h3><%= @articles.count%> publications found</h3>
-      <h3 class="well-title">
-        Filter <%= link_to 'reset', '?', class: 'btn  btn-success btn-sm pull-right' %>
-      </h3>
-      <div class="well">
-        <div class="row search-inputs">
+  <div class="panel">
+    <div class="panel-heading ">
+      <%= @articles.count%> publications found  <br/>
+      <div>
+        Filter <%= link_to 'reset', '?', class: 'btn  btn-success btn-sm float-right' %>
+      </div>
+    </div>
+    <div class="panel-body search-inputs">
           <%= form_tag nil, method: :get do %>
+           <!-- Field for searching by title -->
             <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
-            <div class="col">
+            <div class="col-md-4">
               <% title_filter = @search.filter(:title) %>
               <%= text_field_tag 'search[title]', title_filter.value, class: 'form-control', placeholder: title_filter.name %>
             </div>
+            <!-- Sort order by year -->
+            <div class="col-md-3">
+              <a class="btn btn-success" data-toggle="dropdown" href="#" role="button">
+                sort by:
+                <%= @search.order.title if @search.order %>
+                <b class="caret"></b>
+              </a>
+              <ul aria-labelledby="drop4" class="dropdown-menu" id="menu1" role="menu">
+                <% @search.orders.reject(&:active).each do |order| %>
+                  <li>
+                    <%= link_to order.title, order.by.path %>
+                  </li>
+                <% end %>
+              </ul>
+              <br/>
+            </div>
           <% end %>
-        </div>
-      </div>
     </div>
+    <br/>
   </div>
 
   <%= will_paginate @articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
@@ -71,4 +86,3 @@
   </table>
   <br>
   <%= link_to 'New Article', new_article_path, :class => "btn btn-success btn-sm" %>
-</div>
