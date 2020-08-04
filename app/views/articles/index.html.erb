@@ -8,6 +8,7 @@
         Filter <%= link_to 'reset', '?', class: 'btn  btn-success btn-sm float-right' %>
       </div>
     </div>
+
     <div class="panel-body search-inputs">
           <%= form_tag nil, method: :get do %>
            <!-- Field for searching by title -->
@@ -16,7 +17,7 @@
               <% title_filter = @search.filter(:title) %>
               <%= text_field_tag 'search[title]', title_filter.value, class: 'form-control', placeholder: title_filter.name %>
             </div>
-            <br>
+            <br/>
             <!-- Sort order by year -->
             <div class="col-md-4">
               <a class="btn btn-success" data-toggle="dropdown" href="#" role="button">
@@ -32,6 +33,8 @@
                 <% end %>
               </ul>
             </div>
+            <br/>
+            <!-- Facet filter for publisher -->
             <div class="row">
               <% [:container_title].each do |filter_name| %>
                 <% filter = @search.filter(filter_name) %>
@@ -69,7 +72,6 @@
                 </div>
               <% end %>
             </div>
-            <br/>
           <% end %>
     </div>
     <br/>
