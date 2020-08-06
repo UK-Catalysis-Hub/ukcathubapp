@@ -1,144 +1,142 @@
 <%= javascript_include_tag('dashboard.js') %>
 <% @authors_list = Article.active.joins(:authors).select("authors.id, full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(5) %>
 <div class="container">
-  <main role="main">
-    <div class="row my-1"><!-- Qucik info row -->
+  <p id="notice"><%= notice %></p>
+  <div class="row my-1"><!-- Qucik info row -->
+    <div class="col-sm-3 col-6">
+      <div class="container"><!-- info box -->
+        <div class="row bg-primary  rounded border-primary">
+          <div class="col-sm-6">
+      			<h1><%= Article.active.count() %></h1>
+      			<h6>Publications</h6>
+      		</div>
+          <div class="col-sm-6 my-1">
+      			<%= image_tag('books2.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
+      		</div>
+          <%= link_to 'More Info', articles_path, :class => "btn btn-primary btn-sm btn-block text-dark" %>
+      	</div>
+      </div>
+    </div>  <!-- info box -->
       <div class="col-sm-3 col-6">
         <div class="container"><!-- info box -->
-          <div class="row bg-primary  rounded border-primary">
+          <div class="row bg-secondary  rounded border-secondary my-0">
             <div class="col-sm-6">
-        			<h1><%= Article.active.count() %></h1>
-        			<h6>Publications</h6>
+        			<h1><%= Author.count() %></h1>
+        			<h6>Authors</h6>
         		</div>
             <div class="col-sm-6 my-1">
-        			<%= image_tag('books2.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
+        			<%= image_tag('users.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
         		</div>
-            <%= link_to 'More Info', articles_path, :class => "btn btn-primary btn-sm btn-block text-dark" %>
+            <%= link_to 'More Info', authors_path, :class => "btn btn-secondary btn-sm btn-block text-dark" %>
         	</div>
-        </div>
-      </div>  <!-- info box -->
-        <div class="col-sm-3 col-6">
-          <div class="container"><!-- info box -->
-            <div class="row bg-secondary  rounded border-secondary my-0">
-              <div class="col-sm-6">
-          			<h1><%= Author.count() %></h1>
-          			<h6>Authors</h6>
-          		</div>
-              <div class="col-sm-6 my-1">
-          			<%= image_tag('users.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
-          		</div>
-              <%= link_to 'More Info', authors_path, :class => "btn btn-secondary btn-sm btn-block text-dark" %>
-          	</div>
-        </div> <!-- info box -->
-      </div>
-      <div class="col-sm-3 col-6">
-        <div class="container"><!-- info box -->
-          <div class="row bg-success  rounded border-success">
-            <div class="col-sm-6">
-        			<h1><%= Affiliation.count() %></h1>
-        			<h6>Institutions</h6>
-        		</div>
-            <div class="col-sm-6 my-1">
-        			<%= image_tag('institution.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
-        		</div>
-            <%= link_to 'More Info', affiliations_path, :class => "btn btn-success btn-sm btn-block text-dark" %>
-        	</div>
-        </div> <!-- info box -->
-      </div>
-      <div class="col-sm-3 col-6">
-        <div class="container"><!-- info box -->
-          <div class="row bg-danger  rounded border-danger ">
-            <div class="col-sm-6">
-              <h1><%= Dataset.count() %></h1>
-              <h6 class="card-title">Datasets</h6>
-            </div>
-            <div class="col-sm-6 my-1">
-              <%= image_tag('database.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
-            </div>
-            <%= link_to 'More Info', datasets_path, :class => "btn btn-danger btn-sm btn-block text-dark" %>
-          </div>
-        </div> <!-- info box -->
-      </div>
+      </div> <!-- info box -->
     </div>
-    <div class="row px-1 my-3">
-      <div class="col-sm-6 col-lg-8">
-        <div class="card">
-          <div class="card-header bg-light">
-            <h6 style= "margin:auto">Recent publications</h6>
+    <div class="col-sm-3 col-6">
+      <div class="container"><!-- info box -->
+        <div class="row bg-success  rounded border-success">
+          <div class="col-sm-6">
+      			<h1><%= Affiliation.count() %></h1>
+      			<h6>Institutions</h6>
+      		</div>
+          <div class="col-sm-6 my-1">
+      			<%= image_tag('institution.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
+      		</div>
+          <%= link_to 'More Info', affiliations_path, :class => "btn btn-success btn-sm btn-block text-dark" %>
+      	</div>
+      </div> <!-- info box -->
+    </div>
+    <div class="col-sm-3 col-6">
+      <div class="container"><!-- info box -->
+        <div class="row bg-danger  rounded border-danger ">
+          <div class="col-sm-6">
+            <h1><%= Dataset.count() %></h1>
+            <h6 class="card-title">Datasets</h6>
           </div>
-          <div class="card-body p-0" style= "margin:auto">
-            <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
+          <div class="col-sm-6 my-1">
+            <%= image_tag('database.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
           </div>
+          <%= link_to 'More Info', datasets_path, :class => "btn btn-danger btn-sm btn-block text-dark" %>
         </div>
-      </div>
-      <div class="col-sm-6 col-lg-4">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Publications by theme</h6>
-          </div>
-          <div class="card-body p-0">
-            <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true,  legend: "right" %>
-          </div>
+      </div> <!-- info box -->
+    </div>
+  </div>
+  <div class="row px-1 my-3">
+    <div class="col-sm-6 col-lg-8">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h6 style= "margin:auto">Recent publications</h6>
+        </div>
+        <div class="card-body p-0" style= "margin:auto">
+          <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
         </div>
       </div>
     </div>
-
-    <div class="row px-1 my-3">
-      <div class="col-sm-6 col-lg-4">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Top publishing authors</h6>
-          </div>
-          <div class="card-body p-0">
-            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
-          </div>
+    <div class="col-sm-6 col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 style= "margin:auto">Publications by theme</h6>
+        </div>
+        <div class="card-body p-0">
+          <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true,  legend: "right" %>
         </div>
       </div>
-      <div class="col-sm-6 col-lg-8">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Most cited publications</h6>
-          </div>
-          <div class="card-body p-0">
-            <%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
-          </div>
+    </div>
+  </div>
+
+  <div class="row px-1 my-3">
+    <div class="col-sm-6 col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 style= "margin:auto">Top publishing authors</h6>
+        </div>
+        <div class="card-body p-0">
+          <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h6 style= "margin:auto">Most cited publications</h6>
+        </div>
+        <div class="card-body p-0">
+          <%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 style= "margin:auto">Most cited authors</h6>
+        </div>
+        <div class="card-body p-0">
+          <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
+        </div>
+      </div>
+    </div><!--col-sm-4-->
+
+		<div class="col-6 col-sm-4 themed-grid-col">
+      <div class="card">
+        <div class="card-header">
+          <h6 style= "margin:auto">Most cited authors</h6>
+        </div>
+        <div class="card-body p-0">
+          <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
         </div>
       </div>
     </div>
 
-    <div class="row mb-3">
-      <div class="col-sm-4">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Most cited authors</h6>
-          </div>
-          <div class="card-body p-0">
-            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
-          </div>
+		<div class="col-6 col-sm-4 themed-grid-col">
+      <div class="card">
+        <div class="card-header">
+          <h6 style= "margin:auto">Publications by theme</h6>
         </div>
-      </div><!--col-sm-4-->
-
-  		<div class="col-6 col-sm-4 themed-grid-col">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Most cited authors</h6>
-          </div>
-          <div class="card-body p-0">
-            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
-          </div>
+        <div class="card-body p-0">
+          <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true %>
         </div>
       </div>
-
-  		<div class="col-6 col-sm-4 themed-grid-col">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Publications by theme</h6>
-          </div>
-          <div class="card-body p-0">
-            <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true %>
-          </div>
-        </div>
-      </div>
-  	</div>
-  </main>
+    </div>
+	</div>
 </div>

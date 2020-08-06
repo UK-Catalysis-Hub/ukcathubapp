@@ -1,6 +1,5 @@
 <!--Display a filtered list of articles -->
 <div id="filtered_artilcle_list" class="container">
-  <p id="notice"><%= notice %></p>
   <% #= will_paginate articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
   <table class="table table-sm table-striped table-bordered">
     <tbody>

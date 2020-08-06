@@ -1,5 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
+  before_action :authorize, only: [:edit, :update, :new]
 
   class ArticleSearch < FortyFacets::FacetSearch
     model 'Article' # which model to search for
@@ -12,7 +13,7 @@ class ArticlesController < ApplicationController
            'pub_year, newest first' => "pub_year desc",
            'pub_year, oldest first' => {pub_year: :asc, title: :asc}
   end
-  
+
   # GET /articles
   # GET /articles.json
   def index
