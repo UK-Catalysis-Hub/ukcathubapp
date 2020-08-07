@@ -1,4 +1,5 @@
 class Article < ApplicationRecord
+  
   # relationships to authors
   has_many :article_authors
   has_many :authors, through: :article_authors

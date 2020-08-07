@@ -8,40 +8,30 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li>
-         <%= link_to image_tag('books2.svg'), {:controller => 'articles', :action => 'index'}, {:class => "nav-link active", title: "View Publications"}%>
+         <%= link_to image_tag('books2.svg'), {:controller => '/articles', :action => 'index'}, {:class => "nav-link active", title: "View Publications"}%>
       </li>
       <li>
-         <%= link_to image_tag('users.svg'), {:controller => 'authors', :action => 'index'}, {:class => "nav-link active", title: "View authors"} %>
+         <%= link_to image_tag('users.svg'), {:controller => '/authors', :action => 'index'}, {:class => "nav-link active", title: "View authors"} %>
       </li>
       <li>
-         <%= link_to image_tag('institution.svg'), {:controller => 'affiliations', :action => 'index'}, {:class => "nav-link active", title: "View affiliations"} %>
+         <%= link_to image_tag('institution.svg'), {:controller => '/affiliations', :action => 'index'}, {:class => "nav-link active", title: "View affiliations"} %>
       </li>
       <li>
-         <%= link_to image_tag('expert.svg'), {:controller => 'themes', :action => 'index'}, {:class => "nav-link active", title: "View experts"} %>
+         <%= link_to image_tag('expert.svg'), {:controller => '/themes', :action => 'index'}, {:class => "nav-link active", title: "View experts"} %>
       </li>
       <li>
-         <%= link_to image_tag('database.svg'), {:controller => 'datasets', :action => 'index'}, {:class => "nav-link active", title: "View datasets"} %>
+         <%= link_to image_tag('database.svg'), {:controller => '/datasets', :action => 'index'}, {:class => "nav-link active", title: "View datasets"} %>
       </li>
     </ul>
-    <!-- <div class="col-sm-3 col-md-3 pull-right">
-  		<%= form_tag({:controller => "articles", :action => "index"}, :method => "get", :id => 'searchForm', :class => 'navbar-form', :enforce_utf8 => false) do%>
-  			<div class="input-group">
-  				<input type="text" class="form-control" placeholder="Search" name="search" id="search" value="<%=@search%>" onchange="javascript:$('#searchForm').submit();">
-  				<div class="input-group-btn" title="You can search by free text or use lucene query syntax like /country:Japan AND /locality:Tosa AND /institutionCode:ANSP">
-  					<%= button_tag(type: "submit", name:"", class: "btn btn-default") do %>
-  						<i class="fas fa-search h4 text-body"></i>
-  					<% end %>
-  				</div>
-  			</div>
-  		<% end %> -->
-      <div class="col-sm-3 col-md-3 pull-right">
-        <% if current_user %>
-          Logged in as <%= current_user.email %>
-          <%= link_to "Log Out", logout_path %>
-        <% else %>
-          <%= link_to "Sign Up", signup_path %> or
-          <%= link_to "login", login_path %>
-        <% end %>
-      </div>
-	</div>
+    <div class="col-sm-3 col-md-3 pull-right">
+      <% if user_signed_in? %>
+        Logged in as <strong><%= current_user.email %></strong>.
+        <%= link_to 'Edit profile', edit_user_registration_path %> |
+        <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to "Sign up", new_user_registration_path %> |
+        <%= link_to "Login", new_user_session_path %>
+      <% end %>
+    </div>    
+  </div>
 </nav>

@@ -1,6 +1,6 @@
 class AffiliationsController < ApplicationController
   before_action :set_affiliation, only: [:show, :edit, :update, :destroy]
-  before_action :authorize, only: [:edit, :update, :new]
+
   # GET /affiliations
   # GET /affiliations.json
   def index

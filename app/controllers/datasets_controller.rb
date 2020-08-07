@@ -1,6 +1,5 @@
 class DatasetsController < ApplicationController
   before_action :set_dataset, only: [:show, :edit, :update, :destroy]
-  before_action :authorize, only: [:edit, :update, :new]
 
   # GET /datasets
   # GET /datasets.json

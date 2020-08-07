@@ -17,7 +17,8 @@
       <%= render 'layouts/navigation' %>
     </header>
     <main role="main">
-      <%= content_for?(:content) ? yield(:content) : yield %>
+	<p id="notice"><%= notice %></p>
+        <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
   </body>
 </html>
