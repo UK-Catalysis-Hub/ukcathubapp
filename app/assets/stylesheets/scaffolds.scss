@@ -16,8 +16,6 @@ pre {
 a {
   color: #000; }
 
-
-
 a:hover {
   color: #fff;
   background-color: #000; }
@@ -89,7 +87,7 @@ label {
           margin-right: 5px;}
         }
     .selectable{
-      max-height: 200px;
+      max-height: 100px;
       overflow: scroll;
       background-color: white;
       list-style: none;
