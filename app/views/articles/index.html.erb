@@ -4,7 +4,6 @@
       <div class="panel">
         <div class="panel-heading ">
           <div>
-            Filter <%= link_to 'reset', '?', class: 'btn  btn-success btn-sm float-right' %>
           </div>
         </div>
 
@@ -12,31 +11,31 @@
               <%= form_tag nil, method: :get do %>
                <!-- Field for searching by title -->
                 <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
-                <div class="col-md-4">
-                  <% title_filter = @search.filter(:title) %>
-                  <%= text_field_tag 'search[title]', title_filter.value, class: 'form-control', placeholder: title_filter.name %>
+                <div class="row">
+                  <div class="col-md-2">
+                    <b> Search: </b>
+                  </div>
+                  <div class="col-md-4">
+                    <% title_filter = @search.filter(:title) %>
+                    <%= text_field_tag 'search[title]', title_filter.value, class: 'form-control', placeholder: title_filter.name %>
+                  </div>
+                  <div class="col-md-4">
+                    <!-- Set sort order -->
+                      <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <% @search.orders.reject(&:active).each do |order| %>
+                        <li> <%= link_to order.title, order.by.path %> </li>
+                        <% end %>
+                      </ul>
+                  </div>
+                  <div class="col-md-2">
+                    <%= link_to 'reset', '?', class: 'btn  btn-success float-right' %>
+                  </div>
                 </div>
-                <br/>
-                <!-- Sort order by year -->
-                <div class="col-md-4">
-                  <a class="btn btn-success" data-toggle="dropdown" href="#" role="button">
-                    sort by:
-                    <%= @search.order.title if @search.order %>
-                    <b class="caret"></b>
-                  </a>
-                  <ul aria-labelledby="drop4" class="dropdown-menu" id="menu1" role="menu">
-                    <% @search.orders.reject(&:active).each do |order| %>
-                      <li>
-                        <%= link_to order.title, order.by.path %>
-                      </li>
-                    <% end %>
-                  </ul>
-                </div>
-                <br/>
               <% end %>
-              <%= @articles.count%> publications found  <br/>
+              <b> <%= @articles.count%> publications found  </b>
         </div>
-        <br/>
       </div>
     </div>
   </div>
