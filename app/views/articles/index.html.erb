@@ -1,132 +1,148 @@
-  <div class="row">
-    <div class="col-md-12">
-      <!-- Top DIV: search, order, reset -->
-      <p id="notice"><%= notice %></p>
-        <%= form_tag nil, method: :get do %>
-         <!-- Field for searching by title -->
-          <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
-          <div class="row">
-            <div class="col-md-1">
-              <b> Search: </b>
-            </div>
-            <div class="col-md-5">
-              <% title_filter = @search.filter(:title) %>
-              <%= text_field_tag 'search[title]', title_filter.value, class: 'form-control', placeholder: title_filter.name %>
-            </div>
-            <div class="col-md-4">
-              <!-- Set sort order -->
-                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
-                <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                  <% @search.orders.reject(&:active).each do |order| %>
-                  <li> <%= link_to order.title, order.by.path %> </li>
-                  <% end %>
-                </ul>
-            </div>
-            <div class="col-md-2">
-              <%= link_to 'reset', '?', class: 'btn  btn-success float-right' %>
-              </div>
-          </div>
-        <% end %>
-    </div>
-  </div>
-  <br/>
-  <div class="row">
-    <div class="col-md-3">
-      <!-- left DIV: facet filters -->
-        <%= form_tag nil, method: :get do %>
-          <!-- Field for searching by title -->
-          <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
-          <!-- Facet filter for publisher -->
-            <% [:container_title].each do |filter_name| %>
-               <% filter = @search.filter(filter_name) %>
-               <div class="filter">
-                 <div class="filter-title">
-                   <%= filter.name %>
-                   <span class="small text-muted">
-                     <%= "(#{filter.facet.length})" %>
-                   </span>
+
+
+     <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
+       <li class="nav-item">
+         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Browse</a>
+       </li>
+       <li class="nav-item">
+         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="false">Statistics</a>
+       </li>
+     </ul>
+     <div class="tab-content" id="myTabContent">
+       <div class="tab-pane fade show active" id="browse" role="tabpanel" aria-labelledby="browse-tab">
+         <div class="row">
+           <div class="col-md-12">
+             <!-- Top DIV: search, order, reset -->
+             <p id="notice"><%= notice %></p>
+               <%= form_tag nil, method: :get do %>
+                <!-- Field for searching by title -->
+                 <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
+                 <div class="row">
+                   <div class="col-md-1">
+                     <b> Search: </b>
+                   </div>
+                   <div class="col-md-5">
+                     <% title_filter = @search.filter(:title) %>
+                     <%= text_field_tag 'search[title]', title_filter.value, class: 'form-control', placeholder: title_filter.name %>
+                   </div>
+                   <div class="col-md-4">
+                     <!-- Set sort order -->
+                       <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
+                       <span class="caret"></span></button>
+                       <ul class="dropdown-menu">
+                         <% @search.orders.reject(&:active).each do |order| %>
+                         <li> <%= link_to order.title, order.by.path %> </li>
+                         <% end %>
+                       </ul>
+                   </div>
+                   <div class="col-md-2">
+                     <%= link_to 'reset', '?', class: 'btn  btn-success float-right' %>
+                     </div>
                  </div>
-                 <div class="filter-values">
-                   <ul class="selected">
-                     <% filter.selected.each do |entity| %>
-                       <% display = entity %>
-                       <li>
-                         <%= link_to display, filter.remove(entity).path %>
-                       </li>
-                     <% end %>
-                   </ul>
-                   <ul class="selectable">
-                     <% filter.facet.reject(&:selected).each do |facet_value| %>
-                       <% entity = facet_value.entity %>
-                       <li>
-                         <% display = entity %>
-                         <%= link_to display, filter.add(entity).path %>
-                         <span class="count">
-                           <%= "(#{facet_value.count})" %>
-                         </span>
-                       </li>
-                     <% end %>
-                   </ul>
-                 </div>
-               </div>
-             <% end %>
-           <% end %>
+               <% end %>
+           </div>
          </div>
-     <div class="col-md-9">
-       <!-- right DIV: results list -->
-       <%= will_paginate @articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
-       <% if user_signed_in? %>
-         <%= link_to 'New Article', new_article_path, :class => "btn btn-success btn-sm float-right" %>
-       <% end %>
-       <b> <%= @articles.count%> publications found  </b>
-       <br/>
-       <br/>
-       <table class="table">
-         <thead class="thead-light">
-           <tr>
-             <th>Publications</th>
-           </tr>
-         </thead>
-         <tbody>
-           <% @articles.each do |article| %>
-             <tr>
-               <td>
-                 <b>Title:</b> <%= link_to(article.title, article) %> <b>Year:</b> <%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>
-                 <b>Authors (<%= article.authors.count %>):</b>
-                 <% author_links = article.article_authors.all
-                    disp_names = ""
-                    for auth in author_links
-                      pr_name = auth.author.given_name
-                      pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
-                      pr_name += auth.author.last_name
-                      if disp_names =="" then
-                        disp_names = link_to(pr_name, auth.author)
-                      else
-                        disp_names += ', '.html_safe + link_to(pr_name, auth.author)
-                      end
-                    end %>
-                 <%= disp_names.to_s.html_safe %>
-                 <b>Publisher:</b> <%= article.container_title %>
-                 <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
-                 <% theme_links = article.article_themes.all
-                   disp_themes = ""
-                   for theme_lnk in theme_links
-                     theme_name = theme_lnk.theme.short
-                     theme_string = theme_lnk.theme.short + " ("+ theme_lnk.project_year.to_s() +")"
-                     if disp_themes =="" then
-                       disp_themes = link_to(theme_string, theme_lnk.theme)
-                     else
-                       disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
-                     end
-                   end
-                  %>
-                  <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
-               </td>
-             </tr>
-           <% end %>
-         </tbody>
-       </table>
+         <br/>
+         <div class="row">
+           <div class="col-md-3">
+             <!-- left DIV: facet filters -->
+               <%= form_tag nil, method: :get do %>
+                 <!-- Field for searching by title -->
+                 <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
+                 <!-- Facet filter for publisher -->
+                   <% [:container_title].each do |filter_name| %>
+                      <% filter = @search.filter(filter_name) %>
+                      <div class="filter">
+                        <div class="filter-title">
+                          <%= filter.name %>
+                          <span class="small text-muted">
+                            <%= "(#{filter.facet.length})" %>
+                          </span>
+                        </div>
+                        <div class="filter-values">
+                          <ul class="selected">
+                            <% filter.selected.each do |entity| %>
+                              <% display = entity %>
+                              <li>
+                                <%= link_to display, filter.remove(entity).path %>
+                              </li>
+                            <% end %>
+                          </ul>
+                          <ul class="selectable">
+                            <% filter.facet.reject(&:selected).each do |facet_value| %>
+                              <% entity = facet_value.entity %>
+                              <li>
+                                <% display = entity %>
+                                <%= link_to display, filter.add(entity).path %>
+                                <span class="count">
+                                  <%= "(#{facet_value.count})" %>
+                                </span>
+                              </li>
+                            <% end %>
+                          </ul>
+                        </div>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+            <div class="col-md-9">
+              <!-- right DIV: results list -->
+              <%= will_paginate @articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+              <% if user_signed_in? %>
+                <%= link_to 'New Article', new_article_path, :class => "btn btn-success btn-sm float-right" %>
+              <% end %>
+              <b> <%= @articles.count%> publications found  </b>
+              <br/>
+              <br/>
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Publications</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @articles.each do |article| %>
+                    <tr>
+                      <td>
+                        <b>Title:</b> <%= link_to(article.title, article) %> <b>Year:</b> <%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>
+                        <b>Authors (<%= article.authors.count %>):</b>
+                        <% author_links = article.article_authors.all
+                           disp_names = ""
+                           for auth in author_links
+                             pr_name = auth.author.given_name
+                             pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
+                             pr_name += auth.author.last_name
+                             if disp_names =="" then
+                               disp_names = link_to(pr_name, auth.author)
+                             else
+                               disp_names += ', '.html_safe + link_to(pr_name, auth.author)
+                             end
+                           end %>
+                        <%= disp_names.to_s.html_safe %>
+                        <b>Publisher:</b> <%= article.container_title %>
+                        <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
+                        <% theme_links = article.article_themes.all
+                          disp_themes = ""
+                          for theme_lnk in theme_links
+                            theme_name = theme_lnk.theme.short
+                            theme_string = theme_lnk.theme.short + " ("+ theme_lnk.project_year.to_s() +")"
+                            if disp_themes =="" then
+                              disp_themes = link_to(theme_string, theme_lnk.theme)
+                            else
+                              disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
+                            end
+                          end
+                         %>
+                         <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+            </div>
+       </div>
+       <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="statistics-tab">
+         .b.
+       </div>
      </div>
-     </div>
-  </div>
