@@ -5,12 +5,12 @@ class ArticlesController < ApplicationController
     model 'Article' # which model to search for
     text :title   # filter by a generic string entered by the user
     scope :active   # only return articles which are in the scope 'active'
-    facet :pub_year, name: 'YearPublished', order: :pub_year # additionally order values in the year field
+    facet :pub_year, name: 'Pub Year', order: :pub_year # additionally order values in the year field
     facet :container_title, name: 'Publisher'#, order: :container_title
 
     orders 'Title' => :title,
-           'pub_year, newest first' => "pub_year desc",
-           'pub_year, oldest first' => {pub_year: :asc, title: :asc}
+           'Year, newest first' => "pub_year desc",
+           'Year, oldest first' => {pub_year: :asc, title: :asc}
   end
 
   # GET /articles
@@ -84,7 +84,7 @@ class ArticlesController < ApplicationController
     def article_params
       params.require(:article).permit(:reference_count, :publisher, :issue, :license, :pub_print_year, :pub_print_month, :pub_print_day, :doi, :pub_type, :page, :title, :volume, :pub_ol_year, :pub_ol_month, :pub_ol_day, :container_title, :link, :references_count, :journal_issue, :url, :abstract, :status, :comment)
     end
-    
+
     # functions for getting data from crossref
     include Serrano
 end
