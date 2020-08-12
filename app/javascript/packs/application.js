@@ -9,6 +9,7 @@ require("@rails/activestorage").start()
 require("channels")
 require("chartkick")
 require("chart.js")
+require('bootstrap-sprockets')
 import "bootstrap"
 import "../stylesheets/application"
 

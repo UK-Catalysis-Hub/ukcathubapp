@@ -12,7 +12,7 @@ class ArticlesController < ApplicationController
            'pub_year, newest first' => "pub_year desc",
            'pub_year, oldest first' => {pub_year: :asc, title: :asc}
   end
-  
+
   # GET /articles
   # GET /articles.json
   def index
@@ -84,4 +84,7 @@ class ArticlesController < ApplicationController
     def article_params
       params.require(:article).permit(:reference_count, :publisher, :issue, :license, :pub_print_year, :pub_print_month, :pub_print_day, :doi, :pub_type, :page, :title, :volume, :pub_ol_year, :pub_ol_month, :pub_ol_day, :container_title, :link, :references_count, :journal_issue, :url, :abstract, :status, :comment)
     end
+    
+    # functions for getting data from crossref
+    include Serrano
 end

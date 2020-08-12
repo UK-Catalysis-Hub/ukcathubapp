@@ -67,3 +67,6 @@ gem 'forty_facets'
 
 # devise for authentication
 gem 'devise'
+
+# crossref gem
+gem 'serrano'
