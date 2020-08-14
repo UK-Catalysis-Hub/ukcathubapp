@@ -118,7 +118,9 @@
             <%= link_to @article.link, @article.link, target: "_blank", rel: "nofollow"  %>
           </p>
             <strong>URL:</strong>
+            <% if  @article.url %>
             <%= link_to @article.url, @article.url.html_safe, target: "_blank", rel: "nofollow" %>
+            <% end %>
           </p>
         </div>
       </div>
@@ -134,7 +136,9 @@
       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
         <div class="card-body">
           <p>
+            <% if @article.abstract %>
             <%= @article.abstract.html_safe %>
+            <% end %>
           </p>
         </div>
       </div>
