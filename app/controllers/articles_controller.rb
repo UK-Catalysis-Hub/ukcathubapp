@@ -190,6 +190,6 @@ class ArticlesController < ApplicationController
         db_article.pub_print_day = pub_data['journal_issue']['published-print']['date-parts'][0][2]
       end
       # mark incomplete as it is missing authors, affiliation and themes
-      db_article.status = "incomplete"
+      db_article.status = "Incomplete"
     end
 end
