@@ -38,5 +38,7 @@
     </tbody>
   </table>
   <br>
-  <%= link_to 'New Author', new_author_path, :class => "btn btn-success btn-sm"  %>
+  <% if user_signed_in? %>
+    <%= link_to 'New Author', new_author_path, :class => "btn btn-success btn-sm"  %>
+  <% end %>
 </div>

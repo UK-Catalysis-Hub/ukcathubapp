@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link active" id="details-tab" data-toggle="tab" href="#article_details" role="tab" aria-controls="article" aria-selected="true">Article details</a>
+    <a class="nav-link active" id="details-tab" data-toggle="tab" href="#article_details" role="tab" aria-controls="article_details" aria-selected="true">Article details</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="publisher-tab" data-toggle="tab" href="#publisher" role="tab" aria-controls="publisher" aria-selected="false">Publisher</a>
@@ -13,8 +13,9 @@
   </li>
 </ul>
 <div class="tab-content" id="myTabContent">
-  <%= form_with(model: article, local: true) do |form| %>
+
   <div class="tab-pane fade show active" id="article_details" role="tabpanel" aria-labelledby="article_details-tab">
+    <%= form_with(model: article, local: true) do |form| %>
       <% if article.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(article.errors.count, "error") %> prohibited this article from being saved:</h2>
@@ -38,7 +39,7 @@
         <%= form.label :pub_year %>
         <%= form.text_field :pub_year %>
       </div>
-      
+
       <div class="field">
         <%= form.label :link %>
         <%= form.text_field :link %>
@@ -64,12 +65,13 @@
         <%= form.label :comment %>
         <%= form.text_field :comment %>
       </div>
-
       <div class="actions">
         <%= form.submit %>
       </div>
+      <% end %>
   </div>
   <div class="tab-pane fade" id="publisher" role="tabpanel" aria-labelledby="publisher-tab">
+    <%= form_with(model: article, local: true) do |form| %>
     <div class="field">
       <%= form.label :publisher %>
       <%= form.text_field :publisher %>
@@ -131,15 +133,37 @@
       <%= form.label :pub_ol_day %>
       <%= form.number_field :pub_ol_day %>
     </div>
+    <% end %>
   </div>
   <div class="tab-pane fade" id="abstract" role="tabpanel" aria-labelledby="abstract-tab">
+    <%= form_with(model: article, local: true) do |form| %>
     <div class="field">
       <%= form.label :abstract %>
       <%= form.text_field :abstract %>
     </div>
+    <% end %>
   </div>
-<% end %>
-<div class="tab-pane fade" id="authors" role="tabpanel" aria-labelledby="authors-tab">
-  Authors
-</div>
+  <div class="tab-pane fade" id="authors" role="tabpanel" aria-labelledby="authors-tab">
+    <b>Show article authors</b>
+    <% if @article.authors.count == 0 %>
+      <%= 'Need to add authors' %>
+    <% else %>
+      <b>Authors (<%= @article.authors.count %>):</b>
+      <% author_links = @article.article_authors.all
+         disp_names = ""
+         for auth in author_links
+           pr_name = auth.author.given_name
+           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
+           pr_name += auth.author.last_name
+           if disp_names =="" then
+             disp_names = link_to(pr_name, auth.author)
+           else
+             disp_names += ', '.html_safe + link_to(pr_name, auth.author)
+           end
+         end %>
+      <%= disp_names.to_s.html_safe %>
+    <% end%>
+  </div>
+
+
 </div>
