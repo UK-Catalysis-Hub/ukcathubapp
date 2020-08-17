@@ -3,18 +3,11 @@
     <a class="nav-link active" id="details-tab" data-toggle="tab" href="#article_details" role="tab" aria-controls="article_details" aria-selected="true">Article details</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="publisher-tab" data-toggle="tab" href="#publisher" role="tab" aria-controls="publisher" aria-selected="false">Publisher</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="abstract-tab" data-toggle="tab" href="#abstract" role="tab" aria-controls="abstract" aria-selected="true">Abstract</a>
-  </li>
-  <li class="nav-item">
     <a class="nav-link" id="authors-tab" data-toggle="tab" href="#authors" role="tab" aria-controls="authors" aria-selected="false">Authors</a>
   </li>
 </ul>
 <div class="tab-content" id="myTabContent">
-
-  <div class="tab-pane fade show active" id="article_details" role="tabpanel" aria-labelledby="article_details-tab">
+  <div class="tab-pane form-inline fade show active" id="article_details" role="tabpanel" aria-labelledby="article_details-tab">
     <%= form_with(model: article, local: true) do |form| %>
       <% if article.errors.any? %>
         <div id="error_explanation">
@@ -26,121 +19,115 @@
           </ul>
         </div>
       <% end %>
-      <div class="field">
-        <%= form.label "DOI" %>
-        <%= form.text_field :doi %>
+      <div class="form-row">
+        <div class="col-md-2">
+          <%= form.label :doi, "DOI " %>
+          <%= form.text_field :doi %>
+        </div>
+        <div class="col-md-8">
+          <%= form.label :title %>
+          <%= form.text_field :title, :size=>"fill" %>
+        </div>
+        <div class="col-md-2">
+          <%= form.label :pub_year %>
+          <%= form.text_field :pub_year %>
+        </div>
       </div>
-      <div class="field">
-        <%= form.label :title %>
-        <%= form.text_field :title %>
+      <div class="form-row">
+        <div class="col-md-6">
+          <%= form.label :link %>
+          <%= form.text_field :link %>
+        </div>
+        <div class="col-md-6">
+          <%= form.label :url, "URL" %>
+          <%= form.text_field :url %>
+        </div>
       </div>
-
-      <div class="field">
-        <%= form.label :pub_year %>
-        <%= form.text_field :pub_year %>
+      <div class="form-row">
+        <div class="col-md-4 form-group">
+          <%= form.label :publisher %>
+          <%= form.text_field :publisher %>
+        </div>
+        <div class="col-md-4 form-group">
+          <%= form.label :container_title %>
+          <%= form.text_field :container_title %>
+        </div>
+        <div class="col-md-1 form-group">
+          <%= form.label :volume %>
+          <%= form.text_field :volume %>
+        </div>
+        <div class="col-md-1 form-group">
+          <%= form.label :issue %>
+          <%= form.text_field :issue %>
+        </div>
+        <div class="col-md-2 form-group">
+          <%= form.label :page %>
+          <%= form.text_field :page %>
+        </div>
       </div>
-
-      <div class="field">
-        <%= form.label :link %>
-        <%= form.text_field :link %>
+      <div class="form-row">
+        <div class="col-md-2 form-group">
+          <%= form.label :pub_type %>
+          <%= form.text_field :pub_type %>
+        </div>
+        <div class="col-md-2 form-group">
+          <%= form.label :reference_count %>
+          <%= form.number_field :reference_count %>
+        </div>
+        <div class="col-md-8 form-group">
+          <%= form.label :license %>
+          <%= form.text_field :license %>
+        </div>
       </div>
-
-      <div class="field">
-        <%= form.label :references_count %>
-        <%= form.text_field :references_count %>
+      <div class="form-row">
+        <div class="col-md-1 form-group">
+          <b>Print</b>
+        </div>
+        <div class="col-md-1 form-group">
+          <%= form.label :pub_print_year, "Year" %>
+          <%= form.number_field :pub_print_year %>
+        </div>
+        <div class="col-md-1 form-group">
+          <%= form.label :pub_print_month, "Month" %>
+          <%= form.number_field :pub_print_month %>
+        </div>
+        <div class="col-md-1 form-group">
+          <%= form.label :pub_print_day, "Day" %>
+          <%= form.number_field :pub_print_day %>
+        </div>
+        <div class="col-md-1 form-group">
+          <b>Online</b>
+        </div>
+        <div class="col-md-1 form-group">
+          <%= form.label :pub_ol_year, "Year" %>
+          <%= form.number_field :pub_ol_year %>
+        </div>
+        <div class="col-md-1 form-group">
+          <%= form.label :pub_ol_month, "Month" %>
+          <%= form.number_field :pub_ol_month %>
+        </div>
+        <div class="col-md-1 form-group">
+          <%= form.label :pub_ol_day, "Day" %>
+          <%= form.number_field :pub_ol_day %>
+        </div>
       </div>
-
-
-      <div class="field">
-        <%= form.label :url %>
-        <%= form.text_field :url %>
+      <div class="form-group">
+        <%= form.label :abstract %>
+        <%= form.text_area :abstract %>
       </div>
-
-      <div class="field">
-        <%= form.label :status %>
-        <%= form.text_field :status %>
+      <div class="form-row">
+        <div class="col-md-2 form-group">
+          <%= form.label :status %>
+          <%= form.text_field :status %>
+        </div>
+        <div class="col-md-8 form-group">
+          <%= form.label :comment %>
+          <%= form.text_field :comment %>
+        </div>
+        <div class="col-md-2 actions">
+          <%= form.submit %>
+        </div>
       </div>
-
-      <div class="field">
-        <%= form.label :comment %>
-        <%= form.text_field :comment %>
-      </div>
-      <div class="actions">
-        <%= form.submit %>
-      </div>
-      <% end %>
-  </div>
-  <div class="tab-pane fade" id="publisher" role="tabpanel" aria-labelledby="publisher-tab">
-    <%= form_with(model: article, local: true) do |form| %>
-    <div class="field">
-      <%= form.label :publisher %>
-      <%= form.text_field :publisher %>
-    </div>
-    <div class="field">
-      <%= form.label :container_title %>
-      <%= form.text_field :container_title %>
-    </div>
-    <div class="field">
-      <%= form.label :volume %>
-      <%= form.text_field :volume %>
-    </div>
-    <div class="field">
-      <%= form.label :journal_issue %>
-      <%= form.text_field :journal_issue %>
-    </div>
-    <div class="field">
-      <%= form.label :issue %>
-      <%= form.text_field :issue %>
-    </div>
-    <div class="field">
-      <%= form.label :page %>
-      <%= form.text_field :page %>
-    </div>
-    <div class="field">
-      <%= form.label :pub_print_year %>
-      <%= form.number_field :pub_print_year %>
-    </div>
-    <div class="field">
-      <%= form.label :pub_print_month %>
-      <%= form.number_field :pub_print_month %>
-    </div>
-
-    <div class="field">
-      <%= form.label :pub_print_day %>
-      <%= form.number_field :pub_print_day %>
-    </div>
-    <div class="field">
-      <%= form.label :pub_type %>
-      <%= form.text_field :pub_type %>
-    </div>
-    <div class="field">
-      <%= form.label :reference_count %>
-      <%= form.number_field :reference_count %>
-    </div>
-    <div class="field">
-      <%= form.label :license %>
-      <%= form.text_field :license %>
-    </div>
-    <div class="field">
-      <%= form.label :pub_ol_year %>
-      <%= form.number_field :pub_ol_year %>
-    </div>
-    <div class="field">
-      <%= form.label :pub_ol_month %>
-      <%= form.number_field :pub_ol_month %>
-    </div>
-    <div class="field">
-      <%= form.label :pub_ol_day %>
-      <%= form.number_field :pub_ol_day %>
-    </div>
-    <% end %>
-  </div>
-  <div class="tab-pane fade" id="abstract" role="tabpanel" aria-labelledby="abstract-tab">
-    <%= form_with(model: article, local: true) do |form| %>
-    <div class="field">
-      <%= form.label :abstract %>
-      <%= form.text_field :abstract %>
-    </div>
     <% end %>
   </div>
   <div class="tab-pane fade" id="authors" role="tabpanel" aria-labelledby="authors-tab">
