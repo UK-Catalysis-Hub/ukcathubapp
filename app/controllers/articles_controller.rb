@@ -80,11 +80,19 @@ class ArticlesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_article
       @article = Article.find(params[:id])
+      @authors = @article.authors
       #puts "--------------------------------------------------"
       #puts @article.title
       #puts "--------------------------------------------------"
       if @article.title == nil
          getPubData(@article, @article.doi)
+      end
+      if @article.authors.count == 0 or @article.authors[0].last_name == nil
+        puts "--------------------------------------------------"
+        puts "Need to add authors"
+        puts "--------------------------------------------------"
+        # get authors from crossref
+        getPubData(@authors, @article.doi)
       end
     end
 
@@ -102,6 +110,7 @@ class ArticlesController < ApplicationController
         'subtitle', 'short-title', 'issued','alternative-id','relation','ISSN',
         'container-title-short']
     end
+
     def getCRData(doi_text)
       begin
           #puts "trying"
@@ -191,5 +200,31 @@ class ArticlesController < ApplicationController
       end
       # mark incomplete as it is missing authors, affiliation and themes
       db_article.status = "Incomplete"
+    end
+
+    def getPubData(db_authors, doi_text)
+      pub_data = getCRData(doi_text)
+      pub_data['author'].each do |art_author|
+        new_author = Author.new()
+        if art_author.keys.include?('ORCID')
+          puts new_author.orcid
+          new_author.orcid = art_author['ORCID']
+        end
+        if art_author.keys.include?('family')
+          new_author.last_name = art_author['family']
+        end
+        if art_author.keys.include?('given')
+          new_author.given_name = art_author['given']
+        end
+        if new_author.given_name.length > 0
+          new_author.full_name = new_author.last_name + ", " +new_author.given_name
+        else
+          new_author.full_name = new_author.last_name
+        end
+        db_authors.append(new_author)
+        puts "###################################################################"
+        puts db_authors[0].last_name
+        puts "###################################################################"
+      end
     end
 end

@@ -2,20 +2,25 @@
   <p id="notice"><%= notice %></p>
   <h3> <strong>Title:</strong>   <%= @article.title %>  </h3>
   <p>
+    <% if @article.authors.count > 0 %>
     <b>Authors (<%= @article.authors.count %>):</b>
     <% author_links = @article.article_authors.all
        disp_names = ""
+       puts @article.authors.count
        for auth in author_links
-         pr_name = auth.author.given_name
-         pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
-         pr_name += auth.author.last_name
-         if disp_names =="" then
-           disp_names = link_to(pr_name, auth.author)
-         else
-           disp_names += ', '.html_safe + link_to(pr_name, auth.author)
+         if auth.author.given_name != nil
+           pr_name = auth.author.given_name
+           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
+           pr_name += auth.author.last_name
+           if disp_names =="" then
+             disp_names = link_to(pr_name, auth.author)
+           else
+             disp_names += ', '.html_safe + link_to(pr_name, auth.author)
+           end
          end
        end %>
     <%= disp_names.to_s.html_safe %>
+    <% end %>
   </p>
   <p>
     <% theme_links = @article.article_themes.all
@@ -42,7 +47,7 @@
     <strong>Pub type:</strong>
     <%= @article.pub_type %>
   </p>
-  <div class="accordion" id="accordionExample">
+  <div class="accordion" id="accordionPub">
     <div class="card">
       <div class="card-header" id="headingOne">
         <h5 class="mb-0">
