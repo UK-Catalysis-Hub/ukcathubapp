@@ -149,6 +149,9 @@
            end
          end %>
       <%= disp_names.to_s.html_safe %>
+      <% for auth in @article.authors %>
+        <%= render '/authors/form', author: auth %>
+      <% end %>
     <% end%>
   </div>
 

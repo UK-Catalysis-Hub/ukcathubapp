@@ -222,6 +222,9 @@ class ArticlesController < ApplicationController
         end
         db_authors.append(new_author)
         puts "###################################################################"
+        if art_author.keys.include?('affiliation')
+          puts art_author['affiliation']
+        end
         puts db_authors[0].last_name
         puts "###################################################################"
       end

@@ -26,8 +26,8 @@ class AuthorsController < ApplicationController
   # POST /authors.json
   def create
     @author = Author.new(author_params)
-
     respond_to do |format|
+      @author.full_name = @author.last_name + ", " + @author.given_name
       if @author.save
         format.html { redirect_to @author, notice: 'Author was successfully created.' }
         format.json { render :show, status: :created, location: @author }
@@ -41,8 +41,18 @@ class AuthorsController < ApplicationController
   # PATCH/PUT /authors/1
   # PATCH/PUT /authors/1.json
   def update
+    # use a temporary parameter array to store params and modify if needed
+    temp_params = author_params
+    puts "params last_name: " + temp_params['last_name']
+    if temp_params['last_name'] != nil and temp_params['last_name'] != ""
+      temp_params['full_name'] = temp_params['last_name'] + ", " +
+        temp_params['given_name']
+    else
+      temp_params['full_name'] = temp_params['given_name']
+    end
+    @author.full_name = @author.last_name + ", " + @author.given_name
     respond_to do |format|
-      if @author.update(author_params)
+      if @author.update(temp_params)
         format.html { redirect_to @author, notice: 'Author was successfully updated.' }
         format.json { render :show, status: :ok, location: @author }
       else
