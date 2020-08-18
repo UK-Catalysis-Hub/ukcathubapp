@@ -41,14 +41,13 @@ class ArticlesController < ApplicationController
     @article = Article.new(article_params)
     respond_to do |format|
       puts @article.doi
-      render :new
-      #if @article.save
-      #  format.html { redirect_to @article, notice: 'Article was successfully created.' }
-      #  format.json { render :show, status: :created, location: @article }
-    #  else
-      #  format.html { render :new }
-      #  format.json { render json: @article.errors, status: :unprocessable_entity }
-      #end
+      if @article.save
+        format.html { redirect_to @article, notice: 'Article was successfully created.' }
+        format.json { render :show, status: :created, location: @article }
+      else
+        format.html { render :new }
+        format.json { render json: @article.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -92,13 +91,13 @@ class ArticlesController < ApplicationController
         puts "Need to add authors"
         puts "--------------------------------------------------"
         # get authors from crossref
-        getPubData(@authors, @article.doi)
+        getAutData(@authors, @article.doi)
       end
     end
 
     # Only allow a list of trusted parameters through.
     def article_params
-      params.require(:article).permit(:reference_count, :publisher, :issue, :license, :pub_print_year, :pub_print_month, :pub_print_day, :doi, :pub_type, :page, :title, :volume, :pub_ol_year, :pub_ol_month, :pub_ol_day, :container_title, :link, :references_count, :journal_issue, :url, :abstract, :status, :comment)
+      params.require(:article).permit(:reference_count, :publisher, :issue, :license, :pub_print_year, :pub_print_month, :pub_print_day, :doi, :pub_type, :page, :title, :volume, :pub_ol_year, :pub_ol_month, :pub_ol_day, :container_title, :link, :references_count, :journal_issue, :url, :abstract, :status, :comment, :pub_year)
     end
 
     # functions for getting data from crossref
@@ -202,7 +201,7 @@ class ArticlesController < ApplicationController
       db_article.status = "Incomplete"
     end
 
-    def getPubData(db_authors, doi_text)
+    def getAutData(db_authors, doi_text)
       pub_data = getCRData(doi_text)
       pub_data['author'].each do |art_author|
         new_author = Author.new()
