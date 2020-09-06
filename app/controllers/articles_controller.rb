@@ -97,7 +97,7 @@ class ArticlesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def article_params
-      params.require(:article).permit(:reference_by_count, :publisher, :issue, :license, :pub_print_year, :pub_print_month, :pub_print_day, :doi, :pub_type, :page, :title, :volume, :pub_ol_year, :pub_ol_month, :pub_ol_day, :container_title, :link, :references_count, :journal_issue, :url, :abstract, :status, :comment, :pub_year)
+      params.require(:article).permit(:referenced_by_count, :publisher, :issue, :license, :pub_print_year, :pub_print_month, :pub_print_day, :doi, :pub_type, :page, :title, :volume, :pub_ol_year, :pub_ol_month, :pub_ol_day, :container_title, :link, :references_count, :journal_issue, :url, :abstract, :status, :comment, :pub_year)
     end
 
     # functions for getting data from crossref
@@ -155,13 +155,12 @@ class ArticlesController < ApplicationController
       puts "###################################################################"
       puts pub_data['title']
       db_article.title = pub_data['title']
-      db_article.reference_by_count = pub_data['reference-count']
       db_article.publisher = pub_data['publisher']
       db_article.issue = pub_data['issue']
       db_article.pub_type = pub_data['type']
       db_article.license = pub_data['license']
       db_article.volume = pub_data['volume']
-      db_article.reference_by_count = pub_data['reference_count']
+      db_article.referenced_by_count = pub_data['is_referenced_by_count']
       db_article.references_count = pub_data['references_count']
       db_article.link = pub_data['link']
       db_article.url = pub_data['URL']

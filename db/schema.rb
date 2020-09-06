@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_06_075607) do
+ActiveRecord::Schema.define(version: 2020_09_06_082653) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2020_09_06_075607) do
     t.string "author_count"
     t.integer "author_order"
     t.string "status"
-    t.string "sequence"
+    t.string "author_seq"
     t.integer "article_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -75,8 +75,34 @@ ActiveRecord::Schema.define(version: 2020_09_06_075607) do
     t.datetime "updated_at", null: false
   end
 
-# Could not dump table "articles" because of following StandardError
-#   Unknown type 'reference_by_count' for column 'reference_count'
+  create_table "articles", force: :cascade do |t|
+    t.string "doi"
+    t.string "title"
+    t.integer "pub_year"
+    t.string "pub_type"
+    t.string "publisher"
+    t.string "container_title"
+    t.string "volume"
+    t.string "issue"
+    t.string "page"
+    t.integer "pub_print_year"
+    t.integer "pub_print_month"
+    t.integer "pub_print_day"
+    t.integer "pub_ol_year"
+    t.integer "pub_ol_month"
+    t.integer "pub_ol_day"
+    t.string "license"
+    t.integer "referenced_by_count"
+    t.string "link"
+    t.string "url"
+    t.string "abstract"
+    t.string "status"
+    t.string "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "references_count"
+    t.string "journal_issue"
+  end
 
   create_table "authors", force: :cascade do |t|
     t.string "full_name"
