@@ -19,5 +19,5 @@ class Article < ApplicationRecord
   scope :active, -> {where(status: "Added")  }
   scope :inactive, -> {where("status <> ?", "Added")  }
   scope :latest, -> {where(status: "Added").order('CASE WHEN Articles.pub_ol_year = "" THEN Articles.pub_print_year ELSE Articles.pub_ol_year END DESC').order('id DESC').limit(10)  }
-  scope :most_cited, -> {where(status: "Added").order('reference_count DESC').order('id DESC').limit(10) }
+  scope :most_cited, -> {where(status: "Added").order('reference_by_count DESC').order('id DESC').limit(10) }
 end
