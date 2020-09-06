@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_07_162450) do
+ActiveRecord::Schema.define(version: 2020_09_06_073923) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -76,32 +76,32 @@ ActiveRecord::Schema.define(version: 2020_08_07_162450) do
   end
 
   create_table "articles", force: :cascade do |t|
-    t.integer "reference_count"
+    t.string "doi"
+    t.string "title"
+    t.integer "pub_year"
+    t.string "pub_type"
     t.string "publisher"
+    t.string "container_title"
+    t.string "volume"
     t.string "issue"
-    t.string "license"
+    t.string "page"
     t.integer "pub_print_year"
     t.integer "pub_print_month"
     t.integer "pub_print_day"
-    t.string "doi"
-    t.string "pub_type"
-    t.string "page"
-    t.string "title"
-    t.string "volume"
     t.integer "pub_ol_year"
     t.integer "pub_ol_month"
     t.integer "pub_ol_day"
-    t.string "container_title"
+    t.string "license"
+    t.integer "reference_count"
     t.string "link"
-    t.string "references_count"
-    t.string "journal_issue"
     t.string "url"
     t.string "abstract"
     t.string "status"
     t.string "comment"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.integer "pub_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "references_count"
+    t.string "journal_issue"
   end
 
   create_table "authors", force: :cascade do |t|

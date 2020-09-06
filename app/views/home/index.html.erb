@@ -1,4 +1,3 @@
-<%= javascript_include_tag('dashboard.js') %>
 <% @authors_list = Article.active.joins(:authors).select("authors.id, full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(5) %>
 <div class="container">
   <main role="main">
