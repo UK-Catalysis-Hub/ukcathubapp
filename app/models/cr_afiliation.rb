@@ -1,0 +1,2 @@
+class CrAfiliation < ApplicationRecord
+end

@@ -1,0 +1,32 @@
+<%= form_with(model: cr_afiliation, local: true) do |form| %>
+  <% if cr_afiliation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(cr_afiliation.errors.count, "error") %> prohibited this cr_afiliation from being saved:</h2>
+
+      <ul>
+        <% cr_afiliation.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :article_author_id %>
+    <%= form.number_field :article_author_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :affiliation_id %>
+    <%= form.number_field :affiliation_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

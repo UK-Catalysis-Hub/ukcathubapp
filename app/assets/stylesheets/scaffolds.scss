@@ -5,7 +5,7 @@ body {
 
 body, p, ol, ul, td {
   font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 18px; }
 
 pre {
@@ -15,6 +15,9 @@ pre {
 
 a {
   color: #000; }
+
+a:visited {
+  color: #666; }
 
 a:hover {
   color: #fff;
@@ -61,54 +64,54 @@ div.actions {
 label {
   display: block; }
 
-.search-inputs{
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-  border-bottom: 1px dashed #999;}
+  .search-inputs{
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #999;}
 
-.filter{
-  margin-bottom: 20px;
-  .filter-title{
-    font-size: 110%;
-    font-weight: bold;
-  }
-  .filter-values{
-    margin-top: 5;
-    border: 1px solid gray-light;
-    border-width: 1px 0 0 0;
-    .selected{
-      border: 1px solid gray-lighter;
-      border-width: 0 1 0 0;
-      list-style: none;
-      padding-left: 0;}
-      a{
-        &:before{
-          content: 'x';
-          margin-right: 5px;}
-        }
-    .selectable{
-      max-height: 100px;
-      overflow: scroll;
-      background-color: white;
-      list-style: none;
-      padding-left: 0;}
-      li{
+  .filter{
+    margin-bottom: 20px;
+    .filter-title{
+      font-size: 110%;
+      font-weight: bold;
+    }
+    .filter-values{
+      margin-top: 5;
+      border: 1px solid gray-light;
+      border-width: 1px 0 0 0;
+      .selected{
+        border: 1px solid gray-lighter;
+        border-width: 0 1 0 0;
+        list-style: none;
+        padding-left: 0;}
         a{
-          color: gray;
-          font-size: 90%;}
-        .count{
-          color: gray-light;
-          font-size: 70%;}
+          &:before{
+            content: 'x';
+            margin-right: 5px;}
+          }
+      .selectable{
+        max-height: 100px;
+        overflow: scroll;
+        background-color: white;
+        list-style: none;
+        padding-left: 0;}
+        li{
+          a{
+            color: gray;
+            font-size: 90%;}
+          .count{
+            color: gray-light;
+            font-size: 70%;}
+          }
         }
       }
+  form{
+      input, textarea, select, .uneditable-input {
+        border: 1px solid #bbb;
+        border-radius: 5px;
+        width: 100%;
+        padding: 10px;
+        height: auto !important;
+        margin-bottom: 15px;
+      }
     }
-form{
-    input, textarea, select, .uneditable-input {
-      border: 1px solid #bbb;
-      border-radius: 5px;
-      width: 100%;
-      padding: 10px;
-      height: auto !important;
-      margin-bottom: 15px;
-    }
-  }
