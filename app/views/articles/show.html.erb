@@ -47,17 +47,16 @@
     <strong>Pub type:</strong>
     <%= @article.pub_type %>
   </p>
-  <div class="accordion" id="accordionPub">
+  <div class="accordion" id="publicationsAccordion">
     <div class="card">
       <div class="card-header" id="headingOne">
         <h5 class="mb-0">
-          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            Publisher
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapsePublication" aria-expanded="true" aria-controls="collapsePublication">
+            Publisher Details
           </button>
         </h5>
       </div>
-
-      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div id="collapsePublication" class="collapse show" aria-labelledby="headingOne" data-parent="#publicationsAccordion">
         <div class="card-body">
           <p>
             <strong>Publisher:</strong>
@@ -131,14 +130,14 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-header" id="headingTwo">
+      <div class="card-header" id="abstractHeading">
         <h5 class="mb-0">
-          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseAbstract" aria-expanded="false" aria-controls="collapseAbstract">
             Abstract
           </button>
         </h5>
       </div>
-      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div id="collapseAbstract" class="collapse" aria-labelledby="abstractHeading" data-parent="#publicationsAccordion">
         <div class="card-body">
           <p>
             <% if @article.abstract %>
@@ -149,9 +148,9 @@
       </div>
     </div>
   </div>
+  <br/>
   <% if user_signed_in? %>
     <%= link_to 'Edit', edit_article_path(@article), :class => "btn btn-primary btn-sm" %>
   <% end %>
 
   <%= link_to 'Back', articles_path, :class => "btn btn-secondary btn-sm" %>
-</div>
