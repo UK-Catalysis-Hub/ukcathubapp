@@ -208,10 +208,12 @@ class ArticlesController < ApplicationController
         new_author = ArticleAuthor.new()
         if art_id != nil
           tem_auth = ArticleAuthor.find_by article_id: art_id, author_order: aut_order
-          new_author = tem_auth
+          if tem_auth != nil
+            new_author = tem_auth
+          end
         end
         if art_author.keys.include?('ORCID')
-          puts new_author.orcid
+          puts new_author.orcid.to_s
           new_author.orcid = art_author['ORCID']
         end
         if art_author.keys.include?('family')
