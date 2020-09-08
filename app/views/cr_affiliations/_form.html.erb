@@ -1,10 +1,10 @@
-<%= form_with(model: cr_afiliation, local: true) do |form| %>
-  <% if cr_afiliation.errors.any? %>
+<%= form_with(model: cr_affiliation, local: true) do |form| %>
+  <% if cr_affiliation.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(cr_afiliation.errors.count, "error") %> prohibited this cr_afiliation from being saved:</h2>
+      <h2><%= pluralize(cr_affiliation.errors.count, "error") %> prohibited this cr_affiliation from being saved:</h2>
 
       <ul>
-        <% cr_afiliation.errors.full_messages.each do |message| %>
+        <% cr_affiliation.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
       </ul>

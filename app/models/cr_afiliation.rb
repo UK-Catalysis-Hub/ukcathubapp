@@ -1,2 +1,0 @@
-class CrAfiliation < ApplicationRecord
-end

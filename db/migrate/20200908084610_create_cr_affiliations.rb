@@ -1,6 +1,6 @@
-class CreateCrAfiliations < ActiveRecord::Migration[6.0]
+class CreateCrAffiliations < ActiveRecord::Migration[6.0]
   def change
-    create_table :cr_afiliations do |t|
+    create_table :cr_affiliations do |t|
       t.string :name
       t.integer :article_author_id
       t.integer :affiliation_id

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_07_130043) do
+ActiveRecord::Schema.define(version: 2020_09_08_084610) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -52,11 +52,11 @@ ActiveRecord::Schema.define(version: 2020_09_07_130043) do
     t.string "status"
     t.string "author_seq"
     t.integer "article_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.string "orcid"
     t.string "last_name"
     t.string "given_name"
+    t.datetime "updated_at", null: false
+    t.datetime "created_at", null: false
   end
 
   create_table "article_datasets", force: :cascade do |t|
@@ -117,7 +117,7 @@ ActiveRecord::Schema.define(version: 2020_09_07_130043) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "cr_afiliations", force: :cascade do |t|
+  create_table "cr_affiliations", force: :cascade do |t|
     t.string "name"
     t.integer "article_author_id"
     t.integer "affiliation_id"

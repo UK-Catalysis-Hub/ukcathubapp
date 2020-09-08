@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CrAfiliationTest < ActiveSupport::TestCase
+class CrAffiliationTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

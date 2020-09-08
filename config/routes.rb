@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :cr_afiliations
+  resources :cr_affiliations
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
   resources :article_datasets
   resources :datasets

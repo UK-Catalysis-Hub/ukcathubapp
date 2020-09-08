@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Cr Affiliations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Article author</th>
+      <th>Affiliation</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cr_affiliations.each do |cr_affiliation| %>
+      <tr>
+        <td><%= cr_affiliation.name %></td>
+        <td><%= cr_affiliation.article_author_id %></td>
+        <td><%= cr_affiliation.affiliation_id %></td>
+        <td><%= link_to 'Show', cr_affiliation %></td>
+        <td><%= link_to 'Edit', edit_cr_affiliation_path(cr_affiliation) %></td>
+        <td><%= link_to 'Destroy', cr_affiliation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cr Affiliation', new_cr_affiliation_path %>

@@ -79,19 +79,20 @@ class ArticlesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_article
       @article = Article.find(params[:id])
-      @authors = @article.authors
+      @authors = @article.article_authors
+
       #puts "--------------------------------------------------"
       #puts @article.title
       #puts "--------------------------------------------------"
       if @article.title == nil
          getPubData(@article, @article.doi)
       end
-      if @article.authors.count == 0 or @article.authors[0].last_name == nil
+      if @article.article_authors.count == 0 or @article.article_authors[0].last_name == nil
         puts "--------------------------------------------------"
         puts "Need to add authors"
         puts "--------------------------------------------------"
         # get authors from crossref
-        getAutData(@authors, @article.doi)
+        getAutData(@authors, @article.doi, @article.id)
       end
     end
 
@@ -200,10 +201,15 @@ class ArticlesController < ApplicationController
       db_article.status = "Incomplete"
     end
 
-    def getAutData(db_authors, doi_text)
+    def getAutData(db_authors, doi_text, art_id)
       pub_data = getCRData(doi_text)
+      aut_order = 1
       pub_data['author'].each do |art_author|
-        new_author = Author.new()
+        new_author = ArticleAuthor.new()
+        if art_id != nil
+          tem_auth = ArticleAuthor.find_by article_id: art_id, author_order: aut_order
+          new_author = tem_auth
+        end
         if art_author.keys.include?('ORCID')
           puts new_author.orcid
           new_author.orcid = art_author['ORCID']
@@ -214,18 +220,28 @@ class ArticlesController < ApplicationController
         if art_author.keys.include?('given')
           new_author.given_name = art_author['given']
         end
-        if new_author.given_name.length > 0
-          new_author.full_name = new_author.last_name + ", " +new_author.given_name
-        else
-          new_author.full_name = new_author.last_name
-        end
-        db_authors.append(new_author)
+        new_author.author_seq = art_author['sequence'].to_s
+        new_author.author_order = aut_order
+
+        new_author.save
+
         puts "###################################################################"
+        puts "Author ID:" + new_author.id.to_s
         if art_author.keys.include?('affiliation')
           puts art_author['affiliation']
+          if art_author['affiliation'].length > 0
+            art_author['affiliation'].each do |temp_affi|
+              new_tmp_affi = CrAffiliation.new()
+              new_tmp_affi.name = temp_affi['name']
+              new_tmp_affi.article_author_id = new_author.id
+              new_tmp_affi.save
+            end
+          end
         end
         puts db_authors[0].last_name
         puts "###################################################################"
+        aut_order += 1
+
       end
     end
 end

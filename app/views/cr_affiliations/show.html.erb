@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @cr_affiliation.name %>
+</p>
+
+<p>
+  <strong>Article author:</strong>
+  <%= @cr_affiliation.article_author_id %>
+</p>
+
+<p>
+  <strong>Affiliation:</strong>
+  <%= @cr_affiliation.affiliation_id %>
+</p>
+
+<%= link_to 'Edit', edit_cr_affiliation_path(@cr_affiliation) %> |
+<%= link_to 'Back', cr_affiliations_path %>
