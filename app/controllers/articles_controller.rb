@@ -320,16 +320,16 @@ class ArticlesController < ApplicationController
         if art_author.keys.include?('affiliation')
           if art_author['affiliation'].length > 0
             art_author['affiliation'].each do |temp_affi|
-              new_tmp_affi = CrAffiliation.new()
+              new_affi = CrAffiliation.new()
               affi_text = temp_affi['name']
               if aut_id != nil
                 tem_affi = CrAffiliation.find_by article_author_id: aut_id, name: affi_text
-                if tem_auth != nil
-                  new_author = tem_auth
+                if tem_affi != nil
+                  new_affi = tem_affi
                 else
-                  new_tmp_affi.name = temp_affi['name']
-                  new_tmp_affi.article_author_id = new_author.id
-                  new_tmp_affi.save
+                  new_affi.name = temp_affi['name']
+                  new_affi.article_author_id = aut_id
+                  new_affi.save
                 end
               end
             end
