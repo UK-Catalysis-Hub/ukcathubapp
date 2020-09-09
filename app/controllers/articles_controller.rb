@@ -79,13 +79,13 @@ class ArticlesController < ApplicationController
   def verify
     puts 'verify all publications against CR records'
     date_from = Date.today - 30
-    articles_list = Article.all() #where("updated_at < ?", date_from)
+    articles_list = Article.where("updated_at < ?", date_from)
     #break counter
     bk_i = 1
     articles_list.each do |an_article|
       doi_text = an_article.doi
       verify_article(an_article)
-      if bk_i == 30
+      if bk_i == 10
         break
       end
       bk_i += 1
