@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   resources :datasets
   get 'home/index'
   resources :articles
+  #get 'verify' => 'articles#verify', as: :verify
+  post 'verify' => 'articles#verify', as: :verify
+  #get "issues/cancel_return" => "issues#cancel_return"
   resources :article_themes
   resources :article_authors
   resources :affiliation_links

@@ -75,6 +75,29 @@ class ArticlesController < ApplicationController
     end
   end
 
+  # VERIFY records in CR
+  def verify
+    puts 'verify all publications against CR records'
+    date_from = Date.today - 30
+    articles_list = Article.all() #where("updated_at < ?", date_from)
+    #break counter
+    bk_i = 1
+    articles_list.each do |an_article|
+      doi_text = an_article.doi
+      verify_article(an_article)
+      if bk_i == 30
+        break
+      end
+      bk_i += 1
+    end
+    respond_to do |format|
+      flash[:notice] = 'verify process started'
+      format.html { redirect_to action: "index" }
+      format.json { head :no_content }
+    end
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
@@ -244,6 +267,75 @@ class ArticlesController < ApplicationController
         puts "###################################################################"
         aut_order += 1
 
+      end
+    end
+
+    def verify_article(article)
+      # get the article from crossref
+      doi_text = article.doi
+      art_id = article.id
+      pub_data = getCRData(doi_text)
+      changes_found = false
+      # only verify fields which may chenge between recoveries, eg: citations
+      if article.attributes['referenced_by_count'] != pub_data['is-referenced-by-count']
+        changes_found = true
+        article.attributes['referenced_by_count'] = pub_data['is-referenced-by-count']
+        article.referenced_by_count = pub_data['is-referenced-by-count']
+      end
+      if changes_found
+        article.save
+      end
+      aut_order = 1
+      pub_data['author'].each do |art_author|
+        changes_found = false
+        new_author = ArticleAuthor.new()
+        if art_id != nil
+          tem_auth = ArticleAuthor.find_by article_id: art_id, author_order: aut_order
+          if tem_auth != nil
+            new_author = tem_auth
+          end
+        end
+        if art_author.keys.include?('ORCID')
+          if  new_author.orcid != art_author['ORCID']
+            changes_found = true
+            new_author.orcid = art_author['ORCID']
+          end
+        end
+        if art_author.keys.include?('family')
+          if new_author.last_name != art_author['family']
+            changes_found = true
+            new_author.last_name = art_author['family']
+          end
+        end
+        if art_author.keys.include?('given')
+          if new_author.given_name != art_author['given']
+            changes_found = true
+            new_author.given_name = art_author['given']
+          end
+        end
+        if changes_found
+          new_author.save
+        end
+        aut_id = new_author.id
+        if art_author.keys.include?('affiliation')
+          if art_author['affiliation'].length > 0
+            art_author['affiliation'].each do |temp_affi|
+              new_tmp_affi = CrAffiliation.new()
+              affi_text = temp_affi['name']
+              if aut_id != nil
+                tem_affi = CrAffiliation.find_by article_author_id: aut_id, name: affi_text
+                if tem_auth != nil
+                  new_author = tem_auth
+                else
+                  new_tmp_affi.name = temp_affi['name']
+                  new_tmp_affi.article_author_id = new_author.id
+                  new_tmp_affi.save
+                end
+              end
+            end
+          end
+        end
+        aut_order += 1
       end
     end
 end
