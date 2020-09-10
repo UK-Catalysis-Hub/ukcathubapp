@@ -77,19 +77,20 @@ class ArticlesController < ApplicationController
 
   # VERIFY records in CR
   def verify
-    puts 'verify all publications against CR records'
-    date_from = Date.today - 30
-    articles_list = Article.where("updated_at < ?", date_from)
-    #break counter
-    bk_i = 1
-    articles_list.each do |an_article|
-      doi_text = an_article.doi
-      verify_article(an_article)
-      if bk_i == 10
-        break
-      end
-      bk_i += 1
-    end
+    VerifyCrossrefWorker.perform_async
+    # puts 'verify all publications against CR records'
+    # date_from = Date.today - 30
+    # articles_list = Article.where("updated_at < ?", date_from)
+    # #break counter
+    # bk_i = 1
+    # articles_list.each do |an_article|
+    #   doi_text = an_article.doi
+    #   verify_articles(an_article)
+    #   if bk_i == 10
+    #     break
+    #   end
+    #   bk_i += 1
+    # end
     respond_to do |format|
       flash[:notice] = 'verify process started'
       format.html { redirect_to action: "index" }
@@ -270,7 +271,7 @@ class ArticlesController < ApplicationController
       end
     end
 
-    def verify_article(article)
+    def verify_articles(article)
       # get the article from crossref
       doi_text = article.doi
       art_id = article.id

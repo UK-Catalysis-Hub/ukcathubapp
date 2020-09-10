@@ -70,3 +70,6 @@ gem 'devise'
 
 # crossref gem
 gem 'serrano'
+
+# sidekiq gem for handling background processes
+gem 'sidekiq'
