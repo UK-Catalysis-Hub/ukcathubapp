@@ -1,22 +1,17 @@
 # worker for going through all publication records and verify them against CR
 class VerifyCrossrefWorker
   include Sidekiq::Worker
+  include Serrano
   def perform
     puts 'verify all publications against CR records'
     date_from = Date.today - 30
     articles_list = Article.where("updated_at < ?", date_from)
-    #break counter
-    bk_i = 1
     articles_list.each do |an_article|
       doi_text = an_article.doi
       verify_articles(an_article)
-      if bk_i == 10
-        break
-      end
-      bk_i += 1
     end
   end
-  
+
   def getCRData(doi_text)
     begin
         #puts "trying"
