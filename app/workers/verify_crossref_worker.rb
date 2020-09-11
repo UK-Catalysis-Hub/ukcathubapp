@@ -23,13 +23,15 @@ class VerifyCrossrefWorker
     end
   end
 
+
   def verify_articles(article)
     # get the article from crossref
     doi_text = article.doi
-    art_id = article.id
     pub_data = getCRData(doi_text)
+
+    art_id = article.id
     changes_found = false
-    # only verify fields which may chenge between recoveries, eg: citations
+    # only verify fields which may chenge between recoveries: citations
     if article.attributes['referenced_by_count'] != pub_data['is-referenced-by-count']
       changes_found = true
       article.attributes['referenced_by_count'] = pub_data['is-referenced-by-count']
@@ -91,5 +93,4 @@ class VerifyCrossrefWorker
       aut_order += 1
     end
   end
-
 end
