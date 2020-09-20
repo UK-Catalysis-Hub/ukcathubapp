@@ -1,4 +1,3 @@
-<%= form_with(model: article_author, local: true) do |form| %>
   <% if article_author.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(article_author.errors.count, "error") %> prohibited this article_author from being saved:</h2>
@@ -32,15 +31,19 @@
             <%= researcher.orcid %>
           </td>
           <td>
-            <%= link_to 'Assign', article_author, method: :link_to_researcher, data: { confirm: 'Are you sure?' }, class: "btn btn-primary btn-sm"  %>
+            <% #= #form.hidden_field :author_id, :value => researcher.id %>
+            <% #= #form.hidden_field :new_id, :value => researcher.id %>
+            <% #= #form.submit "Assign"  %>
+            <% #= #button_to "Verify", {:action => "verify", :controller => "articles"}, :class => 'btn  btn-success float-right'  %>
+            <% #= #link_to 'Assign', link_to_researcher_path + '?new_id='+researcher.id.to_s , data: { confirm: 'Are you sure?' }, class: "btn btn-primary btn-sm"  %>
+            <%= button_to 'Assign', {:action => 'link_to_researcher', :controller => 'article_authors', :data => {:author_id => researcher.id,:id => article_author.id}}, :class => 'btn  btn-success btn-sm'  %>
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
   <% if authors_list.length > 1 %>
-    <%= form.label "Many possible matches" %>
+    <%=  "Many possible matches" %>
   <% else %>
-    <%= form.label "Unique match" %>
+    <%=  "Unique match" %>
   <% end %>
-<% end %>

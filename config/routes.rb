@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   #get "issues/cancel_return" => "issues#cancel_return"
   resources :article_themes
   resources :article_authors
+  post 'link_to_researcher' => 'article_authors#link_to_researcher', as: :link_to_researcher
   resources :affiliation_links
   resources :affiliations
   resources :addresses

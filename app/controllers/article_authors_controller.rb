@@ -1,6 +1,7 @@
 class ArticleAuthorsController < ApplicationController
   before_action :set_article_author, only: [:show, :edit, :update, :destroy]
 
+  #before_action :skip_forgery_protection, only: [:link_to_researcher]
   # GET /article_authors
   # GET /article_authors.json
   def index
@@ -40,6 +41,10 @@ class ArticleAuthorsController < ApplicationController
   # PATCH/PUT /article_authors/1
   # PATCH/PUT /article_authors/1.json
   def update
+    if params.has_key?("commit") and params["commit"] == "Assign"
+      puts params["article_author"]["author_id"]
+      params["article_author"]["status"] = "not verified"
+    end
     respond_to do |format|
       if @article_author.update(article_author_params)
         format.html { redirect_to @article_author, notice: 'Article author was successfully updated.' }
@@ -59,6 +64,26 @@ class ArticleAuthorsController < ApplicationController
       format.html { redirect_to article_authors_url, notice: 'Article author was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  # Assign researcher(author) to article author record
+  def link_to_researcher
+    # get the researcher id from the parameters
+    # get the article id from the parameters
+    # save article_author
+    # redirect to article edit
+    puts "********************************************************************"
+    puts params
+    puts params["data"]
+    @article_author = ArticleAuthor.find(params["data"]["id"])
+    update_hash = {:author_id=>params["data"]["author_id"], :status => 'verified'}  
+    @article_author.update(update_hash)
+    puts "********************************************************************"
+    # respond_to do |format|
+    #   flash[:notice] = 'verify process started'
+    #   format.html { redirect_to action: "index" }
+    #   format.json { head :no_content }
+    # end
   end
 
   private
