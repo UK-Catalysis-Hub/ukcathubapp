@@ -1,0 +1,35 @@
+<%= form_with(model: article_author, local: true) do |form| %>
+  <% if article_author.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(article_author.errors.count, "error") %> prohibited this article_author from being saved:</h2>
+      <ul>
+        <% article_author.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% invalid =["",nil, "not verified"] %>
+  <% if invalid.include?(article_author.status) %>
+    <div class="card">
+      <div class="card-header">
+        <h5>
+          <%= article_author.given_name %> <%= article_author.last_name %>
+        </h5>
+        <p>Verify linked researcher</p>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class= "col-md-6">
+            <%= render '/article_authors/form_verify_left', article_author: article_author %>
+          </div>
+          <div class= "col-md-6">
+            <%= render '/article_authors/form_verify_right', article_author: article_author %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <%= render '/article_authors/form', article_author: article_author %>
+  <% end %>
+<% end %>

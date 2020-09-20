@@ -1,0 +1,46 @@
+<%= form_with(model: article_author, local: true) do |form| %>
+  <% if article_author.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(article_author.errors.count, "error") %> prohibited this article_author from being saved:</h2>
+
+      <ul>
+        <% article_author.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% authors_list = Author.where(orcid: article_author.orcid, last_name: article_author.last_name)%>
+
+  <table>
+    <thead class="thead-light">
+      <tr>
+        <th>Author</th>
+        <th>ORCID</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% authors_list.each do |researcher| %>
+        <tr>
+          <td>
+            <%= researcher.id %>
+            <%= researcher.given_name %>
+            <%= researcher.last_name %>
+          </td>
+          <td>
+            <%= researcher.orcid %>
+          </td>
+          <td>
+            <%= link_to 'Assign', article_author, method: :link_to_researcher, data: { confirm: 'Are you sure?' }, class: "btn btn-primary btn-sm"  %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% if authors_list.length > 1 %>
+    <%= form.label "Many possible matches" %>
+  <% else %>
+    <%= form.label "Unique match" %>
+  <% end %>
+<% end %>

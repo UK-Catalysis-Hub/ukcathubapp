@@ -1,0 +1,35 @@
+<%= form_with(model: article_author, local: true) do |form| %>
+  <% if article_author.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(article_author.errors.count, "error") %> prohibited this article_author from being saved:</h2>
+      <ul>
+        <% article_author.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <p>
+    <strong>Name: </strong>
+    <%= article_author.last_name %>
+    <%= article_author.given_name %>
+  </p>
+  <p>
+    <strong>ORCID: </strong>
+    <%= article_author.orcid %>
+  </p>
+  <p>
+    <strong>Linked Researcher ID: </strong>
+    <%= article_author.author_id %>
+    <strong>Status: </strong>
+    <%= article_author.status %>
+  </p>
+  <p>
+    <strong>Sequence: </strong>
+    <%= article_author.author_seq %>
+    <strong>Order: </strong>
+    <%= article_author.author_order %>
+  </p>
+  <p>
+
+<% end %>

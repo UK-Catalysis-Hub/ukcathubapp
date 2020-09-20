@@ -135,7 +135,7 @@
     <% if @article.authors.count == 0 %>
       <%= 'Need to add authors' %>
     <% else %>
-      <b>Authors (<%= @article.authors.count %>):</b>
+      <b>Authors (<%= @article.article_authors.count %>):</b>
       <% author_links = @article.article_authors.all
          disp_names = ""
          for auth in author_links
@@ -149,8 +149,8 @@
            end
          end %>
       <%= disp_names.to_s.html_safe %>
-      <% for auth in @article.authors %>
-        <%= render '/authors/form', author: auth %>
+      <% for auth in @article.article_authors %>
+        <%= render '/article_authors/form_verify', article_author: auth %>
       <% end %>
     <% end%>
   </div>
