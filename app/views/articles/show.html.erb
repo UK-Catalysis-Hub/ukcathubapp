@@ -9,7 +9,7 @@
        puts @article.authors.count
        for auth in author_links
          if auth.author.given_name != nil
-           pr_name = auth.author.given_name
+           pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
            pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
            pr_name += auth.author.last_name
            if disp_names =="" then

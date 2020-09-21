@@ -1,6 +1,15 @@
-  <% authors_list = Author.where(orcid: article_author.orcid, last_name: article_author.last_name)
+  <% plain_ln = "XXXXX"
+     if article_author.last_name.include?('-')
+       plain_ln = article_author.last_name.gsub('-',' ')
+     end  
+     puts "***************************************************************"
+     puts plain_ln
+     puts article_author.last_name
+     puts "***************************************************************"
+     authors_list = Author.where(orcid: article_author.orcid, last_name: article_author.last_name)
                           .or(Author.where(given_name: article_author.given_name, last_name: article_author.last_name))
-                          .or(Author.where(last_name: article_author.last_name))%>
+                          .or(Author.where(last_name: article_author.last_name))
+                          .or(Author.where(last_name: plain_ln))%>
   <% if authors_list.length > 1 %>
     <%=  "Researcher possible matches" %>
   <% else %>
