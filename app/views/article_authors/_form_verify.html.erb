@@ -1,15 +1,19 @@
           <% invalid =["",nil, "not verified", "None"] %>
+          <% needs_verification = invalid.include?(article_author.status) %>
           <div class="card">
             <div class="card-header" id="heading<%= article_author.id %>">
               <h5 class="mb-0" >
                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<%= article_author.id %>" aria-expanded="true" aria-controls="collapse<%= article_author.id %>">
                   <%= article_author.given_name %> <%= article_author.last_name %>
                 </button>
+                <% if needs_verification %>
+                  <%= "x" %>
+                <% end %>
               </h5>
             </div> <!--end of authors card header -->
             <div id="collapse<%= article_author.id %>" class="collapse" aria-labelledby="heading<%= article_author.id %>" data-parent="#accordionAuthors">
               <div class="card-body" >
-              <% if invalid.include?(article_author.status) %>
+              <% if needs_verification %>
                   <div class="row">
                     <div class= "col-md-6">
                       <p> Please verify linked researcher</p>
