@@ -3,7 +3,9 @@
     <a class="nav-link active" id="details-tab" data-toggle="tab" href="#article_details" role="tab" aria-controls="article_details" aria-selected="true">Article details</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="authors-tab" data-toggle="tab" href="#authors" role="tab" aria-controls="authors" aria-selected="false">Authors</a>
+    <a class="nav-link" id="authors-tab" data-toggle="tab" href="#authors" role="tab" aria-controls="authors" aria-selected="false">
+      Authors (<%= @article.article_authors.count %>)
+    </a>
   </li>
 </ul>
 <div class="tab-content" id="myTabContent">
@@ -131,31 +133,10 @@
     <% end %>
   </div>
   <div class="tab-pane fade" id="authors" role="tabpanel" aria-labelledby="authors-tab">
-    <b>Show article authors</b>
-    <% if @article.authors.count == 0 %>
-      <%= 'Need to add authors' %>
-    <% else %>
-      <b>Authors (<%= @article.article_authors.count %>):</b>
-      <% author_links = @article.article_authors.all
-         disp_names = ""
-         for auth in author_links
-           pr_name = auth.author.given_name
-           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
-           pr_name += auth.author.last_name
-           if disp_names =="" then
-             disp_names = link_to(pr_name, auth.author)
-           else
-             disp_names += ', '.html_safe + link_to(pr_name, auth.author)
-           end
-         end %>
-      <%= disp_names.to_s.html_safe %>
-        <div class="accordion" id="accordionAuthors">
-          <% for auth in @article.article_authors %>
-            <%= render '/article_authors/form_verify', article_author: auth %>
-          <% end %>
-        </div><!--end of authors accordion -->
-    <% end%>
+    <div class="accordion" id="accordionAuthors">
+      <% for auth in @article.article_authors %>
+        <%= render '/article_authors/form_verify', article_author: auth %>
+      <% end %>
+    </div><!--end of authors accordion -->
   </div>
-
-
 </div>
