@@ -1,35 +1,27 @@
-<%= form_with(model: article_author, local: true) do |form| %>
-  <% if article_author.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(article_author.errors.count, "error") %> prohibited this article_author from being saved:</h2>
-      <ul>
-        <% article_author.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <% invalid =["",nil, "not verified", "None"] %>
-  <% if invalid.include?(article_author.status) %>
-    <div class="card">
-      <div class="card-header">
-        <h5>
-          <%= article_author.given_name %> <%= article_author.last_name %>
-        </h5>
-        <p>Verify linked researcher</p>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class= "col-md-6">
-            <%= render '/article_authors/form_verify_left', article_author: article_author %>
-          </div>
-          <div class= "col-md-6">
-            <%= render '/article_authors/form_verify_right', article_author: article_author %>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% else %>
-    <%= render '/article_authors/form_verify_left', article_author: article_author %>
-  <% end %>
-<% end %>
+          <% invalid =["",nil, "not verified", "None"] %>
+          <div class="card">
+            <div class="card-header" id="heading<%= article_author.id %>">
+              <h5 class="mb-0" >
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<%= article_author.id %>" aria-expanded="true" aria-controls="collapse<%= article_author.id %>">
+                  <%= article_author.given_name %> <%= article_author.last_name %>
+                </button>
+              </h5>
+            </div> <!--end of authors card header -->
+            <div id="collapse<%= article_author.id %>" class="collapse" aria-labelledby="heading<%= article_author.id %>" data-parent="#accordionAuthors">
+              <div class="card-body" >
+              <% if invalid.include?(article_author.status) %>
+                  <div class="row">
+                    <div class= "col-md-6">
+                      <p> Please verify linked researcher</p>
+                      <%= render '/article_authors/form_verify_left', article_author: article_author %>
+                    </div>
+                    <div class= "col-md-6">
+                      <%= render '/article_authors/form_verify_right', article_author: article_author %>
+                    </div>
+                  </div>
+              <% else %>
+                  <%= render '/article_authors/form_verify_left', article_author: article_author %>
+              <% end %>
+              </div> <!--end of authors card body -->
+            </div><!--end of collapse div -->
+          </div> <!--end of authors card -->

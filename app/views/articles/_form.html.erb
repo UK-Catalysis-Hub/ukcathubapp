@@ -149,9 +149,11 @@
            end
          end %>
       <%= disp_names.to_s.html_safe %>
-      <% for auth in @article.article_authors %>
-        <%= render '/article_authors/form_verify', article_author: auth %>
-      <% end %>
+        <div class="accordion" id="accordionAuthors">
+          <% for auth in @article.article_authors %>
+            <%= render '/article_authors/form_verify', article_author: auth %>
+          <% end %>
+        </div><!--end of authors accordion -->
     <% end%>
   </div>
 

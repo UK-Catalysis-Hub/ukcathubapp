@@ -1,18 +1,11 @@
-  <% if article_author.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(article_author.errors.count, "error") %> prohibited this article_author from being saved:</h2>
-
-      <ul>
-        <% article_author.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
   <% authors_list = Author.where(orcid: article_author.orcid, last_name: article_author.last_name)
                           .or(Author.where(given_name: article_author.given_name, last_name: article_author.last_name))
                           .or(Author.where(last_name: article_author.last_name))%>
-
+  <% if authors_list.length > 1 %>
+    <%=  "Researcher possible matches" %>
+  <% else %>
+    <%=  "Unique researcher match" %>
+  <% end %>
   <table>
     <thead class="thead-light">
       <tr>
@@ -39,8 +32,3 @@
       <% end %>
     </tbody>
   </table>
-  <% if authors_list.length > 1 %>
-    <%=  "Many possible matches" %>
-  <% else %>
-    <%=  "Unique match" %>
-  <% end %>
