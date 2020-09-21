@@ -9,7 +9,9 @@
       </ul>
     </div>
   <% end %>
-  <% authors_list = Author.where(orcid: article_author.orcid, last_name: article_author.last_name)%>
+  <% authors_list = Author.where(orcid: article_author.orcid, last_name: article_author.last_name)
+                          .or(Author.where(given_name: article_author.given_name, last_name: article_author.last_name))
+                          .or(Author.where(last_name: article_author.last_name))%>
 
   <table>
     <thead class="thead-light">
@@ -31,11 +33,6 @@
             <%= researcher.orcid %>
           </td>
           <td>
-            <% #= #form.hidden_field :author_id, :value => researcher.id %>
-            <% #= #form.hidden_field :new_id, :value => researcher.id %>
-            <% #= #form.submit "Assign"  %>
-            <% #= #button_to "Verify", {:action => "verify", :controller => "articles"}, :class => 'btn  btn-success float-right'  %>
-            <% #= #link_to 'Assign', link_to_researcher_path + '?new_id='+researcher.id.to_s , data: { confirm: 'Are you sure?' }, class: "btn btn-primary btn-sm"  %>
             <%= button_to 'Assign', {:action => 'link_to_researcher', :controller => 'article_authors', :data => {:author_id => researcher.id,:id => article_author.id}}, :class => 'btn  btn-success btn-sm'  %>
           </td>
         </tr>

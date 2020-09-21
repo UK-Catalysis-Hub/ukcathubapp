@@ -9,7 +9,7 @@
       </ul>
     </div>
   <% end %>
-  <% invalid =["",nil, "not verified"] %>
+  <% invalid =["",nil, "not verified", "None"] %>
   <% if invalid.include?(article_author.status) %>
     <div class="card">
       <div class="card-header">
