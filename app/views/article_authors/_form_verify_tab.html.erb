@@ -1,6 +1,4 @@
-          <% invalid =["",nil, "not verified", "None"] %>
-          <% needs_verification = invalid.include?(article_author.status) %>
-          <% if needs_verification %>
+          <% if article_author.status != "verified" %>
               <div class="row">
                 <div class= "col-md-6">
                   <p> Please verify linked researcher</p>

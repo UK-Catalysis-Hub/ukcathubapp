@@ -1,15 +1,33 @@
-  <% plain_ln = "XXXXX"
+  <% plain_ln = "XXXXX%"
      if article_author.last_name.include?('-')
        plain_ln = article_author.last_name.gsub('-',' ')
-     end  
+     end
+     like_name = "XXXX%"
+     if (article_author.last_name =~ /[^a-zA-Z\s:]/) != nil
+       non_alpha_found = true
+       like_name = article_author.last_name.gsub(" ","%")
+       while non_alpha_found
+         c_idx = (like_name =~ /[^a-zA-Z\s:]/)
+         if c_idx != nil
+           like_name[c_idx] = " "
+         else
+           non_alpha_found = false
+         end
+       end
+       like_name.gsub!(' ','%')
+     end
+
      puts "***************************************************************"
      puts plain_ln
+     puts like_name
      puts article_author.last_name
      puts "***************************************************************"
+
      authors_list = Author.where(orcid: article_author.orcid, last_name: article_author.last_name)
                           .or(Author.where(given_name: article_author.given_name, last_name: article_author.last_name))
                           .or(Author.where(last_name: article_author.last_name))
-                          .or(Author.where(last_name: plain_ln))%>
+                          .or(Author.where(last_name: plain_ln))
+                          .or(Author.where('last_name LIKE ?', '%' + like_name + '%'))%>
   <% if authors_list.length > 1 %>
     <%=  "Researcher possible matches" %>
   <% else %>
