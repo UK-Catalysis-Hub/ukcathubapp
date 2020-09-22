@@ -3,14 +3,17 @@
   <div class="card-body">
     <ul class="nav nav-tabs" id="myTab<%= article_author.id %>" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="home-tab<%= article_author.id %>" data-toggle="tab" href="#home<%= article_author.id %>" role="tab" aria-controls="home<%= article_author.id %>" aria-selected="true">Author details</a>
+        <a class="nav-link active" id="art-author-tab<%= article_author.id %>" data-toggle="tab" href="#art-author<%= article_author.id %>" role="tab" aria-controls="art-author<%= article_author.id %>" aria-selected="true">Author details</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="profile-tab<%= article_author.id %>" data-toggle="tab" href="#profile<%= article_author.id %>" role="tab" aria-controls="profile<%= article_author.id %>" aria-selected="false">Affiliations</a>
+        <a class="nav-link" id="cr-affiliation-tab<%= article_author.id %>" data-toggle="tab" href="#cr-affiliation<%= article_author.id %>" role="tab" aria-controls="cr-affiliation<%= article_author.id %>" aria-selected="false">CR Affiliations</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="researcher-tab<%= article_author.id %>" data-toggle="tab" href="#researcher<%= article_author.id %>" role="tab" aria-controls="researcher<%= article_author.id %>" aria-selected="false">Researcher details</a>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent<%= article_author.id %>">
-      <div class="tab-pane fade show active" id="home<%= article_author.id %>" role="tabpanel" aria-labelledby="home-tab<%= article_author.id %>">
+      <div class="tab-pane fade show active" id="art-author<%= article_author.id %>" role="tabpanel" aria-labelledby="art-author-tab<%= article_author.id %>">
         <p>
           <strong>Name: </strong>
           <%= article_author.last_name %>
@@ -33,9 +36,13 @@
           <%= article_author.author_order %>
         </p>
       </div>
-      <div class="tab-pane fade" id="profile<%= article_author.id %>" role="tabpanel" aria-labelledby="profile-tab<%= article_author.id %>">
-        <%= article_author.cr_affiliations %>
+      <div class="tab-pane fade" id="cr-affiliation<%= article_author.id %>" role="tabpanel" aria-labelledby="cr-affiliation-tab<%= article_author.id %>">
+        <b>CR Affiliations</b>
         <%= render '/cr_affiliations/cr_affiliations_list', cr_affiliations: article_author.cr_affiliations %>
+        
+      </div>
+      <div class="tab-pane fade" id="researcher<%= article_author.id %>" role="tabpanel" aria-labelledby="researcher-tab<%= article_author.id %>">
+        <%= render '/authors/researcher_view', researcher: article_author.author %>
       </div>
     </div>
   </div>
