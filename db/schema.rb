@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_08_084610) do
+ActiveRecord::Schema.define(version: 2020_09_22_154055) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -105,6 +105,19 @@ ActiveRecord::Schema.define(version: 2020_09_08_084610) do
     t.datetime "updated_at", null: false
     t.integer "references_count"
     t.string "journal_issue"
+  end
+
+  create_table "author_affiliations", force: :cascade do |t|
+    t.integer "author_id"
+    t.string "name"
+    t.string "add_01"
+    t.string "add_02"
+    t.string "add_03"
+    t.string "add_04"
+    t.string "add_05"
+    t.string "country"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "authors", force: :cascade do |t|
