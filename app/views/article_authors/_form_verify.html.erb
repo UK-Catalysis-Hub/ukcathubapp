@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card-body">
+    <ul class="nav nav-tabs" id="author-tabs" role="tablist">
+      <% for auth in article_authors %>
+        <li class="nav-item">
+          <a class="nav-link<%= auth.author_seq.downcase == "first" ? " active":"" %>" id="auth<%= auth.id %>-tab" data-toggle="tab" href="#auth<%= auth.id %>" role="tab" aria-controls="auth<%= auth.id %>" aria-selected="true">
+            <%= auth.given_name %> <%= auth.last_name %>
+            <% if auth.status != "verified" %>
+              <%= "x" %>
+            <% end %>
+          </a>
+        </li>
+      <% end %>
+    </ul>
+    <div class="tab-content" id="authorTabContent">
+      <% for auth in article_authors %>
+        <div class="tab-pane fade<%= auth.author_seq.downcase == "first" ? " show active":"" %>" id="auth<%= auth.id %>" role="tabpanel" aria-labelledby="auth<%= auth.id %>-tab">
+          <%= render '/article_authors/form_verify_tab', article_author: auth %>
+        </div>
+      <% end %>
+    </div>
+  </div>
