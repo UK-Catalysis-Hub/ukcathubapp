@@ -3,6 +3,7 @@ class CreateAuthorAffiliations < ActiveRecord::Migration[6.0]
     create_table :author_affiliations do |t|
       t.integer :author_id
       t.string :name
+      t.string :short_name
       t.string :add_01
       t.string :add_02
       t.string :add_03

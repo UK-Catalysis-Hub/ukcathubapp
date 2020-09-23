@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_22_154055) do
+ActiveRecord::Schema.define(version: 2020_09_23_115236) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 2020_09_22_154055) do
   create_table "author_affiliations", force: :cascade do |t|
     t.integer "author_id"
     t.string "name"
+    t.string "short_name"
     t.string "add_01"
     t.string "add_02"
     t.string "add_03"
@@ -133,7 +134,7 @@ ActiveRecord::Schema.define(version: 2020_09_22_154055) do
   create_table "cr_affiliations", force: :cascade do |t|
     t.string "name"
     t.integer "article_author_id"
-    t.integer "affiliation_id"
+    t.integer "author_affiliation_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

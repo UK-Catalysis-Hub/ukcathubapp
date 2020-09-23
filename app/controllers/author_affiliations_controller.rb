@@ -69,6 +69,6 @@ class AuthorAffiliationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def author_affiliation_params
-      params.require(:author_affiliation).permit(:author_id, :name, :add_01, :add_02, :add_03, :add_04, :add_05, :country)
+      params.require(:author_affiliation).permit(:author_id, :name, :short_name, :add_01, :add_02, :add_03, :add_04, :add_05, :country)
     end
 end

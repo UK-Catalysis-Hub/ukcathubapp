@@ -17,7 +17,7 @@ class AuthorAffiliationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create author_affiliation" do
     assert_difference('AuthorAffiliation.count') do
-      post author_affiliations_url, params: { author_affiliation: { add_01: @author_affiliation.add_01, add_02: @author_affiliation.add_02, add_03: @author_affiliation.add_03, add_04: @author_affiliation.add_04, add_05: @author_affiliation.add_05, author_id: @author_affiliation.author_id, country: @author_affiliation.country, name: @author_affiliation.name } }
+      post author_affiliations_url, params: { author_affiliation: { add_01: @author_affiliation.add_01, add_02: @author_affiliation.add_02, add_03: @author_affiliation.add_03, add_04: @author_affiliation.add_04, add_05: @author_affiliation.add_05, author_id: @author_affiliation.author_id, country: @author_affiliation.country, name: @author_affiliation.name, short_name: @author_affiliation.short_name } }
     end
 
     assert_redirected_to author_affiliation_url(AuthorAffiliation.last)
@@ -34,7 +34,7 @@ class AuthorAffiliationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update author_affiliation" do
-    patch author_affiliation_url(@author_affiliation), params: { author_affiliation: { add_01: @author_affiliation.add_01, add_02: @author_affiliation.add_02, add_03: @author_affiliation.add_03, add_04: @author_affiliation.add_04, add_05: @author_affiliation.add_05, author_id: @author_affiliation.author_id, country: @author_affiliation.country, name: @author_affiliation.name } }
+    patch author_affiliation_url(@author_affiliation), params: { author_affiliation: { add_01: @author_affiliation.add_01, add_02: @author_affiliation.add_02, add_03: @author_affiliation.add_03, add_04: @author_affiliation.add_04, add_05: @author_affiliation.add_05, author_id: @author_affiliation.author_id, country: @author_affiliation.country, name: @author_affiliation.name, short_name: @author_affiliation.short_name } }
     assert_redirected_to author_affiliation_url(@author_affiliation)
   end
 

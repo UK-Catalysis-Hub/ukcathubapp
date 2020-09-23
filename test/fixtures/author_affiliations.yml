@@ -3,6 +3,7 @@
 one:
   author_id: 1
   name: MyString
+  short_name: MyString
   add_01: MyString
   add_02: MyString
   add_03: MyString
@@ -13,6 +14,7 @@ one:
 two:
   author_id: 1
   name: MyString
+  short_name: MyString
   add_01: MyString
   add_02: MyString
   add_03: MyString

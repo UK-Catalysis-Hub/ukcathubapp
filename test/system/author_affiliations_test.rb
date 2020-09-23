@@ -22,6 +22,7 @@ class AuthorAffiliationsTest < ApplicationSystemTestCase
     fill_in "Author", with: @author_affiliation.author_id
     fill_in "Country", with: @author_affiliation.country
     fill_in "Name", with: @author_affiliation.name
+    fill_in "Short name", with: @author_affiliation.short_name
     click_on "Create Author affiliation"
 
     assert_text "Author affiliation was successfully created"
@@ -40,6 +41,7 @@ class AuthorAffiliationsTest < ApplicationSystemTestCase
     fill_in "Author", with: @author_affiliation.author_id
     fill_in "Country", with: @author_affiliation.country
     fill_in "Name", with: @author_affiliation.name
+    fill_in "Short name", with: @author_affiliation.short_name
     click_on "Update Author affiliation"
 
     assert_text "Author affiliation was successfully updated"
