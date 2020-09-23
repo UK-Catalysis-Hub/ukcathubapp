@@ -13,7 +13,7 @@
   </p>
 
   <p>
-    <strong>Articles:</strong>
+    <strong>Articles (<%= researcher.articles.count%>):</strong>
     <%
       art_list = ""
       for art in researcher.articles.all.order(:title)
