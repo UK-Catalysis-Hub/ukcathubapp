@@ -4,9 +4,8 @@ class AuthorsController < ApplicationController
   class AuthorsSearch < FortyFacets::FacetSearch
     model 'Author' # which model to search for
     text :last_name   # filter by a generic string entered by the user
-    text :given_name   # filter by a generic string entered by the user
-    text :orcid   # filter by a generic string entered by the user
-    facet :last_name, name: 'Last Name', order: :last_name # additionally order values in the year field
+
+    facet :given_name, name: 'Given Name' 
 
     orders 'Name, Ascendign' => {last_name: :asc, given_name: :asc},
            'Last name, Descendign' => "last_name desc",

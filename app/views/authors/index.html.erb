@@ -20,12 +20,77 @@
       <!-- Browse tab - Default with search and filtering -->
       <div class="row">
         <div class="col-md-12">
-          Top DIV: search, order, reset
+          <!-- Top DIV: search, order, reset -->
+          <p id="notice"><%= notice %></p>
+            <%= form_tag nil, method: :get do %>
+             <!-- Field for searching by title -->
+              <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
+              <div class="row">
+                <div class="col-md-1">
+                  <b> Search: </b>
+                </div>
+                <div class="col-md-5">
+                  <% last_name_filter = @search.filter(:last_name) %>
+                  <%= text_field_tag 'search[last_name]', last_name_filter.value, class: 'form-control', placeholder: last_name_filter.name %>
+                </div>
+                <div class="col-md-4">
+                  <!-- Set sort order -->
+                    <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                      <% @search.orders.reject(&:active).each do |order| %>
+                      <li> <%= link_to order.title, order.by.path %> </li>
+                      <% end %>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                  <%= link_to 'reset', '?', class: 'btn  btn-success float-right' %>
+                </div>
+              </div>
+            <% end %>
         </div>
       </div>
       <div class="row">
         <div class="col-md-3">
-          facet filters
+          <!-- left DIV: facet filters -->
+            <%= form_tag nil, method: :get do %>
+              <!-- Field for searching by title -->
+              <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
+              <!-- Facet filter for publisher -->
+                <% [:given_name].each do |filter_name| %>
+                   <% filter = @search.filter(filter_name) %>
+                   <div class="filter">
+                     <div class="filter-title">
+                       <%= filter.name %>
+                       <span class="small text-muted">
+                         <%= "(#{filter.facet.length})" %>
+                       </span>
+                     </div>
+                     <div class="filter-values">
+                       <ul class="selected">
+                         <% filter.selected.each do |entity| %>
+                           <% display = entity %>
+                           <li>
+                             <%= link_to display, filter.remove(entity).path %>
+                           </li>
+                         <% end %>
+                       </ul>
+                       <ul class="selectable">
+                         <% filter.facet.reject(&:selected).each do |facet_value| %>
+                           <% entity = facet_value.entity %>
+                           <li>
+                             <% display = entity %>
+                             <%= link_to display, filter.add(entity).path %>
+                             <span class="count">
+                               <%= "(#{facet_value.count})" %>
+                             </span>
+                           </li>
+                         <% end %>
+                       </ul>
+                     </div>
+                   </div>
+                 <% end %>
+               <% end %>
         </div>
         <div class="col-md-9">
           <%= render partial: 'authors/researchers_list', locals: {authors: @authors}%>
