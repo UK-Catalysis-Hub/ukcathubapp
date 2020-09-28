@@ -96,7 +96,7 @@ class ArticlesController < ApplicationController
          getPubData(@article, @article.doi)
       end
       if @article.article_authors.count == 0 or @article.article_authors[0].last_name == nil
-        # get authors from crossref
+        # try to get authors from crossref
         getAutData(@authors, @article.doi, @article.id)
       end
     end
@@ -207,48 +207,51 @@ class ArticlesController < ApplicationController
     end
 
     def getAutData(db_authors, doi_text, art_id)
-      pub_data = getCRData(doi_text)
-      aut_order = 1
-      pub_data['author'].each do |art_author|
-        new_author = ArticleAuthor.new()
-        if art_id != nil
-          tem_auth = ArticleAuthor.find_by article_id: art_id, author_order: aut_order
-          if tem_auth != nil
-            new_author = tem_auth
-          end
-        end
-        if art_author.keys.include?('ORCID')
-          puts new_author.orcid.to_s
-          new_author.orcid = art_author['ORCID']
-        end
-        if art_author.keys.include?('family')
-          new_author.last_name = art_author['family']
-        end
-        if art_author.keys.include?('given')
-          new_author.given_name = art_author['given']
-        end
-        new_author.author_seq = art_author['sequence'].to_s
-        new_author.author_order = aut_order
-
-        new_author.save
-
-        puts "###################################################################"
-        puts "Author ID:" + new_author.id.to_s
-        if art_author.keys.include?('affiliation')
-          puts art_author['affiliation']
-          if art_author['affiliation'].length > 0
-            art_author['affiliation'].each do |temp_affi|
-              new_tmp_affi = CrAffiliation.new()
-              new_tmp_affi.name = temp_affi['name']
-              new_tmp_affi.article_author_id = new_author.id
-              new_tmp_affi.save
+      pub_data = CrossrefApiClient.getCRData(doi_text)
+      if pub_data != nil then
+        puts "\nPub data: " + pub_data.class
+        aut_order = 1
+        pub_data['author'].each do |art_author|
+          new_author = ArticleAuthor.new()
+          if art_id != nil
+            tem_auth = ArticleAuthor.find_by article_id: art_id, author_order: aut_order
+            if tem_auth != nil then
+              new_author = tem_auth
             end
           end
-        end
-        puts db_authors[0].last_name
-        puts "###################################################################"
-        aut_order += 1
+          if art_author.keys.include?('ORCID')
+            puts new_author.orcid.to_s
+            new_author.orcid = art_author['ORCID']
+          end
+          if art_author.keys.include?('family')
+            new_author.last_name = art_author['family']
+          end
+          if art_author.keys.include?('given')
+            new_author.given_name = art_author['given']
+          end
+          new_author.author_seq = art_author['sequence'].to_s
+          new_author.author_order = aut_order
 
+          new_author.save
+
+          puts "###################################################################"
+          puts "Author ID:" + new_author.id.to_s
+          if art_author.keys.include?('affiliation')
+            puts art_author['affiliation']
+            if art_author['affiliation'].length > 0
+              art_author['affiliation'].each do |temp_affi|
+                new_tmp_affi = CrAffiliation.new()
+                new_tmp_affi.name = temp_affi['name']
+                new_tmp_affi.article_author_id = new_author.id
+                new_tmp_affi.save
+              end
+            end
+          end
+          puts db_authors[0].last_name
+          puts "###################################################################"
+          aut_order += 1
+
+        end
       end
     end
 
