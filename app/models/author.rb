@@ -9,5 +9,6 @@ class Author < ApplicationRecord
 
   # scopes
   scope :not_verified , -> {joins("INNER JOIN article_authors ON article_authors.author_id = authors.id").where("article_authors.status is not 'verified'") }
+  scope :top_published , -> {order('articles DESC').limit(10) }
 
 end
