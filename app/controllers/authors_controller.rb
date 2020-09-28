@@ -1,11 +1,26 @@
 class AuthorsController < ApplicationController
   before_action :set_author, only: [:show, :edit, :update, :destroy]
 
+  class AuthorsSearch < FortyFacets::FacetSearch
+    model 'Author' # which model to search for
+    text :last_name   # filter by a generic string entered by the user
+    text :given_name   # filter by a generic string entered by the user
+    text :orcid   # filter by a generic string entered by the user
+    facet :last_name, name: 'Last Name', order: :last_name # additionally order values in the year field
+
+    orders 'Name, Ascendign' => {last_name: :asc, given_name: :asc},
+           'Last name, Descendign' => "last_name desc",
+           'ORCID, Ascendign' => "orcid asc",
+           'ORCID, Descendign' => {orcid: :desc}
+  end
+
+
   # GET /authors
   # GET /authors.json
   def index
     #@authors = Author.all
-    @authors = Author.all().order(:full_name).paginate(:page => params[:page], :per_page => 10)
+    @search = AuthorsSearch.new(params) # initializes search object from request params
+    @authors = @search.result.paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /authors/1
