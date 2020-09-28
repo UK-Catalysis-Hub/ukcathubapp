@@ -1,7 +1,7 @@
 # worker for going through all publication records and verify them against CR
 class VerifyCrossrefWorker
   include Sidekiq::Worker
-  include Serrano
+  
   def perform
     puts 'verify all publications against CR records'
     date_from = Date.today - 30
@@ -12,22 +12,10 @@ class VerifyCrossrefWorker
     end
   end
 
-  def getCRData(doi_text)
-    begin
-        #puts "trying"
-        art_bib = JSON.parse(Serrano.content_negotiation(ids: doi_text, format: "citeproc-json"))
-        return art_bib
-    rescue
-        #puts "failing"
-        return nil
-    end
-  end
-
-
   def verify_articles(article)
     # get the article from crossref
     doi_text = article.doi
-    pub_data = getCRData(doi_text)
+    pub_data = CrossrefApiClient.getCRData(doi_text)
 
     art_id = article.id
     changes_found = false
