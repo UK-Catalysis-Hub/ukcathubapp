@@ -6,4 +6,8 @@ class Author < ApplicationRecord
   #relationships to affiliations
   has_many :affiliation_links
   has_many :affiliations, through: :affiliation_links
+
+  # scopes
+  scope :not_verified , -> {joins("INNER JOIN article_authors ON article_authors.author_id = authors.id").where("article_authors.status is not 'verified'") }
+
 end

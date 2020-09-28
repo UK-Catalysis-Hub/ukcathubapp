@@ -1,0 +1,37 @@
+<!--Display a filtered list of researchers -->
+<div id="filtered_artilcle_list" class="container">
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th>Author</th>
+        <th>Articles</th>
+        <th>ORCID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% authors.each do |author| %>
+        <tr>
+          <%
+            expertise = []
+            expertise_lnks = ""
+            author.articles.each do |art|
+              art.article_themes.each do |art_theme|
+                if not expertise.include?(art_theme.theme.short) then
+                  expertise.push(art_theme.theme.short)
+                  if expertise_lnks == "" then
+                    expertise_lnks = link_to(art_theme.theme.short, art_theme.theme)
+                  else
+                    expertise_lnks += ", ".html_safe + link_to(art_theme.theme.short, art_theme.theme)
+                  end
+                end
+              end
+            end
+          %>
+          <td><%= link_to(author.full_name, author) %> <b>Expertise:</b> <%= expertise_lnks %> </td>
+          <th> <%= author.articles.count %> </td>
+          <th> <%= author.orcid %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
