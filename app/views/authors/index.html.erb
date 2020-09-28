@@ -17,9 +17,19 @@
   </ul>
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="browse" role="tabpanel" aria-labelledby="browse-tab">
-      Browse tab content
-      <div class="col-md-9">
-        <%= render partial: 'authors/researchers_list', locals: {authors: @authors}%>
+      <!-- Browse tab - Default with search and filtering -->
+      <div class="row">
+        <div class="col-md-12">
+          Top DIV: search, order, reset
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          facet filters
+        </div>
+        <div class="col-md-9">
+          <%= render partial: 'authors/researchers_list', locals: {authors: @authors}%>
+        </div>
       </div>
     </div>
     <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="statistics-tab">
