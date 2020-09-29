@@ -1,37 +1,47 @@
-<%= form_with(model: author, local: true) do |form| %>
-  <% if author.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(author.errors.count, "error") %> prohibited this author from being saved:</h2>
+<div class="container">
+  <div class="row">
+    <%= form_with(model: author, local: true) do |form| %>
+      <% if author.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(author.errors.count, "error") %> prohibited this author from being saved:</h2>
 
-      <ul>
-        <% author.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+          <ul>
+            <% author.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="field">
+        <%= form.label :full_name %>
+        <%= form.text_field :full_name, :readonly => true %>
+      </div>
 
-  <div class="field">
-    <%= form.label :full_name %>
-    <%= form.text_field :full_name, :readonly => true %>
+      <div class="field">
+        <%= form.label :last_name %>
+        <%= form.text_field :last_name %>
+      </div>
+
+      <div class="field">
+        <%= form.label :given_name %>
+        <%= form.text_field :given_name %>
+      </div>
+
+      <div class="field">
+        <%= form.label :orcid %>
+        <%= form.text_field :orcid %>
+      </div>
+
+      <div class="actions">
+        <%= form.submit %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="field">
-    <%= form.label :last_name %>
-    <%= form.text_field :last_name %>
+  <div >
+    <p> Article Author Links <%= @author.article_authors.count %> </p> <br/>
+    <% if ArticleAuthor.not_verified. count > 0 %>
+      <%= render partial: 'authors/verify_article_author', locals: {author: author } %>
+    <% end %>
+    <%= render partial: 'article_authors/list', locals: {article_authors: @author.article_authors.verified } %>
   </div>
-
-  <div class="field">
-    <%= form.label :given_name %>
-    <%= form.text_field :given_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :orcid %>
-    <%= form.text_field :orcid %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

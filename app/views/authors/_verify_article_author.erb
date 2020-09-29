@@ -1,0 +1,26 @@
+<table>
+  <thead class="thead-light">
+    <tr>
+      <th>Author</th>
+      <th>ORCID</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% author.article_authors.not_verified.each do |researcher| %>
+      <tr>
+        <td>
+          <%= researcher.id %>
+          <%= researcher.given_name %>
+          <%= researcher.last_name %>
+        </td>
+        <td>
+          <%= researcher.orcid %>
+        </td>
+        <td>
+          <%= button_to 'Verify', {:action => 'link_to_researcher', :controller => 'article_authors', :data => {:author_id => author.id,:id => researcher.id}}, :class => 'btn  btn-success btn-sm'  %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

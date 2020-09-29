@@ -1,0 +1,24 @@
+<table>
+  <thead>
+    <tr>
+      <th>Given name</th>
+      <th>Last name</th>
+      <th>ORCID</th>
+      <th>Art Author Status</th>
+      <th>Article</th>
+      <th>Article status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% article_authors.each do |article_author| %>
+      <tr>
+        <td><%= article_author.given_name %></td>
+        <td><%= article_author.last_name %></td>
+        <td><%= article_author.orcid %></td>
+        <td><%= article_author.status %></td>
+        <td><%= article_author.article.title[0..50] + "..." %></td>
+        <td><%= article_author.article.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
