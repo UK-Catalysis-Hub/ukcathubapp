@@ -21,7 +21,7 @@
           <%= button_to 'Verify', {:action => 'link_to_researcher', :controller => 'article_authors', :data => {:author_id => author.id,:id => art_aut.id}}, :class => 'btn  btn-success btn-sm'  %>
         </td>
         <td>
-            <%= link_to "New author", new_author_path({:given_name => art_aut.given_name, :last_name => art_aut.last_name, :orcid => art_aut.orcid, :art_aut_id => art_aut.id}), :class => "btn btn-primary btn-sm" %>
+          <%= link_to "New author", new_author_path({:given_name => art_aut.given_name, :last_name => art_aut.last_name, :orcid => art_aut.orcid, :art_aut_id => art_aut.id}), :class => "btn btn-primary btn-sm" %>
         </td>
       </tr>
     <% end %>

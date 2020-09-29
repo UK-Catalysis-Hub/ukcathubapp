@@ -17,10 +17,10 @@
     <%= @author.orcid %>
   </p>
   <p>
-    <strong>Articles:</strong>
+    <strong>Articles (<%= @author.articles.active.count %>):</strong>
     <%
       art_list = ""
-      for art in @author.articles.all.order(:title)
+      for art in @author.articles.active.order(:title)
         art_list += ' ' + link_to(art.title, art)
       end
     %>
@@ -63,8 +63,26 @@
     <strong>Affiliations:</strong> <%= affiliation_lnks  %>
   </p>
   <% if user_signed_in? %>
-  <p> SHOW article_authors here </p>
-  <%= render partial: 'article_authors/list', locals: {article_authors: @author.article_authors } %>
+    <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="details-tab" data-toggle="tab" href="#article_details" role="tab" aria-controls="article_details" aria-selected="true">
+          Article Links (<%= @author.article_authors.count %>)
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="authors-tab" data-toggle="tab" href="#authors" role="tab" aria-controls="authors" aria-selected="false">
+          Affiliations (from article links)
+        </a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane form-inline fade show active" id="article_details" role="tabpanel" aria-labelledby="article_details-tab">
+        <%= render partial: 'article_authors/list', locals: {article_authors: @author.article_authors } %>
+      </div>
+      <div class="tab-pane fade" id="authors" role="tabpanel" aria-labelledby="authors-tab">
+        SHOW affiliations here
+      </div>
+    </div>
   <% end %>
   <%= link_to 'Edit', edit_author_path(@author), :class => "btn btn-primary btn-sm" %> |
   <%= link_to 'Back', authors_path, :class => "btn btn-secondary btn-sm" %>
