@@ -128,7 +128,7 @@
               <h6 style= "margin:auto">Top publishing authors</h6>
             </div>
             <div class="card-body p-0">
-              <%= render partial: 'authors/authors_top_p', locals: {authors: Author.top_published.limit(5) }%>
+              <%= render partial: 'authors/authors_pub_top', locals: {authors: Author.top_published.limit(5) }%>
             </div>
           </div>
         </div>
