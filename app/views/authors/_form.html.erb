@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row">
+  <div class="">
     <%= form_with(model: author, local: true) do |form| %>
       <% if author.errors.any? %>
         <div id="error_explanation">
@@ -37,11 +37,19 @@
       </div>
     <% end %>
   </div>
-  <div >
-    <p> Article Author Links <%= @author.article_authors.count %> </p> <br/>
-    <% if ArticleAuthor.not_verified. count > 0 %>
-      <%= render partial: 'authors/verify_article_author', locals: {author: author } %>
+  <div class="col-sm-12">
+    <% if @author.article_authors.count > 0%>
+      <p> Article Author Links <%= @author.article_authors.count %> </p> <br/>
+      <% if ArticleAuthor.not_verified.count > 0 %>
+        <%= render partial: 'authors/verify_article_author', locals: {author: author } %>
+      <% end %>
+      <% if ArticleAuthor.verified.count > 0 %>
+        <%= render partial: 'article_authors/list', locals: {article_authors: @author.article_authors.verified } %>
+      <% end %>
+    <% elsif @article_author != nil %>
+      <p> Article Author Origin </p> <br/>
+      <%= render partial: 'article_authors/list', locals: {article_authors: [@article_author] } %>
     <% end %>
-    <%= render partial: 'article_authors/list', locals: {article_authors: @author.article_authors.verified } %>
+
   </div>
 </div>

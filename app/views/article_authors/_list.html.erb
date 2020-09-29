@@ -16,8 +16,8 @@
         <td><%= article_author.last_name %></td>
         <td><%= article_author.orcid %></td>
         <td><%= article_author.status %></td>
-        <td><%= article_author.article.title[0..50] + "..." %></td>
-        <td><%= article_author.article.status %></td>
+        <td><%= if article_author.article != nil then article_author.article.title[0..50] + "..." else "not linked to active articles" end %></td>
+        <td><%= if article_author.article != nil then article_author.article.status else "none" end %></td>
       </tr>
     <% end %>
   </tbody>

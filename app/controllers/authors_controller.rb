@@ -5,7 +5,7 @@ class AuthorsController < ApplicationController
     model 'Author' # which model to search for
     text :last_name   # filter by a generic string entered by the user
 
-    facet :given_name, name: 'Given Name' 
+    facet :given_name, name: 'Given Name'
 
     orders 'Name, Ascendign' => {last_name: :asc, given_name: :asc},
            'Last name, Descendign' => "last_name desc",
@@ -29,7 +29,17 @@ class AuthorsController < ApplicationController
 
   # GET /authors/new
   def new
-    @author = Author.new
+    @author = Author.new()
+    @article_author = nil
+    # if parameters are given, prepopulate object
+    if params.include?('given_name')
+      @author.given_name = params["given_name"]
+      @author.last_name = params["last_name"]
+      @author.orcid = params["orcid"]
+      if params["art_aut_id"] != nil
+        @article_author = ArticleAuthor.find(params["art_aut_id"])
+      end
+    end
   end
 
   # GET /authors/1/edit

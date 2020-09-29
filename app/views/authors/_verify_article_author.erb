@@ -3,22 +3,25 @@
     <tr>
       <th>Author</th>
       <th>ORCID</th>
-      <th>Action</th>
+      <th colspan="2">Action</th>
     </tr>
   </thead>
   <tbody>
-    <% author.article_authors.not_verified.each do |researcher| %>
+    <% author.article_authors.not_verified.each do |art_aut| %>
       <tr>
         <td>
-          <%= researcher.id %>
-          <%= researcher.given_name %>
-          <%= researcher.last_name %>
+          <%= art_aut.id %>
+          <%= art_aut.given_name %>
+          <%= art_aut.last_name %>
         </td>
         <td>
-          <%= researcher.orcid %>
+          <%= art_aut.orcid %>
         </td>
         <td>
-          <%= button_to 'Verify', {:action => 'link_to_researcher', :controller => 'article_authors', :data => {:author_id => author.id,:id => researcher.id}}, :class => 'btn  btn-success btn-sm'  %>
+          <%= button_to 'Verify', {:action => 'link_to_researcher', :controller => 'article_authors', :data => {:author_id => author.id,:id => art_aut.id}}, :class => 'btn  btn-success btn-sm'  %>
+        </td>
+        <td>
+            <%= link_to "New author", new_author_path({:given_name => art_aut.given_name, :last_name => art_aut.last_name, :orcid => art_aut.orcid, :art_aut_id => art_aut.id}), :class => "btn btn-primary btn-sm" %>
         </td>
       </tr>
     <% end %>
