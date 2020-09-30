@@ -1,7 +1,6 @@
 # worker for going through all publication records and verify them against CR
 class VerifyAuthorsCrossrefWorker
   include Sidekiq::Worker
-
   # method that schedules the update of articles from crossref
   def perform
     puts '*************************************'
@@ -10,8 +9,6 @@ class VerifyAuthorsCrossrefWorker
     authors_list = Author.where("updated_at < ?", date_from)
     puts '*************************************'
     puts "Authors to verify " + authors_list.length.to_s
-    # CrossrefPublication.verify_article(authors_list)
-
+    CrossrefPublication.verify_authors(authors_list)
   end
-
 end

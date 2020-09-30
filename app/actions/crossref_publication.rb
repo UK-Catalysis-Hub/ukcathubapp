@@ -81,12 +81,374 @@ class CrossrefPublication
   end
 
   def self.verify_authors(authors_list)
+    al_obj = AffiliationLists.new()
+    print al_obj.affi_countries
+    print al_obj.affi_institutions
     break_idx = 0
     authors_list.each do |an_author|
-      puts an_author.last_name
-    if break_idx > 9
-      break
+      puts "\n" + an_author.last_name
+      article_authors = an_author.article_authors
+      puts "Articles authored: " +  article_authors.length.to_s
+      article_authors.each do |an_art_aut|
+        split_complex = false
+        continue = false
+        affi_lines = an_art_aut.cr_affiliations
+        puts "Afiliatios for " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
+        if affi_lines.count == 1
+          split_complex = true
+          affi_line_id = affi_lines.first.id
+          affi_line_value = affi_lines.first.name
+          auth_affi = al_obj.split_complex(affi_line_value, an_art_aut.id)
+          # check if object is well formed
+          continue = al_obj.affi_object_well_formed(auth_affi, affi_lines, split_complex, an_art_aut.id)
+          # save the object
+          if continue then
+            puts "affiliation object is well formed"
+          end
+        end
+      end
+      if break_idx > 8
+        break
+      end
+      break_idx += 1
     end
-    break_idx += 1
+  end
+
+  class AffiliationLists
+    attr_accessor :affi_countries, :affi_institutions, :affi_work_groups,
+      :affi_departments, :affi_faculties
+    # lists of institution entities (affiliations in old model) as class
+    # attributes
+    @affi_countries = []
+    @affi_institutions = []
+    @affi_departments = []
+    @affi_faculties = []
+    @affi_work_groups = []
+    def initialize()
+      @affi_countries = Affiliation.distinct.pluck(:country)
+      @affi_institutions = Affiliation.distinct.pluck(:institution)
+      @affi_departments = Affiliation.distinct.pluck(:department)
+      @affi_faculties = Affiliation.distinct.pluck(:faculty)
+      @affi_work_groups = Affiliation.distinct.pluck(:work_group)
+
+      # list of country sysnonyms
+      # (need to persist somewhere)
+      @country_synonyms = {"UK":"United Kingdom", "U.K.":"United Kingdom",
+          "U. K.":"United Kingdom", "U.K":"United Kingdom",
+          "PRC":"Peoples Republic of China", "P.R.C.":"Peoples Republic of China",
+          "China":"Peoples Republic of China",
+          "P.R.China":"Peoples Republic of China",
+          "P.R. China":"Peoples Republic of China",
+          "United States":"United States of America",
+          "USA":"United States of America","U.S.A.":"United States of America",
+          "U. S. A.":"United States of America", "U.S.":"United States of America",
+          "U. S.":"United States of America","US":"United States of America"}
+
+      # list of institution sysnonyms
+      # (need to persist somewhere)
+      @institution_synonyms = {"The ISIS facility":"ISIS Neutron and Muon Source",
+          "STFC":"Science and Technology Facilities Councils",
+          "Oxford University":"University of Oxford",
+          "University of St Andrews":"University of St. Andrews",
+          "Diamond Light Source":"Diamond Light Source Ltd.",
+          "ISIS Facility":"ISIS Neutron and Muon Source"}
+
+      # list ofstrings which contain country names but are not countries, such as
+      # streets, institution names, etc.
+      # (need to persist somewhere)
+      @country_exceptions = ["Denmark Hill", "UK Catalysis Hub"]
+    end
+
+    # create a new affiliation object from a list of string values
+    def create_affi_obj(lines_list, auth_id)
+      puts @institution_synonyms
+      puts @country_synonyms
+      puts @country_exceptions
+      line_idx = 0
+      auth_affi = AuthorAffiliation.new()
+      auth_affi.article_author_id = auth_id
+      inst_found = ""
+      #while tkn_idx < lines_list.count
+      while line_idx < lines_list.count
+        a_line = lines_list[line_idx].strip
+        # first element is designated as the affilition
+        if line_idx == 0
+          auth_affi.name = a_line
+        elsif @affi_countries.include?(a_line)
+          auth_affi.country = a_line
+        elsif @affi_institutions.include?(a_line)
+          if auth_affi.name != nil
+            # if the affiliation name is not an institution
+            # add institution to name and make short name the institution
+            # otherwise shot name is the same as name
+            if !@affi_institutions.include?(auth_affi.name) or \
+              !@institution_synonyms.keys.include?(auth_affi.name.to_sym) then
+              auth_affi.name = auth_affi.name + ", " + a_line
+              auth_affi.short_name = a_line
+            else
+              auth_affi.short_name = auth_affi.name
+            end
+          end
+        elsif @institution_synonyms.keys.include?(a_line.to_sym) then
+          if auth_affi.name != nil
+            # if the affiliation name is not an institution
+            # add institution to name and make short name the institution
+            # otherwise shot name is the same as name
+            if !@affi_institutions.include?(auth_affi.name) and \
+              !@institution_synonyms.keys.include?(auth_affi.name.to_sym) then
+              auth_affi.name = auth_affi.name + ", " + @institution_synonyms[a_line.to_sym]
+              auth_affi.short_name =  @institution_synonyms[a_line.to_sym]
+            else
+              auth_affi.short_name =  @institution_synonyms[a_line.to_sym]
+            end
+          end
+        elsif auth_affi.add_01 == nil
+          auth_affi.add_01 = a_line
+        elsif auth_affi.add_02 == nil
+          auth_affi.add_02 = a_line
+        elsif auth_affi.add_03 == nil
+          auth_affi.add_03 = a_line
+        elsif auth_affi.add_04 == nil
+          auth_affi.add_04 = a_line
+        elsif auth_affi.add_05 == nil
+          auth_affi.add_05 = a_line
+        elsif auth_affi.add_05 != nil # case more than 5 tokes in address
+          auth_affi.add_05 += ", " + a_line
+        end
+        line_idx += 1
+      end
+      # if country is missing get check all addres lines in object
+      if auth_affi.country == nil
+        got_it = false
+        auth_affi.instance_variables.each do |instance_variable|
+          # look for country name in address strings
+          if instance_variable.to_s.include?("add_0") then
+            #print instance_variable
+            value = auth_affi.instance_variable_get(instance_variable)
+            ctry = get_country(value.to_s)
+            if ctry != nil then
+              auth_affi.country = ctry
+              value = drop_country(value)
+              auth_affi.instance_variable_set(instance_variable, value)
+              break
+            end
+          end
+        end
+        # look for country in affiliation name
+        if auth_affi.country.to_s == ""  then
+          ctry = get_country(auth_affi.name)
+          auth_affi.country = ctry
+        end
+        # look for country in institution table
+        # print auth_affi.country
+        #
+        if auth_affi.country.to_s == ""  then
+          #printf "\n Before if %s", auth_affi.name
+          inst_found = auth_affi.name
+          if @affi_institutions.include?(auth_affi.name) or \
+            @institution_synonyms.keys.include?(auth_affi.name.to_sym) then
+            inst_found = auth_affi.name
+            #printf "\n Before sendig %s", inst_found
+            ctry = Affiliation.find_by(institution: inst_found.strip).country
+            auth_affi.country = ctry
+          elsif @affi_institutions.include?(auth_affi.short_name) or \
+            @institution_synonyms.keys.include?(auth_affi.short_name.to_s.to_sym) then
+            inst_found = auth_affi.short_name
+            #printf "\n Before sendig %s", inst_found
+            ctry = Affiliation.find_by(institution: inst_found.strip).country
+            auth_affi.country = ctry
+          end
+        end
+      end
+      return auth_affi
+    end
+
+    # if a value in the country exeptions list is in string, remove that value
+    # before looking up for country
+    def country_exclude(affi_string)
+      @country_exceptions.each do |not_a_country|
+        if affi_string.include?(not_a_country)
+          return affi_string.gsub(not_a_country, "")
+        end
+      end
+      # if notting is removed
+      return affi_string
+    end
+
+    # if a value in the country or country sysnonyms lists is in string, return that
+    # value (verify first that there are no country exceptions in string)
+    def get_country(affi_string)
+      cleared_affi_string = country_exclude(affi_string)
+      @affi_countries.each do |country|
+        if cleared_affi_string.include?(country)
+          return country
+        end
+      end
+      @country_synonyms.keys.each do |ctry_key|
+        if cleared_affi_string.include?(ctry_key.to_s)
+          return @country_synonyms[ctry_key]
+        end
+      end
+      return nil
+    end
+
+    # if a value in the country or country sysnonyms lists is in string, remove that
+    # value from the string
+    def drop_country(affi_string)
+      dropped_country = affi_string
+      @affi_countries.each do |country|
+        if dropped_country.include?(country)
+          dropped_country = dropped_country.gsub(country,"").strip
+        end
+      end
+      @country_synonyms.keys.each do |ctry_key|
+         if affi_string.include?(ctry_key.to_s)
+           dropped_country = dropped_country.gsub(ctry_key.to_s,"").strip
+         end
+      end
+      return dropped_country
+    end
+
+    # determine if the string needs to be split by delimiters or by keywords and
+    # call the corresponding method to build the affiliation object
+    def split_complex(affi_string, auth_id)
+      if affi_string.include?(",") or affi_string.include?(";")
+        return split_by_separator(affi_string, auth_id)
+      else
+        return split_by_keywords(affi_string, auth_id)
+      end
+    end
+
+    # split the affiliation string by "," and ";" separators
+    def split_by_separator(affi_string, auth_id)
+      tokens = []
+      if affi_string.include?(",") and affi_string.include?(";")
+        tokens = affi_string.split(";")
+        tokens.each do |token|
+          if token.include?(",")
+            split_idx = tokens.find_index(token)
+            temp_tkns = token.split(",")
+            tokens = tokens[1..split_idx-1].concat(temp_tkns).concat(tokens[split_idx+1..])
+          end
+        end
+      elsif affi_string.include?(",")
+        tokens = affi_string.split(",")
+      elsif affi_string.include?(";")
+        tokens = affi_string.split(";")
+      end
+      # how to handle a name which has both and institution and a another name?
+      # EXAMPLE " Department of Materials Science and Engineering Lehigh University"
+      tokens.each do |token|
+        print "\n check for inst in tokens"
+        found_inst = get_institution(token)
+        inst_index = token.index(found_inst)
+        if found_inst != "" and inst_index != 0
+          split_idx = tokens.find_index(token)
+          temp_tkns = [token.gsub(found_inst).strip, found_inst]
+          tokens = tokens[1..split_idx-1].concat(temp_tkns).concat(tokens[split_idx+1..])
+        end
+      end
+      if tokens != []
+        return create_affi_obj(tokens, auth_id)
+      else
+        return nil
+      end
+    end
+
+    # if a value in the institution sysnonyms list is in string, return that value
+    def get_institution_synonym(affi_string)
+      print affi_string
+      @institution_synonyms.keys.each do |inst_key|
+        if affi_string.include?(inst_key.to_s)
+          return inst_key.to_s
+        end
+      end
+      return nil
+    end
+
+
+    # split an affiliation string using the institution and country lists and then
+    # build the object
+    def split_by_keywords(affi_string, auth_id)
+      # build affiliation object directly
+      # try with country and institution
+      # printf "\n************************** SPLITTING BY KEYWORD *****************\n"
+      # printf "Affiliation: %s\n", affi_string
+      tokens=[]
+      found_inst = found_country = ""
+      found_inst = get_institution(affi_string)
+      if found_inst == nil then
+        found_inst = get_institution_synonym(affi_string)
+        #printf "Institution: %s\n", found_inst
+      end
+      found_country = get_country(affi_string)
+      if found_inst.to_s != ""
+        ins_idx = affi_string.index(found_inst)
+        affi_len = affi_string.length
+        inst_len = found_inst.length
+        if ins_idx == 0
+          tokens.append found_inst
+          tokens.append drop_country(affi_string[inst_len, affi_len-inst_len].strip)
+          tokens.append found_country
+          affi_rest = affi_string[inst_len-1, affi_len-inst_len].strip
+        else
+          tokens.append affi_string[0, ins_idx].strip
+          tokens.append found_inst
+          tokens.append drop_country(affi_string[affi_string[ins_idx+inst_len, affi_len-inst_len].strip].strip)
+          tokens.append found_country
+        end
+        # printf"\n****************************************************************\n"
+        # print tokens
+        # printf"\n****************************************************************\n"
+        affi_obj = create_affi_obj(tokens, auth_id)
+        return affi_obj
+      end
+    end
+    # verify if the affiliation object is well formed it should have a country,
+    # a name and a valid author ID
+    # (make into a method of the affi_object)
+    def affi_object_well_formed(affi_object, name_list, parsed_complex, auth_id)
+      # problem: affi_object nil
+      if affi_object == nil
+        puts "\n********************* Affiliation is nil **********************\n"
+        puts name_list
+      # problem: missing country
+      elsif affi_object.country == nil
+        if parsed_complex == false
+          printf("\nAuthor %d affilition parsed as complex \n", auth_id)
+        else
+          printf("\nAuthor %d affilition parse as single \n", auth_id)
+        end
+        puts "\n************************Missing country**********************\n"
+        puts affi_object.name
+        puts name_list.name
+        return false
+      # problem: missing name
+      elsif affi_object.name == nil
+        if parsed_complex == false
+          printf("\nAuthor %d affilition parsed as complex \n", auth_id)
+        else
+          printf("\nAuthor %d affilition parse as single \n", auth_id)
+        end
+        puts "\n************************ Missing name **********************\n"
+        print affi_object.values
+        puts name_list.name
+        return false
+      # problem: missing author or author_affiliation_id incorrect
+    elsif affi_object.article_author_id == nil or \
+       affi_object.article_author_id != auth_id
+        if parsed_complex == false
+          printf("\nAuthor %d affilition parsed as complex \n", auth_id)
+        else
+          printf("\nAuthor %d affilition parse as single \n", auth_id)
+        end
+        puts "\n************************ Wrong Author ID **********************\n"
+        print affi_object.values
+        print name_list
+        return false
+      else
+        return true
+      end
+    end
   end
 end
