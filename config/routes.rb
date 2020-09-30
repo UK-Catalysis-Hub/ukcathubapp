@@ -6,8 +6,6 @@ Rails.application.routes.draw do
   resources :datasets
   get 'home/index'
   resources :articles
-  #get 'verify' => 'articles#verify', as: :verify
-  post 'verify' => 'articles#verify', as: :verify
   #get "issues/cancel_return" => "issues#cancel_return"
   resources :article_themes
   resources :article_authors
@@ -16,6 +14,9 @@ Rails.application.routes.draw do
   resources :affiliations
   resources :addresses
   resources :authors
+  # custom route to verify methods
+  post 'verify' => 'articles#verify', as: :verify
+  post 'verify_authors' => 'authors#verify', as: :v_cr_authors
   resources :themes
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'home#index'

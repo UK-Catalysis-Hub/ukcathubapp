@@ -96,6 +96,16 @@ class AuthorsController < ApplicationController
     end
   end
 
+  # VERIFY records in CR
+  def verify
+    VerifyAuthorsCrossrefWorker.perform_async
+    respond_to do |format|
+      flash[:notice] = 'Verifying authors process started'
+      format.html { redirect_to action: "index" }
+      format.json { head :no_content }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_author

@@ -10,7 +10,7 @@ class CrossrefPublication
   # verify article object agains CR record
   def self.verify_article(article)
     # get the article from crossref
-    puts "** Verifying this: " + article.title 
+    puts "** Verifying this: " + article.title
     digital_object_identifier = article.doi
     pub_data = CrossrefApiClient.getCRData(digital_object_identifier)
     if pub_data != nil
@@ -78,5 +78,15 @@ class CrossrefPublication
         aut_order += 1
       end
     end
+  end
+
+  def self.verify_authors(authors_list)
+    break_idx = 0
+    authors_list.each do |an_author|
+      puts an_author.last_name
+    if break_idx > 9
+      break
+    end
+    break_idx += 1
   end
 end
