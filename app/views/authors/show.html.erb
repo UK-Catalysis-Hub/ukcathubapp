@@ -19,6 +19,7 @@
       </div>
       <div class="tab-pane fade" id="authors" role="tabpanel" aria-labelledby="authors-tab">
         SHOW affiliations here
+        <%= render partial: 'author_affiliations/list', locals: {author_affiliations: @author.author_affiliations} %>
       </div>
     </div>
   <% end %>
