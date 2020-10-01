@@ -161,14 +161,11 @@ class CrossrefPublication
 
     # create a new affiliation object from a list of string values
     def create_affi_obj(lines_list, auth_id)
-      puts @institution_synonyms
-      puts @country_synonyms
-      puts @country_exceptions
       line_idx = 0
       auth_affi = AuthorAffiliation.new()
       auth_affi.article_author_id = auth_id
       inst_found = ""
-      #while tkn_idx < lines_list.count
+
       while line_idx < lines_list.count
         a_line = lines_list[line_idx].strip
         # first element is designated as the affilition
@@ -218,18 +215,19 @@ class CrossrefPublication
         line_idx += 1
       end
       # if country is missing get check all addres lines in object
-      if auth_affi.country == nil
-        got_it = false
-        auth_affi.instance_variables.each do |instance_variable|
+      if auth_affi.country.to_s == ""
+        print "\nChecking on address lines"
+        auth_affi.attributes.keys.each do |instance_variable|
           # look for country name in address strings
+          print "\nChecking " + instance_variable.to_s
           if instance_variable.to_s.include?("add_0") then
             #print instance_variable
-            value = auth_affi.instance_variable_get(instance_variable)
+            value = auth_affi.attributes[instance_variable]
             ctry = get_country(value.to_s)
             if ctry != nil then
               auth_affi.country = ctry
               value = drop_country(value)
-              auth_affi.instance_variable_set(instance_variable, value)
+              auth_affi.attributes[instance_variable] = value
               break
             end
           end
@@ -336,23 +334,47 @@ class CrossrefPublication
       elsif affi_string.include?(";")
         tokens = affi_string.split(";")
       end
-      # how to handle a name which has both and institution and a another name?
-      # EXAMPLE " Department of Materials Science and Engineering Lehigh University"
-      tokens.each do |token|
-        print "\n check for inst in tokens"
-        found_inst = get_institution(token)
-        inst_index = token.index(found_inst)
-        if found_inst != "" and inst_index != 0
-          split_idx = tokens.find_index(token)
-          temp_tkns = [token.gsub(found_inst).strip, found_inst]
-          tokens = tokens[1..split_idx-1].concat(temp_tkns).concat(tokens[split_idx+1..])
-        end
-      end
+      # # how to handle a name which has both and institution and a another name?
+      # # EXAMPLE " Department of Materials Science and Engineering Lehigh University"
+      # temp_tkns = []
+      # split_idx = -1
+      # tokens.each do |token|
+      #   print "\n check for inst in tokens"
+      #   found_inst = get_institution(token)
+      #   if found_inst != nil then
+      #     found_inst = get_institution_synonym(token)
+      #   end
+      #   if found_inst != nil then
+      #     print found_inst
+      #     if inst_index != 0 && token.gsub(found_inst).strip != "" then
+      #       split_idx = tokens.find_index(token)
+      #       temp_tkns = [token.gsub(found_inst).strip, found_inst]
+      #     end
+      #     print temp_tkns
+      #     print split_idx
+      #     break
+      #   end
+      #   print found_inst
+      # end
+      # if temp_tkns.count >0 and split_idx > -1 then
+      #   tokens = tokens[0..split_idx-1].concat(temp_tkns).concat(tokens[split_idx+1..])
+      # end
+      # print tokens
       if tokens != []
         return create_affi_obj(tokens, auth_id)
       else
         return nil
       end
+    end
+
+    # if a value in the institutions list is in string, return that value
+    def get_institution(affi_string)
+      @affi_institutions.each do |institution|
+        if affi_string.include?(institution)
+          return institution
+        end
+      end
+      return nil
     end
 
     # if a value in the institution sysnonyms list is in string, return that value
@@ -365,7 +387,6 @@ class CrossrefPublication
       end
       return nil
     end
-
 
     # split an affiliation string using the institution and country lists and then
     # build the object
@@ -420,8 +441,8 @@ class CrossrefPublication
           printf("\nAuthor %d affilition parse as single \n", auth_id)
         end
         puts "\n************************Missing country**********************\n"
-        puts affi_object.name
-        puts name_list.name
+        print_affi(affi_object)
+        puts name_list
         return false
       # problem: missing name
       elsif affi_object.name == nil
@@ -431,7 +452,7 @@ class CrossrefPublication
           printf("\nAuthor %d affilition parse as single \n", auth_id)
         end
         puts "\n************************ Missing name **********************\n"
-        print affi_object.values
+        print_affi(affi_object)
         puts name_list.name
         return false
       # problem: missing author or author_affiliation_id incorrect
@@ -443,12 +464,17 @@ class CrossrefPublication
           printf("\nAuthor %d affilition parse as single \n", auth_id)
         end
         puts "\n************************ Wrong Author ID **********************\n"
-        print affi_object.values
+        print_affi(affi_object)
         print name_list
         return false
       else
         return true
       end
+    end
+    # print the contents of the affiliation object
+    def print_affi(affi_object)
+      printf "\nAuthor ID: %d affiliation: %s affiliation short: %s country: %s\n", affi_object.article_author_id, affi_object.name, affi_object.short_name, affi_object.country
+      printf "\nAddress: %s, %s, %s, %s, %s\n", affi_object.add_01, affi_object.add_02, affi_object.add_03,affi_object.add_04, affi_object.add_05
     end
   end
 end
