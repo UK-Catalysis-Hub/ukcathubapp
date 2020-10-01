@@ -103,7 +103,14 @@ class CrossrefPublication
           continue = al_obj.affi_object_well_formed(auth_affi, affi_lines, split_complex, an_art_aut.id)
           # save the object
           if continue then
-            puts "affiliation object is well formed"
+            puts "\nAffiliation object is well formed"
+            existing_affi = AuthorAffiliation.find_by(article_author_id: auth_affi.article_author_id, name:auth_affi.name)
+            if existing_affi == nil then
+              puts "\nSaving Affiliation"
+              auth_affi.save
+            else
+              puts "Found existing affiliation: " + existing_affi.id.to_s
+            end
           end
         end
       end
@@ -216,10 +223,8 @@ class CrossrefPublication
       end
       # if country is missing get check all addres lines in object
       if auth_affi.country.to_s == ""
-        print "\nChecking on address lines"
         auth_affi.attributes.keys.each do |instance_variable|
           # look for country name in address strings
-          print "\nChecking " + instance_variable.to_s
           if instance_variable.to_s.include?("add_0") then
             #print instance_variable
             value = auth_affi.attributes[instance_variable]
@@ -336,30 +341,6 @@ class CrossrefPublication
       end
       # # how to handle a name which has both and institution and a another name?
       # # EXAMPLE " Department of Materials Science and Engineering Lehigh University"
-      # temp_tkns = []
-      # split_idx = -1
-      # tokens.each do |token|
-      #   print "\n check for inst in tokens"
-      #   found_inst = get_institution(token)
-      #   if found_inst != nil then
-      #     found_inst = get_institution_synonym(token)
-      #   end
-      #   if found_inst != nil then
-      #     print found_inst
-      #     if inst_index != 0 && token.gsub(found_inst).strip != "" then
-      #       split_idx = tokens.find_index(token)
-      #       temp_tkns = [token.gsub(found_inst).strip, found_inst]
-      #     end
-      #     print temp_tkns
-      #     print split_idx
-      #     break
-      #   end
-      #   print found_inst
-      # end
-      # if temp_tkns.count >0 and split_idx > -1 then
-      #   tokens = tokens[0..split_idx-1].concat(temp_tkns).concat(tokens[split_idx+1..])
-      # end
-      # print tokens
       if tokens != []
         return create_affi_obj(tokens, auth_id)
       else
