@@ -9,6 +9,6 @@ class VerifyAuthorsCrossrefWorker
     authors_list = Author.where("updated_at < ?", date_from)
     puts '*************************************'
     puts "Authors to verify " + authors_list.length.to_s
-    CrossrefPublication.verify_authors(authors_list)
+    CrossrefPublication.verify_author_affiliations(authors_list)
   end
 end

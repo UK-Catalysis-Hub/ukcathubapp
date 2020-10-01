@@ -6,7 +6,6 @@
 #   - author details (name, orcid, affilition, etc.)
 #   - affilition details (name, address, country, etc.)
 class CrossrefPublication
-
   # verify article object agains CR record
   def self.verify_article(article)
     # get the article from crossref
@@ -80,7 +79,7 @@ class CrossrefPublication
     end
   end
 
-  def self.verify_authors(authors_list)
+  def self.verify_author_affiliations(authors_list)
     al_obj = AffiliationLists.new()
     # print "\nCountries: " + al_obj.affi_countries.to_s
     # print "\nInstitutions: " + al_obj.affi_institutions.to_s
@@ -323,7 +322,7 @@ class CrossrefPublication
           auth_affi.save
           # mark the cr_affis with the id of the corresponding author_affiliation
           affi_lines.each do |cr_affi|
-            cr_affi.author_affiliation_id = art_aut_id
+            cr_affi.author_affiliation_id = auth_affi.id
             cr_affi.save
           end
         else
