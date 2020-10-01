@@ -82,8 +82,11 @@ class CrossrefPublication
 
   def self.verify_authors(authors_list)
     al_obj = AffiliationLists.new()
-    print al_obj.affi_countries
-    print al_obj.affi_institutions
+    # print "\nCountries: " + al_obj.affi_countries.to_s
+    # print "\nInstitutions: " + al_obj.affi_institutions.to_s
+    # print "\nDepartments: " + al_obj.affi_departments.to_s
+    # print "\nFaculties: " + al_obj.affi_faculties.to_s
+    # print "\nWorkgroups: " + al_obj.affi_work_groups.to_s
     break_idx = 0
     authors_list.each do |an_author|
       puts "\n" + an_author.last_name
@@ -95,22 +98,29 @@ class CrossrefPublication
         affi_lines = an_art_aut.cr_affiliations
         puts "Afiliatios for " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
         if affi_lines.count == 1
-          split_complex = true
-          affi_line_id = affi_lines.first.id
-          affi_line_value = affi_lines.first.name
-          auth_affi = al_obj.split_complex(affi_line_value, an_art_aut.id)
-          # check if object is well formed
-          continue = al_obj.affi_object_well_formed(auth_affi, affi_lines, split_complex, an_art_aut.id)
-          # save the object
-          if continue then
-            puts "\nAffiliation object is well formed"
-            existing_affi = AuthorAffiliation.find_by(article_author_id: auth_affi.article_author_id, name:auth_affi.name)
-            if existing_affi == nil then
-              puts "\nSaving Affiliation"
-              auth_affi.save
+          al_obj.build_complex(affi_lines, an_art_aut.id )
+        elsif affi_lines.count > 1
+          # check if lines there is one or more than one affiliations in string
+          print " Has Many affiliation lines\n"
+          # check if affiliation lines contain more than one affiliation
+          single_ctr = 0
+          affi_lines.each do |cr_affi|
+            if al_obj.is_simple(cr_affi.name) then
+              #printf("\n%s Single", an_item)
+              single_ctr += 1
+            elsif al_obj.is_complex(cr_affi.name) then
+              printf("\n%s Complex", cr_affi.name)
             else
-              puts "Found existing affiliation: " + existing_affi.id.to_s
+              #printf("\n%s Single", an_item)
+              single_ctr += 1
             end
+          end
+          if single_ctr > 1
+            print "\t treat all cr as a single affi\n"
+            al_obj.build_single(affi_lines, an_art_aut.id)
+          else
+            print "\t treat each cr as a complex affi\n"
+            al_obj.build_complex(affi_lines, an_art_aut.id )
           end
         end
       end
@@ -134,9 +144,9 @@ class CrossrefPublication
     def initialize()
       @affi_countries = Affiliation.distinct.pluck(:country)
       @affi_institutions = Affiliation.distinct.pluck(:institution)
-      @affi_departments = Affiliation.distinct.pluck(:department)
-      @affi_faculties = Affiliation.distinct.pluck(:faculty)
-      @affi_work_groups = Affiliation.distinct.pluck(:work_group)
+      @affi_departments = Affiliation.where('department IS NOT NULL').distinct.pluck(:department)
+      @affi_faculties = Affiliation.where('faculty IS NOT NULL').distinct.pluck(:faculty)
+      @affi_work_groups = Affiliation.where('work_group IS NOT NULL').distinct.pluck(:work_group)
 
       # list of country sysnonyms
       # (need to persist somewhere)
@@ -266,6 +276,62 @@ class CrossrefPublication
       return auth_affi
     end
 
+    # handle strings wich contain a complete affiliation
+    def build_complex(affi_lines, art_aut_id )
+      split_complex = true
+      affi_lines.each do |cr_affi|
+        affi_line_id =cr_affi.id
+        affi_line_value = cr_affi.name
+        auth_affi = split_complex(affi_line_value, art_aut_id)
+        # check if object is well formed
+        continue = affi_object_well_formed(auth_affi, affi_lines, split_complex, art_aut_id)
+        # save the object
+        if continue then
+          puts "\nAffiliation object is well formed"
+          existing_affi = AuthorAffiliation.find_by(article_author_id: auth_affi.article_author_id, name:auth_affi.name)
+          if existing_affi == nil then
+            puts "\nSaving Affiliation"
+            auth_affi.save
+            # mark the cr_affi with the id of the corresponding author_affiliation
+            cr_affi.author_affiliation_id = art_aut_id
+            cr_affi.save
+          else
+            puts "Found existing affiliation: " + existing_affi.id.to_s
+          end
+        end
+      end
+    end
+
+    # handle affiliations consisting of many cr_affi lines
+    def build_single(affi_lines, art_aut_id)
+      split_complex = false
+      cr_affi_keys = []
+      single_vals = []
+      affi_lines.each do |cr_affi|
+        cr_affi_keys.append(cr_affi.id)
+        single_vals.append(cr_affi.name)
+      end
+      auth_affi = create_affi_obj(single_vals, art_aut_id)
+      # check if object is well formed
+      continue = affi_object_well_formed(auth_affi, affi_lines, split_complex, art_aut_id)
+      # save the object
+      if continue then
+        puts "\nAffiliation object is well formed"
+        existing_affi = AuthorAffiliation.find_by(article_author_id: auth_affi.article_author_id, name:auth_affi.name)
+        if existing_affi == nil then
+          puts "\nSaving Affiliation"
+          auth_affi.save
+          # mark the cr_affis with the id of the corresponding author_affiliation
+          affi_lines.each do |cr_affi|
+            cr_affi.author_affiliation_id = art_aut_id
+            cr_affi.save
+          end
+        else
+          puts "Found existing affiliation: " + existing_affi.id.to_s
+        end
+      end
+    end
+
     # if a value in the country exeptions list is in string, remove that value
     # before looking up for country
     def country_exclude(affi_string)
@@ -360,10 +426,39 @@ class CrossrefPublication
 
     # if a value in the institution sysnonyms list is in string, return that value
     def get_institution_synonym(affi_string)
-      print affi_string
       @institution_synonyms.keys.each do |inst_key|
         if affi_string.include?(inst_key.to_s)
           return inst_key.to_s
+        end
+      end
+      return nil
+    end
+
+    # if a value in the departments list is in string, return that value
+    def get_department(affi_string)
+      @affi_departments.each do |department|
+        if affi_string.include?(department)
+          return department
+        end
+      end
+      return nil
+    end
+
+    # if a value in the faculties list is in string, return that value
+    def get_faculty(affi_string)
+      @affi_faculties.each do |faculty|
+        if affi_string.include?(faculty)
+          return faculty
+        end
+      end
+      return nil
+    end
+
+    # if a value in the workgroups list is in string, return that value
+    def get_workgroup(affi_string)
+      @affi_work_groups.each do |workgroup|
+        if affi_string.include?(workgroup)
+          return workgroup
         end
       end
       return nil
@@ -452,6 +547,43 @@ class CrossrefPublication
         return true
       end
     end
+
+    # determine if an affilition string is complex by checking if it
+    # contains 2 or more keywords from the common lists
+    def is_complex(an_item)
+      occurrence_counter = 0
+      #verify if item has two or more affilition elements
+      if get_institution(an_item) != nil then occurrence_counter += 1 end
+      if get_country(an_item) != nil then occurrence_counter += 1 end
+      if get_department(an_item) != nil then occurrence_counter += 1 end
+      if get_faculty(an_item) != nil then occurrence_counter += 1 end
+      if get_workgroup(an_item) != nil then occurrence_counter += 1 end
+      # if more than one affilition element, treat as complex
+      if occurrence_counter > 1
+        return true
+      else
+        return(false)
+      end
+    end
+
+    # determine if an affilition string is simple by checking if it fully matches
+    # one of the keywords from the common lists
+    def is_simple(an_item)
+      #verify if item has two or more affilition elements
+      found_this = get_institution(an_item)
+      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
+      found_this = get_department(an_item)
+      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
+      found_this = get_faculty(an_item)
+      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
+      found_this = get_workgroup(an_item)
+      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
+      found_this = get_country(an_item)
+      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
+      if found_this != nil and found_this.length > an_item.length then return true end # found a country synonym
+      return false
+    end
+
     # print the contents of the affiliation object
     def print_affi(affi_object)
       printf "\nAuthor ID: %d affiliation: %s affiliation short: %s country: %s\n", affi_object.article_author_id, affi_object.name, affi_object.short_name, affi_object.country
