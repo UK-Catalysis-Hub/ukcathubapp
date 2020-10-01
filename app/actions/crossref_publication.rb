@@ -86,7 +86,6 @@ class CrossrefPublication
     # print "\nDepartments: " + al_obj.affi_departments.to_s
     # print "\nFaculties: " + al_obj.affi_faculties.to_s
     # print "\nWorkgroups: " + al_obj.affi_work_groups.to_s
-    break_idx = 0
     authors_list.each do |an_author|
       puts "\n" + an_author.last_name
       article_authors = an_author.article_authors
@@ -123,10 +122,6 @@ class CrossrefPublication
           end
         end
       end
-      if break_idx > 8
-        break
-      end
-      break_idx += 1
     end
   end
 
