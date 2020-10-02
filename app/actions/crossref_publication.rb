@@ -287,7 +287,7 @@ class CrossrefPublication
             puts "\nSaving Affiliation"
             auth_affi.save
             # mark the cr_affi with the id of the corresponding author_affiliation
-            cr_affi.author_affiliation_id = art_aut_id
+            cr_affi.author_affiliation_id = auth_affi.id
             cr_affi.save
           else
             puts "Found existing affiliation: " + existing_affi.id.to_s
