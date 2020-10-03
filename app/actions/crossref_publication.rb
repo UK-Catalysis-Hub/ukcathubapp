@@ -82,12 +82,6 @@ class CrossrefPublication
   def self.verify_author_affiliations(authors_list)
     affi_splitter = AffiliationLists.new()
     authors_list.each do |an_author|
-      if an_author.id == 97 then
-        print "\n*************************************************************"
-        puts  "\n" + an_author.last_name + " " + an_author.given_name
-        puts  "\nArticles authored: " + an_author.article_authors.length.to_s
-        print "\n*************************************************************"
-      end
       article_authors = an_author.article_authors
       article_authors.each do |an_art_aut|
         continue = false
@@ -121,11 +115,6 @@ class CrossrefPublication
             end
           end
         end
-      end
-      if an_author.id == 97 then
-        print "\nID: " + an_author.id.to_s
-        print "\nAuthor Name: " + an_author.last_name + " " + an_author.given_name
-        break
       end
     end
   end
