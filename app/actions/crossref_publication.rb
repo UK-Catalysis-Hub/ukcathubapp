@@ -125,6 +125,7 @@ class CrossrefPublication
       if an_author.id == 97 then
         print "\nID: " + an_author.id.to_s
         print "\nAuthor Name: " + an_author.last_name + " " + an_author.given_name
+        break
       end
     end
   end
