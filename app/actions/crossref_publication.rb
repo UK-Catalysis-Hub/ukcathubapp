@@ -80,47 +80,51 @@ class CrossrefPublication
   end
 
   def self.verify_author_affiliations(authors_list)
-    al_obj = AffiliationLists.new()
-    # print "\nCountries: " + al_obj.affi_countries.to_s
-    # print "\nInstitutions: " + al_obj.affi_institutions.to_s
-    # print "\nDepartments: " + al_obj.affi_departments.to_s
-    # print "\nFaculties: " + al_obj.affi_faculties.to_s
-    # print "\nWorkgroups: " + al_obj.affi_work_groups.to_s
+    affi_splitter = AffiliationLists.new()
     authors_list.each do |an_author|
-      puts "\n" + an_author.last_name
+      if an_author.id == 97 then
+        print "\n*************************************************************"
+        puts  "\n" + an_author.last_name + " " + an_author.given_name
+        puts  "\nArticles authored: " + an_author.article_authors.length.to_s
+        print "\n*************************************************************"
+      end
       article_authors = an_author.article_authors
-      puts "Articles authored: " +  article_authors.length.to_s
       article_authors.each do |an_art_aut|
-        split_complex = false
         continue = false
         affi_lines = an_art_aut.cr_affiliations
-        puts "Afiliatios for " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
-        if affi_lines.count == 1
-          al_obj.build_complex(affi_lines, an_art_aut.id )
-        elsif affi_lines.count > 1
-          # check if lines there is one or more than one affiliations in string
-          print " Has Many affiliation lines\n"
-          # check if affiliation lines contain more than one affiliation
-          single_ctr = 0
-          affi_lines.each do |cr_affi|
-            if al_obj.is_simple(cr_affi.name) then
-              #printf("\n%s Single", an_item)
-              single_ctr += 1
-            elsif al_obj.is_complex(cr_affi.name) then
-              printf("\n%s Complex", cr_affi.name)
+        if affi_lines.length > 0
+          puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
+          if affi_lines.count == 1
+            affi_splitter.build_complex(affi_lines, an_art_aut.id )
+          elsif affi_lines.count > 1
+            # check if lines there is one or more than one affiliations in string
+            print " Has Many affiliation lines\n"
+            # check if affiliation lines contain more than one affiliation
+            single_ctr = 0
+            affi_lines.each do |cr_affi|
+              if affi_splitter.is_simple(cr_affi.name) then
+                #printf("\n%s Single", an_item)
+                single_ctr += 1
+              elsif affi_splitter.is_complex(cr_affi.name) then
+                printf("\n%s Complex", cr_affi.name)
+              else
+                #printf("\n%s Single", an_item)
+                single_ctr += 1
+              end
+            end
+            if single_ctr > 1
+              print "\t treat all cr as a single affi\n"
+              affi_splitter.build_single(affi_lines, an_art_aut.id)
             else
-              #printf("\n%s Single", an_item)
-              single_ctr += 1
+              print "\t treat each cr as a complex affi\n"
+              affi_splitter.build_complex(affi_lines, an_art_aut.id )
             end
           end
-          if single_ctr > 1
-            print "\t treat all cr as a single affi\n"
-            al_obj.build_single(affi_lines, an_art_aut.id)
-          else
-            print "\t treat each cr as a complex affi\n"
-            al_obj.build_complex(affi_lines, an_art_aut.id )
-          end
         end
+      end
+      if an_author.id == 97 then
+        print "\nID: " + an_author.id.to_s
+        print "\nAuthor Name: " + an_author.last_name + " " + an_author.given_name
       end
     end
   end
@@ -145,15 +149,15 @@ class CrossrefPublication
       # list of country sysnonyms
       # (need to persist somewhere)
       @country_synonyms = {"UK":"United Kingdom", "U.K.":"United Kingdom",
-          "U. K.":"United Kingdom", "U.K":"United Kingdom",
-          "PRC":"Peoples Republic of China", "P.R.C.":"Peoples Republic of China",
-          "China":"Peoples Republic of China",
-          "P.R.China":"Peoples Republic of China",
-          "P.R. China":"Peoples Republic of China",
-          "United States":"United States of America",
-          "USA":"United States of America","U.S.A.":"United States of America",
-          "U. S. A.":"United States of America", "U.S.":"United States of America",
-          "U. S.":"United States of America","US":"United States of America"}
+        "(UK)":"United Kingdom", "U. K.":"United Kingdom",
+        "U.K":"United Kingdom", "PRC":"Peoples Republic of China",
+        "P.R.C.":"Peoples Republic of China", "China":"Peoples Republic of China",
+        "P.R.China":"Peoples Republic of China",
+        "P.R. China":"Peoples Republic of China",
+        "United States":"United States of America",
+        "USA":"United States of America","U.S.A.":"United States of America",
+        "U. S. A.":"United States of America", "U.S.":"United States of America",
+        "U. S.":"United States of America","US":"United States of America"}
 
       # list of institution sysnonyms
       # (need to persist somewhere)
@@ -162,7 +166,8 @@ class CrossrefPublication
           "Oxford University":"University of Oxford",
           "University of St Andrews":"University of St. Andrews",
           "Diamond Light Source":"Diamond Light Source Ltd.",
-          "ISIS Facility":"ISIS Neutron and Muon Source"}
+          "ISIS Facility":"ISIS Neutron and Muon Source",
+          "University College of London":"University College London"}
 
       # list ofstrings which contain country names but are not countries, such as
       # streets, institution names, etc.
@@ -502,7 +507,9 @@ class CrossrefPublication
       # problem: affi_object nil
       if affi_object == nil
         puts "\n********************* Affiliation is nil **********************\n"
-        puts name_list
+        name_list.each do |cr_affi|
+          puts cr_affi.id.to_s + " - " + cr_affi.name
+        end
       # problem: missing country
       elsif affi_object.country == nil
         if parsed_complex == false
