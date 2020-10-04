@@ -80,7 +80,7 @@ class CrossrefPublication
   end
 
   def self.verify_author_affiliations(authors_list)
-    affi_splitter = AffiliationLists.new()
+    affi_separator = AffiliationLists.new()
     authors_list.each do |an_author|
       article_authors = an_author.article_authors
       article_authors.each do |an_art_aut|
@@ -89,17 +89,17 @@ class CrossrefPublication
         if affi_lines.length > 0
           puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
           if affi_lines.count == 1
-            affi_splitter.build_complex(affi_lines, an_art_aut.id )
+            affi_separator.build_complex(affi_lines, an_art_aut.id )
           elsif affi_lines.count > 1
             # check if lines there is one or more than one affiliations in string
             print " Has Many affiliation lines\n"
             # check if affiliation lines contain more than one affiliation
             single_ctr = 0
             affi_lines.each do |cr_affi|
-              if affi_splitter.is_simple(cr_affi.name) then
+              if affi_separator.is_simple(cr_affi.name) then
                 #printf("\n%s Single", an_item)
                 single_ctr += 1
-              elsif affi_splitter.is_complex(cr_affi.name) then
+              elsif affi_separator.is_complex(cr_affi.name) then
                 printf("\n%s Complex", cr_affi.name)
               else
                 #printf("\n%s Single", an_item)
@@ -107,11 +107,18 @@ class CrossrefPublication
               end
             end
             if single_ctr > 1
-              print "\t treat all cr as a single affi\n"
-              affi_splitter.build_single(affi_lines, an_art_aut.id)
+              print "\t treat all cr as one single affiliation?\n"
+              affi_splits = affi_separator.affi_lines_split(affi_lines)
+              if affi_splits.count > 1
+                print ("\n***************************************************************\n")
+                print affi_splits
+              end
+              affi_splits.each do |an_affi|
+                affi_separator.build_single(an_affi, an_art_aut.id)
+              end
             else
-              print "\t treat each cr as a complex affi\n"
-              affi_splitter.build_complex(affi_lines, an_art_aut.id )
+              print "\t treat each cr as many affiliations\n"
+              affi_separator.build_complex(affi_lines, an_art_aut.id )
             end
           end
         end
@@ -138,8 +145,8 @@ class CrossrefPublication
 
       # list of country sysnonyms
       # (need to persist somewhere)
-      @country_synonyms = {"UK":"United Kingdom", "U.K.":"United Kingdom",
-        "(UK)":"United Kingdom", "U. K.":"United Kingdom",
+      @country_synonyms = {"(UK)":"United Kingdom", "UK":"United Kingdom",
+        "U.K.":"United Kingdom", "U. K.":"United Kingdom",
         "U.K":"United Kingdom", "PRC":"Peoples Republic of China",
         "P.R.C.":"Peoples Republic of China", "China":"Peoples Republic of China",
         "P.R.China":"Peoples Republic of China",
@@ -152,12 +159,13 @@ class CrossrefPublication
       # list of institution sysnonyms
       # (need to persist somewhere)
       @institution_synonyms = {"The ISIS facility":"ISIS Neutron and Muon Source",
-          "STFC":"Science and Technology Facilities Councils",
-          "Oxford University":"University of Oxford",
-          "University of St Andrews":"University of St. Andrews",
-          "Diamond Light Source":"Diamond Light Source Ltd.",
-          "ISIS Facility":"ISIS Neutron and Muon Source",
-          "University College of London":"University College London"}
+        "STFC":"Science and Technology Facilities Councils",
+        "Oxford University":"University of Oxford",
+        "University of St Andrews":"University of St. Andrews",
+        "Diamond Light Source Ltd Harwell Science and Innovation Campus":"Diamond Light Source Ltd.",
+        "Diamond Light Source":"Diamond Light Source Ltd.",
+        "ISIS Facility":"ISIS Neutron and Muon Source",
+        "University College of London":"University College London"}
 
       # list ofstrings which contain country names but are not countries, such as
       # streets, institution names, etc.
@@ -179,31 +187,30 @@ class CrossrefPublication
           auth_affi.name = a_line
         elsif @affi_countries.include?(a_line)
           auth_affi.country = a_line
-        elsif @affi_institutions.include?(a_line)
-          if auth_affi.name != nil
-            # if the affiliation name is not an institution
-            # add institution to name and make short name the institution
-            # otherwise shot name is the same as name
-            if !@affi_institutions.include?(auth_affi.name) or \
-              !@institution_synonyms.keys.include?(auth_affi.name.to_sym) then
-              auth_affi.name = auth_affi.name + ", " + a_line
-              auth_affi.short_name = a_line
-            else
-              auth_affi.short_name = auth_affi.name
-            end
+        elsif @affi_institutions.include?(a_line) and auth_affi.name != nil then
+          # if the affiliation name is not an institution
+          # add institution to name and make short name the institution
+          # otherwise shot name is the same as name
+          if @affi_institutions.include?(auth_affi.name) or \
+            @institution_synonyms.keys.include?(auth_affi.name.to_sym) then
+            auth_affi.short_name = auth_affi.name
+            auth_affi.add_01 = a_line
+          else
+            auth_affi.name = auth_affi.name + ", " + a_line
+            auth_affi.short_name = a_line
           end
-        elsif @institution_synonyms.keys.include?(a_line.to_sym) then
-          if auth_affi.name != nil
-            # if the affiliation name is not an institution
-            # add institution to name and make short name the institution
-            # otherwise shot name is the same as name
-            if !@affi_institutions.include?(auth_affi.name) and \
-              !@institution_synonyms.keys.include?(auth_affi.name.to_sym) then
-              auth_affi.name = auth_affi.name + ", " + @institution_synonyms[a_line.to_sym]
-              auth_affi.short_name =  @institution_synonyms[a_line.to_sym]
-            else
-              auth_affi.short_name =  @institution_synonyms[a_line.to_sym]
-            end
+        elsif @institution_synonyms.keys.include?(a_line.to_sym) and \
+          auth_affi.name != nil then
+          # if the affiliation name is not an institution
+          # add institution to name and make short name the institution
+          # otherwise shot name is the same as name
+          if @affi_institutions.include?(auth_affi.name) or \
+            @institution_synonyms.keys.include?(auth_affi.name.to_sym) then
+            auth_affi.short_name =  auth_affi.name
+            auth_affi.add_01 = a_line
+          else
+            auth_affi.name = auth_affi.name + ", " + @institution_synonyms[a_line.to_sym]
+            auth_affi.short_name =  @institution_synonyms[a_line.to_sym]
           end
         elsif auth_affi.add_01 == nil
           auth_affi.add_01 = a_line
@@ -220,6 +227,12 @@ class CrossrefPublication
         end
         line_idx += 1
       end
+
+      # make sure there is a short name, if blank make it the same as name
+      if auth_affi.short_name == nil
+        auth_affi.short_name = auth_affi.name
+      end
+
       # if country is missing get check all addres lines in object
       if auth_affi.country.to_s == ""
         auth_affi.attributes.keys.each do |instance_variable|
@@ -242,21 +255,22 @@ class CrossrefPublication
           auth_affi.country = ctry
         end
         # look for country in institution table
-        # print auth_affi.country
-        #
         if auth_affi.country.to_s == ""  then
-          #printf "\n Before if %s", auth_affi.name
           inst_found = auth_affi.name
-          if @affi_institutions.include?(auth_affi.name) or \
-            @institution_synonyms.keys.include?(auth_affi.name.to_sym) then
+          if @affi_institutions.include?(auth_affi.name) then
             inst_found = auth_affi.name
-            #printf "\n Before sendig %s", inst_found
             ctry = Affiliation.find_by(institution: inst_found.strip).country
             auth_affi.country = ctry
-          elsif @affi_institutions.include?(auth_affi.short_name) or \
-            @institution_synonyms.keys.include?(auth_affi.short_name.to_s.to_sym) then
+          elsif @affi_institutions.include?(auth_affi.short_name) then
             inst_found = auth_affi.short_name
-            #printf "\n Before sendig %s", inst_found
+            ctry = Affiliation.find_by(institution: inst_found.strip).country
+            auth_affi.country = ctry
+          elsif $institution_synonyms.keys.include?(auth_affi.name.to_sym)
+            inst_found = @institution_synonyms[auth_affi.name.to_sym]
+            ctry = Affiliation.find_by(institution: inst_found.strip).country
+            auth_affi.country = ctry
+          elsif $institution_synonyms.keys.include?(auth_affi.short_name.to_sym)
+            inst_found = @institution_synonyms[auth_affi.short_name.to_sym]
             ctry = Affiliation.find_by(institution: inst_found.strip).country
             auth_affi.country = ctry
           end
@@ -573,6 +587,41 @@ class CrossrefPublication
       if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
       if found_this != nil and found_this.length > an_item.length then return true end # found a country synonym
       return false
+    end
+
+    # check if a set of lines contains more than one affiliation,
+    # if so split them
+    def affi_lines_split(affi_lines)
+      all_insts=[]
+      temp_lines = affi_lines
+      return_splits = []
+      affi_lines.each do |a_line|
+        inst_found = get_institution(a_line.name)
+        if inst_found == nil then
+          inst_found = get_institution_synonym(a_line.name)
+        end
+        if inst_found != nil and inst_found.to_s.downcase.strip == a_line.name.to_s.downcase.strip then
+          all_insts.append(affi_lines.find_index(a_line))
+        end
+      end
+      prev_idx = 0
+      if all_insts.count > 1
+        all_insts[1..].each do |inst_indx| #ignore the first index
+          # distance between institution has to be greather than 1
+          # 0 and 1, for instance can have institutions such as UKCH+RCaH
+          # ignore the two first occurrences
+          if inst_indx > 1 and inst_indx-1 > prev_idx
+            return_splits.append(temp_lines[prev_idx..inst_indx-1])
+            prev_idx = inst_indx
+          end
+        end
+      end
+      if prev_idx != 0
+        return_splits.append(temp_lines[prev_idx.. ])
+      else
+        return_splits = [affi_lines]
+      end
+      return return_splits
     end
 
     # print the contents of the affiliation object
