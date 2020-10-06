@@ -79,7 +79,7 @@ class CrossrefPublication
     end
   end
 
-  def self.verify_author_affiliations(authors_list)
+  def self.generate_author_affiliations(authors_list)
     affi_separator = AffiliationLists.new()
     authors_list.each do |an_author|
       article_authors = an_author.article_authors

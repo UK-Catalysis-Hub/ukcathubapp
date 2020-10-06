@@ -96,11 +96,11 @@ class AuthorsController < ApplicationController
     end
   end
 
-  # VERIFY records in CR
-  def verify
-    VerifyAuthorsCrossrefWorker.perform_async
+  # generate affilitions from CR records
+  def generate
+    GenerateAffiliationsCrossrefWorker.perform_async
     respond_to do |format|
-      flash[:notice] = 'Verifying authors process started'
+      flash[:notice] = 'Affiliation generation process started'
       format.html { redirect_to action: "index" }
       format.json { head :no_content }
     end

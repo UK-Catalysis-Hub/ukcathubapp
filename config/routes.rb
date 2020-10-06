@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   resources :authors
   # custom route to verify methods
   post 'verify' => 'articles#verify', as: :verify
-  post 'verify_authors' => 'authors#verify', as: :v_cr_authors
+  post 'generate_affiliations' => 'authors#generate', as: :generate_auth_affis
   resources :themes
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'home#index'
