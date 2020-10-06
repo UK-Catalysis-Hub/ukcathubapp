@@ -265,11 +265,11 @@ class CrossrefPublication
             inst_found = auth_affi.short_name
             ctry = Affiliation.find_by(institution: inst_found.strip).country
             auth_affi.country = ctry
-          elsif $institution_synonyms.keys.include?(auth_affi.name.to_sym)
+          elsif @institution_synonyms.keys.include?(auth_affi.name.to_sym)
             inst_found = @institution_synonyms[auth_affi.name.to_sym]
             ctry = Affiliation.find_by(institution: inst_found.strip).country
             auth_affi.country = ctry
-          elsif $institution_synonyms.keys.include?(auth_affi.short_name.to_sym)
+          elsif @institution_synonyms.keys.include?(auth_affi.short_name.to_sym)
             inst_found = @institution_synonyms[auth_affi.short_name.to_sym]
             ctry = Affiliation.find_by(institution: inst_found.strip).country
             auth_affi.country = ctry
@@ -364,6 +364,17 @@ class CrossrefPublication
       return nil
     end
 
+    # if a value in the country sysnonyms lists is in string, return that value
+    def get_country_synonym(affi_string)
+      cleared_affi_string = country_exclude(affi_string)
+      @country_synonyms.keys.each do |ctry_key|
+        if cleared_affi_string.include?(ctry_key.to_s)
+          return ctry_key.to_s
+        end
+      end
+      return nil
+    end
+
     # if a value in the country or country sysnonyms lists is in string, remove that
     # value from the string
     def drop_country(affi_string)
@@ -419,22 +430,32 @@ class CrossrefPublication
 
     # if a value in the institutions list is in string, return that value
     def get_institution(affi_string)
-      @affi_institutions.each do |institution|
-        if affi_string.include?(institution)
-          return institution
+      found_inst = nil
+      @institution_synonyms.keys.each do |inst_key|
+        if affi_string.include?(inst_key.to_s) then
+          if found_inst == nil then
+            found_inst = inst_key.to_s
+          elsif found_inst != nil and found_inst.length < inst_key.to_s.length then
+            found_inst = inst_key.to_s
+          end
         end
       end
-      return nil
+      return found_inst
     end
 
     # if a value in the institution sysnonyms list is in string, return that value
     def get_institution_synonym(affi_string)
+      found_inst = nil
       @institution_synonyms.keys.each do |inst_key|
-        if affi_string.include?(inst_key.to_s)
-          return inst_key.to_s
+        if affi_string.include?(inst_key.to_s) then
+          if found_inst == nil then
+            found_inst = inst_key.to_s
+          elsif found_inst != nil and found_inst.length < inst_key.to_s.length then
+            found_inst = inst_key.to_s
+          end
         end
       end
-      return nil
+      return found_inst
     end
 
     # if a value in the departments list is in string, return that value
@@ -469,11 +490,95 @@ class CrossrefPublication
 
     # split an affiliation string using the institution and country lists and then
     # build the object
+    def split_by_keywords2(affi_string, auth_id)
+      # get the indexes of each element found
+      # separate the string using the indexes
+      printf "\n************************** SPLITTING BY KEYWORD *****************\n"
+      printf "Affiliation: %s\n", affi_string
+      kw_indexes = {} #kewrds array of indexes and lengths
+      found_inst = found_country = nil
+
+      found_inst = get_institution(affi_string)
+      if found_inst != nil then
+        kw_indexes[affi_string.index(found_inst)] = found_inst.length
+      end
+
+      if found_inst == nil then
+        found_inst = get_institution_synonym(affi_string)
+        if found_inst != nil then
+          kw_indexes[affi_string.index(found_inst)] = found_inst.length
+        end
+      end
+      printf "--Institution: %s\n", found_inst
+
+      found_country = get_country(affi_string)
+      if found_country != nil then
+        kw_indexes[affi_string.index(found_country)] = found_country.length
+      end
+
+      found_country_synonym = get_country_synonym(affi_string)
+      if found_country_synonym != nil then
+        cleared_affi_string = country_exclude(affi_string)
+        kw_indexes[cleared_affi_string.index(found_country_synonym)] = found_country_synonym.length
+      end
+
+      found_faculty = get_faculty(affi_string)
+      if found_faculty != nil then
+        kw_indexes[affi_string.index(found_faculty)] = found_faculty.length
+      end
+
+      found_workgroup = get_workgroup(affi_string)
+      if found_workgroup != nil then
+        kw_indexes[affi_string.index(found_workgroup)] = found_workgroup.length
+      end
+
+      found_department = get_department(affi_string)
+      if found_department != nil then
+        kw_indexes[affi_string.index(found_department)] = found_department.length
+      end
+
+      affiliation_array = []
+      prev_split = 0
+      if kw_indexes.count > 0 then
+        print"\nkw_indexes +++++:" + kw_indexes.to_s+"\n\n"
+        temp_affi = affi_string
+        # Order the indexes to break the affistring in its original order
+        kw_indexes = kw_indexes.sort.to_h
+        kw_indexes.keys.each do |kw_idx|
+          # if the first index 0 make it the first element of the return array
+          if affiliation_array == [] and kw_idx == 0 then
+            affiliation_array = [temp_affi[kw_idx, kw_indexes[kw_idx]]]
+          elsif affiliation_array == [] then
+            affiliation_array = [temp_affi[..kw_idx-1]]
+            affiliation_array.append(temp_affi[kw_idx, kw_indexes[kw_idx]])
+          elsif prev_split < kw_idx then
+            affiliation_array.append(temp_affi[prev_split..kw_idx-1].strip)
+            affiliation_array.append(temp_affi[kw_idx,kw_indexes[kw_idx]])
+          else
+            affiliation_array.append(temp_affi[kw_idx,kw_indexes[kw_idx]])
+          end
+          prev_split = kw_idx + kw_indexes[kw_idx] + 1
+        end
+      end
+      # strip and remove trailing commas in one place instead of with every
+      # assignment
+      indx = 0
+      while indx < affiliation_array.count do
+        affiliation_array[indx] = affiliation_array[indx].strip.chomp(",").chomp(";")
+        indx +=1
+      end
+      # remove leftover nulls
+      affiliation_array.delete("")
+      printf "\n****************************************************************\n"
+      printf "\n" + affiliation_array.to_s
+      printf "\n****************************************************************\n"
+      #
+    end
     def split_by_keywords(affi_string, auth_id)
       # build affiliation object directly
       # try with country and institution
-      # printf "\n************************** SPLITTING BY KEYWORD *****************\n"
-      # printf "Affiliation: %s\n", affi_string
+      printf "\n************************** SPLITTING BY KEYWORD *****************\n"
+      printf "Affiliation: %s\n", affi_string
       tokens=[]
       found_inst = found_country = ""
       found_inst = get_institution(affi_string)
@@ -497,9 +602,9 @@ class CrossrefPublication
           tokens.append drop_country(affi_string[affi_string[ins_idx+inst_len, affi_len-inst_len].strip].strip)
           tokens.append found_country
         end
-        # printf"\n****************************************************************\n"
-        # print tokens
-        # printf"\n****************************************************************\n"
+        printf"\n****************************************************************\n"
+        print tokens
+        printf"\n****************************************************************\n"
         affi_obj = create_affi_obj(tokens, auth_id)
         return affi_obj
       end
@@ -514,6 +619,7 @@ class CrossrefPublication
         name_list.each do |cr_affi|
           puts cr_affi.id.to_s + " - " + cr_affi.name
         end
+        return false
       # problem: missing country
       elsif affi_object.country == nil
         if parsed_complex == false
