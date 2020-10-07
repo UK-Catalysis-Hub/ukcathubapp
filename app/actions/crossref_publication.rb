@@ -398,7 +398,7 @@ class CrossrefPublication
       if affi_string.include?(",") or affi_string.include?(";")
         return split_by_separator(affi_string, auth_id)
       else
-        return split_by_keywords(affi_string, auth_id)
+        return split_by_keywords2(affi_string, auth_id)
       end
     end
 
@@ -431,7 +431,7 @@ class CrossrefPublication
     # if a value in the institutions list is in string, return that value
     def get_institution(affi_string)
       found_inst = nil
-      @institution_synonyms.keys.each do |inst_key|
+      @affi_institutions.each do |inst_key|
         if affi_string.include?(inst_key.to_s) then
           if found_inst == nil then
             found_inst = inst_key.to_s
@@ -509,33 +509,44 @@ class CrossrefPublication
           kw_indexes[affi_string.index(found_inst)] = found_inst.length
         end
       end
+      print"\nis kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
       printf "--Institution: %s\n", found_inst
 
       found_country = get_country(affi_string)
       if found_country != nil then
         kw_indexes[affi_string.index(found_country)] = found_country.length
       end
+      print"\nct kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
+      printf "--Institution: %s\n", found_inst
 
       found_country_synonym = get_country_synonym(affi_string)
       if found_country_synonym != nil then
         cleared_affi_string = country_exclude(affi_string)
         kw_indexes[cleared_affi_string.index(found_country_synonym)] = found_country_synonym.length
       end
+      print"\ncs kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
+      printf "--Institution: %s\n", found_inst
 
       found_faculty = get_faculty(affi_string)
       if found_faculty != nil then
         kw_indexes[affi_string.index(found_faculty)] = found_faculty.length
       end
+      print"\nfc kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
+      printf "--Institution: %s\n", found_inst
 
       found_workgroup = get_workgroup(affi_string)
       if found_workgroup != nil then
         kw_indexes[affi_string.index(found_workgroup)] = found_workgroup.length
       end
+      print"\nwg kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
+      printf "--Institution: %s\n", found_inst
 
       found_department = get_department(affi_string)
       if found_department != nil then
         kw_indexes[affi_string.index(found_department)] = found_department.length
       end
+      print"\ndep kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
+      printf "--Institution: %s\n", found_inst
 
       affiliation_array = []
       prev_split = 0
@@ -573,6 +584,7 @@ class CrossrefPublication
       printf "\n" + affiliation_array.to_s
       printf "\n****************************************************************\n"
       #
+      return affiliation_array
     end
     def split_by_keywords(affi_string, auth_id)
       # build affiliation object directly
@@ -681,18 +693,73 @@ class CrossrefPublication
     # one of the keywords from the common lists
     def is_simple(an_item)
       #verify if item has two or more affilition elements
-      found_this = get_institution(an_item)
-      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
-      found_this = get_department(an_item)
-      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
-      found_this = get_faculty(an_item)
-      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
-      found_this = get_workgroup(an_item)
-      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
-      found_this = get_country(an_item)
-      if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
-      if found_this != nil and found_this.length > an_item.length then return true end # found a country synonym
+      items_found={}
+      items_found["institution"] = get_institution(an_item)
+      items_found["department"] = get_department(an_item)
+      items_found["faculty"] = get_faculty(an_item)
+      items_found["work_group"] = get_workgroup(an_item)
+      items_found["country"] = get_country(an_item)
+      # item matches exactly one of the found values so it is simple
+      items_found.values.each do |found_this|
+        if found_this != nil and found_this.downcase().strip == an_item.downcase().strip then return true end
+        if found_this != nil and found_this.length > an_item.length then return true end # found a synonym
+      end
       return false
+    end
+
+    def same_affi(items)
+      items_found={}
+      items.each do |an_item|
+        items_found["institution"] = get_institution(an_item)
+        items_found["department"] = get_department(an_item)
+        items_found["faculty"] = get_faculty(an_item)
+        items_found["work_group"] = get_workgroup(an_item)
+        items_found["country"] = get_country(an_item)
+      end
+      find_str = ""
+      items_found.keys.each do |item_key|
+        if items_found[item_key].to_s != ""
+          find_str += item_key.to_s + " = '" + items_found[item_key].gsub("''","\'") + "' and "
+        end
+      end
+      if find_str != "" then
+        find_str = find_str[..-5]
+        found = Affiliation.where(find_str).count
+        if found > 0 then
+          return true
+        end
+      end
+    end
+
+    # get a set of affi lines and determie how many belong to an affiliation
+    # e.g. "Interdisciplinary Nanoscience Center (iNANO) and Department of Physics and Astronomy"
+    #      "Aarhus University"
+    #      "DK-8000 Aarhus C, Denmark"
+    #      "Department of Chemistry and Interdisciplinary Nanoscience Center (iNANO)"
+    def from_same_affi(affi_lines, accummulated = [])
+      # split the first line
+      # add it to affi_lines if affi_lines empty
+      # in next line try to see if the string belongs to same affiliation
+      # after first line try adding to affi_items, if resulting in same affi, add, else start new affi_items
+      affi_items = {}
+      indx = 0
+      affi_items[indx] = []
+      temp_lines = []
+      affi_lines.each do |cr_affi|
+        print "\nIndex: "+ indx.to_s+ " Items: " + affi_items[indx].to_s
+        temp_split = split_by_keywords2(cr_affi.name.strip, 0)
+        temp_lines = affi_items[indx].concat(temp_split)
+        if affi_items[indx] == [] then
+          affi_items[indx] = temp_split
+        elsif same_affi(temp_lines)
+          affi_items[indx] = temp_lines
+        else
+          indx += 1
+          affi_items[indx] =  temp_split
+        end
+        print "\nIndex: "+ indx.to_s+ " Items: " + affi_items[indx].to_s
+      end
+      print affi_items
     end
 
     # check if a set of lines contains more than one affiliation,
