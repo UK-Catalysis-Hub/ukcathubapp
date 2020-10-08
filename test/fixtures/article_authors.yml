@@ -6,7 +6,7 @@ one:
   author_count: MyString
   author_order: 1
   status: MyString
-  sequence: MyString
+  author_seq: MyString
   article_id: 1
 
 two:
@@ -15,5 +15,5 @@ two:
   author_count: MyString
   author_order: 1
   status: MyString
-  sequence: MyString
+  author_seq: MyString
   article_id: 1

@@ -3,9 +3,9 @@
 one:
   name: MyString
   article_author_id: 1
-  affiliation_id: 1
+  author_affiliation_id: 1
 
 two:
   name: MyString
   article_author_id: 1
-  affiliation_id: 1
+  author_affiliation_id: 1

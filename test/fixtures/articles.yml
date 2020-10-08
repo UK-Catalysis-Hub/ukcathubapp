@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  reference_count: 1
+  referenced_by_count: 1
   publisher: MyString
   issue: MyString
   license: MyString
@@ -26,7 +26,7 @@ one:
   comment: MyString
 
 two:
-  reference_count: 1
+  referenced_by_count: 1
   publisher: MyString
   issue: MyString
   license: MyString

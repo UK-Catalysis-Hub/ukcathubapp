@@ -17,7 +17,7 @@ class ArticleAuthorsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create article_author" do
     assert_difference('ArticleAuthor.count') do
-      post article_authors_url, params: { article_author: { article_id: @article_author.article_id, author_count: @article_author.author_count, author_id: @article_author.author_id, author_order: @article_author.author_order, doi: @article_author.doi, sequence: @article_author.sequence, status: @article_author.status } }
+      post article_authors_url, params: { article_author: { article_id: @article_author.article_id, author_count: @article_author.author_count, author_id: @article_author.author_id, author_order: @article_author.author_order, doi: @article_author.doi, author_seq: @article_author.sequence, status: @article_author.status } }
     end
 
     assert_redirected_to article_author_url(ArticleAuthor.last)

@@ -747,8 +747,17 @@ class CrossrefPublication
       temp_lines = []
       affi_lines.each do |cr_affi|
         print "\nIndex: "+ indx.to_s+ " Items: " + affi_items[indx].to_s
+        # split element
         temp_split = split_by_keywords2(cr_affi.name.strip, 0)
         temp_lines = affi_items[indx].concat(temp_split)
+        #   - test if current affiliation is full (i.e. inst, dep, fcty, wg, cty.)
+        #     - not complete then test if it fits with current affiliation
+        #       - if an affi is element already filled then mark current affi as
+        #         - complete and create a new affi.
+        #           - mark as complete requires looking for matches and missing minimal parts in affiliations table: i.e. inst, ctry,
+        #           - if inst and ctry blank, use the same as last one (i.e. inst and ctry from previous)
+
+        # basic empty is
         if affi_items[indx] == [] then
           affi_items[indx] = temp_split
         elsif same_affi(temp_lines)
