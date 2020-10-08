@@ -398,7 +398,7 @@ class CrossrefPublication
       if affi_string.include?(",") or affi_string.include?(";")
         return split_by_separator(affi_string, auth_id)
       else
-        return split_by_keywords2(affi_string, auth_id)
+        return split_by_keywords2(affi_string)
       end
     end
 
@@ -490,7 +490,7 @@ class CrossrefPublication
 
     # split an affiliation string using the institution and country lists and then
     # build the object
-    def split_by_keywords2(affi_string, auth_id)
+    def split_by_keywords2(affi_string)
       # get the indexes of each element found
       # separate the string using the indexes
       printf "\n************************** SPLITTING BY KEYWORD *****************\n"
@@ -513,7 +513,8 @@ class CrossrefPublication
       printf "--Institution: %s\n", found_inst
 
       found_country = get_country(affi_string)
-      if found_country != nil then
+      print"\nCountry: " +  found_country.to_s
+      if found_country != nil and affi_string.index(found_country)!=nil then
         kw_indexes[affi_string.index(found_country)] = found_country.length
       end
       print"\nct kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
@@ -586,6 +587,185 @@ class CrossrefPublication
       #
       return affiliation_array
     end
+
+    # split an affiliation string using the institution and country lists and then
+    # build the object
+    def split_by_keywords3(affi_string)
+      # get the indexes of each element found
+      # separate the string using the indexes
+      #printf "\n************************** SPLITTING BY KEYWORD *****************\n"
+      #printf "Full Affiliation: %s\n", affi_string
+      kw_indexes = {} #kewrds array of indexes and lengths
+      found_inst = found_country = nil
+      found_inst = get_institution(affi_string)
+      if found_inst != nil then
+        kw_indexes[affi_string.index(found_inst)] = [found_inst.length, 'institution']
+      end
+      if found_inst == nil then
+        found_inst = get_institution_synonym(affi_string)
+        if found_inst != nil then
+          kw_indexes[affi_string.index(found_inst)] = [found_inst.length, 'inst_syn']
+        end
+      end
+      found_country = get_country(affi_string)
+      if found_country != nil and affi_string.index(found_country)!=nil then
+        kw_indexes[affi_string.index(found_country)] = [found_country.length, 'country']
+      end
+      found_country_synonym = get_country_synonym(affi_string)
+      if found_country_synonym != nil then
+        cleared_affi_string = country_exclude(affi_string)
+        kw_indexes[cleared_affi_string.index(found_country_synonym)] = [found_country_synonym.length, "ctry_syn"]
+      end
+      found_faculty = get_faculty(affi_string)
+      if found_faculty != nil then
+        kw_indexes[affi_string.index(found_faculty)] = [found_faculty.length, "faculty"]
+      end
+      found_workgroup = get_workgroup(affi_string)
+      if found_workgroup != nil then
+        kw_indexes[affi_string.index(found_workgroup)] = [found_workgroup.length, "workgroup"]
+        print "WORKGROUP FOUND"
+        if is_simple(affi_string) and affi_string == found_workgroup then
+          return {"workgroup" => found_workgroup}
+        end
+      end
+      found_department = get_department(affi_string)
+      if found_department != nil then
+        kw_indexes[affi_string.index(found_department)] = [found_department.length,"department"]
+      end
+
+      affiliation_array = {}
+      prev_split = 0
+      if kw_indexes.count > 0 then
+        temp_affi = affi_string
+        # Order the indexes to break the affistring in its original order
+        kw_indexes = kw_indexes.sort.to_h
+        kw_indexes.keys.each do |kw_idx|
+          # if the first index 0 make it the first element of the return array
+          if affiliation_array == [] and kw_idx == 0 then
+            affiliation_array = [temp_affi[kw_idx, kw_indexes[kw_idx][0]]]
+          elsif affiliation_array == [] then
+            affiliation_array = [temp_affi[..kw_idx-1]]
+            affiliation_array.append(temp_affi[kw_idx, kw_indexes[kw_idx][0]])
+          elsif prev_split < kw_idx then
+            affiliation_array["ft_"+prev_split.to_s] = temp_affi[prev_split..kw_idx-1].strip
+            affiliation_array[kw_indexes[kw_idx][1]] = temp_affi[kw_idx,kw_indexes[kw_idx][0]]
+          else
+            affiliation_array[kw_indexes[kw_idx][1]] = temp_affi[kw_idx,kw_indexes[kw_idx][0]]
+          end
+          prev_split = kw_idx + kw_indexes[kw_idx][0] + 1
+        end
+      end
+      # strip and remove trailing commas in one place instead of with every
+      # assignment
+      indx = 0
+      # while indx < affiliation_array.count do
+      #   affiliation_array[indx] = affiliation_array[indx].strip.chomp(",").chomp(";")
+      #   indx +=1
+      # end
+      affiliation_array = remove_trailing(affiliation_array)
+      # remove redundant splits (lone conectors e.g. 'and' or empty strings '')
+      affiliation_array = remove_redundant(affiliation_array)
+      #printf "\n****************************************************************\n"
+      #printf "\n" + affiliation_array.to_s
+      #printf "\n****************************************************************\n"
+      #
+      return affiliation_array
+    end
+
+    # get a set of affi lines and determie how many belong to an affiliation
+    # e.g. "Interdisciplinary Nanoscience Center (iNANO) and Department of Physics and Astronomy"
+    #      "Aarhus University"
+    #      "DK-8000 Aarhus C, Denmark"
+    #      "Department of Chemistry and Interdisciplinary Nanoscience Center (iNANO)"
+    def one_by_one_affi(affi_lines, accummulated = [])
+      # split the first line
+      # add it to affi_lines if affi_lines empty
+      # in next line try to see if the string belongs to same affiliation
+      # after first line try adding to affi_items, if resulting in same affi, add, else start new affi_items
+      affi_items = {}
+      indx = 0
+      other_lines = 1
+      affi_items[indx] = nil
+      temp_affi = nil
+      affi_lines.each do |cr_affi|
+        #print "\nElement: " + cr_affi.name.strip.gsub("'","''")
+        # split element by keywords
+        temp_split = $affi_sep.split_by_keywords3(cr_affi.name.strip.gsub("'","''"))
+        # when no fragment is recognised as a keyword?
+        if temp_split == {} then
+          #  print "\nElement: " + cr_affi.name.strip + " *** not recognised ***"
+          temp_split = {"line_"+other_lines.to_s => cr_affi.name.strip}
+          other_lines += 1
+          #else
+          #  print "\nSplit: " + temp_split.to_s
+        end
+        #   - test if current affiliation is full (i.e. inst, dep, fcty, wg, cty.)
+        #     or already contains the elements just returned
+        #     - not complete then test if it fits with current affiliation
+        #       - if an affi is element already filled then mark current affi as
+        #         - complete and create a new affi.
+        #           - mark as complete requires looking for matches and missing minimal parts in affiliations table: i.e. inst, ctry,
+        #           - if inst and ctry blank, use the same as last one (i.e. inst and ctry from previous)
+
+        # currently there is no affiliation
+        add_another = false
+        if affi_items[indx] == nil then
+          # if all elements are from same affi just add them
+          if $affi_sep.one_affi(temp_split) then
+            affi_items[indx] = temp_split
+          # if they are from different affis then create two?
+          end
+        # if the element can be added to current then just add
+        elsif affi_items[indx] != nil
+          current = affi_items[indx]
+          if current.keys.to_set.disjoint?temp_split.keys.to_set
+          # see if they can be in same affi
+            temp_affi = current.merge(temp_split)
+        #      print "\nTemporary merge:" + temp_affi.to_s
+            if $affi_sep.one_affi(temp_affi)
+              affi_items[indx] = temp_affi
+            else
+              # the new set of strings does not fit into current affi
+              add_another = true
+            end
+          elsif
+            # the new set of strings has keys already present in current affi
+            add_another = true
+          end
+        end
+        if add_another
+          indx += 1
+          affi_items[indx] =  temp_split
+        end
+        #print "\nIndex: "+ indx.to_s+ " Items: " + affi_items[indx].to_s
+      end
+      print "\n"+ affi_items.to_s
+      return affi_items
+    end
+
+
+    def remove_trailing(x_hash)
+      x_hash.each do |ex|
+        x_hash[ex[0]] = x_hash[ex[0]].strip.chomp(",").chomp(";")
+      end
+      return x_hash
+    end
+
+    def remove_redundant(x_hash)
+      redundant_strings = ["", "and"]
+      red_found_at = []
+      x_hash.each do |ex|
+        if redundant_strings.include?(ex[1].to_s) then
+          red_found_at.append(ex[0])
+       end
+      end
+      red_found_at.each do |red_key|
+        x_hash.delete(red_key)
+      end
+      return x_hash
+    end
+
+
     def split_by_keywords(affi_string, auth_id)
       # build affiliation object directly
       # try with country and institution
@@ -709,11 +889,14 @@ class CrossrefPublication
 
     def same_affi(items)
       items_found={}
+      if items.count == 1 and is_simple(items[0])
+        return true
+      end
       items.each do |an_item|
         items_found["institution"] = get_institution(an_item)
+        items_found["work_group"] = get_workgroup(an_item)
         items_found["department"] = get_department(an_item)
         items_found["faculty"] = get_faculty(an_item)
-        items_found["work_group"] = get_workgroup(an_item)
         items_found["country"] = get_country(an_item)
       end
       find_str = ""
@@ -731,11 +914,27 @@ class CrossrefPublication
       end
     end
 
+    def one_affi(affi_hash)
+      valid_keys = ["institution","work_group","department","faculty","country"]
+      find_str = ""
+      affi_hash.keys.each do |item_key|
+        if affi_hash[item_key].to_s != "" and valid_keys.include?(item_key.to_s)
+          find_str += item_key.to_s + " = '" + affi_hash[item_key].gsub("''","\'") + "' and "
+        end
+      end
+      if find_str != "" then
+        find_str = find_str[..-5]
+        found = Affiliation.where(find_str).count
+        if found > 0 then
+          return true
+        end
+      end
+    end
     # get a set of affi lines and determie how many belong to an affiliation
-    # e.g. "Interdisciplinary Nanoscience Center (iNANO) and Department of Physics and Astronomy"
-    #      "Aarhus University"
-    #      "DK-8000 Aarhus C, Denmark"
-    #      "Department of Chemistry and Interdisciplinary Nanoscience Center (iNANO)"
+      # e.g. "Interdisciplinary Nanoscience Center (iNANO) and Department of Physics and Astronomy"
+      #      "Aarhus University"
+      #      "DK-8000 Aarhus C, Denmark"
+      #      "Department of Chemistry and Interdisciplinary Nanoscience Center (iNANO)"
     def from_same_affi(affi_lines, accummulated = [])
       # split the first line
       # add it to affi_lines if affi_lines empty
@@ -748,16 +947,8 @@ class CrossrefPublication
       affi_lines.each do |cr_affi|
         print "\nIndex: "+ indx.to_s+ " Items: " + affi_items[indx].to_s
         # split element
-        temp_split = split_by_keywords2(cr_affi.name.strip, 0)
+        temp_split = split_by_keywords2(cr_affi.name.strip)
         temp_lines = affi_items[indx].concat(temp_split)
-        #   - test if current affiliation is full (i.e. inst, dep, fcty, wg, cty.)
-        #     - not complete then test if it fits with current affiliation
-        #       - if an affi is element already filled then mark current affi as
-        #         - complete and create a new affi.
-        #           - mark as complete requires looking for matches and missing minimal parts in affiliations table: i.e. inst, ctry,
-        #           - if inst and ctry blank, use the same as last one (i.e. inst and ctry from previous)
-
-        # basic empty is
         if affi_items[indx] == [] then
           affi_items[indx] = temp_split
         elsif same_affi(temp_lines)
