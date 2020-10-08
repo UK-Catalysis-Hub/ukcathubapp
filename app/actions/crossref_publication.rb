@@ -688,16 +688,12 @@ class CrossrefPublication
       affi_items[indx] = nil
       temp_affi = nil
       affi_lines.each do |cr_affi|
-        #print "\nElement: " + cr_affi.name.strip.gsub("'","''")
         # split element by keywords
         temp_split = $affi_sep.split_by_keywords3(cr_affi.name.strip.gsub("'","''"))
         # when no fragment is recognised as a keyword?
         if temp_split == {} then
-          #  print "\nElement: " + cr_affi.name.strip + " *** not recognised ***"
           temp_split = {"line_"+other_lines.to_s => cr_affi.name.strip}
           other_lines += 1
-          #else
-          #  print "\nSplit: " + temp_split.to_s
         end
         #   - test if current affiliation is full (i.e. inst, dep, fcty, wg, cty.)
         #     or already contains the elements just returned
@@ -719,9 +715,8 @@ class CrossrefPublication
         elsif affi_items[indx] != nil
           current = affi_items[indx]
           if current.keys.to_set.disjoint?temp_split.keys.to_set
-          # see if they can be in same affi
+          # see if they can be in same affi merge and see if it works
             temp_affi = current.merge(temp_split)
-        #      print "\nTemporary merge:" + temp_affi.to_s
             if $affi_sep.one_affi(temp_affi)
               affi_items[indx] = temp_affi
             else
@@ -737,9 +732,7 @@ class CrossrefPublication
           indx += 1
           affi_items[indx] =  temp_split
         end
-        #print "\nIndex: "+ indx.to_s+ " Items: " + affi_items[indx].to_s
       end
-      print "\n"+ affi_items.to_s
       return affi_items
     end
 
