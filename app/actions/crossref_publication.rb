@@ -379,6 +379,11 @@ class CrossrefPublication
       return nil
     end
 
+    # get the country corresponding to the country synonym
+    def get_country_from_synonym(ctry_synonym)
+      return @country_synonyms[ctry_synonym.to_sym]
+    end
+
     # if a value in the country or country sysnonyms lists is in string, remove that
     # value from the string
     def drop_country(affi_string)
@@ -462,7 +467,7 @@ class CrossrefPublication
       return found_inst
     end
 
-    # if a value in the institutions list is in string, return that value
+    # get the institution name corresponding to the institution synonym
     def get_institution_from_synonym(inst_synonym)
       return @institution_synonyms[inst_synonym.to_sym]
     end
