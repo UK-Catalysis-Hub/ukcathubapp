@@ -645,9 +645,9 @@ class CrossrefPublication
       end
       found_workgroup = get_workgroup(affi_string)
       if found_workgroup != nil then
-        kw_indexes[affi_string.index(found_workgroup)] = [found_workgroup.length, "workgroup"]
+        kw_indexes[affi_string.index(found_workgroup)] = [found_workgroup.length, "work_group"]
         if is_simple(affi_string) and affi_string == found_workgroup then
-          return {"workgroup" => found_workgroup}
+          return {"work_group" => found_workgroup}
         end
       end
       found_department = get_department(affi_string)
@@ -797,7 +797,7 @@ class CrossrefPublication
     end
 
     def remove_redundant(x_hash)
-      redundant_strings = ["", "and"]
+      redundant_strings = ["", "and", "The"]
       red_found_at = []
       x_hash.each do |ex|
         if redundant_strings.include?(ex[1].to_s) then
@@ -809,7 +809,6 @@ class CrossrefPublication
       end
       return x_hash
     end
-
 
     def split_by_keywords(affi_string, auth_id)
       # build affiliation object directly
