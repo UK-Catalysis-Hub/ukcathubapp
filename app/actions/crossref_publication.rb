@@ -655,7 +655,6 @@ class CrossrefPublication
         kw_indexes[affi_string.index(found_department)] = [found_department.length,"department"]
       end
 
-      print (kw_indexes)
       affiliation_array = {}
       prev_split = 0
       if kw_indexes.count > 0 then
@@ -776,7 +775,7 @@ class CrossrefPublication
               # the new set of strings does not fit into current affi
               add_another = true
             end
-          elsif
+          else
             # the new set of strings has keys already present in current affi
             add_another = true
           end
@@ -958,6 +957,7 @@ class CrossrefPublication
           return true
         end
       end
+      retun false
     end
 
     def one_affi(affi_hash)
@@ -975,6 +975,7 @@ class CrossrefPublication
           return true
         end
       end
+      return false
     end
     # get a set of affi lines and determie how many belong to an affiliation
       # e.g. "Interdisciplinary Nanoscience Center (iNANO) and Department of Physics and Astronomy"
