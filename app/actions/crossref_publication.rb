@@ -165,12 +165,16 @@ class CrossrefPublication
         "Diamond Light Source Ltd Harwell Science and Innovation Campus":"Diamond Light Source Ltd.",
         "Diamond Light Source":"Diamond Light Source Ltd.",
         "ISIS Facility":"ISIS Neutron and Muon Source",
-        "University College of London":"University College London"}
+        "University College of London":"University College London",
+        "UOP LLC":"UOP LLC, A Honeywell Company",
+        "University of Manchester":"The University of Manchester",
+        "Johnson-Matthey Technology Centre":"Johnson Matthey Technology Centre"
+      }
 
       # list ofstrings which contain country names but are not countries, such as
       # streets, institution names, etc.
       # (need to persist somewhere)
-      @country_exceptions = ["Denmark Hill", "UK Catalysis Hub"]
+      @country_exceptions = ["Denmark Hill", "UK Catalysis Hub", "Sasol Technology U.K.", "N. Ireland"]
     end
 
     # create a new affiliation object from a list of string values
@@ -458,34 +462,54 @@ class CrossrefPublication
       return found_inst
     end
 
+    # if a value in the institutions list is in string, return that value
+    def get_institution_from_synonym(inst_synonym)
+      return @institution_synonyms[inst_synonym.to_sym]
+    end
+
     # if a value in the departments list is in string, return that value
     def get_department(affi_string)
+      found_dep = nil
       @affi_departments.each do |department|
-        if affi_string.include?(department)
-          return department
+        if affi_string.include?(department) then
+          if found_dep == nil then
+            found_dep = department
+          elsif found_dep != nil and found_dep.length < department.length then
+            found_dep = department
+          end
         end
       end
-      return nil
+      return found_dep
     end
 
     # if a value in the faculties list is in string, return that value
     def get_faculty(affi_string)
+      found_fac = nil
       @affi_faculties.each do |faculty|
         if affi_string.include?(faculty)
-          return faculty
+          if found_fac == nil then
+            found_fac = faculty
+          elsif found_fac.length < faculty.length then
+            found_fac = faculty
+          end
         end
       end
-      return nil
+      return found_fac
     end
 
     # if a value in the workgroups list is in string, return that value
     def get_workgroup(affi_string)
+      found_wg = nil
       @affi_work_groups.each do |workgroup|
-        if affi_string.include?(workgroup)
-          return workgroup
+        if affi_string.include?(workgroup) then
+          if found_wg == nil then
+            found_wg = workgroup
+          elsif found_wg != nil and found_wg.length < workgroup.length then
+            found_wg = workgroup
+          end
         end
       end
-      return nil
+      return found_wg
     end
 
     # split an affiliation string using the institution and country lists and then
@@ -593,8 +617,6 @@ class CrossrefPublication
     def split_by_keywords3(affi_string)
       # get the indexes of each element found
       # separate the string using the indexes
-      #printf "\n************************** SPLITTING BY KEYWORD *****************\n"
-      #printf "Full Affiliation: %s\n", affi_string
       kw_indexes = {} #kewrds array of indexes and lengths
       found_inst = found_country = nil
       found_inst = get_institution(affi_string)
@@ -614,7 +636,8 @@ class CrossrefPublication
       found_country_synonym = get_country_synonym(affi_string)
       if found_country_synonym != nil then
         cleared_affi_string = country_exclude(affi_string)
-        kw_indexes[cleared_affi_string.index(found_country_synonym)] = [found_country_synonym.length, "ctry_syn"]
+	      diff = affi_string.length - cleared_affi_string.length
+        kw_indexes[cleared_affi_string.index(found_country_synonym)+diff] = [found_country_synonym.length, "ctry_syn"]
       end
       found_faculty = get_faculty(affi_string)
       if found_faculty != nil then
@@ -623,7 +646,6 @@ class CrossrefPublication
       found_workgroup = get_workgroup(affi_string)
       if found_workgroup != nil then
         kw_indexes[affi_string.index(found_workgroup)] = [found_workgroup.length, "workgroup"]
-        print "WORKGROUP FOUND"
         if is_simple(affi_string) and affi_string == found_workgroup then
           return {"workgroup" => found_workgroup}
         end
@@ -633,12 +655,15 @@ class CrossrefPublication
         kw_indexes[affi_string.index(found_department)] = [found_department.length,"department"]
       end
 
+      print (kw_indexes)
       affiliation_array = {}
       prev_split = 0
       if kw_indexes.count > 0 then
         temp_affi = affi_string
         # Order the indexes to break the affistring in its original order
         kw_indexes = kw_indexes.sort.to_h
+        # check for overlaps in ordered indexes and remove them
+        kw_indexes = remove_overlaps(kw_indexes)
         kw_indexes.keys.each do |kw_idx|
           # if the first index 0 make it the first element of the return array
           if affiliation_array == [] and kw_idx == 0 then
@@ -652,24 +677,52 @@ class CrossrefPublication
           else
             affiliation_array[kw_indexes[kw_idx][1]] = temp_affi[kw_idx,kw_indexes[kw_idx][0]]
           end
-          prev_split = kw_idx + kw_indexes[kw_idx][0] + 1
+          prev_split = kw_idx + kw_indexes[kw_idx][0]
         end
       end
       # strip and remove trailing commas in one place instead of with every
       # assignment
-      indx = 0
-      # while indx < affiliation_array.count do
-      #   affiliation_array[indx] = affiliation_array[indx].strip.chomp(",").chomp(";")
-      #   indx +=1
-      # end
       affiliation_array = remove_trailing(affiliation_array)
       # remove redundant splits (lone conectors e.g. 'and' or empty strings '')
       affiliation_array = remove_redundant(affiliation_array)
-      #printf "\n****************************************************************\n"
-      #printf "\n" + affiliation_array.to_s
-      #printf "\n****************************************************************\n"
-      #
+      if affiliation_array.keys.include?("inst_syn")
+        new_array = {}
+        inst_full = get_institution_from_synonym(affiliation_array["inst_syn"])
+        affiliation_array.each {|k,v|
+          k=="inst_syn"? new_array["institution"] = inst_full:new_array[k] = v }
+        affiliation_array = new_array
+      end
       return affiliation_array
+    end
+
+    #remove overlaping instances from found keyword hash (helper for split_by_keywords3)
+    def remove_overlaps(kw_indexes)
+      kw_indexes = kw_indexes.sort.to_h
+      previous = []
+      remove = -1
+      kw_indexes.each{|k,v|
+        if previous == [] then
+          previous=[k,k+v[0]]
+        else
+          current=[k,k+v[0]]
+          # current inside previous
+          if (previous[0]<current[0] and previous[1]>=current[1]) or \
+             (previous[0]<=current[0] and previous[1]>current[1])
+            remove = current[0]
+            break
+          # previous inside current
+          elsif (previous[0]>current[0] and previous[1]<=current[1]) or \
+             (previous[0]>=current[0] and previous[1]<current[1]) then
+            remove = previous[0]
+            break
+          end
+          previous=current
+        end
+      }
+      if remove > -1
+        kw_indexes.delete(remove)
+      end
+      return kw_indexes
     end
 
     # get a set of affi lines and determie how many belong to an affiliation
@@ -689,7 +742,7 @@ class CrossrefPublication
       temp_affi = nil
       affi_lines.each do |cr_affi|
         # split element by keywords
-        temp_split = $affi_sep.split_by_keywords3(cr_affi.name.strip.gsub("'","''"))
+        temp_split = split_by_keywords3(cr_affi.name.strip)#.gsub("'","''"))
         # when no fragment is recognised as a keyword?
         if temp_split == {} then
           temp_split = {"line_"+other_lines.to_s => cr_affi.name.strip}
@@ -707,7 +760,7 @@ class CrossrefPublication
         add_another = false
         if affi_items[indx] == nil then
           # if all elements are from same affi just add them
-          if $affi_sep.one_affi(temp_split) then
+          if one_affi(temp_split) then
             affi_items[indx] = temp_split
           # if they are from different affis then create two?
           end
@@ -717,7 +770,7 @@ class CrossrefPublication
           if current.keys.to_set.disjoint?temp_split.keys.to_set
           # see if they can be in same affi merge and see if it works
             temp_affi = current.merge(temp_split)
-            if $affi_sep.one_affi(temp_affi)
+            if one_affi(temp_affi)
               affi_items[indx] = temp_affi
             else
               # the new set of strings does not fit into current affi
@@ -912,7 +965,7 @@ class CrossrefPublication
       find_str = ""
       affi_hash.keys.each do |item_key|
         if affi_hash[item_key].to_s != "" and valid_keys.include?(item_key.to_s)
-          find_str += item_key.to_s + " = '" + affi_hash[item_key].gsub("''","\'") + "' and "
+          find_str += item_key.to_s + " = '" + affi_hash[item_key].gsub("'","''") + "' and "
         end
       end
       if find_str != "" then
