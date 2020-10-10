@@ -406,7 +406,7 @@ def build_two_db_affis_from_multi_test
   auth_ids.each{|auth_id|
     affi_lines = CrAffiliation.where("article_author_id = " + auth_id.to_s)
     temp_lines = $affi_sep.one_by_one_affi(affi_lines)
-    db_affis_created.append(build_db_affis(temp_lines, auth_id))
+    db_affis_created.append($affi_sep.build_affi_stubs(temp_lines, auth_id))
   }
   if db_affis_created.count == 2 and db_affis_created[0] == db_affis_created[1]\
      and db_affis_created[0] == 2 then
@@ -425,7 +425,7 @@ def build_one_db_affi_from_multi_test
   auth_ids.each{|auth_id|
     affi_lines = CrAffiliation.where("article_author_id = " + auth_id.to_s)
     temp_lines = $affi_sep.one_by_one_affi(affi_lines)
-    db_affis_created.append(build_db_affis(temp_lines, auth_id))
+    db_affis_created.append($affi_sep.build_affi_stubs(temp_lines, auth_id))
   }
   if db_affis_created.count == 2 and db_affis_created[0] == db_affis_created[1]\
      and db_affis_created[0] == 1 then
@@ -435,7 +435,9 @@ def build_one_db_affi_from_multi_test
   end
 end
 
-def build_db_affis(temp_lines, auth_id = 0)
+# analise the affi hashes and determine if they belong to a single or various
+# affiliations. Last step before actually building the affiliations
+def build_affi_stubs(temp_lines, auth_id = 0)
   print temp_lines
   affis_built = 0
   if temp_lines.count > 0 then
@@ -490,6 +492,7 @@ def build_db_affis(temp_lines, auth_id = 0)
 end
 
 # get the bets matching affilition for a given hash
+# helper for build affi stubs
 def get_affi(affi_hash)
   valid_keys = ["institution","work_group","department","faculty","country"]
   find_str = ""

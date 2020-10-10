@@ -1048,6 +1048,115 @@ class CrossrefPublication
       return return_splits
     end
 
+    # analise the affi hashes and determine if they belong to a single or various
+    # affiliations. Last step before actually building the affiliations
+    def build_affi_stubs(temp_lines, auth_id = 0)
+      print temp_lines
+      affis_built = 0
+      if temp_lines.count > 0 then
+        affi_previous = nil
+        previous = nil
+        build_affis=[]
+        temp_lines.each { |k,v|
+          current = v # get the values of current affi
+          if previous != nil then
+            affi_current = get_affi(current)
+            curr_inst = affi_current.institution.strip.downcase
+            prev_inst = affi_previous.institution.strip.downcase
+            affi_current.addresses[0].add_01
+            curr_add = affi_current.addresses[0].add_01.strip.downcase
+            prev_add = affi_previous.addresses[0].add_01.strip.downcase
+            if curr_inst == prev_add then
+              print "\n"+ prev_inst + " is hosted by " + curr_inst
+              print "\n create single affi for " + prev_inst
+              build_affis.append(previous.values + current.values)
+              # skip current in next loop by making previous = current
+              current = previous
+            elsif curr_add == prev_inst then
+              print "\n"+ curr_inst + " is hosted by " + prev_inst
+              print "\n create single affi for " + curr_inst
+              build_affis.append(current.values + previous.values)
+            else
+              print "\n"+ curr_inst + " and " + prev_inst + "are independent"
+              print "\n create an affi for each "
+              if build_affis[build_affis.count -1] == nil \
+                 or !build_affis[build_affis.count -1].include?(affi_previous.institution) then
+                build_affis.append(previous.values)
+              end
+              build_affis.append(current.values)
+            end
+          end
+          previous = current
+          affi_previous = get_affi(previous)
+        }
+        if build_affis.count == 0 then
+          # there was only one affiliation in hash, build it
+          build_affis.append(previous.values)
+        end
+        print "\n BUILD THESE AFFIS: " + build_affis.to_s
+        build_affis.each{|lines_list|
+          affi_obj = create_affi_obj(lines_list, auth_id)
+          print_affi(affi_obj)
+          affis_built += 1
+        }
+      end
+      # return the number of new db affis created
+      return affis_built
+    end
+
+    # get the bets matching affilition for a given hash
+    # helper for build affi stubs
+    def get_affi(affi_hash)
+      valid_keys = ["institution","work_group","department","faculty","country"]
+      find_str = ""
+      has_keys = []
+      affi_hash.keys.each do |item_key|
+        if affi_hash[item_key].to_s != "" and valid_keys.include?(item_key.to_s)
+          find_str += item_key.to_s + " = '" + affi_hash[item_key].gsub("'","''") + "' and "
+        end
+      end
+      # add country from ctry_syn
+      if affi_hash.keys.include?("ctry_syn") and !affi_hash.keys.include?("country") then
+        ctry_name = get_country_from_synonym(affi_hash["ctry_syn"])
+        find_str += "country = '" + ctry_name.gsub("'","''") + "' and "
+      end
+      if find_str != "" then
+        find_str = find_str[..-5]
+        found_affis = Affiliation.where(find_str)
+        if found_affis.count > 0 then
+          print found_affis.count
+          if found_affis.count == 1 then
+            return found_affis[0]
+          else
+            # Determine which is the closest match for the affi at hand
+            candidate_scores = {}
+            affi_index = 0
+            relevant_keys = affi_hash.keys.to_set().intersection(valid_keys.to_set())
+            exclude_keys = valid_keys.to_set() - affi_hash.keys.to_set()
+            found_affis.each do |an_affi|
+              # check if affi matches only relevant and does not have other
+              # fields filled
+              print "\nLOOKING FOR KEYS " + relevant_keys.to_s
+              print "\nIGNORING KEYS:   " + exclude_keys.to_s
+              likely_candidate = 0
+              exclude_keys.each {|key|
+                if an_affi.attributes[key].to_s == "" then
+                  likely_candidate  += 1
+                end
+              }
+              candidate_scores[affi_index] = likely_candidate
+              affi_index+=1
+            end
+            print "\nScores: " + candidate_scores.to_s
+            candidate_scores = candidate_scores.sort_by{|k,v| v}.reverse()
+            puts "\nHigh Score: " + candidate_scores[0][0].to_s
+            high_score = candidate_scores[0][0]
+            return found_affis[high_score]
+          end
+        end
+      end
+    end
+
     # print the contents of the affiliation object
     def print_affi(affi_object)
       printf "\nAuthor ID: %d affiliation: %s affiliation short: %s country: %s\n", affi_object.article_author_id, affi_object.name, affi_object.short_name, affi_object.country
