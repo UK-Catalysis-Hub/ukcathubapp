@@ -1051,7 +1051,6 @@ class CrossrefPublication
     # analise the affi hashes and determine if they belong to a single or various
     # affiliations. Last step before actually building the affiliations
     def build_affi_stubs(temp_lines, auth_id = 0)
-      print temp_lines
       affis_built = 0
       if temp_lines.count > 0 then
         affi_previous = nil
@@ -1067,18 +1066,18 @@ class CrossrefPublication
             curr_add = affi_current.addresses[0].add_01.strip.downcase
             prev_add = affi_previous.addresses[0].add_01.strip.downcase
             if curr_inst == prev_add then
-              print "\n"+ prev_inst + " is hosted by " + curr_inst
-              print "\n create single affi for " + prev_inst
+              # prev_inst is hosted by curr_inst
+              # create single affi for prev_inst, appending values of current
               build_affis.append(previous.values + current.values)
               # skip current in next loop by making previous = current
               current = previous
             elsif curr_add == prev_inst then
-              print "\n"+ curr_inst + " is hosted by " + prev_inst
-              print "\n create single affi for " + curr_inst
+              # curr_inst is hosted by prev_inst
+              # create single affi for curr_inst, appending values of previous
               build_affis.append(current.values + previous.values)
             else
-              print "\n"+ curr_inst + " and " + prev_inst + "are independent"
-              print "\n create an affi for each "
+              # curr_inst and prev_inst are independent
+              # create an affi for each
               if build_affis[build_affis.count -1] == nil \
                  or !build_affis[build_affis.count -1].include?(affi_previous.institution) then
                 build_affis.append(previous.values)
@@ -1093,10 +1092,10 @@ class CrossrefPublication
           # there was only one affiliation in hash, build it
           build_affis.append(previous.values)
         end
-        print "\n BUILD THESE AFFIS: " + build_affis.to_s
+        # BUILD AFFIS (stubs for db)
         build_affis.each{|lines_list|
           affi_obj = create_affi_obj(lines_list, auth_id)
-          print_affi(affi_obj)
+          #print_affi(affi_obj)
           affis_built += 1
         }
       end
@@ -1124,7 +1123,6 @@ class CrossrefPublication
         find_str = find_str[..-5]
         found_affis = Affiliation.where(find_str)
         if found_affis.count > 0 then
-          print found_affis.count
           if found_affis.count == 1 then
             return found_affis[0]
           else
@@ -1135,9 +1133,9 @@ class CrossrefPublication
             exclude_keys = valid_keys.to_set() - affi_hash.keys.to_set()
             found_affis.each do |an_affi|
               # check if affi matches only relevant and does not have other
-              # fields filled
-              print "\nLOOKING FOR KEYS " + relevant_keys.to_s
-              print "\nIGNORING KEYS:   " + exclude_keys.to_s
+              # fields filled.
+              # LOOKING FOR relevant_keys
+              # IGNORING exclude_keys.to_s
               likely_candidate = 0
               exclude_keys.each {|key|
                 if an_affi.attributes[key].to_s == "" then
@@ -1147,9 +1145,8 @@ class CrossrefPublication
               candidate_scores[affi_index] = likely_candidate
               affi_index+=1
             end
-            print "\nScores: " + candidate_scores.to_s
+            #get the higuest scoring match, i.e. the most similar found
             candidate_scores = candidate_scores.sort_by{|k,v| v}.reverse()
-            puts "\nHigh Score: " + candidate_scores[0][0].to_s
             high_score = candidate_scores[0][0]
             return found_affis[high_score]
           end
