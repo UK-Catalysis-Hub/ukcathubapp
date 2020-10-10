@@ -23,6 +23,11 @@ def run_my_tests
   test_obo_liners_ok(3) ? print('.') : print('E')
   test_obo_liners_ok(4) ? print('.') : print('E')
   test_obo_liners_ok(5) ? print('.') : print('E')
+
+  # test creating db_affis
+  build_two_db_affis_from_multi_test ? print('.') : print('E')
+  build_one_db_affi_from_multi_test ? print('.') : print('E')
+  
   # restore sql logger after running tests
   enable_sql_logger
   return ""
@@ -393,13 +398,46 @@ end
 
 
 # test create affi when the affiliation is in multiple lines
-def after_obo_multiline_affis_test
-  # test that splitter returns a single affiliation when it is made of multiple lines
-  # after split valid affis can be creater
-  auth_id = 927 # 941 #2323
-  affi_lines = CrAffiliation.where("article_author_id = " + auth_id.to_s)
-  temp_lines = $affi_sep.one_by_one_affi(affi_lines)
+def build_two_db_affis_from_multi_test
+  # test that splitter returns two affilition when they are 
+  # made of multiple lines
+  auth_ids = [927, 941]
+  db_affis_created = []
+  auth_ids.each{|auth_id|
+    affi_lines = CrAffiliation.where("article_author_id = " + auth_id.to_s)
+    temp_lines = $affi_sep.one_by_one_affi(affi_lines)
+    db_affis_created.append(build_db_affis(temp_lines, auth_id))
+  }
+  if db_affis_created.count == 2 and db_affis_created[0] == db_affis_created[1]\
+     and db_affis_created[0] == 2 then
+    return true
+  else
+    return false
+  end
+end
+
+# test create affi when the affiliation is in multiple lines
+def build_one_db_affi_from_multi_test
+  # test that splitter returns one affilition when they are 
+  # made of multiple lines
+  auth_ids = [2266, 2323]
+  db_affis_created = []
+  auth_ids.each{|auth_id|
+    affi_lines = CrAffiliation.where("article_author_id = " + auth_id.to_s)
+    temp_lines = $affi_sep.one_by_one_affi(affi_lines)
+    db_affis_created.append(build_db_affis(temp_lines, auth_id))
+  }
+  if db_affis_created.count == 2 and db_affis_created[0] == db_affis_created[1]\
+     and db_affis_created[0] == 1 then
+    return true
+  else
+    return false
+  end
+end
+
+def build_db_affis(temp_lines, auth_id = 0)
   print temp_lines
+  affis_built = 0
   if temp_lines.count > 0 then
     affi_previous = nil
     previous = nil
@@ -436,21 +474,23 @@ def after_obo_multiline_affis_test
       previous = current
       affi_previous = get_affi(previous)
     }
+    if build_affis.count == 0 then
+      # there was only one affiliation in hash, build it
+      build_affis.append(previous.values)
+    end
     print "\n BUILD THESE AFFIS: " + build_affis.to_s
     build_affis.each{|lines_list|
       affi_obj = $affi_sep.create_affi_obj(lines_list, auth_id)
       $affi_sep.print_affi(affi_obj)
+      affis_built += 1
     }
   end
-  if temp_lines.count == 1 then
-    return true
-  else 
-    return false
-  end  
+  # return the number of new db affis created
+  return affis_built
 end
 
 # get the bets matching affilition for a given hash
-def get_affi affi_hash
+def get_affi(affi_hash)
   valid_keys = ["institution","work_group","department","faculty","country"]
   find_str = ""
   has_keys = []
@@ -499,6 +539,7 @@ def get_affi affi_hash
     end
   end
 end
+
 
 def test_overlaps
   indexes = {74=>[44, "institution"], 163=>[6, "country"], 52=>[20, "faculty"], 0=>[50, "workgroup"], 63=>[9, "department"]}
