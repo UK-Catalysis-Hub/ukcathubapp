@@ -400,7 +400,7 @@ def after_obo_multiline_affis_test
   affi_lines = CrAffiliation.where("article_author_id = " + auth_id.to_s)
   temp_lines = $affi_sep.one_by_one_affi(affi_lines)
   print temp_lines
-  if temp_lines.count > 1 then
+  if temp_lines.count > 0 then
     affi_previous = nil
     previous = nil
     build_affis=[]
@@ -417,6 +417,8 @@ def after_obo_multiline_affis_test
 	  print "\n"+ prev_inst + " is hosted by " + curr_inst
 	  print "\n create single affi for " + prev_inst
           build_affis.append(previous.values + current.values)
+  	  # skip current in next loop by making previous = current
+	  current = previous  
  	elsif curr_add == prev_inst then
 	  print "\n"+ curr_inst + " is hosted by " + prev_inst
           print "\n create single affi for " + curr_inst
@@ -424,14 +426,17 @@ def after_obo_multiline_affis_test
 	else
           print "\n"+ curr_inst + " and " + prev_inst + "are independent"
           print "\n create an affi for each "
-          build_affis.append(previous.values)
+	  if build_affis[build_affis.count -1] == nil \
+             or !build_affis[build_affis.count -1].include?(affi_previous.institution) then
+            build_affis.append(previous.values)
+          end
 	  build_affis.append(current.values)
 	end
       end
       previous = current
       affi_previous = get_affi(previous)
     }
-    print "\n BUILD THIS AFFIS: " + build_affis.to_s
+    print "\n BUILD THESE AFFIS: " + build_affis.to_s
     build_affis.each{|lines_list|
       affi_obj = $affi_sep.create_affi_obj(lines_list, auth_id)
       $affi_sep.print_affi(affi_obj)
