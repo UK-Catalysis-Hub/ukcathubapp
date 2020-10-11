@@ -27,7 +27,8 @@ def run_my_tests
   # test creating db_affis
   build_two_db_affis_from_multi_test ? print('.') : print('E')
   build_one_db_affi_from_multi_test ? print('.') : print('E')
-  
+  build_one_db_affi_from_single_liners_test ? print('.') : print('E')
+
   # restore sql logger after running tests
   enable_sql_logger
   return ""
@@ -434,6 +435,26 @@ def build_one_db_affi_from_multi_test
     return false
   end
 end
+
+# test create affi when the affiliation is in multiple lines
+def build_one_db_affi_from_single_liners_test
+  # test that splitter returns one affilition when they are 
+  # made of multiple lines
+  auth_ids = [16, 89]
+  db_affis_created = []
+  auth_ids.each{|auth_id|
+    affi_lines = CrAffiliation.where("article_author_id = " + auth_id.to_s)
+    temp_lines = $affi_sep.one_by_one_affi(affi_lines)
+    db_affis_created.append($affi_sep.build_affi_stubs(temp_lines, auth_id))
+  }
+  if db_affis_created.count == 2 and db_affis_created[0] == db_affis_created[1]\
+     and db_affis_created[0] == 1 then
+    return true
+  else
+    return false
+  end
+end
+
 
 # analise the affi hashes and determine if they belong to a single or various
 # affiliations. Last step before actually building the affiliations
