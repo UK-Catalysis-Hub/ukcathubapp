@@ -128,7 +128,6 @@ def workgroup_doesnt_break_test
   end
 end
 
-
 #tests of the one by one splitter 
 def obo_multiline_affis_test
   # test that splitter returns a single affiliation when it is made of multiple lines
@@ -171,13 +170,23 @@ def all_records_test
     if an_auth.cr_affiliations.count > 0
       puts "\n****Author: " + an_auth.id.to_s
       affi_lines = CrAffiliation.where("article_author_id="+ an_auth.id.to_s)
-      one_by_one_affi(affi_lines)
+      $affi_sep.one_by_one_affi(affi_lines)
     end
   end
 end
 
-
-
+# test build affi stubs for all records
+def all_records_build_test
+  # test that splitter and builder work for all records
+  db_affis_created = []
+  multi = ArticleAuthor.joins(:cr_affiliations).group('Article_authors.id').having('count(article_author_id)>0').count
+  multi.keys.each {|an_auth_id|
+    affi_lines = CrAffiliation.where("article_author_id = " + an_auth_id.to_s)
+    temp_lines = $affi_sep.one_by_one_affi(affi_lines)
+    db_affis_created.append($affi_sep.build_affi_stubs(temp_lines, an_auth_id))
+  }
+  print db_affis_created
+end
 
 def test_07
   multi = ArticleAuthor.joins(:cr_affiliations).group('Article_authors.id').having('count(article_author_id)=1').count

@@ -159,7 +159,7 @@ class CrossrefPublication
       # list of institution sysnonyms
       # (need to persist somewhere)
       @institution_synonyms = {"The ISIS facility":"ISIS Neutron and Muon Source",
-        "STFC":"Science and Technology Facilities Councils",
+        "STFC":"Science and Technology Facilities Council",
         "Oxford University":"University of Oxford",
         "University of St Andrews":"University of St. Andrews",
         "Diamond Light Source Ltd Harwell Science and Innovation Campus":"Diamond Light Source Ltd.",
@@ -1047,7 +1047,6 @@ class CrossrefPublication
       end
       return return_splits
     end
-
     # analise the affi hashes and determine if they belong to a single or various
     # affiliations. Last step before actually building the affiliations
     def build_affi_stubs(temp_lines, auth_id = 0)
@@ -1058,32 +1057,41 @@ class CrossrefPublication
         build_affis=[]
         temp_lines.each { |k,v|
           current = v # get the values of current affi
-          if previous != nil then
+          if previous != nil and current != nil then
             affi_current = get_affi(current)
-            curr_inst = affi_current.institution.strip.downcase
-            prev_inst = affi_previous.institution.strip.downcase
-            affi_current.addresses[0].add_01
-            curr_add = affi_current.addresses[0].add_01.strip.downcase
-            prev_add = affi_previous.addresses[0].add_01.strip.downcase
-            if curr_inst == prev_add then
-              # prev_inst is hosted by curr_inst
-              # create single affi for prev_inst, appending values of current
-              build_affis.append(previous.values + current.values)
-              # skip current in next loop by making previous = current
-              current = previous
-            elsif curr_add == prev_inst then
-              # curr_inst is hosted by prev_inst
-              # create single affi for curr_inst, appending values of previous
-              build_affis.append(current.values + previous.values)
-            else
-              # curr_inst and prev_inst are independent
-              # create an affi for each
-              if build_affis[build_affis.count -1] == nil \
-                 or !build_affis[build_affis.count -1].include?(affi_previous.institution) then
-                build_affis.append(previous.values)
+            if affi_current != nil
+              curr_inst = affi_current.institution.strip.downcase
+              prev_inst = affi_previous.institution.strip.downcase
+              affi_current.addresses[0].add_01
+              curr_add = affi_current.addresses[0].add_01.strip.downcase
+              prev_add = affi_previous.addresses[0].add_01.strip.downcase
+              if curr_inst == prev_add then
+                # prev_inst is hosted by curr_inst
+                # create single affi for prev_inst, appending values of current
+                build_affis.append(previous.values + current.values)
+                # skip current in next loop by making previous = current
+                current = previous
+              elsif curr_add == prev_inst then
+                # curr_inst is hosted by prev_inst
+                # create single affi for curr_inst, appending values of previous
+                build_affis.append(current.values + previous.values)
+              else
+                # curr_inst and prev_inst are independent
+                # create an affi for each
+                if build_affis[build_affis.count -1] == nil \
+                   or !build_affis[build_affis.count -1].include?(affi_previous.institution) then
+                  build_affis.append(previous.values)
+                end
+                build_affis.append(current.values)
               end
-              build_affis.append(current.values)
+            else
+              print "\n********************************************************"
+              print "\n Current:  " + current.to_s
+              print "\n Previous: " + current.to_s
+              print "\n Lines:    " + temp_lines.to_s
+              print "\n********************************************************"
             end
+
           end
           previous = current
           affi_previous = get_affi(previous)
