@@ -245,7 +245,7 @@ end
 
 def test_one_ok()
   # test one liners: passing with no changes
-  one_liners_ok = [16, 89, 90, 183,  797, 2309, 466, 800, 2310, 583, 627, 638, 2308, 573, 574, 578, 516, 519, 468, 472, 473]
+  one_liners_ok = [16] #, 89, 90, 183,  797, 2309, 466, 800, 2310, 583, 627, 638, 2308, 573, 574, 578, 516, 519, 468, 472, 473]
   one_liners_ok.each do |an_auth_id|
     affi_lines = CrAffiliation.where("article_author_id="+ an_auth_id.to_s)
     return_hash = $affi_sep.one_by_one_affi(affi_lines)
@@ -398,7 +398,7 @@ end
 
 def test_belfast
   affi_string = "School of Chemistry and Chemical Engineering; Queen's University Belfast; Belfast BT9 5AG N. Ireland UK"
-  $affi_sep.split_by_keywords3(affi_string)
+  split_by_keywords3(affi_string)
 end
 
 def print_lines(affi_lines)
@@ -668,11 +668,11 @@ end
         #print "\nElement: " + cr_affi.name.strip.gsub("'","''")
         # split element by keywords
         temp_split = split_by_keywords3(cr_affi.name.strip)#.gsub("'","''"))
-	# when no fragment is recognised as a keyword?
-	if temp_split == {} then
+        # when no fragment is recognised as a keyword?
+        if temp_split == {} then
         #  print "\nElement: " + cr_affi.name.strip + " *** not recognised ***"
-	  temp_split = {"line_"+other_lines.to_s => cr_affi.name.strip}
-	  other_lines += 1
+	       temp_split = {"line_"+other_lines.to_s => cr_affi.name.strip}
+	        other_lines += 1
         #else
         #  print "\nSplit: " + temp_split.to_s
         end
@@ -720,12 +720,12 @@ end
       return affi_items
     end
 
-    # split an affiliation string using the institution and country lists and then
-    # build the object
+    # split an affiliation string using the keywords lists before building an
+    # affiliation object
     def split_by_keywords3(affi_string)
       # get the indexes of each element found
       # separate the string using the indexes
-      kw_indexes = {} #kewrds array of indexes and lengths
+      kw_indexes = {} #keywords array of indexes and lengths
       found_inst = found_country = nil
       found_inst = $affi_sep.get_institution(affi_string)
       if found_inst != nil then
@@ -789,25 +789,24 @@ end
           prev_split = kw_idx + kw_indexes[kw_idx][0]
         end
       end
-      # strip and remove trailing commas in one place instead of with every
-      # assignment
+      # strip and remove trailing commas or semicolons
       affiliation_array = $affi_sep.remove_trailing(affiliation_array)
+      # strip and remove leading commas or semicolons
+      affiliation_array = $affi_sep.remove_leading(affiliation_array)
       # remove redundant splits (lone conectors e.g. 'and' or empty strings '')
       affiliation_array = $affi_sep.remove_redundant(affiliation_array)
       printf "\nAFFILIATION ARRAY: " + affiliation_array.to_s
       if affiliation_array.keys.include?("inst_syn")
         print "\nFound at "+ affiliation_array.keys.index("inst_syn").to_s
-	print "\nItem Found: "+ affiliation_array[0].to_s
+	      print "\nItem Found: "+ affiliation_array[0].to_s
         new_array = {}
-	inst_full=$affi_sep.get_institution_from_synonym(affiliation_array["inst_syn"])
-	affiliation_array.each {|k,v| k=="inst_syn"? new_array["institution"] = inst_full:new_array[k] = v }
-	affiliation_array = new_array
-
+        inst_full=$affi_sep.get_institution_from_synonym(affiliation_array["inst_syn"])
+	      affiliation_array.each {|k,v| k=="inst_syn"? new_array["institution"] = inst_full:new_array[k] = v }
+	      affiliation_array = new_array
         #affiliation_array.keys[0] = "institution"
         #affiliation_array.values[0] = inst_full
         #affiliation_array["institution"] = $affi_sep.get_institution_from_synonym(affiliation_array["inst_syn"])
-	#affiliation_array.delete("inst_syn")
-
+	      #affiliation_array.delete("inst_syn")
       end
       #printf "\n****************************************************************\n"
       printf "\n" + affiliation_array.to_s

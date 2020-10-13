@@ -794,10 +794,20 @@ class CrossrefPublication
       return affi_items
     end
 
-
+    # delete trailing commas or semicolons
     def remove_trailing(x_hash)
       x_hash.each do |ex|
         x_hash[ex[0]] = x_hash[ex[0]].strip.chomp(",").chomp(";")
+      end
+      return x_hash
+    end
+
+    # delete leading commas or semicolons
+    def remove_leading(x_hash)
+      x_hash.each do |ex|
+        if x_hash[ex[0]][0] == ";" or x_hash[ex[0]][0] == "," then
+           x_hash[ex[0]] = x_hash[ex[0]][1..].strip()
+        end
       end
       return x_hash
     end
@@ -885,8 +895,8 @@ class CrossrefPublication
         puts name_list.name
         return false
       # problem: missing author or author_affiliation_id incorrect
-    elsif affi_object.article_author_id == nil or \
-       affi_object.article_author_id != auth_id
+      elsif affi_object.article_author_id == nil or \
+        affi_object.article_author_id != auth_id
         if parsed_complex == false
           printf("\nAuthor %d affilition parsed as complex \n", auth_id)
         else
