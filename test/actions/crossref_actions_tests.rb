@@ -178,6 +178,7 @@ end
 
 # test build affi stubs for all records
 def all_records_build_test
+  disable_sql_logger
   # test that splitter and builder work for all records
   db_affis_created = []
   multi = ArticleAuthor.joins(:cr_affiliations).group('Article_authors.id').having('count(article_author_id)>0').count
@@ -187,6 +188,7 @@ def all_records_build_test
     db_affis_created.append($affi_sep.build_affi_stubs(temp_lines, an_auth_id))
   }
   print db_affis_created
+  disable_sql_logger
 end
 
 def test_07
@@ -245,7 +247,7 @@ end
 
 def test_one_ok()
   # test one liners: passing with no changes
-  one_liners_ok = [16] #, 89, 90, 183,  797, 2309, 466, 800, 2310, 583, 627, 638, 2308, 573, 574, 578, 516, 519, 468, 472, 473]
+  one_liners_ok = [16,423] #, 89, 90, 183,  797, 2309, 466, 800, 2310, 583, 627, 638, 2308, 573, 574, 578, 516, 519, 468, 472, 473]
   one_liners_ok.each do |an_auth_id|
     affi_lines = CrAffiliation.where("article_author_id="+ an_auth_id.to_s)
     return_hash = $affi_sep.one_by_one_affi(affi_lines)

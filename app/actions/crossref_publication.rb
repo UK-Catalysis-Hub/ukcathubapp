@@ -168,7 +168,20 @@ class CrossrefPublication
         "University College of London":"University College London",
         "UOP LLC":"UOP LLC, A Honeywell Company",
         "University of Manchester":"The University of Manchester",
-        "Johnson-Matthey Technology Centre":"Johnson Matthey Technology Centre"
+        "Johnson-Matthey Technology Centre":"Johnson Matthey Technology Centre",
+        "Research Complex at Harwell (RCaH)":"Research Complex at Harwell",
+        "RCaH":"Research Complex at Harwell"
+      }
+
+      # list of institutions hosted by other institutions
+      # institution1:institution2 => institution1 is hosted by institution2
+      @institution_hostings = {
+        "ISIS Neutron and Muon Source":"Science and Technology Facilities Council",
+        "Diamond Light Source Ltd.":"Science and Technology Facilities Council",
+        "Research Complex at Harwell":"Science and Technology Facilities Council",
+        "UK Catalysis Hub":"Research Complex at Harwell",
+        "HarwellXPS":"Research Complex at Harwell",
+        "Cardiff Catalysis Institute":"Cardiff University"
       }
 
       # list ofstrings which contain country names but are not countries, such as
