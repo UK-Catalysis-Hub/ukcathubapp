@@ -407,7 +407,8 @@ class CrossrefPublication
       if affi_string.include?(",") or affi_string.include?(";")
         return split_by_separator(affi_string, auth_id)
       else
-        return split_by_keywords2(affi_string)
+        affi_lines = split_by_keywords2(affi_string)
+        return create_affi_obj(affi_lines, auth_id)
       end
     end
 
