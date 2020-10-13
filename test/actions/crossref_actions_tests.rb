@@ -2,10 +2,11 @@
 # quick and dirty testing from rails console
 
 require 'set'
+
 $affi_sep = CrossrefPublication::AffiliationLists.new
 
 def run_my_tests
-  # disable sql logger for clearer output 
+  # disable sql logger for clearer output
   disable_sql_logger
   # keyword splitter tests
   split_single_test ? print('.') : print('E')
@@ -37,13 +38,13 @@ end
 $sql_logger = ActiveRecord::Base.logger
 
 def disable_sql_logger
-  # disable sql logger for clearer output 
+  # disable sql logger for clearer output
   ActiveRecord::Base.logger = nil
 end
 
 def enable_sql_logger
-  # disable sql logger for clearer output 
-  ActiveRecord::Base.logger = $sql_logger 
+  # disable sql logger for clearer output
+  ActiveRecord::Base.logger = $sql_logger
 end
 
 
@@ -54,9 +55,9 @@ def split_single_test
   affi_string = "Aarhus University"
   return_hash = $affi_sep.split_by_keywords3(affi_string)
   if return_hash == {"institution"=>"Aarhus University"} then
-    return true 
-  else 
-    return false 
+    return true
+  else
+    return false
   end
 end
 
@@ -65,9 +66,9 @@ def split_complex_test
   affi_string = "School of ChemistryUniversity of Bristol Cantock's Close Bristol BS81TS UK"
   return_hash = $affi_sep.split_by_keywords3(affi_string)
   if return_hash.count == 4 then
-    return true 
-  else 
-    return false 
+    return true
+  else
+    return false
   end
 end
 
@@ -78,9 +79,9 @@ def split_complex_two_inst_test
   $affi_sep.split_by_keywords3(affi_string)
   return_hash = $affi_sep.split_by_keywords3(affi_string)
   if return_hash.count == 4 then
-    return true 
-  else 
-    return false 
+    return true
+  else
+    return false
   end
 end
 
@@ -90,7 +91,7 @@ def all_elements_in_same_affi_test
   temp_lines = $affi_sep.split_by_keywords3(affi_string)
   if $affi_sep.same_affi(temp_lines.values)
     return true
-  else 
+  else
     return false
   end
 end
@@ -101,7 +102,7 @@ def all_elements_in_one_affi_test
   temp_lines = $affi_sep.split_by_keywords3(affi_string)
   if $affi_sep.one_affi(temp_lines)
     return true
-  else 
+  else
     return false
   end
 end
@@ -113,7 +114,7 @@ def all_elements_in_one_affi_fail_test
   temp_lines = $affi_sep.split_by_keywords3(affi_string)
   if $affi_sep.one_affi(temp_lines)
     return false
-  else 
+  else
     return true
   end
 end
@@ -122,22 +123,22 @@ def workgroup_doesnt_break_test
   affi_string = "Centre for Computational Chemistry"
   temp_lines = $affi_sep.split_by_keywords3(affi_string)
   if temp_lines == {"work_group"=>"Centre for Computational Chemistry"} then
-    return true 
-  else 
-    return false 
+    return true
+  else
+    return false
   end
 end
 
-#tests of the one by one splitter 
+#tests of the one by one splitter
 def obo_multiline_affis_test
   # test that splitter returns a single affiliation when it is made of multiple lines
   affi_lines = CrAffiliation.where("article_author_id=54")
   temp_lines = $affi_sep.one_by_one_affi(affi_lines)
   if temp_lines.count == 1 then
     return true
-  else 
+  else
     return false
-  end  
+  end
 end
 
 def test_obo_liners_ok(num_lines=1)
@@ -404,12 +405,12 @@ def print_lines(affi_lines)
    affi_lines.each do |cr_affi|
      print "\n\t" + cr_affi.name
    end
-end 
+end
 
 
 # test create affi when the affiliation is in multiple lines
 def build_two_db_affis_from_multi_test
-  # test that splitter returns two affilition when they are 
+  # test that splitter returns two affilition when they are
   # made of multiple lines
   auth_ids = [927, 941]
   db_affis_created = []
@@ -428,7 +429,7 @@ end
 
 # test create affi when the affiliation is in multiple lines
 def build_one_db_affi_from_multi_test
-  # test that splitter returns one affilition when they are 
+  # test that splitter returns one affilition when they are
   # made of multiple lines
   auth_ids = [2266, 2323]
   db_affis_created = []
@@ -447,7 +448,7 @@ end
 
 # test create affi when the affiliation is in multiple lines
 def build_one_db_affi_from_single_liners_test
-  # test that splitter returns one affilition when they are 
+  # test that splitter returns one affilition when they are
   # made of multiple lines
   auth_ids = [16, 89]
   db_affis_created = []
@@ -488,7 +489,7 @@ def build_affi_stubs(temp_lines, auth_id = 0)
 	  print "\n create single affi for " + prev_inst
           build_affis.append(previous.values + current.values)
   	  # skip current in next loop by making previous = current
-	  current = previous  
+	  current = previous
  	elsif curr_add == prev_inst then
 	  print "\n"+ curr_inst + " is hosted by " + prev_inst
           print "\n create single affi for " + curr_inst
@@ -535,7 +536,7 @@ def get_affi(affi_hash)
   # add country from ctry_syn
   if affi_hash.keys.include?("ctry_syn") and !affi_hash.keys.include?("country") then
     ctry_name = $affi_sep.get_country_from_synonym(affi_hash["ctry_syn"])
-    find_str += "country = '" + ctry_name.gsub("'","''") + "' and " 
+    find_str += "country = '" + ctry_name.gsub("'","''") + "' and "
   end
   if find_str != "" then
     find_str = find_str[..-5]
@@ -544,7 +545,7 @@ def get_affi(affi_hash)
       print found_affis.count
       if found_affis.count == 1 then
         return found_affis[0]
-      else 
+      else
         # Determine which is the closest match for the affi at hand
         candidate_scores = {}
         affi_index = 0
@@ -552,17 +553,17 @@ def get_affi(affi_hash)
         exclude_keys = valid_keys.to_set() - affi_hash.keys.to_set()
         found_affis.each do |an_affi|
 	  # check if affi matches only relevant and does not have other fields filled
-          print "\nLOOKING FOR KEYS " + relevant_keys.to_s           
-          print "\nIGNORING KEYS:   " + exclude_keys.to_s 
+          print "\nLOOKING FOR KEYS " + relevant_keys.to_s
+          print "\nIGNORING KEYS:   " + exclude_keys.to_s
           likely_candidate = 0
           exclude_keys.each {|key|
             if an_affi.attributes[key].to_s == "" then
               likely_candidate  += 1
             end
           }
-          candidate_scores[affi_index] = likely_candidate 
+          candidate_scores[affi_index] = likely_candidate
           affi_index+=1
-        end 
+        end
         print "\nScores: " + candidate_scores.to_s
 	candidate_scores = candidate_scores.sort_by{|k,v| v}.reverse()
 	puts "\nHigh Score: " + candidate_scores[0][0].to_s
@@ -580,31 +581,31 @@ def test_overlaps
   kw_indexes = kw_indexes.sort.to_h
   previous = []
   remove = -1
-  kw_indexes.each{|k,v| 
+  kw_indexes.each{|k,v|
     if previous == [] then
       previous=[k,k+v[0]]
     else
       current=[k,k+v[0]]
       print "\ncurrent = "+ current.to_s
       print "\nprevious = "+ previous.to_s
-      # current inside previous 
+      # current inside previous
       if (previous[0]<current[0] and previous[1]>=current[1]) or \
          (previous[0]<=current[0] and previous[1]>current[1])
-        print "\n" + kw_indexes[current[0]].to_s + " is inside " + kw_indexes[previous[0]].to_s 
+        print "\n" + kw_indexes[current[0]].to_s + " is inside " + kw_indexes[previous[0]].to_s
         print "\nRemove curr" + kw_indexes[current[0]].to_s
         remove = current[0]
         break
       # previous inside current
       elsif (previous[0]>current[0] and previous[1]<=current[1]) or \
          (previous[0]>=current[0] and previous[1]<current[1]) then
-        print "\n" + kw_indexes[previous[0]].to_s + " is inside " + kw_indexes[current[0]].to_s 
-        print "\nRemove prev" + kw_indexes[previous[0]].to_s 
+        print "\n" + kw_indexes[previous[0]].to_s + " is inside " + kw_indexes[current[0]].to_s
+        print "\nRemove prev" + kw_indexes[previous[0]].to_s
         remove = previous[0]
         break
       end
       previous=current
     end
-  } 
+  }
   if remove > -1
     kw_indexes.delete(remove)
   end
@@ -621,12 +622,12 @@ def remove_overlaps(kw_indexes)
   kw_indexes = kw_indexes.sort.to_h
   previous = []
   remove = -1
-  kw_indexes.each{|k,v| 
+  kw_indexes.each{|k,v|
     if previous == [] then
       previous=[k,k+v[0]]
     else
       current=[k,k+v[0]]
-      # current inside previous 
+      # current inside previous
       if (previous[0]<current[0] and previous[1]>=current[1]) or \
          (previous[0]<=current[0] and previous[1]>current[1])
         remove = current[0]
@@ -639,7 +640,7 @@ def remove_overlaps(kw_indexes)
       end
       previous=current
     end
-  } 
+  }
   if remove > -1
     kw_indexes.delete(remove)
   end
@@ -669,13 +670,13 @@ end
         temp_split = split_by_keywords3(cr_affi.name.strip)#.gsub("'","''"))
 	# when no fragment is recognised as a keyword?
 	if temp_split == {} then
-        #  print "\nElement: " + cr_affi.name.strip + " *** not recognised ***" 
+        #  print "\nElement: " + cr_affi.name.strip + " *** not recognised ***"
 	  temp_split = {"line_"+other_lines.to_s => cr_affi.name.strip}
 	  other_lines += 1
-        #else 
+        #else
         #  print "\nSplit: " + temp_split.to_s
         end
-        
+
         #temp_affi = temp_split
         #   - test if current affiliation is full (i.e. inst, dep, fcty, wg, cty.)
         #     or already contains the elements just returned
@@ -707,10 +708,10 @@ end
                 add_another = true
               end
 	  else
-	     # the new set of strings has keys already present in current affi		
+	     # the new set of strings has keys already present in current affi
 	     add_another = true
           end
-        end 
+        end
         if add_another
           indx += 1
           affi_items[indx] =  temp_split
@@ -743,7 +744,7 @@ end
       found_country_synonym = $affi_sep.get_country_synonym(affi_string)
       if found_country_synonym != nil then
         cleared_affi_string = $affi_sep.country_exclude(affi_string)
-	diff = affi_string.length - cleared_affi_string.length
+	      diff = affi_string.length - cleared_affi_string.length
         kw_indexes[cleared_affi_string.index(found_country_synonym)+diff] = [found_country_synonym.length, "ctry_syn"]
       end
       found_faculty = $affi_sep.get_faculty(affi_string)
@@ -801,12 +802,12 @@ end
 	inst_full=$affi_sep.get_institution_from_synonym(affiliation_array["inst_syn"])
 	affiliation_array.each {|k,v| k=="inst_syn"? new_array["institution"] = inst_full:new_array[k] = v }
 	affiliation_array = new_array
-	
+
         #affiliation_array.keys[0] = "institution"
         #affiliation_array.values[0] = inst_full
         #affiliation_array["institution"] = $affi_sep.get_institution_from_synonym(affiliation_array["inst_syn"])
-	#affiliation_array.delete("inst_syn")        
-        
+	#affiliation_array.delete("inst_syn")
+
       end
       #printf "\n****************************************************************\n"
       printf "\n" + affiliation_array.to_s
@@ -814,6 +815,3 @@ end
       #
       return affiliation_array
     end
-
-
-
