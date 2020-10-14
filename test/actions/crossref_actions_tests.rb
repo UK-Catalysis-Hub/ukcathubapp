@@ -433,7 +433,7 @@ end
 def build_one_db_affi_from_multi_test
   # test that splitter returns one affilition when they are
   # made of multiple lines
-  auth_ids = [2266, 2323]
+  auth_ids = [2266, 2323, 815]
   db_affis_created = []
   auth_ids.each{|auth_id|
     affi_lines = CrAffiliation.where("article_author_id = " + auth_id.to_s)

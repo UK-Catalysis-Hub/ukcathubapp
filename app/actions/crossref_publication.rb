@@ -85,7 +85,7 @@ class CrossrefPublication
       article_authors = an_author.article_authors
       article_authors.each do |an_art_aut|
         continue = false
-        affi_lines = an_art_aut.cr_affiliations
+        affi_lines = an_art_aut.cr_affiliations.where(author_affiliation_id: nil)
         if affi_lines.length > 0
           #puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
           if affi_lines.count == 1
@@ -94,7 +94,8 @@ class CrossrefPublication
             print "\ninput lines: "
             affi_separator.print_lines(affi_lines)
             print "\nreturn hash " +return_hash.to_s
-
+            n_affis = affi_separator.build_and_save_auth_affis(return_hash, an_art_aut.id)
+            print "\n New affilaitions saved: " + n_affis.to_s
             break
           end
           # if affi_lines.count == 1
@@ -179,11 +180,13 @@ class CrossrefPublication
         "University of Manchester":"The University of Manchester",
         "Johnson-Matthey Technology Centre":"Johnson Matthey Technology Centre",
         "Research Complex at Harwell (RCaH)":"Research Complex at Harwell",
-        "RCaH":"Research Complex at Harwell"
+        "RCaH":"Research Complex at Harwell",
+        "Queens University Belfast":"Queen's University Belfast"
       }
 
       # list of institutions hosted by other institutions
       # institution1:institution2 => institution1 is hosted by institution2
+      # (need to persist somewhere)
       @institution_hostings = {
         "ISIS Neutron and Muon Source":"Science and Technology Facilities Council",
         "Diamond Light Source Ltd.":"Science and Technology Facilities Council",
@@ -707,9 +710,10 @@ class CrossrefPublication
           prev_split = kw_idx + kw_indexes[kw_idx][0]
         end
       end
-      # strip and remove trailing commas in one place instead of with every
-      # assignment
       affiliation_array = remove_trailing(affiliation_array)
+      # strip and remove leading commas or semicolons
+      affiliation_array = remove_leading(affiliation_array)
+
       # remove redundant splits (lone conectors e.g. 'and' or empty strings '')
       affiliation_array = remove_redundant(affiliation_array)
       if affiliation_array.keys.include?("inst_syn")
@@ -1082,7 +1086,7 @@ class CrossrefPublication
     end
     # analise the affi hashes and determine if they belong to a single or various
     # affiliations. Last step before actually building the affiliations
-    def build_affi_stubs(temp_lines, auth_id = 0)
+    def build_and_save_auth_affis(temp_lines, auth_id = 0)
       affis_built = 0
       if temp_lines.count > 0 then
         affi_previous = nil
@@ -1132,6 +1136,25 @@ class CrossrefPublication
         # BUILD AFFIS (stubs for db)
         build_affis.each{|lines_list|
           affi_obj = create_affi_obj(lines_list, auth_id)
+          continue = affi_object_well_formed(affi_obj, lines_list, true, auth_id)
+          # save the object
+          if continue then
+            puts "\nAffiliation object is well formed"
+            existing_affi = AuthorAffiliation.find_by(article_author_id: auth_id, name:affi_obj.name)
+            if existing_affi == nil then
+              puts "\nSaving Affiliation"
+              affi_obj.save
+              # mark the cr_affi with the id of the corresponding author_affiliation
+              cr_affis = ArticleAuthor.find(auth_id).cr_affiliations
+              cr_affis.each {|cr_affi|
+                cr_affi.author_affiliation_id = affi_obj.id
+                cr_affi.save
+              }
+            else
+              puts "Found existing affiliation: " + existing_affi.id.to_s
+            end
+          else
+          end
           #print_affi(affi_obj)
           affis_built += 1
         }
