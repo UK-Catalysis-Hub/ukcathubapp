@@ -88,9 +88,9 @@ class CrossrefPublication
         affi_lines = an_art_aut.cr_affiliations.where(author_affiliation_id: nil)
         if affi_lines.length > 0
           #puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
-          if affi_lines.count == 1
+          if affi_lines.count <= 2
             return_hash = affi_separator.one_by_one_affi(affi_lines)
-            puts "\n****Author: " + an_art_aut.id.to_s + " Lines: 1"
+            puts "\n****Author: " + an_art_aut.id.to_s + " Lines: " + affi_lines.count.to_s
             print "\ninput lines: "
             affi_separator.print_lines(affi_lines)
             print "\nreturn hash " +return_hash.to_s
@@ -98,39 +98,6 @@ class CrossrefPublication
             print "\n New affilaitions saved: " + n_affis.to_s
             break
           end
-          # if affi_lines.count == 1
-          #   affi_separator.build_complex(affi_lines, an_art_aut.id )
-          # elsif affi_lines.count > 1
-          #   # check if lines there is one or more than one affiliations in string
-          #   print " Has Many affiliation lines\n"
-          #   # check if affiliation lines contain more than one affiliation
-          #   single_ctr = 0
-          #   affi_lines.each do |cr_affi|
-          #     if affi_separator.is_simple(cr_affi.name) then
-          #       #printf("\n%s Single", an_item)
-          #       single_ctr += 1
-          #     elsif affi_separator.is_complex(cr_affi.name) then
-          #       printf("\n%s Complex", cr_affi.name)
-          #     else
-          #       #printf("\n%s Single", an_item)
-          #       single_ctr += 1
-          #     end
-          #   end
-          #   if single_ctr > 1
-          #     print "\t treat all cr as one single affiliation?\n"
-          #     affi_splits = affi_separator.affi_lines_split(affi_lines)
-          #     if affi_splits.count > 1
-          #       print ("\n***************************************************************\n")
-          #       print affi_splits
-          #     end
-          #     affi_splits.each do |an_affi|
-          #       affi_separator.build_single(an_affi, an_art_aut.id)
-          #     end
-          #   else
-          #     print "\t treat each cr as many affiliations\n"
-          #     affi_separator.build_complex(affi_lines, an_art_aut.id )
-          #   end
-          # end
         end
       end
     end
@@ -203,10 +170,11 @@ class CrossrefPublication
     end
 
     # create a new affiliation object from a list of string values
-    def create_affi_obj(lines_list, auth_id)
+    def create_affi_obj(lines_list, auth_id, affi_id)
       line_idx = 0
       auth_affi = AuthorAffiliation.new()
       auth_affi.article_author_id = auth_id
+      auth_affi.affiliation_id = affi_id
       inst_found = ""
 
       while line_idx < lines_list.count
@@ -1091,7 +1059,7 @@ class CrossrefPublication
       if temp_lines.count > 0 then
         affi_previous = nil
         previous = nil
-        build_affis=[]
+        build_affis={}
         temp_lines.each { |k,v|
           current = v # get the values of current affi
           if previous != nil and current != nil then
@@ -1102,26 +1070,28 @@ class CrossrefPublication
               if @institution_hostings[prev_inst.to_sym] == curr_inst then
                 # prev_inst is hosted by curr_inst
                 # create single affi for prev_inst, appending values of current
-                build_affis.append(previous.values + current.values)
+                build_affis[affi_previous.id] = previous.values + current.values
                 # skip current in next loop by making previous = current
                 current = previous
               elsif @institution_hostings[curr_inst.to_sym] == prev_inst then
                 # curr_inst is hosted by prev_inst
                 # create single affi for curr_inst, appending values of previous
-                build_affis.append(current.values + previous.values)
+                build_affis[affi_previous.id] = current.values + previous.values
               else
                 # curr_inst and prev_inst are independent
                 # create an affi for each
                 if build_affis[build_affis.count -1] == nil \
                    or !build_affis[build_affis.count -1].include?(affi_previous.institution) then
-                  build_affis.append(previous.values)
+                  build_affis[affi_previous.id] = previous.values
                 end
-                build_affis.append(current.values)
+                build_affis[affi_current.id] = current.values
               end
             else
               print "\n********************************************************"
               print "\n Current:  " + current.to_s
+              #print "\n Current affi: " + affi_current.id.to_s
               print "\n Previous: " + current.to_s
+              print "\n Previous affi: " + affi_current.id.to_s
               print "\n Lines:    " + temp_lines.to_s
               print "\n********************************************************"
             end
@@ -1131,11 +1101,11 @@ class CrossrefPublication
         }
         if build_affis.count == 0 then
           # there was only one affiliation in hash, build it
-          build_affis.append(previous.values)
+          build_affis[affi_previous.id] = previous.values
         end
-        # BUILD AFFIS (stubs for db)
-        build_affis.each{|lines_list|
-          affi_obj = create_affi_obj(lines_list, auth_id)
+        # Save in DB
+        build_affis.each{|affi_id, lines_list|
+          affi_obj = create_affi_obj(lines_list, auth_id, affi_id)
           continue = affi_object_well_formed(affi_obj, lines_list, true, auth_id)
           # save the object
           if continue then
