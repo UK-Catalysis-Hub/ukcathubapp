@@ -88,7 +88,7 @@ class CrossrefPublication
         affi_lines = an_art_aut.cr_affiliations.where(author_affiliation_id: nil)
         if affi_lines.length > 0
           #puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
-          if affi_lines.count <= 2
+          if affi_lines.count <= 3
             return_hash = affi_separator.one_by_one_affi(affi_lines)
             puts "\n****Author: " + an_art_aut.id.to_s + " Lines: " + affi_lines.count.to_s
             print "\ninput lines: "
@@ -513,106 +513,6 @@ class CrossrefPublication
 
     # split an affiliation string using the institution and country lists and then
     # build the object
-    def split_by_keywords2(affi_string)
-      # get the indexes of each element found
-      # separate the string using the indexes
-      printf "\n************************** SPLITTING BY KEYWORD *****************\n"
-      printf "Affiliation: %s\n", affi_string
-      kw_indexes = {} #kewrds array of indexes and lengths
-      found_inst = found_country = nil
-
-      found_inst = get_institution(affi_string)
-      if found_inst != nil then
-        kw_indexes[affi_string.index(found_inst)] = found_inst.length
-      end
-
-      if found_inst == nil then
-        found_inst = get_institution_synonym(affi_string)
-        if found_inst != nil then
-          kw_indexes[affi_string.index(found_inst)] = found_inst.length
-        end
-      end
-      print"\nis kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
-      printf "--Institution: %s\n", found_inst
-
-      found_country = get_country(affi_string)
-      print"\nCountry: " +  found_country.to_s
-      if found_country != nil and affi_string.index(found_country)!=nil then
-        kw_indexes[affi_string.index(found_country)] = found_country.length
-      end
-      print"\nct kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
-      printf "--Institution: %s\n", found_inst
-
-      found_country_synonym = get_country_synonym(affi_string)
-      if found_country_synonym != nil then
-        cleared_affi_string = country_exclude(affi_string)
-        kw_indexes[cleared_affi_string.index(found_country_synonym)] = found_country_synonym.length
-      end
-      print"\ncs kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
-      printf "--Institution: %s\n", found_inst
-
-      found_faculty = get_faculty(affi_string)
-      if found_faculty != nil then
-        kw_indexes[affi_string.index(found_faculty)] = found_faculty.length
-      end
-      print"\nfc kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
-      printf "--Institution: %s\n", found_inst
-
-      found_workgroup = get_workgroup(affi_string)
-      if found_workgroup != nil then
-        kw_indexes[affi_string.index(found_workgroup)] = found_workgroup.length
-      end
-      print"\nwg kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
-      printf "--Institution: %s\n", found_inst
-
-      found_department = get_department(affi_string)
-      if found_department != nil then
-        kw_indexes[affi_string.index(found_department)] = found_department.length
-      end
-      print"\ndep kw_indexes +++++:" + kw_indexes.to_s+"\n\n"
-      printf "--Institution: %s\n", found_inst
-
-      affiliation_array = []
-      prev_split = 0
-      if kw_indexes.count > 0 then
-        print"\nkw_indexes +++++:" + kw_indexes.to_s+"\n\n"
-        temp_affi = affi_string
-        # Order the indexes to break the affistring in its original order
-        kw_indexes = kw_indexes.sort.to_h
-        kw_indexes.keys.each do |kw_idx|
-          # if the first index 0 make it the first element of the return array
-          if affiliation_array == [] and kw_idx == 0 then
-            affiliation_array = [temp_affi[kw_idx, kw_indexes[kw_idx]]]
-          elsif affiliation_array == [] then
-            affiliation_array = [temp_affi[..kw_idx-1]]
-            affiliation_array.append(temp_affi[kw_idx, kw_indexes[kw_idx]])
-          elsif prev_split < kw_idx then
-            affiliation_array.append(temp_affi[prev_split..kw_idx-1].strip)
-            affiliation_array.append(temp_affi[kw_idx,kw_indexes[kw_idx]])
-          else
-            affiliation_array.append(temp_affi[kw_idx,kw_indexes[kw_idx]])
-          end
-          prev_split = kw_idx + kw_indexes[kw_idx] + 1
-        end
-      end
-      # strip and remove trailing commas in one place instead of with every
-      # assignment
-      indx = 0
-      while indx < affiliation_array.count do
-        affiliation_array[indx] = affiliation_array[indx].strip.chomp(",").chomp(";")
-        indx +=1
-      end
-      # remove leftover nulls
-      affiliation_array.delete("")
-      printf "\n****************************************************************\n"
-      printf "\n" + affiliation_array.to_s
-      printf "\n****************************************************************\n"
-      #
-      return affiliation_array
-    end
-
-    # split an affiliation string using the institution and country lists and then
-    # build the object
     def split_by_keywords3(affi_string)
       # get the indexes of each element found
       # separate the string using the indexes
@@ -905,23 +805,6 @@ class CrossrefPublication
       end
     end
 
-    # determine if an affilition string is complex by checking if it
-    # contains 2 or more keywords from the common lists
-    def is_complex(an_item)
-      occurrence_counter = 0
-      #verify if item has two or more affilition elements
-      if get_institution(an_item) != nil then occurrence_counter += 1 end
-      if get_country(an_item) != nil then occurrence_counter += 1 end
-      if get_department(an_item) != nil then occurrence_counter += 1 end
-      if get_faculty(an_item) != nil then occurrence_counter += 1 end
-      if get_workgroup(an_item) != nil then occurrence_counter += 1 end
-      # if more than one affilition element, treat as complex
-      if occurrence_counter > 1
-        return true
-      else
-        return(false)
-      end
-    end
 
     # determine if an affilition string is simple by checking if it fully matches
     # one of the keywords from the common lists
