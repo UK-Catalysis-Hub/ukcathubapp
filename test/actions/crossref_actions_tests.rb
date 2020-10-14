@@ -487,27 +487,27 @@ def build_affi_stubs(temp_lines, auth_id = 0)
         curr_add = affi_current.addresses[0].add_01.strip.downcase
         prev_add = affi_previous.addresses[0].add_01.strip.downcase
         if curr_inst == prev_add then
-	  print "\n"+ prev_inst + " is hosted by " + curr_inst
-	  print "\n create single affi for " + prev_inst
+	        print "\n"+ prev_inst + " is hosted by " + curr_inst
+	        print "\n create single affi for " + prev_inst
           build_affis.append(previous.values + current.values)
-  	  # skip current in next loop by making previous = current
-	  current = previous
- 	elsif curr_add == prev_inst then
-	  print "\n"+ curr_inst + " is hosted by " + prev_inst
+  	      # skip current in next loop by making previous = current
+	        current = previous
+    	  elsif curr_add == prev_inst then
+	        print "\n"+ curr_inst + " is hosted by " + prev_inst
           print "\n create single affi for " + curr_inst
-	  build_affis.append(current.values + previous.values)
-	else
+	        build_affis.append(current.values + previous.values)
+        else
           print "\n"+ curr_inst + " and " + prev_inst + "are independent"
           print "\n create an affi for each "
-	  if build_affis[build_affis.count -1] == nil \
+	        if build_affis[build_affis.count -1] == nil \
              or !build_affis[build_affis.count -1].include?(affi_previous.institution) then
             build_affis.append(previous.values)
           end
-	  build_affis.append(current.values)
-	end
+	        build_affis.append(current.values)
+	    end
       end
-      previous = current
-      affi_previous = get_affi(previous)
+    previous = current
+    affi_previous = get_affi(previous)
     }
     if build_affis.count == 0 then
       # there was only one affiliation in hash, build it
