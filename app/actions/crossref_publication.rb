@@ -88,7 +88,7 @@ class CrossrefPublication
         affi_lines = an_art_aut.cr_affiliations.where(author_affiliation_id: nil)
         if affi_lines.length > 0
           #puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
-          if affi_lines.count > 4
+          #if affi_lines.count > 4
             return_hash = affi_separator.one_by_one_affi(affi_lines)
             puts "\n***********************************************************"
             puts "*Author: " + an_art_aut.id.to_s + " Lines: " + affi_lines.count.to_s
@@ -98,7 +98,7 @@ class CrossrefPublication
             n_affis = affi_separator.build_and_save_auth_affis(return_hash, an_art_aut.id)
             print "\n*New affilaitions saved: " + n_affis.to_s
             puts "\n***********************************************************"
-          end
+          #end
         end
       end
     end
@@ -137,6 +137,7 @@ class CrossrefPublication
       # list of institution sysnonyms
       # (need to persist somewhere)
       @institution_synonyms = {"The ISIS facility":"ISIS Neutron and Muon Source",
+        "ISIS Neutron and Muon Facility":"ISIS Neutron and Muon Source",
         "STFC":"Science and Technology Facilities Council",
         "Oxford University":"University of Oxford",
         "University of St Andrews":"University of St. Andrews",
