@@ -88,7 +88,7 @@ class CrossrefPublication
         affi_lines = an_art_aut.cr_affiliations.where(author_affiliation_id: nil)
         if affi_lines.length > 0
           #puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
-          if affi_lines.count == 3
+          if affi_lines.count > 4
             return_hash = affi_separator.one_by_one_affi(affi_lines)
             puts "\n***********************************************************"
             puts "*Author: " + an_art_aut.id.to_s + " Lines: " + affi_lines.count.to_s
@@ -744,21 +744,31 @@ class CrossrefPublication
               else
                 # curr_inst and prev_inst are independent
                 # create an affi for each
-                if build_affis[build_affis.count -1] == nil \
+                if build_affis[build_affis.count - 1] == nil \
                    or !build_affis[build_affis.count -1][0].include?(affi_previous.institution) then
+                  build_affis[affi_previous.id] = [previous.values, previous_ids]
+                elsif !build_affis.keys.include?(affi_previous.id) then
                   build_affis[affi_previous.id] = [previous.values, previous_ids]
                 end
                 build_affis[affi_current.id] = [current.values, current_ids]
               end
             else
               print "\n********************************************************"
-              print "\n Current:       " + current.to_s
-              print "\n Previous:      " + current.to_s
-              print "\n Previous affi: " + affi_current.id.to_s
+              print "\n problem with current:  " + current.to_s
+              print "\n Previous:      " + previous.to_s
+              print "\n Previous affi: " + affi_previous.id.to_s
               print "\n Lines:         " + new_affi_hash.to_s
               print "\n********************************************************"
+              # Rescue the portion which is OK
+              if affi_previous != nil then
+                  build_affis[affi_previous.id] = [previous.values, previous_ids]
+              end
             end
           end
+          print "\n********************************************************"
+          print "\n" + build_affis.to_s
+          print "\n" + current.to_s
+          print "\n********************************************************"
           previous = current
           previous_ids = current_ids
           affi_previous = affi_current
@@ -767,6 +777,10 @@ class CrossrefPublication
           # there was only one affiliation in hash, build it
           build_affis[affi_previous.id] = [previous.values, previous_ids]
         end
+        print "\n********************************************************"
+        print "\n" + build_affis.to_s
+        print "\n********************************************************"
+
         # Save in DB
         build_affis.each{|affi_id, lines_list|
           affi_obj = create_affi_obj(lines_list[0], auth_id, affi_id)
@@ -785,15 +799,16 @@ class CrossrefPublication
                 cr_affi.author_affiliation_id = affi_obj.id
                 cr_affi.save
               }
+              affis_built += 1
             else
               puts "Found existing affiliation: " + existing_affi.id.to_s
             end
           else
-            puts "Found errore in new affiliation: "
+            puts "**Found error in new affiliation**"
             print_affi(affi_obj)
+            print build_affis.to_s
+            puts "**********************************"
           end
-          #print_affi(affi_obj)
-          affis_built += 1
         }
       end
       # return the number of new db affis created
@@ -842,10 +857,24 @@ class CrossrefPublication
               candidate_scores[affi_index] = likely_candidate
               affi_index+=1
             end
-            #get the higuest scoring match, i.e. the most similar found
+            # get the higuest scoring match, i.e. the most similar found
             candidate_scores = candidate_scores.sort_by{|k,v| v}.reverse()
-            high_score = candidate_scores[0][0]
-            return found_affis[high_score]
+            max = candidate_scores[0][1]
+            maxes = 1
+            candidate_scores.each {|c_pair|
+              if c_pair[0] !=0 and c_pair[1] == max then
+                maxes += 1
+              end
+            }
+            print "\nCandidate Scores: " + candidate_scores.to_s
+            print "\nMaxes: " + maxes.to_s
+            if maxes <= 3 then
+               high_score = candidate_scores[0][0]
+               print "\nFound Affis: " + found_affis[high_score].id.to_s
+               return found_affis[high_score]
+            else
+               return nil
+            end
           end
         end
       end
