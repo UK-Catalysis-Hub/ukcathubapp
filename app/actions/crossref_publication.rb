@@ -88,14 +88,24 @@ class CrossrefPublication
         affi_lines = an_art_aut.cr_affiliations.where(author_affiliation_id: nil)
         if affi_lines.length > 0
           #puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
-          if affi_lines.count <= 3
-            return_hash = affi_separator.one_by_one_affi(affi_lines)
-            puts "\n****Author: " + an_art_aut.id.to_s + " Lines: " + affi_lines.count.to_s
-            print "\ninput lines: "
+          if affi_lines.count == 2
+            # return_hash = { 0 => {"institution" => "Diamond Light Source Ltd.",
+            #                       "ft_20" => "Harwell Science and Innovation Campus Didcot OX11 0DE",#
+            #                       "ctry_syn" => "UK"},
+            #                 1 => {"department" => "Department of Chemistry",
+            #                       "institution"=>"University of Reading",
+            #                       "ft_44"=>"Reading RG6 6AD",
+            #                       "ctry_syn"=>"UK"}}
+            return_hash, hash2 = affi_separator.one_by_one_affi(affi_lines)
+            puts "\n***********************************************************"
+            puts "*Author: " + an_art_aut.id.to_s + " Lines: " + affi_lines.count.to_s
+            puts "*input lines: "
             affi_separator.print_lines(affi_lines)
-            print "\nreturn hash " +return_hash.to_s
-            n_affis = affi_separator.build_and_save_auth_affis(return_hash, an_art_aut.id)
-            print "\n New affilaitions saved: " + n_affis.to_s
+            print "\n*RETURN HASH " +return_hash.to_s
+            print "\n*NEW RETURN HASH " + hash2.to_s
+            n_affis = affi_separator.build_and_save_auth_affis(return_hash, hash2, an_art_aut.id)
+            print "\n*New affilaitions saved: " + n_affis.to_s
+            puts "\n***********************************************************"
             break
           end
         end
@@ -276,62 +286,6 @@ class CrossrefPublication
       return auth_affi
     end
 
-    # handle strings wich contain a complete affiliation
-    def build_complex(affi_lines, art_aut_id )
-      split_complex = true
-      affi_lines.each do |cr_affi|
-        affi_line_id =cr_affi.id
-        affi_line_value = cr_affi.name
-        auth_affi = split_complex(affi_line_value, art_aut_id)
-        # check if object is well formed
-        continue = affi_object_well_formed(auth_affi, affi_lines, split_complex, art_aut_id)
-        # save the object
-        if continue then
-          puts "\nAffiliation object is well formed"
-          existing_affi = AuthorAffiliation.find_by(article_author_id: auth_affi.article_author_id, name:auth_affi.name)
-          if existing_affi == nil then
-            puts "\nSaving Affiliation"
-            auth_affi.save
-            # mark the cr_affi with the id of the corresponding author_affiliation
-            cr_affi.author_affiliation_id = auth_affi.id
-            cr_affi.save
-          else
-            puts "Found existing affiliation: " + existing_affi.id.to_s
-          end
-        end
-      end
-    end
-
-    # handle affiliations consisting of many cr_affi lines
-    def build_single(affi_lines, art_aut_id)
-      split_complex = false
-      cr_affi_keys = []
-      single_vals = []
-      affi_lines.each do |cr_affi|
-        cr_affi_keys.append(cr_affi.id)
-        single_vals.append(cr_affi.name)
-      end
-      auth_affi = create_affi_obj(single_vals, art_aut_id)
-      # check if object is well formed
-      continue = affi_object_well_formed(auth_affi, affi_lines, split_complex, art_aut_id)
-      # save the object
-      if continue then
-        puts "\nAffiliation object is well formed"
-        existing_affi = AuthorAffiliation.find_by(article_author_id: auth_affi.article_author_id, name:auth_affi.name)
-        if existing_affi == nil then
-          puts "\nSaving Affiliation"
-          auth_affi.save
-          # mark the cr_affis with the id of the corresponding author_affiliation
-          affi_lines.each do |cr_affi|
-            cr_affi.author_affiliation_id = auth_affi.id
-            cr_affi.save
-          end
-        else
-          puts "Found existing affiliation: " + existing_affi.id.to_s
-        end
-      end
-    end
-
     # if a value in the country exeptions list is in string, remove that value
     # before looking up for country
     def country_exclude(affi_string)
@@ -392,43 +346,6 @@ class CrossrefPublication
          end
       end
       return dropped_country
-    end
-
-    # determine if the string needs to be split by delimiters or by keywords and
-    # call the corresponding method to build the affiliation object
-    def split_complex(affi_string, auth_id)
-      if affi_string.include?(",") or affi_string.include?(";")
-        return split_by_separator(affi_string, auth_id)
-      else
-        affi_lines = split_by_keywords2(affi_string)
-        return create_affi_obj(affi_lines, auth_id)
-      end
-    end
-
-    # split the affiliation string by "," and ";" separators
-    def split_by_separator(affi_string, auth_id)
-      tokens = []
-      if affi_string.include?(",") and affi_string.include?(";")
-        tokens = affi_string.split(";")
-        tokens.each do |token|
-          if token.include?(",")
-            split_idx = tokens.find_index(token)
-            temp_tkns = token.split(",")
-            tokens = tokens[1..split_idx-1].concat(temp_tkns).concat(tokens[split_idx+1..])
-          end
-        end
-      elsif affi_string.include?(",")
-        tokens = affi_string.split(",")
-      elsif affi_string.include?(";")
-        tokens = affi_string.split(";")
-      end
-      # # how to handle a name which has both and institution and a another name?
-      # # EXAMPLE " Department of Materials Science and Engineering Lehigh University"
-      if tokens != []
-        return create_affi_obj(tokens, auth_id)
-      else
-        return nil
-      end
     end
 
     # if a value in the institutions list is in string, return that value
@@ -511,12 +428,11 @@ class CrossrefPublication
       return found_wg
     end
 
-    # split an affiliation string using the institution and country lists and then
-    # build the object
-    def split_by_keywords3(affi_string)
+    # split affiliation strings with keywords lists before building affi objects
+    def split_by_keywords(affi_string)
       # get the indexes of each element found
       # separate the string using the indexes
-      kw_indexes = {} #kewrds array of indexes and lengths
+      kw_indexes = {} #keywords array of indexes and lengths
       found_inst = found_country = nil
       found_inst = get_institution(affi_string)
       if found_inst != nil then
@@ -594,7 +510,7 @@ class CrossrefPublication
       return affiliation_array
     end
 
-    #remove overlaping instances from found keyword hash (helper for split_by_keywords3)
+    #remove overlaping instances from found keyword hash (helper for split by keywords)
     def remove_overlaps(kw_indexes)
       kw_indexes = kw_indexes.sort.to_h
       previous = []
@@ -635,13 +551,16 @@ class CrossrefPublication
       # in next line try to see if the string belongs to same affiliation
       # after first line try adding to affi_items, if resulting in same affi, add, else start new affi_items
       affi_items = {}
+      affi_hash = {}
       indx = 0
       other_lines = 1
       affi_items[indx] = nil
+      affi_hash[indx] = nil
       temp_affi = nil
+      temp_pair = []
       affi_lines.each do |cr_affi|
         # split element by keywords
-        temp_split = split_by_keywords3(cr_affi.name.strip)#.gsub("'","''"))
+        temp_split = split_by_keywords(cr_affi.name.strip)#.gsub("'","''"))
         # when no fragment is recognised as a keyword?
         if temp_split == {} then
           temp_split = {"line_"+other_lines.to_s => cr_affi.name.strip}
@@ -661,14 +580,16 @@ class CrossrefPublication
           # if all elements are from same affi just add them
           if one_affi(temp_split) then
             affi_items[indx] = temp_split
+            affi_hash[indx] = [temp_split,[cr_affi.id]]
           # if they are from different affis then create two?
           end
         # if the element can be added to current then just add
         elsif affi_items[indx] != nil
           current = affi_items[indx]
-          if current.keys.to_set.disjoint?temp_split.keys.to_set
+          if current.keys.to_set.disjoint?(temp_split.keys.to_set)
           # see if they can be in same affi merge and see if it works
             temp_affi = current.merge(temp_split)
+            temp_pair =
             if one_affi(temp_affi)
               affi_items[indx] = temp_affi
             else
@@ -679,13 +600,37 @@ class CrossrefPublication
             # the new set of strings has keys already present in current affi
             add_another = true
           end
+
+          current_pair = affi_hash[indx]
+          if current_pair[0].keys.to_set.disjoint?(temp_split.keys.to_set)
+          # see if they can be in same affi merge and see if it works
+            temp_pair = [current_pair[0].merge(temp_split),current_pair[1].append(cr_affi.id)]
+            if one_affi(temp_affi)
+              affi_hash[indx] = temp_pair
+            else
+              # the new set of strings does not fit into current affi
+              add_another = true
+            end
+          else
+            # the new set of strings has keys already present in current affi
+            add_another = true
+          end
+
         end
         if add_another
           indx += 1
           affi_items[indx] =  temp_split
+          affi_hash[indx] =  [temp_split,[cr_affi.id]]
         end
       end
-      return affi_items
+      # affi_items = { 0 => {"institution" => "Diamond Light Source Ltd.",
+      #                       "ft_20" => "Harwell Science and Innovation Campus Didcot OX11 0DE",#
+      #                       "ctry_syn" => "UK"},
+      #                 1 => {"department" => "Department of Chemistry",
+      #                       "institution"=>"University of Reading",
+      #                       "ft_44"=>"Reading RG6 6AD",
+      #                       "ctry_syn"=>"UK"}}
+      return affi_items, affi_hash
     end
 
     # delete trailing commas or semicolons
@@ -720,45 +665,10 @@ class CrossrefPublication
       return x_hash
     end
 
-    def split_by_keywords(affi_string, auth_id)
-      # build affiliation object directly
-      # try with country and institution
-      printf "\n************************** SPLITTING BY KEYWORD *****************\n"
-      printf "Affiliation: %s\n", affi_string
-      tokens=[]
-      found_inst = found_country = ""
-      found_inst = get_institution(affi_string)
-      if found_inst == nil then
-        found_inst = get_institution_synonym(affi_string)
-        #printf "Institution: %s\n", found_inst
-      end
-      found_country = get_country(affi_string)
-      if found_inst.to_s != ""
-        ins_idx = affi_string.index(found_inst)
-        affi_len = affi_string.length
-        inst_len = found_inst.length
-        if ins_idx == 0
-          tokens.append found_inst
-          tokens.append drop_country(affi_string[inst_len, affi_len-inst_len].strip)
-          tokens.append found_country
-          affi_rest = affi_string[inst_len-1, affi_len-inst_len].strip
-        else
-          tokens.append affi_string[0, ins_idx].strip
-          tokens.append found_inst
-          tokens.append drop_country(affi_string[affi_string[ins_idx+inst_len, affi_len-inst_len].strip].strip)
-          tokens.append found_country
-        end
-        printf"\n****************************************************************\n"
-        print tokens
-        printf"\n****************************************************************\n"
-        affi_obj = create_affi_obj(tokens, auth_id)
-        return affi_obj
-      end
-    end
     # verify if the affiliation object is well formed it should have a country,
     # a name and a valid author ID
     # (make into a method of the affi_object)
-    def affi_object_well_formed(affi_object, name_list, parsed_complex, auth_id)
+    def affi_object_well_formed(affi_object, name_list, auth_id)
       # problem: affi_object nil
       if affi_object == nil
         puts "\n********************* Affiliation is nil **********************\n"
@@ -768,35 +678,23 @@ class CrossrefPublication
         return false
       # problem: missing country
       elsif affi_object.country == nil
-        if parsed_complex == false
-          printf("\nAuthor %d affilition parsed as complex \n", auth_id)
-        else
-          printf("\nAuthor %d affilition parse as single \n", auth_id)
-        end
-        puts "\n************************Missing country**********************\n"
+        puts "\n************************Missing country**********************"
+        printf("\nAuthor %d affilition parsed\n", auth_id)
         print_affi(affi_object)
         puts name_list
         return false
       # problem: missing name
       elsif affi_object.name == nil
-        if parsed_complex == false
-          printf("\nAuthor %d affilition parsed as complex \n", auth_id)
-        else
-          printf("\nAuthor %d affilition parse as single \n", auth_id)
-        end
-        puts "\n************************ Missing name **********************\n"
+        puts "\n************************ Missing name **********************"
+        printf("\n*Author %d affilition parsed\n", auth_id)
         print_affi(affi_object)
         puts name_list.name
         return false
       # problem: missing author or author_affiliation_id incorrect
       elsif affi_object.article_author_id == nil or \
         affi_object.article_author_id != auth_id
-        if parsed_complex == false
-          printf("\nAuthor %d affilition parsed as complex \n", auth_id)
-        else
-          printf("\nAuthor %d affilition parse as single \n", auth_id)
-        end
-        puts "\n************************ Wrong Author ID **********************\n"
+        puts "\n************************ Wrong Author ID **********************"
+        printf("\n*Author %d affilition parsed\n", auth_id)
         print_affi(affi_object)
         print name_list
         return false
@@ -804,7 +702,6 @@ class CrossrefPublication
         return true
       end
     end
-
 
     # determine if an affilition string is simple by checking if it fully matches
     # one of the keywords from the common lists
@@ -869,37 +766,6 @@ class CrossrefPublication
       end
       return false
     end
-    # get a set of affi lines and determie how many belong to an affiliation
-      # e.g. "Interdisciplinary Nanoscience Center (iNANO) and Department of Physics and Astronomy"
-      #      "Aarhus University"
-      #      "DK-8000 Aarhus C, Denmark"
-      #      "Department of Chemistry and Interdisciplinary Nanoscience Center (iNANO)"
-    def from_same_affi(affi_lines, accummulated = [])
-      # split the first line
-      # add it to affi_lines if affi_lines empty
-      # in next line try to see if the string belongs to same affiliation
-      # after first line try adding to affi_items, if resulting in same affi, add, else start new affi_items
-      affi_items = {}
-      indx = 0
-      affi_items[indx] = []
-      temp_lines = []
-      affi_lines.each do |cr_affi|
-        print "\nIndex: "+ indx.to_s+ " Items: " + affi_items[indx].to_s
-        # split element
-        temp_split = split_by_keywords2(cr_affi.name.strip)
-        temp_lines = affi_items[indx].concat(temp_split)
-        if affi_items[indx] == [] then
-          affi_items[indx] = temp_split
-        elsif same_affi(temp_lines)
-          affi_items[indx] = temp_lines
-        else
-          indx += 1
-          affi_items[indx] =  temp_split
-        end
-        print "\nIndex: "+ indx.to_s+ " Items: " + affi_items[indx].to_s
-      end
-      print affi_items
-    end
 
     # check if a set of lines contains more than one affiliation,
     # if so split them
@@ -937,59 +803,72 @@ class CrossrefPublication
     end
     # analise the affi hashes and determine if they belong to a single or various
     # affiliations. Last step before actually building the affiliations
-    def build_and_save_auth_affis(temp_lines, auth_id = 0)
+    def build_and_save_auth_affis(temp_lines, new_affi_hash, auth_id = 0)
+      # new_affi_hash = { 0 => [{"institution" => "Diamond Light Source Ltd.",
+      #                       "ft_20" => "Harwell Science and Innovation Campus Didcot OX11 0DE",#
+      #                       "ctry_syn" => "UK"},[cr_ids]],
+      #                 1 => [{"department" => "Department of Chemistry",
+      #                       "institution"=>"University of Reading",
+      #                       "ft_44"=>"Reading RG6 6AD",
+      #                       "ctry_syn"=>"UK"}},[cr_ids]]
       affis_built = 0
-      if temp_lines.count > 0 then
+      if new_affi_hash.count > 0 then
         affi_previous = nil
         previous = nil
+        previous_ids = nil
         build_affis={}
-        temp_lines.each { |k,v|
-          current = v # get the values of current affi
+        new_affi_hash.each { |k,vs|
+          current = vs[0] # get the values of current affi
+          current_ids = vs[1]
+          affi_current = get_affi(current)
           if previous != nil and current != nil then
-            affi_current = get_affi(current)
             if affi_current != nil
               curr_inst = affi_current.institution.strip
               prev_inst = affi_previous.institution.strip
               if @institution_hostings[prev_inst.to_sym] == curr_inst then
                 # prev_inst is hosted by curr_inst
                 # create single affi for prev_inst, appending values of current
-                build_affis[affi_previous.id] = previous.values + current.values
+                # merge previous_ids to current_ids
+                current_ids = previous_ids.set.union(current_ids.set).to_a
+                build_affis[affi_previous.id] = [previous.values + current.values, current_ids]
                 # skip current in next loop by making previous = current
                 current = previous
               elsif @institution_hostings[curr_inst.to_sym] == prev_inst then
                 # curr_inst is hosted by prev_inst
                 # create single affi for curr_inst, appending values of previous
-                build_affis[affi_previous.id] = current.values + previous.values
+                # merge previous_ids to current_ids
+                previous_ids = previous_ids.set.union(current_ids.set).to_a
+                build_affis[affi_previous.id] = [current.values + previous.values, previous_ids]
               else
                 # curr_inst and prev_inst are independent
                 # create an affi for each
                 if build_affis[build_affis.count -1] == nil \
-                   or !build_affis[build_affis.count -1].include?(affi_previous.institution) then
-                  build_affis[affi_previous.id] = previous.values
+                   or !build_affis[build_affis.count -1][0].include?(affi_previous.institution) then
+                  build_affis[affi_previous.id] = [previous.values, previous_ids]
                 end
-                build_affis[affi_current.id] = current.values
+                build_affis[affi_current.id] = [current.values, current_ids]
               end
             else
               print "\n********************************************************"
-              print "\n Current:  " + current.to_s
-              #print "\n Current affi: " + affi_current.id.to_s
-              print "\n Previous: " + current.to_s
+              print "\n Current:       " + current.to_s
+              print "\n Previous:      " + current.to_s
               print "\n Previous affi: " + affi_current.id.to_s
-              print "\n Lines:    " + temp_lines.to_s
+              print "\n Lines:         " + new_affi_hash.to_s
               print "\n********************************************************"
             end
           end
           previous = current
-          affi_previous = get_affi(previous)
+          previous_ids = current_ids
+          affi_previous = affi_current
         }
         if build_affis.count == 0 then
           # there was only one affiliation in hash, build it
-          build_affis[affi_previous.id] = previous.values
+          build_affis[affi_previous.id] = [previous.values, previous_ids]
         end
         # Save in DB
         build_affis.each{|affi_id, lines_list|
-          affi_obj = create_affi_obj(lines_list, auth_id, affi_id)
-          continue = affi_object_well_formed(affi_obj, lines_list, true, auth_id)
+          affi_obj = create_affi_obj(lines_list[0], auth_id, affi_id)
+          continue = affi_object_well_formed(affi_obj, lines_list[0], auth_id)
           # save the object
           if continue then
             puts "\nAffiliation object is well formed"
@@ -997,9 +876,10 @@ class CrossrefPublication
             if existing_affi == nil then
               puts "\nSaving Affiliation"
               affi_obj.save
-              # mark the cr_affi with the id of the corresponding author_affiliation
-              cr_affis = ArticleAuthor.find(auth_id).cr_affiliations
-              cr_affis.each {|cr_affi|
+              # mark the cr_affis with the id of the corresponding author_affiliation
+              cr_affis = lines_list[1]
+              cr_affis.each {|cr_affi_id|
+                cr_affi = CrAffiliation.find(cr_affi_id)
                 cr_affi.author_affiliation_id = affi_obj.id
                 cr_affi.save
               }
@@ -1007,6 +887,8 @@ class CrossrefPublication
               puts "Found existing affiliation: " + existing_affi.id.to_s
             end
           else
+            puts "Found errore in new affiliation: "
+            print_affi(affi_obj)
           end
           #print_affi(affi_obj)
           affis_built += 1
