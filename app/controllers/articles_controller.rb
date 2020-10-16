@@ -95,9 +95,14 @@ class ArticlesController < ApplicationController
       if @article.title == nil
          getPubData(@article, @article.doi)
       end
+
       if @article.article_authors.count == 0 or @article.article_authors[0].last_name == nil
         # try to get authors from crossref
         getAutData(@authors, @article.doi, @article.id)
+      end
+
+      if @article.pub_year == nil then
+        @article.pub_ol_year != nil ? @article.pub_year = @article.pub_ol_year : @article.pub_year = @article.pub_print_year
       end
     end
 
