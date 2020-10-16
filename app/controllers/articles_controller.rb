@@ -209,8 +209,9 @@ class ArticlesController < ApplicationController
     def getAutData(db_authors, doi_text, art_id)
       pub_data = CrossrefApiClient.getCRData(doi_text)
       if pub_data != nil then
-        puts "\nPub data: " + pub_data.class
+        puts "\nPub data: " + pub_data.class.to_s
         aut_order = 1
+        aut_count = pub_data['author'].count
         pub_data['author'].each do |art_author|
           new_author = ArticleAuthor.new()
           if art_id != nil
@@ -220,7 +221,6 @@ class ArticlesController < ApplicationController
             end
           end
           if art_author.keys.include?('ORCID')
-            puts new_author.orcid.to_s
             new_author.orcid = art_author['ORCID']
           end
           if art_author.keys.include?('family')
@@ -231,11 +231,69 @@ class ArticlesController < ApplicationController
           end
           new_author.author_seq = art_author['sequence'].to_s
           new_author.author_order = aut_order
+          new_author.article_id = art_id
+          new_author.status = "not verified"
+          new_author.doi = doi_text
+          new_author.author_count = aut_count
+          # Before save get best author match
+          plain_ln = "XXXXX%"
+          if new_author.last_name.include?('-')
+            plain_ln = new_author.last_name.gsub('-',' ')
+          end
+          # get a strig with only letters with no punctuations
+          like_name = "XXXX%"
+          if (new_author.last_name =~ /[^a-zA-Z\s:]/) != nil
+            non_alpha_found = true
+            like_name = new_author.last_name.gsub(" ","%")
+            while non_alpha_found
+              c_idx = (like_name =~ /[^a-zA-Z\s:]/)
+              if c_idx != nil
+                like_name[c_idx] = " "
+              else
+                non_alpha_found = false
+              end
+            end
+            like_name.gsub!(' ','%')
+          end
+          authors_list = Author.where(orcid: new_author.orcid, last_name: new_author.last_name)
+            .or(Author.where(given_name: new_author.given_name, last_name: new_author.last_name))
+            .or(Author.where(last_name: new_author.last_name))
+            .or(Author.where(last_name: plain_ln))
+            .or(Author.where("last_name LIKE ?", "%" + like_name + "%"))
 
-          new_author.save
+          found_id = 0
+          authors_list.each { |researcher|
+            if new_author.orcid !=nil and  researcher.orcid != nil \
+               and researcher.orcid == new_author.orcid
+               found_id = researcher.id
+               break
+            elsif new_author.given_name == researcher.given_name and \
+              new_author.last_name == researcher.given_name
+              found_id = researcher.id
+            end
+          }
+          if found_id != 0 then
+            new_author.author_id = found_id
+          else
+            # create a new author
+            new_researcher = Author.new(given_name: new_author.given_name,
+              last_name: new_author.last_name, orcid: new_author.orcid)
+            if new_researcher.save then
+              new_author.author_id = new_researcher.id
+            end
+          end
 
-          puts "###################################################################"
-          puts "Author ID:" + new_author.id.to_s
+          if new_author.save then
+            puts "######################AUTHOR###################################"
+            puts "Hash: " + art_author.to_s
+            puts "Name: " + new_author.last_name + " " + new_author.given_name
+            puts "ORCID     " + new_author.orcid.to_s
+            puts "Order:    " + new_author.author_order.to_s
+            puts "Sequence: " + new_author.author_seq.to_s
+            puts "Article ID: " + new_author.article_id.to_s
+            puts "ID:       " + new_author.id.to_s
+          end
+
           if art_author.keys.include?('affiliation')
             puts art_author['affiliation']
             if art_author['affiliation'].length > 0
@@ -248,7 +306,7 @@ class ArticlesController < ApplicationController
             end
           end
           puts db_authors[0].last_name
-          puts "###################################################################"
+          puts "###############################################################"
           aut_order += 1
 
         end
@@ -301,7 +359,7 @@ class ArticlesController < ApplicationController
         if changes_found
           new_author.save
         end
-        aut_id = new_author.id
+
         if art_author.keys.include?('affiliation')
           if art_author['affiliation'].length > 0
             art_author['affiliation'].each do |temp_affi|
@@ -313,7 +371,7 @@ class ArticlesController < ApplicationController
                   new_affi = tem_affi
                 else
                   new_affi.name = temp_affi['name']
-                  new_affi.article_author_id = aut_id
+                  new_affi.article_author_id = new_author.id
                   new_affi.save
                 end
               end
