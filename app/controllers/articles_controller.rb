@@ -175,38 +175,60 @@ class ArticlesController < ApplicationController
       db_article.references_count = pub_data['references_count']
       db_article.link = pub_data['link']
       db_article.url = pub_data['URL']
-      db_article.journal_issue = pub_data['journal_issue']['issue']
+      if pub_data.keys.include?('journal_issue') \
+        and pub_data['journal_issue'] != nil then
+        if pub_data['journal_issue'].keys.include?('issue') then
+          db_article.journal_issue = pub_data['journal_issue']['issue']
+        end
+        if pub_data['journal_issue']['published-print']['date-parts'][0].length == 1 then
+          #assume that if date parts has only one element, it is year
+          db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
+        elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 2 then
+          #assume that if date parts has two elements, they are year and month
+          db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
+          db_article.pub_ol_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
+        elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 3 then
+          # assume year, month and day if date parts has three elements
+          db_article.pub_print_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
+          db_article.pub_print_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
+          db_article.pub_print_day = pub_data['journal_issue']['published-print']['date-parts'][0][2]
+        end
+      end
       db_article.container_title = pub_data['container_title']
       db_article.page = pub_data['page']
       db_article.abstract = pub_data['abstract']
-      if pub_data['published_online']['date-parts'][0].length == 1
-        #assume that if date parts has only one element, it is year
-        db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
-      elsif pub_data['published_online']['date-parts'].length == 2
-        #assume that if date parts has two elements, they are year and month
-        db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
-        db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
-      elsif pub_data['published_online']['date-parts'][0].length == 3
-        # assume year, month and day if date parts has three elements
-        db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
-        db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
-        db_article.pub_ol_day = pub_data['published_online']['date-parts'][0][2]
+      print pub_data.keys
+      if pub_data.keys.include?('published_online') then
+        if pub_data['published_online']['date-parts'][0].length == 1 then
+          #assume that if date parts has only one element, it is year
+          db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
+        elsif pub_data['published_online']['date-parts'].length == 2 then
+          #assume that if date parts has two elements, they are year and month
+          db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
+          db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
+        elsif pub_data['published_online']['date-parts'][0].length == 3 then
+          # assume year, month and day if date parts has three elements
+          db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
+          db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
+          db_article.pub_ol_day = pub_data['published_online']['date-parts'][0][2]
+        end
       end
-      puts(pub_data['journal_issue'])
-      puts(pub_data['journal_issue']['published-print']['date-parts'][0].length)
-      if pub_data['journal_issue']['published-print']['date-parts'][0].length == 1
-        #assume that if date parts has only one element, it is year
-        db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-      elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 2
-        #assume that if date parts has two elements, they are year and month
-        db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-        db_article.pub_ol_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
-      elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 3
-        # assume year, month and day if date parts has three elements
-        db_article.pub_print_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-        db_article.pub_print_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
-        db_article.pub_print_day = pub_data['journal_issue']['published-print']['date-parts'][0][2]
+      if pub_data.keys.include?('published_print') then
+        if pub_data['published_print']['date-parts'][0].length == 1 then
+          #assume that if date parts has only one element, it is year
+          db_article.pub_ol_year = pub_data['published_print']['date-parts'][0][0]
+        elsif pub_data['published_print']['date-parts'][0].length == 2 then
+          #assume that if date parts has two elements, they are year and month
+          db_article.pub_ol_year = pub_data['published_print']['date-parts'][0][0]
+          db_article.pub_ol_month = pub_data['published_print']['date-parts'][0][1]
+        elsif pub_data['published_print']['date-parts'][0].length == 3 then
+          # assume year, month and day if date parts has three elements
+          db_article.pub_print_year = pub_data['published_print']['date-parts'][0][0]
+          db_article.pub_print_month = pub_data['published_print']['date-parts'][0][1]
+          db_article.pub_print_day = pub_data['published_print']['date-parts'][0][2]
+        end
       end
+
       # mark incomplete as it is missing authors, affiliation and themes
       db_article.status = "Incomplete"
     end
@@ -365,6 +387,7 @@ class ArticlesController < ApplicationController
         end
         like_name.gsub!(' ','%')
       end
+
       authors_list = Author.where(orcid: new_author.orcid, last_name: new_author.last_name)
         .or(Author.where(given_name: new_author.given_name, last_name: new_author.last_name))
         .or(Author.where(last_name: new_author.last_name))
@@ -378,7 +401,7 @@ class ArticlesController < ApplicationController
            found_id = researcher.id
            break
         elsif new_author.given_name == researcher.given_name and \
-          new_author.last_name == researcher.given_name
+          new_author.last_name == researcher.last_name
           found_id = researcher.id
           break
         end
