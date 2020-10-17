@@ -69,6 +69,6 @@ class ArticleThemesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def article_theme_params
-      params.require(:article_theme).permit(:doi, :phase, :collaboration, :theme_id, :project_year)
+      params.require(:article_theme).permit(:doi, :phase, :collaboration, :theme_id, :project_year, :article_id)
     end
 end
