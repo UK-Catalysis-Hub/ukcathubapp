@@ -153,7 +153,7 @@
        %>
        <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
      </div>
-     <%= render '/article_themes/themes_list', article_themes: @article.article_themes %> 
+     <%= render '/article_themes/form_add_tab', article_themes: @article.article_themes %> 
   </div>
   <div class="tab-pane fade" id="authors" role="tabpanel" aria-labelledby="authors-tab">
     <%= render '/article_authors/form_verify', article_authors: @article.article_authors %>

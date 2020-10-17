@@ -1,0 +1,38 @@
+  <%
+     used_themes_ids = []
+     article_id = 0
+     article_themes.each {|art_theme|
+       used_themes_ids.append(art_theme.id)
+       article_id = art_theme.article_id
+     }
+     used_themes_str = "id not in (" + used_themes_ids.join(', ') + ")"
+     themes_list = Theme.where(used_themes_str)
+     %>
+  <table>
+    <thead class="thead-light">
+      <tr>
+        <th>Theme</th>
+        <th>Name</th>
+        <th>Year</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% themes_list.each do |theme| %>
+        <tr>
+          <td>
+            <%= theme.id %>
+          </td>
+          <td>
+            <%= theme.name %>
+          </td>
+          <td>
+            <%= select(theme.phase, "Year" , options = options_for_select([ 2013, 2020 ], 2020) ) %>
+          </td>
+          <td>
+            <%= button_to 'Assign', :class => 'btn  btn-success btn-sm'  %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
