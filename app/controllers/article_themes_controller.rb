@@ -61,6 +61,34 @@ class ArticleThemesController < ApplicationController
     end
   end
 
+  # Assign theme to article record
+  def link_to_theme
+    # get the theme id from the parameters
+    # get the article id from the parameters
+    # get the project_year from the parameters
+    # save article_theme
+    # redirect to article edit
+    puts "********************************************************************"
+    puts params
+    puts params["data"]
+    this_theme = Theme.find(params["data"]["id"])
+    this_article = Article.find(params["data"]["article_id"])
+    @article_theme = ArticleTheme.new()
+    @article_theme.doi = this_article.doi
+    @article_theme.project_year = params["data"]["year"]
+    @article_theme.theme_id = params["data"]["id"]
+    @article_theme.phase = this_theme.phase
+    @article_theme.collaboration = 0
+    @article_theme.article_id = params["data"]["article_id"]
+    @article_theme.save()
+    puts "********************************************************************"
+    # respond_to do |format|
+    #   flash[:notice] = 'verify process started'
+    #   format.html { redirect_to action: "index" }
+    #   format.json { head :no_content }
+    # end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article_theme

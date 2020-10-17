@@ -53,7 +53,7 @@
             <%= researcher.orcid %>
           </td>
           <td>
-            <%= button_to 'Assign', {:action => 'link_to_researcher', :controller => 'article_authors', :data => {:author_id => researcher.id,:id => article_author.id}}, :class => 'btn  btn-success btn-sm'  %>
+            <%= button_to('Assign', {:action => 'link_to_researcher', :controller => 'article_authors', :data => {:author_id => researcher.id,:id => article_author.id}}, :class => 'btn  btn-success btn-sm')%>
           </td>
         </tr>
       <% end %>
