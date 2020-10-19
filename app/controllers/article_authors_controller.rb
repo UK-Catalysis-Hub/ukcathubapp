@@ -82,7 +82,7 @@ class ArticleAuthorsController < ApplicationController
     respond_to do |format|
       flash[:notice] = 'researcher verified'
       return_to = session[:return_to]
-      return_to.include? ("/edit") ? return_to : return_to = return_to + "/edit"
+      return_to.include?("/edit") ? true : return_to = return_to + "/edit"
       format.html { redirect_to return_to }
     end
   end
