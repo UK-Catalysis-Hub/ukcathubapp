@@ -152,7 +152,7 @@ class CrossrefPublication
         "RCaH":"Research Complex at Harwell",
         "Queens University Belfast":"Queen's University Belfast",
         "University of Edinburgh":"The University of Edinburgh",
-        "SynCat@Beijing, Synfuels China Technology Co. Ltd.":"SynCat@Beijing Synfuels China Compnay Limited",
+        "SynCat@Beijing, Synfuels China Technology Co. Ltd.":"SynCat@Beijing Synfuels China Company Limited",
         "Synfuels China Compnay Limited":"SynCat@Beijing Synfuels China Company Limited"
       }
 
