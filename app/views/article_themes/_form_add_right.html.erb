@@ -1,6 +1,9 @@
   <%
      used_themes_ids = []
      select_year = 2013
+     if article_themes.count == 0 then
+       select_year = Article.find(article_id).pub_year
+     end
      article_themes.each {|art_theme|
        used_themes_ids.append(art_theme.id)
        select_year = art_theme.project_year
