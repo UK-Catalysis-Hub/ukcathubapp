@@ -4,7 +4,7 @@ class ArticleThemesController < ApplicationController
   # GET /article_themes
   # GET /article_themes.json
   def index
-    @article_themes = ArticleTheme.all
+    @article_themes = ArticleTheme.order("id DESC").all
   end
 
   # GET /article_themes/1
@@ -82,11 +82,13 @@ class ArticleThemesController < ApplicationController
     @article_theme.article_id = params["data"]["article_id"]
     @article_theme.save()
     puts "********************************************************************"
-    # respond_to do |format|
-    #   flash[:notice] = 'verify process started'
-    #   format.html { redirect_to action: "index" }
-    #   format.json { head :no_content }
-    # end
+     respond_to do |format|
+       flash[:notice] = 'Article linked to theme'
+       return_to = session[:return_to]
+       return_to.include? ("/edit") ? return_to : return_to = return_to + "/edit"
+       format.html { redirect_to return_to }
+       format.html { redirect_to session[:return_to]+"/edit" }
+     end
   end
 
   private

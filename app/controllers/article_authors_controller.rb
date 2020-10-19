@@ -76,14 +76,15 @@ class ArticleAuthorsController < ApplicationController
     puts params
     puts params["data"]
     @article_author = ArticleAuthor.find(params["data"]["id"])
-    update_hash = {:author_id=>params["data"]["author_id"], :status => 'verified'}  
+    update_hash = {:author_id=>params["data"]["author_id"], :status => 'verified'}
     @article_author.update(update_hash)
     puts "********************************************************************"
-    # respond_to do |format|
-    #   flash[:notice] = 'verify process started'
-    #   format.html { redirect_to action: "index" }
-    #   format.json { head :no_content }
-    # end
+    respond_to do |format|
+      flash[:notice] = 'researcher verified'
+      return_to = session[:return_to]
+      return_to.include? ("/edit") ? return_to : return_to = return_to + "/edit"
+      format.html { redirect_to return_to }
+    end
   end
 
   private

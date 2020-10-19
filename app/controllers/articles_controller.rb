@@ -32,6 +32,7 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
+    session[:return_to] = request.referer
   end
 
   # POST /articles
@@ -94,6 +95,8 @@ class ArticlesController < ApplicationController
 
       if @article.title == nil
          getPubData(@article, @article.doi)
+         #save the article so it is not recovered again
+         @article.save()
       end
 
       if @article.article_authors.count == 0 or @article.article_authors[0].last_name == nil
@@ -103,7 +106,10 @@ class ArticlesController < ApplicationController
 
       if @article.pub_year == nil then
         @article.pub_ol_year != nil ? @article.pub_year = @article.pub_ol_year : @article.pub_year = @article.pub_print_year
+        #save the article if it did not have pub_year set
+        @article.save()
       end
+
     end
 
     # Only allow a list of trusted parameters through.
