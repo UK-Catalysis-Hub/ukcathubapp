@@ -121,7 +121,7 @@ class CrossrefPublication
       @affi_faculties = Affiliation.where('faculty IS NOT NULL').distinct.pluck(:faculty)
       @affi_work_groups = Affiliation.where('work_group IS NOT NULL').distinct.pluck(:work_group)
 
-      # list of country sysnonyms
+      # list of country synonyms
       # (need to persist somewhere)
       @country_synonyms = {"(UK)":"United Kingdom", "UK":"United Kingdom",
         "U.K.":"United Kingdom", "U. K.":"United Kingdom",
@@ -145,13 +145,15 @@ class CrossrefPublication
         "Diamond Light Source":"Diamond Light Source Ltd.",
         "ISIS Facility":"ISIS Neutron and Muon Source",
         "University College of London":"University College London",
-        "UOP LLC":"UOP LLC, A Honeywell Company",
+        "UCL":"University College London", "UOP LLC":"UOP LLC, A Honeywell Company",
         "University of Manchester":"The University of Manchester",
         "Johnson-Matthey Technology Centre":"Johnson Matthey Technology Centre",
         "Research Complex at Harwell (RCaH)":"Research Complex at Harwell",
         "RCaH":"Research Complex at Harwell",
         "Queens University Belfast":"Queen's University Belfast",
-        "University of Edinburgh":"The University of Edinburgh"
+        "University of Edinburgh":"The University of Edinburgh",
+        "SynCat@Beijing, Synfuels China Technology Co. Ltd.":"SynCat@Beijing Synfuels China Compnay Limited",
+        "Synfuels China Compnay Limited":"SynCat@Beijing Synfuels China Company Limited"
       }
 
       # list of institutions hosted by other institutions
@@ -740,7 +742,7 @@ class CrossrefPublication
                 # curr_inst is hosted by prev_inst
                 # create single affi for curr_inst, appending values of previous
                 # merge previous_ids to current_ids
-                previous_ids = previous_ids.set.union(current_ids.set).to_a
+                previous_ids = previous_ids.to_set.union(current_ids.to_set).to_a
                 build_affis[affi_previous.id] = [current.values + previous.values, previous_ids]
               else
                 # curr_inst and prev_inst are independent
