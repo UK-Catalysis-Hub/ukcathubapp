@@ -185,10 +185,11 @@
        <div class="col-sm-6 col-lg-5">
          <div class="card">
            <div class="card-header">
-             <h6 style= "margin:auto">Publications by theme</h6>
+             <h6 style= "margin:auto">Publications by year</h6>
            </div>
            <div class="card-body p-0">
-             <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true,  legend: "right" %>
+             <% arts_by_year = Article.where(:status => "Added").group(:pub_year).count %>
+             <%= column_chart arts_by_year %>
            </div>
          </div>
        </div>

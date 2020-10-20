@@ -76,7 +76,11 @@
             <h6 style= "margin:auto">Publications by theme</h6>
           </div>
           <div class="card-body p-0">
-            <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true,  legend: "right" %>
+            <% # replace model with view
+               # themes_list = Theme.joins(:articles).group(:short).order(:id).count()
+               themes_list = ListTheme.all.collect{|th|
+                                             [th.short, th.article_count]} %>
+            <%= pie_chart themes_list, donut: true,  legend: "right" %>
           </div>
         </div>
       </div>
@@ -131,10 +135,11 @@
   		<div class="col-6 col-sm-4 themed-grid-col">
         <div class="card">
           <div class="card-header">
-            <h6 style= "margin:auto">Publications by theme</h6>
+            <h6 style= "margin:auto">Publications by year</h6>
           </div>
           <div class="card-body p-0">
-            <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true %>
+            <% arts_by_year = Article.where(:status => "Added").group(:pub_year).count %>
+            <%= column_chart arts_by_year %>
           </div>
         </div>
       </div>
