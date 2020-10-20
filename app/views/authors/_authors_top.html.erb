@@ -1,10 +1,11 @@
 <!--Display a filtered list of authors -->
+<% count_label =  authors[0].attribute_names[2] %>
 <div id="filtered_author_list" class="container">
   <table class="table table-sm table-striped table-bordered">
     <thead class="thead-light">
       <tr>
         <th>Author</th>
-        <th>Articles</th>
+        <th><%= count_label %></th>
       </tr>
     </thead>
     <tbody>
@@ -13,8 +14,8 @@
           <td>
             <%= link_to(author.full_name, controller: "authors", action: "show", id: author.id) %>
           </td>
-          <td>
-            <%= author.article_count %>
+          <td class="text-right">
+            <%= ActiveSupport::NumberHelper.number_to_delimited(author[count_label]) %>
           </td>
         </tr>
       <% end %>

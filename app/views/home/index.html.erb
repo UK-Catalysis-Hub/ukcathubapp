@@ -1,4 +1,3 @@
-<% @authors_list = Article.active.joins(:authors).select("authors.id, full_name, COUNT(*) AS 'article_count'").order("article_count DESC").group("authors.full_name").limit(5) %>
 <div class="container">
   <main role="main">
     <div class="row my-1"><!-- Qucik info row -->
@@ -80,7 +79,7 @@
                # themes_list = Theme.joins(:articles).group(:short).order(:id).count()
                themes_list = ListTheme.all.collect{|th|
                                              [th.short, th.article_count]} %>
-            <%= pie_chart themes_list,  legend: "right", donut: true, library: { pieSliceText: 'count' } %>
+            <%= pie_chart themes_list,  legend: "right", donut: true %>
           </div>
         </div>
       </div>
@@ -93,7 +92,7 @@
             <h6 style= "margin:auto">Top publishing authors</h6>
           </div>
           <div class="card-body p-0">
-            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
+            <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(5) }%>
           </div>
         </div>
       </div>
@@ -103,7 +102,8 @@
             <h6 style= "margin:auto">Most cited publications</h6>
           </div>
           <div class="card-body p-0">
-            <%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
+            <% label_for_view = "Articles" %>
+            <%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5), count_label: label_for_view }%>
           </div>
         </div>
       </div>
@@ -116,7 +116,8 @@
             <h6 style= "margin:auto">Most cited authors</h6>
           </div>
           <div class="card-body p-0">
-            <%= render partial: 'authors/authors_pub_top', locals: {authors: Author.top_published.limit(5) }%>
+            <% label_for_view = "Citations" %>
+            <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(5), count_label: label_for_view }%>
           </div>
         </div>
       </div><!--col-sm-4-->

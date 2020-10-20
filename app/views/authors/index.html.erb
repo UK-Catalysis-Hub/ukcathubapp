@@ -102,11 +102,11 @@
       <div class="row px-1 my-3">
         <div class="col-sm-6 col-lg-7">
           <div class="card">
-            <div class="card-header bg-light">
-              <h6 style= "margin:auto">Recent publications</h6>
+            <div class="card-header">
+              <h6 style= "margin:auto">Top publishing authors</h6>
             </div>
-            <div class="card-body p-0" style= "margin:auto">
-              <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
+            <div class="card-body p-0">
+              <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(5) }%>
             </div>
           </div>
         </div>
@@ -125,10 +125,11 @@
         <div class="col-sm-6 col-lg-7">
           <div class="card">
             <div class="card-header">
-              <h6 style= "margin:auto">Top publishing authors</h6>
+              <h6 style= "margin:auto">Most cited authors</h6>
             </div>
             <div class="card-body p-0">
-              <%= render partial: 'authors/authors_pub_top', locals: {authors: Author.top_published.limit(5) }%>
+              <% label_for_view = "Citations" %>
+              <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(5), count_label: label_for_view }%>
             </div>
           </div>
         </div>
