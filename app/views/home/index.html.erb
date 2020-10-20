@@ -80,7 +80,7 @@
                # themes_list = Theme.joins(:articles).group(:short).order(:id).count()
                themes_list = ListTheme.all.collect{|th|
                                              [th.short, th.article_count]} %>
-            <%= pie_chart themes_list, donut: true,  legend: "right" %>
+            <%= pie_chart themes_list,  legend: "right", donut: true, library: { pieSliceText: 'count' } %>
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@
             <h6 style= "margin:auto">Top publishing authors</h6>
           </div>
           <div class="card-body p-0">
-            <%= render partial: 'authors/authors_pub_top', locals: {authors: Author.top_published.limit(5) } %>
+            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
           </div>
         </div>
       </div>
@@ -121,28 +121,79 @@
         </div>
       </div><!--col-sm-4-->
 
-  		<div class="col-6 col-sm-4 themed-grid-col">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Most cited authors</h6>
-          </div>
-          <div class="card-body p-0">
-            <%= render partial: 'authors/authors_top', locals: {authors: @authors_list }%>
-          </div>
-        </div>
-      </div>
-
-  		<div class="col-6 col-sm-4 themed-grid-col">
+  		<div class="col-sm-8 themed-grid-col">
         <div class="card">
           <div class="card-header">
             <h6 style= "margin:auto">Publications by year</h6>
           </div>
           <div class="card-body p-0">
-            <% arts_by_year = Article.where(:status => "Added").group(:pub_year).count %>
+            <% year_series = {}
+               arts_by_year = Article.where(:status => "Added").group(:pub_year).count %>
             <%= column_chart arts_by_year %>
           </div>
         </div>
       </div>
-  	</div>
+  	</div> <!--row mb3 -->
+
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-header">
+            <h6 style= "margin:auto">Publications accumulated per year</h6>
+          </div>
+          <div class="card-body p-0">
+            <% year_series = {}
+               arts_by_year = Article.where(:status => "Added").group(:pub_year).count
+               year_series[0] = arts_by_year
+               sum = 0
+               year_series[1] = arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } %>
+            <%= column_chart(year_series[1], library: { :series => { 1 => { type: "line"} } } )%>
+          </div>
+        </div>
+      </div><!--col-sm-6-->
+
+      <div class="col-sm-6 themed-grid-col">
+        <div class="card">
+          <div class="card-header">
+            <h6 style= "margin:auto">Publications line chart </h6>
+          </div>
+          <div class="card-body p-0">
+            <% year_series = {}
+               arts_by_year = Article.where(:status => "Added").group(:pub_year).count
+               year_series[0] = arts_by_year
+               sum = 0
+               year_series[1] = arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } %>
+            <%= line_chart(year_series )%>
+          </div>
+        </div>
+      </div><!--col-sm-6-->
+    </div><!--row-->
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-header">
+            <h6 style= "margin:auto">Timeline</h6>
+          </div>
+          <div class="card-body p-0">
+            <%= timeline [
+                  ["Washington", "1789-04-29", "1797-03-03"],
+                  ["Adams", "1797-03-03", "1801-03-03"],
+                  ["Jefferson", "1801-03-03", "1809-03-03"]
+                  ] %>
+          </div>
+        </div>
+      </div><!--col-sm-6-->
+
+      <div class="col-sm-6 themed-grid-col">
+        <div class="card">
+          <div class="card-header">
+            <h6 style= "margin:auto">Map Chart</h6>
+          </div>
+          <div class="card-body p-0">
+            <%= geo_chart AuthorAffiliation.group(:country).count %>
+          </div>
+        </div>
+      </div><!--col-sm-6-->
+    </div><!--row-->
   </main>
 </div>
