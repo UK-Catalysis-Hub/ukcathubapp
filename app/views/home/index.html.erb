@@ -170,8 +170,6 @@
                themes_per_year = themes_per_year.map{|tpy| {name: tpy[0][0], data: [tpy[0][1],tpy[1]]}}
                %>
             <%= column_chart(year_series, library: { :series => { 1 => { type: "line"} } })%>
-
-
           </div>
         </div>
       </div><!--col-sm-6-->
