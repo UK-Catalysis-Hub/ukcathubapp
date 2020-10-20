@@ -10,18 +10,19 @@
         <th>Lead</th>
         <th>Phase</th>
         <th>Publications</th>
-        <th>Authors </th>
       </tr>
     </thead>
 
     <tbody>
+
+      <% #replace model with view
+         @themes = ListTheme.all %>
       <% @themes.each do |theme| %>
         <tr>
-          <td><%= link_to theme.name, theme %> </td>
+          <td><%= link_to theme.name, "/themes/"+theme.id.to_s %> </td>
           <td><%= theme.lead %></td>
           <td><%= theme.phase %></td>
-          <td><%= theme.article_themes.count %></td>
-          <td><%= theme.get_authors.count %></td>
+          <td><%= theme.article_count %></td>
         </tr>
       <% end %>
     </tbody>

@@ -73,3 +73,9 @@ gem 'serrano'
 
 # sidekiq gem for handling background processes
 gem 'sidekiq'
+
+
+# the scenic and scenic_sqlite_adapter gems are required for handling views in
+# rails
+gem 'scenic'
+gem 'scenic_sqlite_adapter'

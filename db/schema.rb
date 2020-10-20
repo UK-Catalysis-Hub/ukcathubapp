@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_14_164312) do
+ActiveRecord::Schema.define(version: 2020_10_20_075702) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -117,9 +117,9 @@ ActiveRecord::Schema.define(version: 2020_10_14_164312) do
     t.string "add_04"
     t.string "add_05"
     t.string "country"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.integer "affiliation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "authors", force: :cascade do |t|
@@ -187,4 +187,14 @@ ActiveRecord::Schema.define(version: 2020_10_14_164312) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+
+  create_view "list_themes", sql_definition: <<-SQL
+      SELECT themes.id, themes.phase, themes.name, themes.short, themes.lead, count() AS article_count
+    FROM article_themes
+    INNER JOIN themes on article_themes.theme_id = themes.id
+    INNER JOIN articles on article_themes.article_id = articles.id
+    WHERE articles.status == 'Added'
+    GROUP BY themes.phase, themes.name
+    ORDER BY themes.id
+  SQL
 end

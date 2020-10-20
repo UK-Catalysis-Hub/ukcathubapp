@@ -1,0 +1,2 @@
+class ListTheme < ApplicationRecord
+end
