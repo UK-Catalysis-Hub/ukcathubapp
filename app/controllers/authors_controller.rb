@@ -3,9 +3,14 @@ class AuthorsController < ApplicationController
 
   class AuthorsSearch < FortyFacets::FacetSearch
     model 'Author' # which model to search for
-    text :last_name   # filter by a generic string entered by the user
+
+    text  :last_name   # filter by a generic string entered by the user
+    scope :reactive  # to select only from active authors
 
     facet :given_name, name: 'Given Name'
+
+    facet :last_name, name: 'Last Name'
+
 
     orders 'Name, Ascendign' => {last_name: :asc, given_name: :asc},
            'Last name, Descendign' => "last_name desc",

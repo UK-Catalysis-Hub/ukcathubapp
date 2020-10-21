@@ -12,7 +12,7 @@
     <% authors.each do |author| %>
       <tr>
         <td><%= link_to(author.full_name, author) %> </td>
-        <th> <%= author.articles.count %> </td>
+        <th> <%= author.articles.length %> </td>
         <th> <%= author.orcid %></td>
       </tr>
     <% end %>
