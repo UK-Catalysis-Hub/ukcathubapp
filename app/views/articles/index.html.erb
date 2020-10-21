@@ -211,7 +211,7 @@
          p_pub_stats = {}
          p_pub_data = {}
          p_sum = 0
-         Article.publisher_count.reorder(j_count: :asc).each {|apc|
+         Article.publisher_count.reorder(p_count: :asc).each {|apc|
            p_sum += apc.p_count
            idx = ((apc.p_count-1)/5).to_i
            idx > 3 ? idx = 4 : idx
@@ -231,6 +231,30 @@
            <div class="card-body p-0">
              <div class = "row" >
                <div class="col-sm-4">
+                 <div id="top_publishers" class="container">
+                   <table class="table table-sm table-striped table-bordered">
+                     <thead class="thead-light">
+                       <tr>
+                         <th>Journal</th>
+                         <th>Publications</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <% Article.journals_count.limit(10).each do |ajc| %>
+                       <tr>
+                         <td>
+                           <%= ajc.container_title %>
+                         </td>
+                         <td class="text-right">
+                           <%= ajc.j_count %>
+                         </td>
+                       </tr>
+                       <% end %>
+                     </tbody>
+                   </table>
+                 </div>
+               </div>
+               <div class="col-sm-3">
                  <div id="authors_summary_data" class="container">
                    <table class="table table-sm table-striped table-bordered">
                      <thead class="thead-light">
@@ -289,7 +313,7 @@
                    </table>
                  </div>
                </div>
-               <div class="col-sm-8">
+               <div class="col-sm-5">
                  <div id="chart_container" class="container">
                    <%= pie_chart j_pub_data, donut: true,  legend: "right" %>
                  </div>
@@ -309,7 +333,31 @@
            <div class="card-body p-0">
              <div class = "row" >
                <div class="col-sm-4">
-                 <div id="authors_summary_data" class="container">
+                 <div id="top_publishers" class="container">
+                   <table class="table table-sm table-striped table-bordered">
+                     <thead class="thead-light">
+                       <tr>
+                         <th>Publisher</th>
+                         <th>Publications</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <% Article.publisher_count.limit(10).each do |pps| %>
+                       <tr>
+                         <td>
+                           <%= pps.publisher %>
+                         </td>
+                         <td class="text-right">
+                           <%= pps.p_count %>
+                         </td>
+                       </tr>
+                       <% end %>
+                     </tbody>
+                   </table>
+                 </div>
+               </div>
+               <div class="col-sm-3">
+                 <div id="publisher_summary_data" class="container">
                    <table class="table table-sm table-striped table-bordered">
                      <thead class="thead-light">
                        <tr>
@@ -318,7 +366,7 @@
                      </thead>
                      <tbody>
                        <tr>
-                         <td> publishers </td>
+                         <td> Publishers </td>
                          <td class="text-right">
                            <%= Article.publisher_count.length() %>
                          </td>
@@ -344,12 +392,12 @@
                      </tbody>
                    </table>
                  </div>
-                 <div id="pub_per_author" class="container">
+                 <div id="pub_per_publisher" class="container">
                    <table class="table table-sm table-striped table-bordered">
                      <thead class="thead-light">
                        <tr>
                          <th>Groups</th>
-                         <th>Articles</th>
+                         <th>Publications</th>
                        </tr>
                      </thead>
                      <tbody>
@@ -367,7 +415,7 @@
                    </table>
                  </div>
                </div>
-               <div class="col-sm-8">
+               <div class="col-sm-5">
                  <div id="chart_container" class="container">
                    <%= pie_chart p_pub_data, donut: true,  legend: "right" %>
                  </div>
