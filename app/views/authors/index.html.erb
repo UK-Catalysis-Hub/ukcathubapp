@@ -210,7 +210,8 @@
               <h6 style= "margin:auto">Top publishing authors (non P.I.)</h6>
             </div>
             <div class="card-body p-0">
-              <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(10) }%>
+              <% except ='authors.id not in (11, 15, 23, 22, 99, 111, 120, 134, 154, 171, 329)' %>
+              <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.where(except).limit(10) }%>
             </div>
           </div>
         </div>

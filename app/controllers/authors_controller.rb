@@ -5,7 +5,7 @@ class AuthorsController < ApplicationController
     model 'Author' # which model to search for
 
     text  :last_name   # filter by a generic string entered by the user
-    scope :reactive  # to select only from active authors
+    scope :active  # to select only from active authors
 
     facet :given_name, name: 'Given Name'
 
