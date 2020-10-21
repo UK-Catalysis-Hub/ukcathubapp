@@ -5,42 +5,42 @@
         <div class="container"><!-- info box -->
           <div class="row bg-primary  rounded border-primary">
             <div class="col-sm-6">
-        			<h1><%= Article.active.count() %></h1>
-        			<h6>Publications</h6>
-        		</div>
+              <h1><%= Article.active.count() %></h1>
+              <h6>Publications</h6>
+            </div>
             <div class="col-sm-6 my-1">
-        			<%= image_tag('books2.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
-        		</div>
+              <%= image_tag('books2.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
+            </div>
             <%= link_to 'More Info', articles_path, :class => "btn btn-primary btn-sm btn-block text-dark" %>
-        	</div>
+          </div>
         </div>
       </div>  <!-- info box -->
-        <div class="col-sm-3 col-6">
-          <div class="container"><!-- info box -->
-            <div class="row bg-secondary  rounded border-secondary my-0">
-              <div class="col-sm-6">
-          			<h1><%= Author.active.length() %></h1>
-          			<h6>Authors</h6>
-          		</div>
-              <div class="col-sm-6 my-1">
-          			<%= image_tag('users.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
-          		</div>
-              <%= link_to 'More Info', authors_path, :class => "btn btn-secondary btn-sm btn-block text-dark" %>
-          	</div>
+      <div class="col-sm-3 col-6">
+        <div class="container"><!-- info box -->
+          <div class="row bg-secondary  rounded border-secondary my-0">
+            <div class="col-sm-6">
+              <h1><%= Author.active.length() %></h1>
+              <h6>Authors</h6>
+            </div>
+            <div class="col-sm-6 my-1">
+              <%= image_tag('users.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
+            </div>
+            <%= link_to 'More Info', authors_path, :class => "btn btn-secondary btn-sm btn-block text-dark" %>
+          </div>
         </div> <!-- info box -->
       </div>
       <div class="col-sm-3 col-6">
         <div class="container"><!-- info box -->
           <div class="row bg-success  rounded border-success">
             <div class="col-sm-6">
-        			<h1><%= Affiliation.count() %></h1>
-        			<h6>Institutions</h6>
-        		</div>
+              <h1><%= Affiliation.count() %></h1>
+              <h6>Institutions</h6>
+            </div>
             <div class="col-sm-6 my-1">
-        			<%= image_tag('institution.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
-        		</div>
+              <%= image_tag('institution.svg', height: '64', width: '64', class: "rounded float-right d-block") %>
+            </div>
             <%= link_to 'More Info', affiliations_path, :class => "btn btn-success btn-sm btn-block text-dark" %>
-        	</div>
+          </div>
         </div> <!-- info box -->
       </div>
       <div class="col-sm-3 col-6">
@@ -76,13 +76,13 @@
           </div>
           <div class="card-body p-0">
             <% # replace model with view
-               # themes_list = Theme.joins(:articles).group(:short).order(:id).count()
-               themes_list = ListTheme.all.collect{|th|
-                                             [th.short, th.article_count]} %>
-            <%= pie_chart themes_list,  legend: "right", donut: true %>
+            # themes_list = Theme.joins(:articles).group(:short).order(:id).count()
+            themes_list = ListTheme.all.collect{|th|
+              [th.short, th.article_count]} %>
+              <%= pie_chart themes_list,  legend: "right", donut: true %>
+            </div>
           </div>
         </div>
-      </div>
     </div>
 
     <div class="row px-1 my-3">
@@ -122,20 +122,19 @@
         </div>
       </div><!--col-sm-4-->
 
-  		<div class="col-sm-8 themed-grid-col">
+      <div class="col-sm-8 themed-grid-col">
         <div class="card">
           <div class="card-header">
             <h6 style= "margin:auto">Publications by year</h6>
           </div>
           <div class="card-body p-0">
             <% year_series = {}
-               arts_by_year = Article.where(:status => "Added").group(:pub_year).count %>
+            arts_by_year = Article.where(:status => "Added").group(:pub_year).count %>
             <%= column_chart arts_by_year %>
           </div>
         </div>
       </div>
-  	</div> <!--row mb3 -->
-
+    </div> <!--row mb3 -->
     <div class="row mb-3">
       <div class="col-sm-6">
         <div class="card">
@@ -144,10 +143,10 @@
           </div>
           <div class="card-body p-0">
             <% year_series = {}
-               arts_by_year = Article.where(:status => "Added").group(:pub_year).count
-               year_series[0] = arts_by_year
-               sum = 0
-               year_series[1] = arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } %>
+            arts_by_year = Article.where(:status => "Added").group(:pub_year).count
+            year_series[0] = arts_by_year
+            sum = 0
+            year_series[1] = arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } %>
             <%= column_chart(year_series[1], library: { :series => { 1 => { type: "line"} } } )%>
           </div>
         </div>
@@ -160,20 +159,20 @@
           </div>
           <div class="card-body p-0">
             <% year_series = []
-               arts_by_year = Article.where(:status => "Added").group(:pub_year).count
-               year_series[0] = {name:"per year", data: arts_by_year}
-               sum = 0
-               year_series[1] = {name:"accumulated", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
+            arts_by_year = Article.where(:status => "Added").group(:pub_year).count
+            year_series[0] = {name:"per year", data: arts_by_year}
+            sum = 0
+            year_series[1] = {name:"accumulated", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
             <%= line_chart(year_series)%>
 
             <% themes_per_year = Theme.joins(:articles).group(:short,:pub_year).order(:id).count
-               themes_per_year = themes_per_year.map{|tpy| {name: tpy[0][0], data: [tpy[0][1],tpy[1]]}}
-               %>
+            themes_per_year = themes_per_year.map{|tpy| {name: tpy[0][0], data: [tpy[0][1],tpy[1]]}}
+            %>
             <%= column_chart(year_series, library: { :series => { 1 => { type: "line"} } })%>
           </div>
         </div>
       </div><!--col-sm-6-->
-    </div><!--row-->
+    </div><!--row mb3 -->
     <div class="row mb-3">
       <div class="col-sm-6">
         <div class="card">
@@ -182,10 +181,10 @@
           </div>
           <div class="card-body p-0">
             <%= timeline [
-                  ["Washington", "1789-04-29", "1797-03-03"],
-                  ["Adams", "1797-03-03", "1801-03-03"],
-                  ["Jefferson", "1801-03-03", "1809-03-03"]
-                  ] %>
+            ["Washington", "1789-04-29", "1797-03-03"],
+            ["Adams", "1797-03-03", "1801-03-03"],
+            ["Jefferson", "1801-03-03", "1809-03-03"]
+            ] %>
           </div>
         </div>
       </div><!--col-sm-6-->
@@ -200,6 +199,6 @@
           </div>
         </div>
       </div><!--col-sm-6-->
-    </div><!--row-->
+    </div><!--row mb3 -->
   </main>
 </div>
