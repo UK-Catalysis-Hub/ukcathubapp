@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_20_075702) do
+ActiveRecord::Schema.define(version: 2020_10_27_123955) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -150,6 +150,8 @@ ActiveRecord::Schema.define(version: 2020_10_20_075702) do
     t.datetime "dataset_startdate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "ds_type"
+    t.string "repository"
   end
 
   create_table "themes", force: :cascade do |t|
