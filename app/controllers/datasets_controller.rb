@@ -2,18 +2,20 @@ class DatasetsController < ApplicationController
   before_action :set_dataset, only: [:show, :edit, :update, :destroy]
 
   class DatasetSearch < FortyFacets::FacetSearch
-  model 'Dataset' # which model to search for
-  text :dataset_name   # filter by a generic string entered by the user
-  facet :ds_type, name: 'Dataset type'
-  facet :repository, name: 'Repository'
-  orders 'Name ascendign' => :dataset_name,
-         'Name descendign' => "dataset_name desc"
+    model 'Dataset' # which model to search for
+    text :dataset_name   # filter by a generic string entered by the user
+    facet :ds_type, name: 'Dataset type'
+    facet :repository, name: 'Repository'
+
+    orders 'Name' => :dataset_name,
+           'Name, descendign' => "dataset_name desc"
   end
 
   # GET /datasets
   # GET /datasets.json
   def index
-    @datasets = Dataset.all
+    @search = DatasetSearch.new(params)
+    @datasets = @search.result.paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /datasets/1
@@ -78,6 +80,6 @@ class DatasetsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def dataset_params
-      params.require(:dataset).permit(:dataset_complete, :dataset_description, :dataset_doi, :dataset_enddate, :dataset_location, :dataset_name, :dataset_startdate)
+      params.require(:dataset).permit(:dataset_complete, :dataset_description, :dataset_doi, :dataset_enddate, :dataset_location, :dataset_name, :dataset_startdate, :ds_type, :repository)
     end
 end

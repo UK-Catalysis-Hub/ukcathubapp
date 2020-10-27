@@ -14,33 +14,149 @@
   </ul>
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="browse" role="tabpanel" aria-labelledby="browse-tab">
-      <p id="notice"><%= notice %></p>
-      <table class="table">
-        <thead class="thead-light">
-          <tr>
-            <th>Datasets</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @datasets.each do |dataset| %>
-          <tr>
-            <td>
-              <b>Title: </b><%= link_to dataset.dataset_name, dataset %> <b>Date:</b> <%= dataset.dataset_startdate %> <br>
-              <b>Description:</b> <%= dataset.dataset_description %> <br>
-              <b>DOI:</b> <%= dataset.dataset_doi %>
-              <b>Location:</b> <%= link_to dataset.dataset_location, dataset.dataset_location.html_safe, target: "_blank", rel: "nofollow" %>
-              <% if dataset.articles != [] then %>
-              <% dataset.articles.each do | article | %>
-              <br><b>Article:</b> <%= link_to article.title, article %>
-              <% end %>
-              <% end %>
-            </td>
-          </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <br>
-      <%= link_to 'New Dataset', new_dataset_path %>
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Top DIV: search, order, reset -->
+          <p id="notice"><%= notice %></p>
+          <%= form_tag nil, method: :get do %>
+          <!-- Field for searching by title -->
+          <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
+          <div class="row">
+            <div class="col-md-1">
+              <b> Search: </b>
+            </div>
+            <div class="col-md-5">
+              <% dataset_name_filter = @search.filter(:dataset_name) %>
+              <%= text_field_tag 'search[dataset_name]', dataset_name_filter.value, class: 'form-control', placeholder: dataset_name_filter.name %>
+            </div>
+            <div class="col-md-4">
+              <!-- Set sort order -->
+              <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <% @search.orders.reject(&:active).each do |order| %>
+                  <li> <%= link_to order.title, order.by.path %> </li>
+                  <% end %>
+                </ul>
+              </div>
+              <div class="col-md-2">
+                <%= link_to 'reset', '?', class: 'btn  btn-success float-right' %>
+              </div>
+            </div>
+            <% end %>
+          </div>
+        </div>
+        <br/>
+        <div class="row">
+          <div class="col-md-3">
+            <!-- left DIV: facet filters -->
+            <%= form_tag nil, method: :get do %>
+            <!-- Field for searching by title -->
+            <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
+            <!-- Facet filter for repository -->
+            <% [:ds_type].each do |filter_name| %>
+            <% filter = @search.filter(filter_name) %>
+            <div class="filter">
+              <div class="filter-title">
+                <%= filter.name %>
+                <span class="small text-muted">
+                  <%= "(#{filter.facet.length})" %>
+                </span>
+              </div>
+              <div class="filter-values">
+                <ul class="selected">
+                  <% filter.selected.each do |entity| %>
+                  <% display = entity %>
+                  <li>
+                    <%= link_to display, filter.remove(entity).path %>
+                  </li>
+                  <% end %>
+                </ul>
+                <ul class="selectable">
+                  <% filter.facet.reject(&:selected).each do |facet_value| %>
+                  <% entity = facet_value.entity %>
+                  <li>
+                    <% display = entity %>
+                    <%= link_to display, filter.add(entity).path %>
+                    <span class="count">
+                      <%= "(#{facet_value.count})" %>
+                    </span>
+                  </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+            <% end %>
+            <% [:repository].each do |filter_name| %>
+            <% filter = @search.filter(filter_name) %>
+            <div class="filter">
+              <div class="filter-title">
+                <%= filter.name %>
+                <span class="small text-muted">
+                  <%= "(#{filter.facet.length})" %>
+                </span>
+              </div>
+              <div class="filter-values">
+                <ul class="selected">
+                  <% filter.selected.each do |entity| %>
+                  <% display = entity %>
+                  <li>
+                    <%= link_to display, filter.remove(entity).path %>
+                  </li>
+                  <% end %>
+                </ul>
+                <ul class="selectable">
+                  <% filter.facet.reject(&:selected).each do |facet_value| %>
+                  <% entity = facet_value.entity %>
+                  <li>
+                    <% display = entity %>
+                    <%= link_to display, filter.add(entity).path %>
+                    <span class="count">
+                      <%= "(#{facet_value.count})" %>
+                    </span>
+                  </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+            <% end %>
+            <% end %>
+          </div>
+          <div class="col-md-9">
+            <!-- right DIV: results list -->
+            <%= will_paginate @datasets, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+            <% if user_signed_in? %>
+            <%= link_to 'New dataset', new_dataset_path, :class => "btn btn-success btn-sm float-right" %>
+            <% end %>
+            <b> <%= @datasets.count%> datasets found  </b>
+            <br/>
+            <p id="notice"><%= notice %></p>
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th>Datasets</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @datasets.each do |dataset| %>
+                <tr>
+                  <td>
+                    <b>Title: </b><%= link_to dataset.dataset_name, dataset %> <b>Date:</b> <%= dataset.dataset_startdate %> <br>
+                    <b>Description:</b> <%= dataset.dataset_description %> <br>
+                    <b>DOI:</b> <%= dataset.dataset_doi %>
+                    <b>Location:</b> <%= link_to dataset.dataset_location, dataset.dataset_location.html_safe, target: "_blank", rel: "nofollow" %>
+                    <% if dataset.articles != [] then %>
+                    <% dataset.articles.each do | article | %>
+                    <br><b>Article:</b> <%= link_to article.title, article %>
+                    <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
       <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="statistics-tab">
         Statistics
@@ -63,4 +179,4 @@
         </div>
       </div>
     </div>
-</div>
+  </div>
