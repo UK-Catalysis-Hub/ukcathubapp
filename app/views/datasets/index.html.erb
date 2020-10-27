@@ -1,30 +1,66 @@
 <div class="container">
-  <p id="notice"><%= notice %></p>
-  <table class="table">
-    <thead class="thead-light">
-      <tr>
-        <th>Datasets</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @datasets.each do |dataset| %>
-        <tr>
-          <td>
-            <b>Title: </b><%= link_to dataset.dataset_name, dataset %> <b>Date:</b> <%= dataset.dataset_startdate %> <br>
-            <b>Description:</b> <%= dataset.dataset_description %> <br>
-            <b>DOI:</b> <%= dataset.dataset_doi %>
-            <b>Location:</b> <%= link_to dataset.dataset_location, dataset.dataset_location.html_safe, target: "_blank", rel: "nofollow" %>
-            <% if dataset.articles != [] then %>
+  <ul class="nav nav-tabs" id="datasetsTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Browse</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="false">Statistics</a>
+    </li>
+    <% if user_signed_in? %>
+    <li class="nav-item">
+      <a class="nav-link" id="actions-tab" data-toggle="tab" href="#actions" role="tab" aria-controls="inactive" aria-selected="false">Actions</a>
+    </li>
+    <% end %>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="browse" role="tabpanel" aria-labelledby="browse-tab">
+      <p id="notice"><%= notice %></p>
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th>Datasets</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @datasets.each do |dataset| %>
+          <tr>
+            <td>
+              <b>Title: </b><%= link_to dataset.dataset_name, dataset %> <b>Date:</b> <%= dataset.dataset_startdate %> <br>
+              <b>Description:</b> <%= dataset.dataset_description %> <br>
+              <b>DOI:</b> <%= dataset.dataset_doi %>
+              <b>Location:</b> <%= link_to dataset.dataset_location, dataset.dataset_location.html_safe, target: "_blank", rel: "nofollow" %>
+              <% if dataset.articles != [] then %>
               <% dataset.articles.each do | article | %>
-               <br><b>Article:</b> <%= link_to article.title, article %>
+              <br><b>Article:</b> <%= link_to article.title, article %>
               <% end %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <br>
-  <%= link_to 'New Dataset', new_dataset_path %>
+              <% end %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <br>
+      <%= link_to 'New Dataset', new_dataset_path %>
+      </div>
+      <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="statistics-tab">
+        Statistics
+      </div>
+      <div class="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="actions-tab">
+        <div class="row">
+          <div class="col-md-12">
+            <p>The actions below are scheduled and processed in the background</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-3">
+            <p>Generate affiliations from CR</p>
+          </div>
+          <div class="col-md-3">
+            <%= button_to "Generate Affis", {:action => "generate", :controller => "authors"}, :class => 'btn  btn-success float-right'  %>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>

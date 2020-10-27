@@ -1,6 +1,13 @@
 class DatasetsController < ApplicationController
   before_action :set_dataset, only: [:show, :edit, :update, :destroy]
 
+  class DatasetSearch < FortyFacets::FacetSearch
+  model 'Dataset' # which model to search for
+  text :dataset_name   # filter by a generic string entered by the user
+  orders 'Name ascendign' => :dataset_name,
+         'Name descendign' => "dataset_name desc"
+  end
+
   # GET /datasets
   # GET /datasets.json
   def index
