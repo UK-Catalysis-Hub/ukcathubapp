@@ -1,6 +1,6 @@
 # README
 
-== Synopsis
+## Synopsis
 
 UK Catalysis Hub App (UKCHApp) is a prototype interface of the Catalysis data
 interface which is designed to support publishing, finding and reusing research
@@ -22,5 +22,6 @@ quick look at the possiblities for data sharing and not the final version.
 
 ![app screenshot](https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png)
 
-== Authors
-    Abraham Nieva de la Hidalga
+## Authors
+
+Abraham Nieva de la Hidalga
