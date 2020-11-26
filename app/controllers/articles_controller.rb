@@ -5,8 +5,9 @@ class ArticlesController < ApplicationController
     model 'Article' # which model to search for
     text :title   # filter by a generic string entered by the user
     scope :active   # only return articles which are in the scope 'active'
-    facet :pub_year, name: 'Pub Year', order: :pub_year # additionally order values in the year field
-    facet :container_title, name: 'Publisher'#, order: :container_title
+    facet :pub_year, name: 'Year', order: Proc.new { |pub_year| -pub_year }# additionally order values in the year field
+    facet :container_title, name: 'Journal', order: Proc.new { |container_title| container_title }
+    facet :publisher, name: 'Publisher', order: Proc.new { |publisher| publisher }
 
     orders 'Title' => :title,
            'Year, newest first' => "pub_year desc",
