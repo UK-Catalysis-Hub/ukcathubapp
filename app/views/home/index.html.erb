@@ -86,7 +86,7 @@
     </div>
 
     <div class="row px-1 my-3">
-      <div class="col-sm-6 col-lg-4">
+      <div class="col-sm-3">
         <div class="card">
           <div class="card-header">
             <h6 style= "margin:auto">Top publishing authors</h6>
@@ -96,7 +96,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-lg-8">
+      <div class="col-sm-6 ">
         <div class="card">
           <div class="card-header">
             <h6 style= "margin:auto">Most cited publications</h6>
@@ -107,10 +107,7 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <div class="card">
           <div class="card-header">
             <h6 style= "margin:auto">Most cited authors</h6>
@@ -120,34 +117,27 @@
             <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(5), count_label: label_for_view }%>
           </div>
         </div>
-      </div><!--col-sm-4-->
+      </div><!--col-sm-3-->
+    </div>
 
-      <div class="col-sm-8 themed-grid-col">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Publications by year</h6>
-          </div>
-          <div class="card-body p-0">
-            <% year_series = {}
-            arts_by_year = Article.where(:status => "Added").group(:pub_year).count %>
-            <%= column_chart arts_by_year %>
-          </div>
-        </div>
-      </div>
-    </div> <!--row mb3 -->
     <div class="row mb-3">
       <div class="col-sm-6">
         <div class="card">
           <div class="card-header">
-            <h6 style= "margin:auto">Publications accumulated per year</h6>
+            <h6 style= "margin:auto">Publications</h6>
           </div>
           <div class="card-body p-0">
+            <% year_series = {}
+            arts_by_year = Article.where(:status => "Added").group(:pub_year).count %>
+            <%= column_chart arts_by_year, title:"Per Year"  %>
+
             <% year_series = {}
             arts_by_year = Article.where(:status => "Added").group(:pub_year).count
             year_series[0] = arts_by_year
             sum = 0
             year_series[1] = arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } %>
-            <%= column_chart(year_series[1], library: { :series => { 1 => { type: "line"} } } )%>
+
+            <%= column_chart(year_series[1], library: { :series => { 1 => { type: "line"} } }, title:"Accumulated" )%>
           </div>
         </div>
       </div><!--col-sm-6-->
@@ -169,33 +159,6 @@
             themes_per_year = themes_per_year.map{|tpy| {name: tpy[0][0], data: [tpy[0][1],tpy[1]]}}
             %>
             <%= column_chart(year_series, library: { :series => { 1 => { type: "line"} } })%>
-          </div>
-        </div>
-      </div><!--col-sm-6-->
-    </div><!--row mb3 -->
-    <div class="row mb-3">
-      <div class="col-sm-6">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Timeline</h6>
-          </div>
-          <div class="card-body p-0">
-            <%= timeline [
-            ["Washington", "1789-04-29", "1797-03-03"],
-            ["Adams", "1797-03-03", "1801-03-03"],
-            ["Jefferson", "1801-03-03", "1809-03-03"]
-            ] %>
-          </div>
-        </div>
-      </div><!--col-sm-6-->
-
-      <div class="col-sm-6 themed-grid-col">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Map Chart</h6>
-          </div>
-          <div class="card-body p-0">
-            <%= geo_chart AuthorAffiliation.group(:country).count %>
           </div>
         </div>
       </div><!--col-sm-6-->
