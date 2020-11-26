@@ -89,38 +89,38 @@
                   </div>
                 </div>
               <% end %>
-               <% [:container_title].each do |filter_name| %>
-                  <% filter = @search.filter(filter_name) %>
-                  <div class="filter">
-                    <div class="filter-title">
-                      <%= filter.name %>
-                      <span class="small text-muted">
-                        <%= "(#{filter.facet.length})" %>
-                      </span>
-                    </div>
-                    <div class="filter-values">
-                      <ul class="selected">
-                        <% filter.selected.each do |entity| %>
-                          <% display = entity %>
-                          <li>
-                            <%= link_to display, filter.remove(entity).path %>
-                          </li>
-                        <% end %>
-                      </ul>
-                      <ul class="selectable">
-                        <% filter.facet.reject(&:selected).each do |facet_value| %>
-                          <% entity = facet_value.entity %>
-                          <li>
-                            <% display = entity %>
-                            <%= link_to display, filter.add(entity).path %>
-                            <span class="count">
-                              <%= "(#{facet_value.count})" %>
-                            </span>
-                          </li>
-                        <% end %>
-                      </ul>
-                    </div>
-                  </div>
+              <% [:container_title].each do |filter_name| %>
+                <% filter = @search.filter(filter_name) %>
+                   <div class="filter">
+                     <div class="filter-title">
+                       <%= filter.name %>
+                       <span class="small text-muted">
+                         <%= "(#{filter.facet.length})" %>
+                       </span>
+                     </div>
+                     <div class="filter-values">
+                       <ul class="selected">
+                         <% filter.selected.each do |entity| %>
+                           <% display = entity %>
+                           <li>
+                             <%= link_to display, filter.remove(entity).path %>
+                           </li>
+                         <% end %>
+                       </ul>
+                       <ul class="selectable">
+                         <% filter.facet.reject(&:selected).each do |facet_value| %>
+                           <% entity = facet_value.entity %>
+                           <li>
+                             <% display = entity %>
+                             <%= link_to display, filter.add(entity).path %>
+                              <span class="count">
+                                 <%= "(#{facet_value.count})" %>
+                              </span>
+                           </li>
+                         <% end %>
+                       </ul>
+                     </div>
+                   </div>
                 <% end %>
                 <% [:pub_year].each do |filter_name| %>
                    <% filter = @search.filter(filter_name) %>
