@@ -95,9 +95,19 @@ class ArticlesController < ApplicationController
       @authors = @article.article_authors
 
       if @article.title == nil
-         getPubData(@article, @article.doi)
-         #save the article so it is not recovered again
-         @article.save()
+         # check if exists in DB by DOI
+         @art = Article.find_by(doi: @article.doi)
+         if @art.title == nil
+
+           getPubData(@article, @article.doi)
+           #save the article so it is not recovered again
+           @article.save()
+         else
+           puts "############################################################"
+           puts "Article already exists in db"
+           puts "############################################################"
+           @article= @art
+         end
       end
 
       if @article.article_authors.count == 0 or @article.article_authors[0].last_name == nil
