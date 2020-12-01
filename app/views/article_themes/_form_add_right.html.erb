@@ -5,7 +5,7 @@
        select_year = Article.find(article_id).pub_year
      end
      article_themes.each {|art_theme|
-       used_themes_ids.append(art_theme.id)
+       used_themes_ids.append(art_theme.theme_id)
        select_year = art_theme.project_year
      }
      used_themes_str = "id not in (" + used_themes_ids.join(', ') + ")"
