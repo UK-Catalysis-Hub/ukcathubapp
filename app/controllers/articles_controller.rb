@@ -42,10 +42,13 @@ class ArticlesController < ApplicationController
     puts article_params
     @article = Article.new(article_params)
     respond_to do |format|
-      puts @article.doi
       if @article.save
-        format.html { redirect_to @article, notice: 'Article was created.' }
-        format.json { render :show, status: :created, location: @article }
+        if @article.doi != ""
+          format.html { redirect_to @article, notice: 'Article was created.' }
+          format.json { render :show, status: :created, location: @article }
+        else
+          format.html { redirect_to edit_article_path(@article), notice: 'Input article details' }
+        end
       else
         format.html { render :new }
         format.json { render json: @article.errors, status: :unprocessable_entity }
@@ -150,102 +153,103 @@ class ArticlesController < ApplicationController
     end
 
     def getPubData(db_article, doi_text)
-      pub_data = getCRData(doi_text)
-      data_keys = pub_data.keys()
-      pub_columns = []
-      exclude_columns = get_excluded()
-      for key in data_keys do
-        key_cp = key.dup()
-        if not pub_columns.include?(key_cp) and not exclude_columns.include?(key_cp)
-          pub_columns.append(key_cp)
+      if doi_text != ""
+        pub_data = getCRData(doi_text)
+        data_keys = pub_data.keys()
+        pub_columns = []
+        exclude_columns = get_excluded()
+        for key in data_keys do
+          key_cp = key.dup()
+          if not pub_columns.include?(key_cp) and not exclude_columns.include?(key_cp)
+            pub_columns.append(key_cp)
+          end
         end
-      end
-      for key in pub_columns
-        key_cp = key.dup()
-        if key_cp.include?('-')
-          new_key = key_cp.gsub('-','_')
-          pub_columns.delete(key_cp)
+        for key in pub_columns
+          key_cp = key.dup()
+          if key_cp.include?('-')
+            new_key = key_cp.gsub('-','_')
+            pub_columns.delete(key_cp)
+            pub_columns.append(new_key)
+            pub_data[new_key] = pub_data[key]
+            pub_data.delete(key_cp)
+          end
+        end
+        for frzkey in ['container-title', 'journal-issue']
+          pub_columns.delete(frzkey)
+          new_key = frzkey.gsub('-','_')
           pub_columns.append(new_key)
-          pub_data[new_key] = pub_data[key]
-          pub_data.delete(key_cp)
+          pub_data[new_key] = pub_data[frzkey]
+          pub_data.delete(frzkey)
+        end
+        puts "###################################################################"
+        puts pub_columns
+        puts pub_data
+        puts "###################################################################"
+        puts pub_data['title']
+        db_article.title = pub_data['title']
+        db_article.publisher = pub_data['publisher']
+        db_article.issue = pub_data['issue']
+        db_article.pub_type = pub_data['type']
+        db_article.license = pub_data['license']
+        db_article.volume = pub_data['volume']
+        db_article.referenced_by_count = pub_data['is_referenced_by_count']
+        db_article.references_count = pub_data['references_count']
+        db_article.link = pub_data['link']
+        db_article.url = pub_data['URL']
+        if pub_data.keys.include?('journal_issue') \
+          and pub_data['journal_issue'] != nil then
+          if pub_data['journal_issue'].keys.include?('issue') then
+            db_article.journal_issue = pub_data['journal_issue']['issue']
+          end
+          if pub_data['journal_issue']['published-print']['date-parts'][0].length == 1 then
+            #assume that if date parts has only one element, it is year
+            db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
+          elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 2 then
+            #assume that if date parts has two elements, they are year and month
+            db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
+            db_article.pub_ol_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
+          elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 3 then
+            # assume year, month and day if date parts has three elements
+            db_article.pub_print_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
+            db_article.pub_print_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
+            db_article.pub_print_day = pub_data['journal_issue']['published-print']['date-parts'][0][2]
+          end
+        end
+        db_article.container_title = pub_data['container_title']
+        db_article.page = pub_data['page']
+        db_article.abstract = pub_data['abstract']
+        print pub_data.keys
+        if pub_data.keys.include?('published_online') then
+          if pub_data['published_online']['date-parts'][0].length == 1 then
+            #assume that if date parts has only one element, it is year
+            db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
+          elsif pub_data['published_online']['date-parts'].length == 2 then
+            #assume that if date parts has two elements, they are year and month
+            db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
+            db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
+          elsif pub_data['published_online']['date-parts'][0].length == 3 then
+            # assume year, month and day if date parts has three elements
+            db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
+            db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
+            db_article.pub_ol_day = pub_data['published_online']['date-parts'][0][2]
+          end
+        end
+        if pub_data.keys.include?('published_print') then
+          if pub_data['published_print']['date-parts'][0].length == 1 then
+            #assume that if date parts has only one element, it is year
+            db_article.pub_ol_year = pub_data['published_print']['date-parts'][0][0]
+          elsif pub_data['published_print']['date-parts'][0].length == 2 then
+            #assume that if date parts has two elements, they are year and month
+            db_article.pub_ol_year = pub_data['published_print']['date-parts'][0][0]
+            db_article.pub_ol_month = pub_data['published_print']['date-parts'][0][1]
+          elsif pub_data['published_print']['date-parts'][0].length == 3 then
+            # assume year, month and day if date parts has three elements
+            db_article.pub_print_year = pub_data['published_print']['date-parts'][0][0]
+            db_article.pub_print_month = pub_data['published_print']['date-parts'][0][1]
+            db_article.pub_print_day = pub_data['published_print']['date-parts'][0][2]
+          end
         end
       end
-      for frzkey in ['container-title', 'journal-issue']
-        pub_columns.delete(frzkey)
-        new_key = frzkey.gsub('-','_')
-        pub_columns.append(new_key)
-        pub_data[new_key] = pub_data[frzkey]
-        pub_data.delete(frzkey)
-      end
-      puts "###################################################################"
-      puts pub_columns
-      puts pub_data
-      puts "###################################################################"
-      puts pub_data['title']
-      db_article.title = pub_data['title']
-      db_article.publisher = pub_data['publisher']
-      db_article.issue = pub_data['issue']
-      db_article.pub_type = pub_data['type']
-      db_article.license = pub_data['license']
-      db_article.volume = pub_data['volume']
-      db_article.referenced_by_count = pub_data['is_referenced_by_count']
-      db_article.references_count = pub_data['references_count']
-      db_article.link = pub_data['link']
-      db_article.url = pub_data['URL']
-      if pub_data.keys.include?('journal_issue') \
-        and pub_data['journal_issue'] != nil then
-        if pub_data['journal_issue'].keys.include?('issue') then
-          db_article.journal_issue = pub_data['journal_issue']['issue']
-        end
-        if pub_data['journal_issue']['published-print']['date-parts'][0].length == 1 then
-          #assume that if date parts has only one element, it is year
-          db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-        elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 2 then
-          #assume that if date parts has two elements, they are year and month
-          db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-          db_article.pub_ol_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
-        elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 3 then
-          # assume year, month and day if date parts has three elements
-          db_article.pub_print_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-          db_article.pub_print_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
-          db_article.pub_print_day = pub_data['journal_issue']['published-print']['date-parts'][0][2]
-        end
-      end
-      db_article.container_title = pub_data['container_title']
-      db_article.page = pub_data['page']
-      db_article.abstract = pub_data['abstract']
-      print pub_data.keys
-      if pub_data.keys.include?('published_online') then
-        if pub_data['published_online']['date-parts'][0].length == 1 then
-          #assume that if date parts has only one element, it is year
-          db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
-        elsif pub_data['published_online']['date-parts'].length == 2 then
-          #assume that if date parts has two elements, they are year and month
-          db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
-          db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
-        elsif pub_data['published_online']['date-parts'][0].length == 3 then
-          # assume year, month and day if date parts has three elements
-          db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
-          db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
-          db_article.pub_ol_day = pub_data['published_online']['date-parts'][0][2]
-        end
-      end
-      if pub_data.keys.include?('published_print') then
-        if pub_data['published_print']['date-parts'][0].length == 1 then
-          #assume that if date parts has only one element, it is year
-          db_article.pub_ol_year = pub_data['published_print']['date-parts'][0][0]
-        elsif pub_data['published_print']['date-parts'][0].length == 2 then
-          #assume that if date parts has two elements, they are year and month
-          db_article.pub_ol_year = pub_data['published_print']['date-parts'][0][0]
-          db_article.pub_ol_month = pub_data['published_print']['date-parts'][0][1]
-        elsif pub_data['published_print']['date-parts'][0].length == 3 then
-          # assume year, month and day if date parts has three elements
-          db_article.pub_print_year = pub_data['published_print']['date-parts'][0][0]
-          db_article.pub_print_month = pub_data['published_print']['date-parts'][0][1]
-          db_article.pub_print_day = pub_data['published_print']['date-parts'][0][2]
-        end
-      end
-
       # mark incomplete as it is missing authors, affiliation and themes
       db_article.status = "Incomplete"
     end
