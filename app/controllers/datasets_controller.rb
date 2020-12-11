@@ -3,12 +3,12 @@ class DatasetsController < ApplicationController
 
   class DatasetSearch < FortyFacets::FacetSearch
     model 'Dataset' # which model to search for
-    text :dataset_name   # filter by a generic string entered by the user
-    facet :ds_type, name: 'Dataset type'
+    text :dataset_name, name: 'Data object name'  # filter by a generic string entered by the user
+    facet :ds_type, name: 'Data object type'
     facet :repository, name: 'Repository'
 
     orders 'Name' => :dataset_name,
-           'Name, descendign' => "dataset_name desc"
+           'Name, descending' => "dataset_name desc"
   end
 
   # GET /datasets

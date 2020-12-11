@@ -13,9 +13,9 @@ class AuthorsController < ApplicationController
 
 
     orders 'Name, Ascendign' => {last_name: :asc, given_name: :asc},
-           'Last name, Descendign' => "last_name desc",
-           'ORCID, Ascendign' => "orcid asc",
-           'ORCID, Descendign' => {orcid: :desc}
+           'Last name, descending' => "last_name desc",
+           'ORCID, ascending' => "orcid asc",
+           'ORCID, Descending' => {orcid: :desc}
   end
 
 

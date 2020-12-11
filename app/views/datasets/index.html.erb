@@ -123,13 +123,13 @@
             <% if user_signed_in? %>
             <%= link_to 'New dataset', new_dataset_path, :class => "btn btn-success btn-sm float-right" %>
             <% end %>
-            <b> <%= @datasets.count%> datasets found  </b>
+            <b> <%= @datasets.count%> data objects found  </b>
             <br/>
             <p id="notice"><%= notice %></p>
             <table class="table">
               <thead class="thead-light">
                 <tr>
-                  <th>Datasets</th>
+                  <th>Data objects</th>
                 </tr>
               </thead>
               <tbody>
