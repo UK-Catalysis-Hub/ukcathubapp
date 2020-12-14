@@ -161,7 +161,7 @@
           <!-- right DIV: results list -->
           <%= will_paginate @articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
           <% if user_signed_in? %>
-            <%= link_to 'New Article', new_article_path, :class => "btn btn-success btn-sm float-right" %>
+            <%= link_to 'New Publication', new_article_path, :class => "btn btn-success btn-sm float-right" %>
           <% end %>
           <b> <%= @articles.count%> publications found  </b>
           <br/>
