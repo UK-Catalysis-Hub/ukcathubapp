@@ -2,36 +2,36 @@
   <p id="notice">
     <%= notice %></p>
   <p>
-    <strong>Dataset name:</strong>
+    <strong>Name:</strong>
     <%= @dataset.dataset_name %>
   </p>
   <p>
-    <strong>Dataset complete:</strong>
-    <%= @dataset.dataset_complete %>
-  </p>
-  <p>
-    <strong>Dataset description:</strong>
+    <strong>Description:</strong>
     <%= @dataset.dataset_description %>
   </p>
   <p>
-    <strong>Dataset doi:</strong>
+    <strong>DOI:</strong>
     <%= @dataset.dataset_doi %>
   </p>
   <p>
-    <strong>Dataset enddate:</strong>
-    <%= @dataset.dataset_enddate %>
-  </p>
-  <p>
-    <strong>Dataset location:</strong>
+    <strong>Location:</strong>
     <%= link_to @dataset.dataset_location, @dataset.dataset_location %>
   </p>
   <p>
-    <strong>Dataset startdate:</strong>
+    <strong>Resository:</strong>
+    <%= link_to @dataset.repository, @dataset.repository %>
+  </p>
+  <p>
+    <strong>Start date:</strong>
     <%= @dataset.dataset_startdate %>
+  </p>
+  <p>
+    <strong>End date:</strong>
+    <%= @dataset.dataset_enddate %>
   </p>
   <% @dataset.articles.each do | article | %>
     <p>
-     <b>Article:</b> <%= link_to article.title, article %>
+     <b>Related Article:</b> <%= link_to article.title, article %>
     </p>
   <% end %>
   <%= link_to 'Edit', edit_dataset_path(@dataset) %> |

@@ -161,7 +161,7 @@
                 <h6 style= "margin:auto">Recent Datasets</h6>
               </div>
               <div class="card-body p-0" style= "margin:auto">
-                <%= render partial: 'datasets/dataobject_list', locals: {data_objects: Dataset.latest.limit(5) }%>
+                <%= render partial: 'datasets/dataobject_list', locals: {data_objects: Dataset.latest.limit(10) }%>
               </div>
             </div>
           </div>
@@ -171,7 +171,7 @@
                 <h6 style= "margin:auto">Datasets by theme</h6>
               </div>
               <div class="card-body p-0">
-                <%= render partial: 'datasets/dataobject_list', locals: {data_objects: Dataset.latest.limit(5) }%>
+                <%= render partial: 'datasets/dataobject_list', locals: {data_objects: Dataset.latest.limit(10) }%>
               </div>
             </div>
           </div>

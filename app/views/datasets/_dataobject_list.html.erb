@@ -16,7 +16,9 @@
              <%= link_to(data_object.dataset_name, data_object) %>
           </td>
           <td>
-             <%= data_object.dataset_description[0..26]+'...' %>
+             <% ds_desc = data_object.dataset_description.gsub('Supplementary', "Supl.") %>
+             <% ds_desc.gsub('Supporting', "Supr.") %>
+             <%= ds_desc[0..41]+'...' %>
           </td>
           <td>
             <%= data_object.dataset_startdate.year %>
