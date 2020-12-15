@@ -5,7 +5,7 @@ class DatasetsController < ApplicationController
     model 'Dataset' # which model to search for
     text :dataset_name, name: 'Data object name'  # filter by a generic string entered by the user
     facet :ds_type, name: 'Data object type', order: Proc.new { |ds_type| ds_type }
-    facet :repository, name: 'Repository'
+    facet :repository, name: 'Repository', order: Proc.new { |repository| repository }
 
     orders 'Name' => :dataset_name,
            'Name, descending' => "dataset_name desc"
