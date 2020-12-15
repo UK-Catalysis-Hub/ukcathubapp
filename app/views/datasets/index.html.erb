@@ -136,7 +136,7 @@
                 <% @datasets.each do |dataset| %>
                 <tr>
                   <td>
-                    <b>Title: </b><%= link_to dataset.dataset_name, dataset %> <b>Date:</b> <%= dataset.dataset_startdate %> <br>
+                    <b>Name: </b><%= link_to dataset.dataset_name, dataset %> <b>Date:</b> <%= dataset.dataset_startdate %> <br>
                     <b>Description:</b> <%= dataset.dataset_description %> <br>
                     <b>DOI:</b> <%= dataset.dataset_doi %>
                     <b>Location:</b> <%= link_to dataset.dataset_location, dataset.dataset_location.html_safe, target: "_blank", rel: "nofollow" %>

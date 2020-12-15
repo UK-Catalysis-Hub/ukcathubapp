@@ -4,7 +4,7 @@ class DatasetsController < ApplicationController
   class DatasetSearch < FortyFacets::FacetSearch
     model 'Dataset' # which model to search for
     text :dataset_name, name: 'Data object name'  # filter by a generic string entered by the user
-    facet :ds_type, name: 'Data object type'
+    facet :ds_type, name: 'Data object type', order: Proc.new { |ds_type| ds_type }
     facet :repository, name: 'Repository'
 
     orders 'Name' => :dataset_name,
