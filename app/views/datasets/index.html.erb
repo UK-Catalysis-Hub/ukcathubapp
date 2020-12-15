@@ -158,7 +158,7 @@
           <div class="col-sm-6 col-lg-7">
             <div class="card">
               <div class="card-header bg-light">
-                <h6 style= "margin:auto">Recent publications</h6>
+                <h6 style= "margin:auto">Recent Datasets</h6>
               </div>
               <div class="card-body p-0" style= "margin:auto">
                 <%= render partial: 'datasets/dataobject_list', locals: {data_objects: Dataset.latest.limit(5) }%>
@@ -168,7 +168,7 @@
           <div class="col-sm-6 col-lg-5">
             <div class="card">
               <div class="card-header">
-                <h6 style= "margin:auto">Publications by theme</h6>
+                <h6 style= "margin:auto">Datasets by theme</h6>
               </div>
               <div class="card-body p-0">
                 <%= render partial: 'datasets/dataobject_list', locals: {data_objects: Dataset.latest.limit(5) }%>
