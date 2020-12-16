@@ -155,47 +155,58 @@
       </div>
       <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="statistics-tab">
         <div class="row mb-3">
-          <div class="col-sm-6 col-lg-7">
-            <div class="card">
-              <div class="card-header bg-light">
-                <h6 style= "margin:auto">Recent Datasets</h6>
-              </div>
-              <div class="card-body p-0" style= "margin:auto">
-                <%= render partial: 'datasets/dataobject_list', locals: {data_objects: Dataset.latest.limit(10) }%>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-5">
+          <div class="col-sm-6 ">
             <div class="card">
               <div class="card-header">
-                <h6 style= "margin:auto">Datasets by theme</h6>
+                <h6 style= "margin:auto">Data objects per year </h6>
               </div>
               <div class="card-body p-0">
-                <%= render partial: 'datasets/dataobject_list', locals: {data_objects: Dataset.latest.limit(10) }%>
+                <% year_series = {}
+                do_by_year = Dataset.ds_per_year
+                year_series[0] = do_by_year.each.collect{ |doby| [doby['item'], doby['i_count']]}
+                sum = 0
+                year_series[1] = do_by_year.each.collect{ |doby| [doby['item'], sum += doby['i_count']]} %>
+                <%= column_chart(year_series[0], library: { :series => { 1 => { type: "line"} } } )%>
               </div>
             </div>
           </div>
-        </div><!--row mb-3-->
-        <%  group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
-            r_sum = 0
-            d_repo_stats = {}
-            d_repo_data = {}
-            Dataset.repository_count.reorder(r_count: :asc).each {|drc|
-              r_sum += drc.r_count
-              idx = ((drc.r_count-1)/5).to_i
-              idx > 3 ? idx = 4 : idx
-              d_repo_stats.include?(idx) ? d_repo_stats[idx] += 1 : d_repo_stats[idx] = 1
-            }
-            d_repo_data = {}
-            d_repo_stats.each { |drs|
-              d_repo_data[group_labels[drs[0]]] = drs[1]
-            }
-        %>
-        <div class="row px-1 my-3">
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-header">
+                <h6 style= "margin:auto">Data objects accumulated vs. per year </h6>
+              </div>
+              <div class="card-body p-0">
+                <% year_series = []
+                do_by_year = Dataset.ds_per_year
+                doby = do_by_year.each.collect{ |doby| [doby['item'], doby['i_count']]}
+                year_series[0] = {name:"per year", data: doby}
+                sum = 0
+                year_series[1] = {name:"accumulated", data: doby.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
+                <%= column_chart(year_series)%>
+              </div>
+            </div>
+          </div><!--col-sm-6-->
+        </div> <!--row mb3 -->
+        <div class="row mb-3">
+          <% group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
+             r_sum = 0
+             d_repo_stats = {}
+             d_repo_data = {}
+             Dataset.repository_count.reorder(r_count: :asc).each {|drc|
+               r_sum += drc.r_count
+               idx = ((drc.r_count-1)/5).to_i
+                idx > 3 ? idx = 4 : idx
+                d_repo_stats.include?(idx) ? d_repo_stats[idx] += 1 : d_repo_stats[idx] = 1
+              }
+              d_repo_data = {}
+              d_repo_stats.each { |drs|
+                d_repo_data[group_labels[drs[0]]] = drs[1]
+              }
+          %>
           <div class="col-sm-12 ">
             <div class="card">
               <div class="card-header bg-light">
-                <h6 style= "margin:auto">Publications per publisher </h6>
+                <h6 style= "margin:auto">Data objects per repository </h6>
               </div>
               <div class="card-body p-0">
                 <div class = "row" >
@@ -294,6 +305,19 @@
             </div>
           </div>
         </div>
+        <div class="row mb-3">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header bg-light">
+                <h6 style= "margin:auto">Recent data objects</h6>
+              </div>
+              <div class="card-body p-0" style= "margin:auto">
+                <%= render partial: 'datasets/dataobject_list', locals: {data_objects: Dataset.latest.limit(10) }%>
+              </div>
+            </div>
+          </div>
+        </div> <!--row mb3 -->
+
       </div>
     </div>
   </div>
