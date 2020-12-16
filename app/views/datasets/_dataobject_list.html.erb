@@ -18,7 +18,7 @@
           <td>
              <% ds_desc = data_object.dataset_description.gsub('Supplementary', "Supl.") %>
              <% ds_desc.gsub('Supporting', "Supr.") %>
-             <%= ds_desc[0..41]+'...' %>
+             <%= ds_desc[0..71]+'...' %>
           </td>
           <td>
             <%= data_object.dataset_startdate.year %>
