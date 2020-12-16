@@ -175,6 +175,124 @@
               </div>
             </div>
           </div>
+        </div><!--row mb-3-->
+        <%  group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
+            r_sum = 0
+            d_repo_stats = {}
+            d_repo_data = {}
+            Dataset.repository_count.reorder(r_count: :asc).each {|drc|
+              r_sum += drc.r_count
+              idx = ((drc.r_count-1)/5).to_i
+              idx > 3 ? idx = 4 : idx
+              d_repo_stats.include?(idx) ? d_repo_stats[idx] += 1 : d_repo_stats[idx] = 1
+            }
+            d_repo_data = {}
+            d_repo_stats.each { |drs|
+              d_repo_data[group_labels[drs[0]]] = drs[1]
+            }
+        %>
+        <div class="row px-1 my-3">
+          <div class="col-sm-12 ">
+            <div class="card">
+              <div class="card-header bg-light">
+                <h6 style= "margin:auto">Publications per publisher </h6>
+              </div>
+              <div class="card-body p-0">
+                <div class = "row" >
+                  <div class="col-sm-4">
+                    <div id="top_publishers" class="container">
+                      <table class="table table-sm table-striped table-bordered">
+                        <thead class="thead-light">
+                          <tr>
+                            <th>Repository</th>
+                            <th>Data objects</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% Dataset.repository_count.limit(10).each do |pps| %>
+                          <tr>
+                            <td>
+                              <%= pps.repository %>
+                            </td>
+                            <td class="text-right">
+                              <%= pps.r_count %>
+                            </td>
+                          </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <div id="publisher_summary_data" class="container">
+                      <table class="table table-sm table-striped table-bordered">
+                        <thead class="thead-light">
+                          <tr>
+                            <th colspan="2">Summary</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td> Repositories </td>
+                            <td class="text-right">
+                              <%= Dataset.repository_count.length() %>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> Average: </td>
+                            <td class="text-right">
+                              <%= ((0.0+r_sum)/Dataset.repository_count.length()).round(2) %>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> Maximum:  </td>
+                            <td class="text-right">
+                              <%= Dataset.repository_count.first.r_count %>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> Minimum:  </td>
+                            <td class="text-right">
+                              <%= Dataset.repository_count.last.r_count %>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="pub_per_publisher" class="container">
+                      <table class="table table-sm table-striped table-bordered">
+                        <thead class="thead-light">
+                          <tr>
+                            <th>Groups</th>
+                            <th>Data objects</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% d_repo_stats.each do |drs| %>
+                          <tr>
+                            <td>
+                              <%= group_labels[drs[0]] %>
+                            </td>
+                            <td class="text-right">
+                              <%= drs[1] %>
+                            </td>
+                          </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="col-sm-5">
+                    <div id="chart_container" class="container">
+                      <%= pie_chart d_repo_data, donut: true,  legend: "right" %>
+                    </div>
+                  </div>
+                </div>
+                <br/>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
