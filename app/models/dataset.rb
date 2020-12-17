@@ -7,4 +7,6 @@ class Dataset < ApplicationRecord
   scope :latest, -> {order('dataset_startdate DESC').order('id DESC').limit(10)  }
   scope :repository_count, -> {select("repository, COUNT(*) AS 'r_count'").order("r_count DESC").group("repository")}
   scope :ds_per_year, -> {select("strftime('%Y', dataset_startdate) AS item, COUNT(*) AS 'i_count'").group("item")}
+  scope :type_count, -> {select("ds_type, COUNT(*) AS 'i_count'").group("ds_type").order("ds_type")}
+
 end

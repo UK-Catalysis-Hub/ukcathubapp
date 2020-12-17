@@ -309,6 +309,41 @@
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header bg-light">
+                <h6 style= "margin:auto">Data object types</h6>
+              </div>
+              <div class="card-body p-0" style= "margin:auto">
+                <div class="col-sm-4">
+                  <div id="top_publishers" class="container">
+                    <table class="table table-sm table-striped table-bordered">
+                      <thead class="thead-light">
+                        <tr>
+                          <th>Type</th>
+                          <th>Data objects</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% Dataset.type_count.each do |dot| %>
+                        <tr>
+                          <td>
+                            <%= dot.ds_type %>
+                          </td>
+                          <td class="text-right">
+                            <%= dot.i_count %>
+                          </td>
+                        </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!--row mb3 -->
+        <div class="row mb-3">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header bg-light">
                 <h6 style= "margin:auto">Recent data objects</h6>
               </div>
               <div class="card-body p-0" style= "margin:auto">
