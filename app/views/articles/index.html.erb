@@ -81,6 +81,7 @@
                           <% display = entity %>
                           <%= link_to display, filter.add(entity).path %>
                           <span class="count">
+                            <!--Cannot have inactives the filter does not work with scopes -->
                             <%= "(#{facet_value.count})" %>
                           </span>
                         </li>
