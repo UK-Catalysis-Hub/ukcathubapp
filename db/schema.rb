@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_27_123955) do
+ActiveRecord::Schema.define(version: 2021_03_18_154609) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 2020_10_27_123955) do
     t.integer "articles"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "is_public"
   end
 
   create_table "cr_affiliations", force: :cascade do |t|
@@ -198,5 +199,55 @@ ActiveRecord::Schema.define(version: 2020_10_27_123955) do
     WHERE articles.status == 'Added'
     GROUP BY themes.phase, themes.name
     ORDER BY themes.id
+  SQL
+  create_view "authors_by_pub", sql_definition: <<-SQL
+    		SELECT group_concat(art_authors, ", ") AS author_list, article_id as article_id
+		FROM (SELECT article_authors.last_name || ", " || article_authors.given_name as art_authors, article_authors.article_id
+				FROM article_authors ORDER BY article_authors.article_id, article_authors.author_order) GROUP BY article_id
+  SQL
+  create_view "article_base", sql_definition: <<-SQL
+      SELECT CASE WHEN Articles.pub_ol_year = "" THEN Articles.pub_print_year ELSE Articles.pub_ol_year END as Published, Articles.title, Articles.container_title as Journal, Articles.volume, Articles.issue, Articles.page, Articles.DOI, articles.id FROM Articles WHERE Articles.status <> "Remove"
+  SQL
+  create_view "bib_list", sql_definition: <<-SQL
+      SELECT authors_by_pub.author_list, article_base.* FROM authors_by_pub inner join article_base on authors_by_pub.article_id = article_base.id
+  SQL
+  create_view "pub_theme_groups", sql_definition: <<-SQL
+    		CREATE VIEW pub_theme_groups as 
+		SELECT article_id, max (phase_1) as phase_1, max (phase_2) as phase_2, sum(t01) as design,
+			  sum(t02) as environment,
+			  sum(t03) as transformations,
+			  sum(t04) as energy,
+			  sum(t05) as biocatalysis,
+			  sum(t06) as collaboration,
+			  sum(t07) as new_catalysts,
+			  sum(t08) as water_energy,
+			  sum(t09) as economy_manufacturing,
+			  sum(t10) as core,
+			  sum(t11) as XAFS_BAG,
+			  sum(t14) as Featured,
+			  sum(t15) as PhD_Thesis
+		 from ( 
+			SELECT article_id, 
+			  case when themes.phase = 1 then TRUE end as phase_1,
+			  case when themes.phase = 2 then TRUE end as phase_2,
+			  case when themes.id = 1 then 1 end as t01,
+			  case when themes.id = 2 then 1 end as t02,
+			  case when themes.id = 3 then 1 end as t03,
+			  case when themes.id = 4 then 1 end as t04,
+			  case when themes.id = 5 then 1 end as t05,
+			  case when themes.id = 6 then 1 end as t06,
+			  case when themes.id = 7 then 1 end as t07,
+			  case when themes.id = 8 then 1 end as t08,
+			  case when themes.id = 9 then 1 end as t09,
+			  case when themes.id = 10 then 1 end as t10,
+			  case when themes.id = 11 then 1 end as t11,
+			  case when themes.id = 14 then 1 end as t14,
+			  case when themes.id = 15 then 1 end as t15
+			  FROM article_themes
+			  INNER JOIN themes on article_themes.theme_id = themes.id
+			  INNER JOIN articles on article_themes.article_id = articles.id
+			  WHERE articles.status == 'Added'
+			  ORDER BY article_id)
+			  GROUP BY article_id
   SQL
 end
