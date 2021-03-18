@@ -4,8 +4,8 @@ class AuthorsController < ApplicationController
   class AuthorsSearch < FortyFacets::FacetSearch
     model 'Author' # which model to search for
 
-    text  :last_name   # filter by a generic string entered by the user
-    scope :active  # to select only from active authors
+    text  :last_name # filter by a generic string entered by the user
+    scope :is_public # to select only from active authors
 
     facet :given_name, name: 'Given Name'
 
@@ -24,7 +24,7 @@ class AuthorsController < ApplicationController
   def index
     #@authors = Author.all
     @search = AuthorsSearch.new(params) # initializes search object from request params
-    @authors = @search.result.paginate(:page => params[:page], :per_page => 10)
+    @authors = @search.result.is_public.paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /authors/1
