@@ -51,49 +51,8 @@
           </div>
         </div>
         <div class="row">
-          <!-- left DIV: facet filters -->
-          <div class="col-md-3">
-            <%= form_tag nil, method: :get do %>
-            <!-- Field for searching by title -->
-            <%= hidden_field_tag 'search[order]', @search.order.definition.request_value if @search.order %>
-            <!-- Facet filter for publisher -->
-            <% [:given_name].each do |filter_name| %>
-            <% filter = @search.filter(filter_name) %>
-            <div class="filter">
-              <div class="filter-title">
-                <%= filter.name %>
-                <span class="small text-muted">
-                  <%= "(#{filter.facet.length})" %>
-                </span>
-              </div>
-              <div class="filter-values">
-                <ul class="selected">
-                  <% filter.selected.each do |entity| %>
-                  <% display = entity %>
-                  <li>
-                    <%= link_to display, filter.remove(entity).path %>
-                  </li>
-                  <% end %>
-                </ul>
-                <ul class="selectable">
-                  <% filter.facet.reject(&:selected).each do |facet_value| %>
-                  <% entity = facet_value.entity %>
-                  <li>
-                    <% display = entity %>
-                    <%= link_to display, filter.add(entity).path %>
-                    <span class="count">
-                      <%= "(#{facet_value.count})" %>
-                    </span>
-                  </li>
-                  <% end %>
-                </ul>
-              </div>
-            </div>
-            <% end %>
-            <% end %>
-          </div>
-          <!-- right DIV: researchers list -->
-          <div class="col-md-9">
+          <!-- no facets -->
+          <div class="col-md-12">
             <%= render partial: 'authors/researchers_list', locals: {authors: @authors}%>
           </div>
         </div>

@@ -3,16 +3,12 @@ class AuthorsController < ApplicationController
 
   class AuthorsSearch < FortyFacets::FacetSearch
     model 'Author' # which model to search for
-
     text  :last_name # filter by a generic string entered by the user
-    scope :is_public # to select only from active authors
-
+    #scope :isap # to select only authors that approve sharing their data
     facet :given_name, name: 'Given Name'
-
     facet :last_name, name: 'Last Name'
 
-
-    orders 'Name, Ascendign' => {last_name: :asc, given_name: :asc},
+    orders 'Last name, Ascendign' => {last_name: :asc, given_name: :asc},
            'Last name, descending' => "last_name desc",
            'ORCID, ascending' => "orcid asc",
            'ORCID, Descending' => {orcid: :desc}
@@ -23,8 +19,9 @@ class AuthorsController < ApplicationController
   # GET /authors.json
   def index
     #@authors = Author.all
-    @search = AuthorsSearch.new(params) # initializes search object from request params
-    @authors = @search.result.is_public.paginate(:page => params[:page], :per_page => 10)
+    print(params["search"])
+    @search = AuthorsSearch.new(params)# initializes search object from request params
+    @authors = @search.result.isap.paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /authors/1
