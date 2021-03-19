@@ -6,7 +6,7 @@ class Theme < ApplicationRecord
     author_list = []
     articles.each do |article|
       article.authors.each do |author|
-        if not author_list.include?(author) then
+        if not author_list.include?(author) and author.isap then
           author_list.push(author)
         end
       end
