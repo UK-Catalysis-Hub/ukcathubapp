@@ -12,10 +12,14 @@
            pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
            pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
            pr_name += auth.author.last_name
+           this_name = pr_name
+           if auth.author.isap == true
+	     this_name = link_to(pr_name, auth)
+	   end 
            if disp_names =="" then
-             disp_names = link_to(pr_name, auth.author)
+             disp_names = this_name
            else
-             disp_names += ', '.html_safe + link_to(pr_name, auth.author)
+             disp_names += ', '.html_safe + this_name
            end
          end
        end %>
