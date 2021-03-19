@@ -1,4 +1,17 @@
+ 
 <div class="container">
+ <div class="rounded border-light bg-light ">
+    <div class="container">
+        <p class="bold">
+          <%= number_with_delimiter(Author.active.length()) %> researchers have 
+          collaborated in publishing <%= Article.active.count() %> papers supproted by UK Catalysis Hub
+        </p>
+        <ul>
+          <li>The authors list shows only details of the authors who have consented to being displayed.</li>
+         <li>The statistics show some insights into the production of top authors.</li>
+         </ul>
+    </div>
+  </div>
   <ul class="nav nav-tabs" id="researchersTab" role="tablist">
     <li class="nav-item">
       <a class="nav-link active" id="home-tab" data-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Browse</a>
