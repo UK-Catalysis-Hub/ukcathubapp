@@ -31,7 +31,10 @@
         <%= form.label :orcid %>
         <%= form.text_field :orcid %>
       </div>
-
+      <div class="field">
+        <%= form.label "Public" %>
+        <%= form.check_box :isap %>
+      </div>
       <div class="actions">
         <%= form.submit %>
       </div>
