@@ -1,3 +1,5 @@
+<div class="row">
+  <div class="col-md-8">
   <p id="notice"><%= notice %></p>
   <p>
     <strong>Full name:</strong>
@@ -15,6 +17,20 @@
     <strong>Orcid:</strong>
     <%= author.orcid %>
   </p>
+  </div>
+  <div class="col-md-4">
+    <div class="rounded border-light bg-light ">
+    <div class="container">
+        <ul>
+          <li>This author's details have been made public because of explicit consent from the researcher or an authorised proxi.</li>
+          <li>Contact the CDI admin if you do not authorise your information being displayed in this medium at: cdi_amin@rcah.ac.uk </li>
+         </ul>
+    </div>
+  </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
   <p>
     <strong>Articles (<%= author.articles.active.count %>):</strong>
     <%
@@ -58,3 +74,5 @@
       end
     end
   %>
+  </div>
+</div>
