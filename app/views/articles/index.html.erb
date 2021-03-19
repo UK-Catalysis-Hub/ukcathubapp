@@ -179,16 +179,20 @@
                   <td>
                     <b>Title:</b> <%= link_to(article.title, article) %> <b>Year:</b> <%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>
                     <b>Authors (<%= article.authors.count %>):</b>
-                    <% author_links = article.article_authors.all
+                    <% author_links = article.authors.all
                        disp_names = ""
                        for auth in author_links
-                         pr_name = auth.author.given_name
+                         pr_name = auth.given_name.sub('í','i').sub('é','e').sub('á','a')
                          pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
-                         pr_name += auth.author.last_name
+                         pr_name += auth.last_name
+                         this_name = pr_name
+                         if auth.isap == true
+                           this_name = link_to(pr_name, auth)
+                         end
                          if disp_names =="" then
-                           disp_names = link_to(pr_name, auth.author)
+                           disp_names = this_name
                          else
-                           disp_names += ', '.html_safe + link_to(pr_name, auth.author)
+                           disp_names += ', '.html_safe + this_name
                          end
                        end %>
                     <%= disp_names.to_s.html_safe %>
