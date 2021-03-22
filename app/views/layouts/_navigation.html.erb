@@ -1,27 +1,28 @@
-<nav class="navbar navbar-expand flex-column flex-md-row bd-navbar">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>  <a class="navbar-brand" title="Publications Explorer" href="/">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" title="Publications Explorer" href="/">
        <%= image_tag('ukchcdi_logo_sm.png',height: '40')%>
     </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li>
-         <%= link_to image_tag('books2.svg'), {:controller => '/articles', :action => 'index'}, {:class => "nav-link active", title: "View Publications"}%>
+    <ul class="navbar-nav mr-auto nav-pills">
+      <li class="<%= 'active' if current_page?(articles_path) %>">
+        <%= link_to 'Publications', {:controller => '/articles', :action => 'index'}, {:class => "nav-link", title: "View Publications"}%>
       </li>
-      <li>
-         <%= link_to image_tag('users.svg'), {:controller => '/authors', :action => 'index'}, {:class => "nav-link active", title: "View authors"} %>
+      <li class="<%= 'active' if current_page?(authors_path) %>" >
+         <%= link_to 'Researchers', {:controller => '/authors', :action => 'index'}, {:class => "nav-link", title: "View authors"} %>
       </li>
-      <li>
-         <%= link_to image_tag('institution.svg'), {:controller => '/affiliations', :action => 'index'}, {:class => "nav-link active", title: "View affiliations"} %>
+      <li class="<%= 'active' if current_page?(affiliations_path) %>">
+         <%= link_to 'Institutions', {:controller => '/affiliations', :action => 'index'}, {:class => "nav-link ", title: "View affiliations"} %>
       </li>
-      <li>
-         <%= link_to image_tag('expert.svg'), {:controller => '/themes', :action => 'index'}, {:class => "nav-link active", title: "View experts"} %>
+      <li class="<%= 'active' if current_page?(themes_path) %>">
+         <%= link_to 'Themes', {:controller => '/themes', :action => 'index'}, {:class => "nav-link ", title: "View experts"} %>
       </li>
-      <li>
-         <%= link_to image_tag('database.svg'), {:controller => '/datasets', :action => 'index'}, {:class => "nav-link active", title: "View datasets"} %>
-      </li>
+      <li class="<%= 'active' if current_page?(datasets_path) %>">
+         <%= link_to 'Datasets', {:controller => '/datasets', :action => 'index'}, {:class => "nav-link ", title: "View datasets"} %>
+      </li> 
     </ul>
     <div class="col-sm-3 col-md-3 pull-right">
       <% if user_signed_in? %>
