@@ -170,32 +170,31 @@
         <div class="col-sm-4">
           <div class="card">
             <div class="card-header">
-              <h6 style= "margin:auto">Top publishing authors</h6>
+              <h6 style= "margin:auto">Top publishing researchers</h6>
             </div>
             <div class="card-body p-0">
-              <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(10) }%>
+              <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(10), count_name: "Publications" }%>
             </div>
           </div>
         </div>
         <div class="col-sm-4">
           <div class="card">
             <div class="card-header">
-              <h6 style= "margin:auto">Top publishing authors (non P.I.)</h6>
+              <h6 style= "margin:auto">Top publishing researchers (non P.I.)</h6>
             </div>
             <div class="card-body p-0">
               <% except ='authors.id not in (11, 15, 23, 22, 99, 111, 120, 134, 154, 171, 329)' %>
-              <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.where(except).limit(10) }%>
+              <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.where(except).limit(10), count_name: "Publications" }%>
             </div>
           </div>
         </div>
         <div class="col-sm-4">
           <div class="card">
             <div class="card-header">
-              <h6 style= "margin:auto">Most cited authors</h6>
+              <h6 style= "margin:auto">Most cited researchers</h6>
             </div>
             <div class="card-body p-0">
-              <% label_for_view = "Citations" %>
-              <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(10), count_label: label_for_view }%>
+              <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(10), count_name: "Citations" }%>
             </div>
           </div>
         </div>
@@ -227,11 +226,10 @@
         <div class="col-sm-5 themed-grid-col">
           <div class="card">
             <div class="card-header">
-              <h6 style= "margin:auto">Published data objects</h6>
+              <h6 style= "margin:auto">Top data publishing researchers</h6>
             </div>
             <div class="card-body p-0" >
-              <% label_for_view = "Data Objects"%>
-              <%= render partial: 'authors/authors_top', locals: {authors: Author.data_objects_count.limit(10), count_label: label_for_view }%>
+              <%= render partial: 'authors/authors_top', locals: {authors: Author.data_objects_count.limit(10), count_name: "Data Objects"}%>
             </div>
           </div>
         </div><!--col-sm-7-->
