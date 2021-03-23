@@ -2,22 +2,23 @@
 <div class="container">
  <div class="rounded border-light bg-light ">
     <div class="container">
-        <p class="bold">
+        <h5> Researcher Authoring UK Catalysis Hub Publications</h5>
+        <p>
           <%= number_with_delimiter(Author.active.length()) %> researchers have 
           collaborated in publishing <%= Article.active.count() %> papers supproted by UK Catalysis Hub
         </p>
         <ul>
-          <li>The authors list shows only details of the authors who have consented to being displayed.</li>
-         <li>The statistics show some insights into the production of top authors.</li>
+          <li>The reserachers tab lists details of those researchers who have consented to being displayed.</li>
+          <li>The indicators tab shows statistics about the production of researchers.</li>
          </ul>
     </div>
   </div>
   <ul class="nav nav-tabs" id="researchersTab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Authors List</a>
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Researchers</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="false">Statistics</a>
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="false">Indicators</a>
     </li>
     <% if user_signed_in? %>
     <li class="nav-item">
@@ -226,10 +227,11 @@
         <div class="col-sm-5 themed-grid-col">
           <div class="card">
             <div class="card-header">
-              <h6 style= "margin:auto">Other Info</h6>
+              <h6 style= "margin:auto">Published data objects</h6>
             </div>
-            <div class="card-body" style="width: 200px; margin-left: auto; margin-right: auto;">
-            
+            <div class="card-body p-0" >
+              <% label_for_view = "Data Objects"%>
+              <%= render partial: 'authors/authors_top', locals: {authors: Author.data_objects_count.limit(10), count_label: label_for_view }%>
             </div>
           </div>
         </div><!--col-sm-7-->

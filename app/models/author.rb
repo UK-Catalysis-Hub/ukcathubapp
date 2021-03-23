@@ -16,6 +16,7 @@ class Author < ApplicationRecord
   scope :not_verified, -> {joins("INNER JOIN article_authors ON article_authors.author_id = authors.id").where("article_authors.status is not 'verified'") }
   scope :active, -> {joins(:articles).where("articles.status = 'Added'").group("authors.id")}
   scope :publications_count, -> {isap.joins(:articles).select("authors.id, full_name, COUNT(*) AS 'pub_count'").order("pub_count DESC").group("authors.full_name")}
+  scope :data_objects_count, -> {isap.joins(:articles).joins("INNER JOIN article_datasets ON article_datasets.article_id = articles.id").where("article_datasets.article_id = articles.id").select("authors.id, full_name, COUNT(*) AS 'pub_count'").order("pub_count DESC").group("authors.full_name")}
   scope :citations_count, -> {isap.joins(:articles).select("authors.id, full_name, SUM(articles.referenced_by_count) AS 'Citations'").order("Citations DESC").group("authors.full_name")}
   scope :country_count, -> {Author.joins(:author_affiliations).select('author_affiliations.country').group(:country).count('*')}
 

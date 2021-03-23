@@ -1,9 +1,10 @@
-<h5> Researcher Authoring UK Catalysis Hub Publications</h5>
 <%= will_paginate authors, renderer: WillPaginate::ActionView::BootstrapLinkRenderer  %>
+<b> <%= @authors.count%> Researchers authorising display of their data 
+    (out of <%= number_with_delimiter(Author.active.length()) %> )</b>
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th>Author</th>
+      <th>Name</th>
       <th>Articles</th>
       <th>ORCID</th>
     </tr>
