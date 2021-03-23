@@ -59,7 +59,7 @@
       </div>
     </div>
     <div class="row px-1 my-3">
-      <div class="col-sm-6 col-lg-8">
+      <div class="col-sm-6 col-lg-6">
         <div class="card">
           <div class="card-header bg-light">
             <h6 style= "margin:auto">Recent publications</h6>
@@ -69,7 +69,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-lg-4">
+      <div class="col-sm-6 col-lg-6">
         <div class="card">
           <div class="card-header">
             <h6 style= "margin:auto">Publications by theme</h6>
@@ -89,10 +89,10 @@
       <div class="col-sm-3">
         <div class="card">
           <div class="card-header">
-            <h6 style= "margin:auto">Top publishing authors</h6>
+            <h6 style= "margin:auto">Top publishing researchers</h6>
           </div>
           <div class="card-body p-0">
-            <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(5) }%>
+            <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(5), count_name: "Pubs."}%>
           </div>
         </div>
       </div>
@@ -110,11 +110,11 @@
       <div class="col-sm-3">
         <div class="card">
           <div class="card-header">
-            <h6 style= "margin:auto">Most cited authors</h6>
+            <h6 style= "margin:auto">Most cited researchers</h6>
           </div>
           <div class="card-body p-0">
             <% label_for_view = "Citations" %>
-            <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(5), count_label: label_for_view }%>
+            <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(5), count_name: label_for_view }%>
           </div>
         </div>
       </div><!--col-sm-3-->
