@@ -158,7 +158,7 @@
             year_series[0] = {name:"Annual", data: arts_by_year}
             sum = 0
             year_series[1] = {name:"Accumulating", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
-            <%= line_chart(year_series, legend: "right")%>
+            <%= line_chart(year_series, legend: "right", title:"Annual vs Accumulating" )%>
 
             <% themes_per_year = Theme.joins(:articles).group(:short,:pub_year).order(:id).count
             themes_per_year = themes_per_year.map{|tpy| {name: tpy[0][0], data: [tpy[0][1],tpy[1]]}}
