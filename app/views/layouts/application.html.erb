@@ -15,9 +15,7 @@
 
   <body>
     <header>
-    
       <%= render 'layouts/navigation' %>
-    
     </header>
     <main role="main">
         <%= content_for?(:content) ? yield(:content) : yield %>
