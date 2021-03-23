@@ -222,7 +222,21 @@
               <%= geo_chart country_data %>
             </div>
           </div>
-        </div><!--col-sm-12-->
+        </div><!--col-sm-7-->
+        <div class="col-sm-5 themed-grid-col">
+          <div class="card">
+            <div class="card-header">
+              <h6 style= "margin:auto">Countries of oringin</h6>
+            </div>
+            <div class="card-body" style="width: 200px; margin-left: auto; margin-right: auto;">
+              <% 
+                 country_data = [['Rome',20],['Milan',25], ['Naples',50]]
+                 options = {'region'=>'GB','displayMode'=>'markers','colorscolorAxis'=> {'colors'=> ['green', 'blue']}}
+                  %>
+              <%= geo_chart country_data, region:'GB' %>
+            </div>
+          </div>
+        </div><!--col-sm-7-->
       </div><!--row mb3 -->
 
     </div>
