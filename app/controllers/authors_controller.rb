@@ -18,8 +18,6 @@ class AuthorsController < ApplicationController
   # GET /authors
   # GET /authors.json
   def index
-    #@authors = Author.all
-    print(params["search"])
     @search = AuthorsSearch.new(params)# initializes search object from request params
     @authors = @search.result.isap.paginate(:page => params[:page], :per_page => 10)
   end
