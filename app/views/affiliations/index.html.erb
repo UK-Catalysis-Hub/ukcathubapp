@@ -12,7 +12,8 @@
          </ul>
     </div>
   </div>
-
+  <%= will_paginate @affiliations, renderer: WillPaginate::ActionView::BootstrapLinkRenderer  %>
+  <b> <%= @affiliations.count%> Institutions found</b> 
   <table class="table">
     <thead class="thead-light">
       <tr>
