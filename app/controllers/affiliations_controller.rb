@@ -1,10 +1,21 @@
 class AffiliationsController < ApplicationController
   before_action :set_affiliation, only: [:show, :edit, :update, :destroy]
+  class AffiliationSearch < FortyFacets::FacetSearch
+    model 'Affiliation' # which model to search for
+    text  :institution # filter by a generic string entered by the user
+    facet :country, name: 'Country'
+
+    orders 'Institution, Ascendign' => {institution: :asc, department: :asc},
+           'Institution, Descending' => {institution: :asc, department: :asc},
+           'Country, Ascending' => {country: :asc},
+           'Country, Descending' => {country: :desc}
+  end
 
   # GET /affiliations
   # GET /affiliations.json
   def index
-    @affiliations = Affiliation.all
+    @search = AffiliationSearch.new(params) # initializes search object from request params
+    @affiliations = @search.result.paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /affiliations/1
