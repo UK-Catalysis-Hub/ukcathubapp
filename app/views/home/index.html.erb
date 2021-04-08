@@ -3,8 +3,8 @@
     <div class="container col-sm-8 col-8">
         <h5> Live Prototype of the Catalysis Data Infrastructure </h5>
         <p>
-	  The prototype of the Catalysis Data Infrastructure (CDI) allows browsing and searching
-	  publications and data objects published by researchers supported by or affiliated to 
+	  The Catalysis Data Infrastructure (CDI) allows browsing and searching
+	  publications and data objects published by researchers supported-by or affiliated-to 
 	  the UK Catalysis Hub.
 	<br/>
           The latests numbers indicate that <b> <%= number_with_delimiter(Author.active.length()) %> </b>researchers have 
@@ -12,7 +12,7 @@
           These papers in turn make reference to <b><%= Dataset.count() %> </b> data objects.
         <br/>
           Information is divided into five groups: Publications, Researchers, Institutions, Themes and Datasets. 
-          Each group includes a searchable list and a summary of indicators (yearly publishing, most recent, citation count, etc.)
+          Each group includes a searchable list and a summary of indicators (yearly publishing, most recent, citation counts, etc.)
          </p>
     </div>
   </div>
@@ -217,7 +217,7 @@
               <h6 style= "margin:auto">Top data publishing researchers</h6>
             </div>
             <div class="card-body p-0" >
-              <%= render partial: 'authors/authors_top', locals: {authors: Author.data_objects_count.limit(5), count_name: "Data Objects"}%>
+              <%= render partial: 'authors/authors_top', locals: {authors: Author.data_objects_count.limit(10), count_name: "Data Objects"}%>
             </div>
           </div>
         </div><!--col-sm-7-->
