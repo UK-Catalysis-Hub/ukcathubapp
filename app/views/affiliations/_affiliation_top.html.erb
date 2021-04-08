@@ -1,0 +1,24 @@
+<!--Display a filtered list of items -->
+<% count_label =  count_name %>
+<div id="filtered_item_list" class="container">
+  <table class="table table-sm table-striped table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th>Name</th>
+        <th><%= count_name %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% items.each do |an_item| %>
+        <tr>
+          <td>
+            <%= an_item [0]%>
+          </td>
+          <td class="text-right">
+            <%= ActiveSupport::NumberHelper.number_to_delimited(an_item[1]) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

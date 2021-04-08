@@ -13,4 +13,5 @@ class Affiliation < ApplicationRecord
     end
     addr_list.sort()
   end
+  scope :country_count, -> {all.group(:country).count('*')}
 end
