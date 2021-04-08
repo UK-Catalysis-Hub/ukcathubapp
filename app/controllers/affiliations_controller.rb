@@ -6,7 +6,7 @@ class AffiliationsController < ApplicationController
     facet :country, name: 'Country'
 
     orders 'Institution, Ascendign' => {institution: :asc, department: :asc},
-           'Institution, Descending' => {institution: :asc, department: :asc},
+           'Institution, Descending' => {institution: :desc, department: :desc},
            'Country, Ascending' => {country: :asc},
            'Country, Descending' => {country: :desc}
   end

@@ -1,14 +1,11 @@
-<div class="container">
-  <div class="rounded border-light bg-light ">
-    <div class="container">
-      <h5> Institutuions with relations to UK Catalysis Hub</h5>
-      <p>
-        Researchers affiliated to <%= number_with_delimiter(Affiliation.all.length()) %> institutions have 
-        collaborated in publishing <%= Article.active.count() %> papers supproted by UK Catalysis Hub
-      </p>
-      <ul>
-        <li>The institutions allows browsing the institutions which have participated collabrated with the UK Catalysis Hub.</li>
-        <li>The indicators tab shows statistics about institutions.</li>
-       </ul>
-  </div>
+<div class="container rounded border-light bg-light ">
+    <h5> Institutuions with relations to UK Catalysis Hub</h5>
+    <p>
+      Researchers affiliated to <%= number_with_delimiter(Affiliation.all.length()) %> institutions have 
+      collaborated in publishing <%= Article.active.count() %> papers supproted by UK Catalysis Hub
+    </p>
+    <ul>
+      <li>The institutions allows browsing the institutions which have participated collabrated with the UK Catalysis Hub.</li>
+      <li>The indicators tab shows statistics about institutions.</li>
+    </ul>
 </div>
