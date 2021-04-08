@@ -14,4 +14,6 @@ class Affiliation < ApplicationRecord
     addr_list.sort()
   end
   scope :country_count, -> {all.group(:country).count('*')}
-end
+  scope :filter_by_theme, -> (theme_id) {all.joins("INNER JOIN author_affiliations on author_affiliations.affiliation_id = affiliations.id").joins("INNER JOIN article_authors on author_affiliations.article_author_id = article_authors.id").joins("INNER JOIN article_themes on article_themes.article_id  = article_authors.article_id").where("article_themes.theme_id = ?", theme_id) }
+
+ end

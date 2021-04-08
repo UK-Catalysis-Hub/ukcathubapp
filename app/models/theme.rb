@@ -23,6 +23,6 @@ class Theme < ApplicationRecord
         end
       end
     end
-    affi_list.sort()
+    Affiliation.filter_by_theme(self.id)
   end
 end

@@ -90,6 +90,8 @@
               <% end %><!--end of form for facets-->
             </div>
         <div class="col-md-9"><!--List of items in page -->
+          <%= will_paginate @affiliations, renderer: WillPaginate::ActionView::BootstrapLinkRenderer  %>
+	  <b> <%= @affiliations.count%> Institutions found</b> 
 	  <%= render 'affiliations_list', affiliations: @affiliations %>
 	</div><!-- col right DIV: list -->
 	</div><!-- row DIV: facets and list -->
