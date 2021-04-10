@@ -39,5 +39,5 @@ yarn-debug.log*
 *.csv
 .~*
 # ignore capistrano deploy file
-/config/deploy/production.rb*
+/config/deploy/*
 
