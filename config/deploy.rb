@@ -1,6 +1,3 @@
-# config valid for current version and patch releases of Capistrano
-lock "~> 3.16.0"
-
 set :application, "ukchapp"
 set :repo_url, "https://github.com/scman1/ukcathubapp.git"
 
@@ -14,6 +11,9 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bund
 
 # Only keep the last 5 releases to save disk space
 set :keep_releases, 5
+
+# config valid for current version and patch releases of Capistrano
+#lock "~> 3.16.0"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
