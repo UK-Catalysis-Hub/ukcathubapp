@@ -5,8 +5,8 @@ class CreateArticleThemes < ActiveRecord::Migration[6.0]
       t.integer :phase
       t.string :collaboration
       t.integer :theme_id
+       t.integer :article_id
       t.integer :project_year
-
       t.timestamps
     end
   end
