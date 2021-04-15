@@ -3,6 +3,8 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
     <title><%= content_for?(:title) ? yield(:title) : "Publications &middot; UK Catalysis Hub".html_safe %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Publications DB from UK Catalysis Hub" %>">
     <%= csrf_meta_tags %>
