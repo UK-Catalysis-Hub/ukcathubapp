@@ -19,3 +19,15 @@ import "../stylesheets/application"
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+
+// about supported directives.
+//
+//= require rails-ujs
+//= require activestorage
+//= require turbolinks
+//= require jquery3
+//= require popper
+//= require bootstrap
+//= require bootstrap-sprockets
+//= require_tree .
+//= require jquery-ui/widgets/tooltip
