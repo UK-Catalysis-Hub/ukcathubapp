@@ -123,7 +123,9 @@
             <h6 style= "margin:auto">Top publishing researchers</h6>
           </div>
           <div class="card-body p-0">
+            <% if Author.publications_count.length > 0 %>
             <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(5), count_name: "Pubs."}%>
+            <% end %>
           </div>
         </div>
       </div>
@@ -144,8 +146,10 @@
             <h6 style= "margin:auto">Most cited researchers</h6>
           </div>
           <div class="card-body p-0">
+            <% if Author.publications_count.length() > 0 %>
             <% label_for_view = "Citations" %>
             <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(5), count_name: label_for_view }%>
+            <% end %>
           </div>
         </div>
       </div><!--col-sm-3-->
@@ -217,7 +221,9 @@
               <h6 style= "margin:auto">Top data publishing researchers</h6>
             </div>
             <div class="card-body p-0" >
+              <% if Author.data_objects_count.length()>0 %>
               <%= render partial: 'authors/authors_top', locals: {authors: Author.data_objects_count.limit(10), count_name: "Data Objects"}%>
+              <% end %>
             </div>
           </div>
         </div><!--col-sm-7-->

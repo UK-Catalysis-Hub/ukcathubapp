@@ -259,13 +259,17 @@
                           <tr>
                             <td> Maximum:  </td>
                             <td class="text-right">
+                              <% if Dataset.repository_count.length() > 0 %>
                               <%= Dataset.repository_count.first.r_count %>
+                              <% end %>
                             </td>
                           </tr>
                           <tr>
                             <td> Minimum:  </td>
                             <td class="text-right">
+                              <% if Dataset.repository_count.length() > 0 %>
                               <%= Dataset.repository_count.last.r_count %>
+                              <% end %>
                             </td>
                           </tr>
                         </tbody>

@@ -411,13 +411,13 @@
                        <tr>
                          <td> Maximum:  </td>
                          <td class="text-right">
-                           <%= Article.journals_count.first.j_count %>
+                           <%= Article.journals_count.length() > 0 ? Article.journals_count.first.j_count : 0 %>
                          </td>
                        </tr>
                        <tr>
                          <td> Minimum:  </td>
                          <td class="text-right">
-                           <%= Article.journals_count.last.j_count %>
+                           <%= Article.journals_count.length() > 0 ? Article.journals_count.last.j_count : 0 %>
                          </td>
                        </tr>
                      </tbody>
@@ -513,13 +513,13 @@
                        <tr>
                          <td> Maximum:  </td>
                          <td class="text-right">
-                           <%= Article.publisher_count.first.p_count %>
+                           <%= Article.publisher_count.length() > 0 ? Article.publisher_count.first.p_count : 0 %>
                          </td>
                        </tr>
                        <tr>
                          <td> Minimum:  </td>
                          <td class="text-right">
-                           <%= Article.publisher_count.last.p_count %>
+                           <%= Article.publisher_count.length() > 0 ? Article.publisher_count.last.p_count : 0 %>
                          </td>
                        </tr>
                      </tbody>
