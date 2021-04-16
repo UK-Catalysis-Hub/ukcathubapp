@@ -21,7 +21,7 @@
              <%= ds_desc[0..71]+'...' %>
           </td>
           <td>
-            <%= data_object.dataset_startdate.year %>
+            <%= data_object.dataset_startdate.to_date().year %>
           </td>
         </tr>
       <% end %>

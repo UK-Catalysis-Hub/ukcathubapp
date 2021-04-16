@@ -1,11 +1,13 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-  <a class="navbar-brand" title="Publications Explorer" href="/">
-       <%= image_tag('ukchcdi_logo_sm.png',height: '40')%>
-    </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
+  <div class = "container">
+    <div class="navbar-header">
+      <a class="navbar-brand" title="Publications Explorer" href="/">
+         <%= image_tag('ukchcdi_logo_sm.png',height: '40')%>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto nav-pills">
       <li class="<%= 'active' if current_page?(articles_path) %>">
@@ -32,4 +34,7 @@
       <% end %>
     </div>
   </div>
+  </div>
 </nav>
+
+
