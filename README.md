@@ -19,7 +19,9 @@ quick look at the possiblities for data sharing and not the final version.
 
 * Ruby version: 2.7.0
 * Rails version: 6.0.3.3
+
 [Current Online Version](http://188.166.149.246/)
+
 ![app screenshot](https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png)
 
 ## Authors
