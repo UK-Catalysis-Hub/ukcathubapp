@@ -263,6 +263,9 @@
            </div>
            <div class="card-body p-0">
              <%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
+             <div class="container">
+               Citation count:<%= number_with_delimiter(Article.most_cited.sum(:referenced_by_count)) %>
+             </div>
            </div>
          </div>
        </div>
