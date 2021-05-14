@@ -15,8 +15,6 @@
 
   <body>
     <%= render 'layouts/navigation' %>
-    <div class="container">
-        <%= content_for?(:content) ? yield(:content) : yield %>
-    </div>
+    <%= content_for?(:content) ? yield(:content) : yield %>
   </body>
 </html>
