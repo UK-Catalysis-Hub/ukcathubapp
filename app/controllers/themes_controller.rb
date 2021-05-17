@@ -1,6 +1,6 @@
 class ThemesController < ApplicationController
   before_action :set_theme, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user!, except: [:index, :show, :themes_count]
   # GET /themes
   # GET /themes.json
   def index
@@ -25,7 +25,6 @@ class ThemesController < ApplicationController
   # POST /themes.json
   def create
     @theme = Theme.new(theme_params)
-
     respond_to do |format|
       if @theme.save
         format.html { redirect_to @theme, notice: 'Theme was successfully created.' }
@@ -61,14 +60,33 @@ class ThemesController < ApplicationController
     end
   end
 
+  # download theme stats
+  def themes_count
+    theme_pubs = ListTheme.where("NOT (id IN (6,11,14,15))").collect{|th| [th.name, th.article_count, th.phase]}
+    theme_csv = get_csv(['name','count','phase'], theme_pubs)
+    send_data(theme_csv, 
+              :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_theme_count.txt')
+  end 
+
   private
+    require 'csv'
     # Use callbacks to share common setup or constraints between actions.
     def set_theme
       @theme = Theme.find(params[:id])
     end
-
+    
     # Only allow a list of trusted parameters through.
     def theme_params
       params.require(:theme).permit(:short, :name, :lead, :phase, :used)
     end
+    
+    def get_csv(headrs, pubs)
+      CSV.generate do |csv|
+        csv << headrs
+        pubs.each do |a_pub|
+          csv<< a_pub
+        end
+      end
+    end
+
 end

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   post 'verify' => 'articles#verify', as: :verify
   post 'generate_affiliations' => 'authors#generate', as: :generate_auth_affis
   resources :themes
+  get 'themes_count' => 'themes#themes_count', as: 'themes_count'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'home#index'
 end
