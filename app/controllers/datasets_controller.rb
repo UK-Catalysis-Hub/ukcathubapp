@@ -1,6 +1,7 @@
 class DatasetsController < ApplicationController
   before_action :set_dataset, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user!, except: [:index, :show, :data_count]
+  
   class DatasetSearch < FortyFacets::FacetSearch
     model 'Dataset' # which model to search for
     text :dataset_name, name: 'Data object name'  # filter by a generic string entered by the user
@@ -71,6 +72,15 @@ class DatasetsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  # download datasets stats
+  def data_count
+    do_by_year = Dataset.ds_per_year
+    doby = do_by_year.each.collect{ |doby| [doby['item'], doby['i_count']]}
+    theme_csv = get_csv(['year','count'], doby)
+    send_data(theme_csv, 
+              :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_dataobject_count.csv')
+  end 
 
   private
     # Use callbacks to share common setup or constraints between actions.

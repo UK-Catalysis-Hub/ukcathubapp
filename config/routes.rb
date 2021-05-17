@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   post 'generate_affiliations' => 'authors#generate', as: :generate_auth_affis
   resources :themes
   get 'themes_count' => 'themes#themes_count', as: 'themes_count'
+  get 'data_count' => 'datasets#data_count', as: 'data_count'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'home#index'
 end

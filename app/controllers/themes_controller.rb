@@ -65,11 +65,10 @@ class ThemesController < ApplicationController
     theme_pubs = ListTheme.where("NOT (id IN (6,11,14,15))").collect{|th| [th.name, th.article_count, th.phase]}
     theme_csv = get_csv(['name','count','phase'], theme_pubs)
     send_data(theme_csv, 
-              :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_theme_count.txt')
+              :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_theme_count.csv')
   end 
 
   private
-    require 'csv'
     # Use callbacks to share common setup or constraints between actions.
     def set_theme
       @theme = Theme.find(params[:id])
@@ -79,14 +78,4 @@ class ThemesController < ApplicationController
     def theme_params
       params.require(:theme).permit(:short, :name, :lead, :phase, :used)
     end
-    
-    def get_csv(headrs, pubs)
-      CSV.generate do |csv|
-        csv << headrs
-        pubs.each do |a_pub|
-          csv<< a_pub
-        end
-      end
-    end
-
 end

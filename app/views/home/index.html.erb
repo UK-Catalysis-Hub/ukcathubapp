@@ -237,7 +237,7 @@
 		        [th.short, th.article_count]} %>
 		      <%= pie_chart themes_list,  legend: "right", donut: true, title: 'Phase II (2019-2023)' %>
 		      <p>
-		      <%= link_to 'Download Data', themes_path, :class => "btn-success btn-sm" %>
+		      <%= link_to 'Download Data', {:action => "themes_count", :controller => "themes"}, :class => "btn-success btn-sm" %>
 		      <%= link_to 'View Themes', themes_path, :class => "btn-success btn-sm" %>
 		      <p>
                   </div>
@@ -265,16 +265,17 @@
                       sum = 0
                       year_series[1] = {name:"accumulated", data: doby.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
                    <%= column_chart(year_series, :legend=> "bottom", title:"Published Data Objects")%>
-                </div>
+                    <p>
+		      <%= link_to 'Download Data', {:action => "data_count", :controller => "datasets"}, :class => "btn-success btn-sm" %>
+		      <%= link_to 'View Data Objects', datasets_path, :class => "btn-success btn-sm" %>
+		    <p>
+		 </div>
                 <div class="col-sm-6">
                     <% if Author.data_objects_count.length()>0 %>
                     <h6>Top Data Publishing Researchers</h6>
                     <%= render partial: 'authors/authors_top', locals: {authors: Author.data_objects_count.limit(10), count_name: "Data Objects"}%>
                     <% end %>
-                    <p>
-		      <%= link_to 'Download Data', datasets_path, :class => "btn-success btn-sm" %>
-		      <%= link_to 'View Data Objects', datasets_path, :class => "btn-success btn-sm" %>
-		    <p>
+
                 </div>
               </div>
             </div>

@@ -45,8 +45,8 @@
                       <table class="table table-sm table-striped table-bordered">
                         <thead class="thead-light">
                           <tr>
-                            <th>Type</th>
-                            <th>Data objects</th>
+                            <th>Theme</th>
+                            <th>Publications</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -71,7 +71,7 @@
 		        [th.short, th.article_count]} %>
 		      <%= pie_chart themes_list,  legend: "right", donut: true %>
 		      <p>
-		      <%= link_to 'Download Data', themes_path, :class => "btn-success btn-sm" %>
+		      <%= link_to 'Download Data', {:action => "themes_count", :controller => "themes"}, :class => "btn-success btn-sm" %>
 		      <p>
                   </div>
                 </div>
@@ -97,8 +97,8 @@
                       <table class="table table-sm table-striped table-bordered">
                         <thead class="thead-light">
                           <tr>
-                            <th>Type</th>
-                            <th>Data objects</th>
+                            <th>Theme</th>
+                            <th>Publications</th>
                           </tr>
                         </thead>
                         <tbody>
