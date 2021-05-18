@@ -20,7 +20,12 @@ quick look at the possiblities for data sharing and not the final version.
 * Ruby version: 2.7.0
 * Rails version: 6.0.3.3
 
-[Current Online Version](http://188.166.149.246/)
+## Current Online Version
+Currently this address can change so this is the most secure way to access it.
+We are working to publish the online version with a stable address. 
+
+The moment the Current Online Version can be accessed from **[here](http://188.166.149.246/)**.
+
 
 ![app screenshot](https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png)
 
