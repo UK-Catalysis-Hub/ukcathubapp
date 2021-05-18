@@ -27,6 +27,9 @@
     <li class="nav-item">
       <a class="nav-link" id="actions-tab" data-toggle="tab" href="#actions" role="tab" aria-controls="not-verified" aria-selected="false">Actions</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" id="all-auths-tab" data-toggle="tab" href="#all-auths" role="tab" aria-controls="not-verified" aria-selected="false">All Authors</a>
+    </li>
     <% end %>
   </ul>
   <div class="tab-content" id="myTabContent">
@@ -243,6 +246,7 @@
         </div><!--col-sm-7-->
       </div><!--row mb3 -->
     </div>
+    <% if user_signed_in? %>
     <div class="tab-pane fade" id="not-verified" role="tabpanel" aria-labelledby="not-verified-tab">
       <div class="card">
         <div class="card-header bg-light">
@@ -270,5 +274,12 @@
         </div>
       </div>
     </div>
+    <div class="tab-pane fade" id="all-auths" role="tabpanel" aria-labelledby="all-auths-tab">
+      <div class="container">
+          <%= render partial: 'authors/authors_list', locals: {authors: Author.all}%>
+      </div>
+
+    </div>
+    <% end %>
   </div> <!-- Tabs Contents-->
 </div><!-- container -->

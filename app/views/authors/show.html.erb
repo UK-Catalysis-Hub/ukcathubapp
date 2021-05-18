@@ -1,5 +1,5 @@
 <div class="container">
-  <% if @author.isap%>
+  <% if @author.isap or user_signed_in? %>
     <%= render partial: 'authors/author_details', locals: {author: @author} %>
     <% if user_signed_in? %>
       <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
