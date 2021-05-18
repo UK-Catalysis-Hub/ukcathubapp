@@ -20,7 +20,12 @@ quick look at the possiblities for data sharing and not the final version.
 * Ruby version: 2.7.0
 * Rails version: 6.0.3.3
 
-[Current Online Version](http://188.166.149.246/)
+## Current Online Version
+Currently, the address for the CDI can change. We are working to publish the CDI 
+with a stable address. 
+
+At the moment, the CDI can be accessed from **[here](http://188.166.149.246/)**.
+
 
 ![app screenshot](https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png)
 
