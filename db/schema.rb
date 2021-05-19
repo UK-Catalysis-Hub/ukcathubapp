@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_19_124355) do
+ActiveRecord::Schema.define(version: 2021_05_19_170858) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
@@ -251,13 +251,16 @@ ActiveRecord::Schema.define(version: 2021_05_19_124355) do
 			  GROUP BY article_id
   SQL
   create_view "inst_ctry_stats", sql_definition: <<-SQL
-      SELECT country, COUNT() AS insts, SUM(collaborations) AS collab from(
-  SELECT affiliations.institution, affiliations.country , COUNT(*) AS collaborations
-    FROM "authors" 
-    INNER JOIN "affiliation_links" ON "affiliation_links"."author_id" = "authors"."id" 
-    INNER JOIN "affiliations" ON "affiliations"."id" = "affiliation_links"."affiliation_id" 
-    GROUP BY "country", affiliations.institution
-  )
+      SELECT country, COUNT() AS insts, SUM(rchs) AS res, sum(colls) AS collab FROM(
+    SELECT country, COUNT() AS rchs, SUM(publications) AS colls FROM(
+      SELECT authors.id, affiliations.institution, affiliations.country, COUNT(*) AS publications
+        FROM "authors" 
+        INNER JOIN "affiliation_links" ON "affiliation_links"."author_id" = "authors"."id" 
+        INNER JOIN "affiliations" ON "affiliations"."id" = "affiliation_links"."affiliation_id" 
+        GROUP BY authors.id, affiliations.institution, affiliations.country
+      )
+      GROUP BY country, institution
+    )
   GROUP BY country
   SQL
 end
