@@ -168,52 +168,47 @@
 		  </div>
 		</div>
 	      </div><!--col-sm-3-->
-	</div>
-        
-        
-            <!-- Affiliations -->
-	    <div class="row mb-3">
-		<div class="col-sm-12">
-		    <div class="card">
-		      <div class="card-header">
-			<h6 style= "margin:auto">Affiliations</h6>
-		      </div>
-		      <div class="card-body p-0">
-		      <div class="row">
+    </div>
+    <!-- Affiliations -->
+    <div class="row mb-3">
+        <div class="col-sm-12">
+	    <div class="card">
+	        <div class="card-header">
+		    <h6 style= "margin:auto">Institutions</h6>
+	        </div>
+	        <div class="card-body p-0">
+	        <div class="row">
+		    <div class="col-sm-6">
+		        <br/>
+		     <% aff_stats = InstCtryStat.all.order('insts desc')
+		        country_data = []
+		        aff_stats.each do |affsts|
+		            if affsts.country == "Peoples Republic of China" then
+		                 country_data.append(["China", affsts.insts])
+                            elsif affsts.country == "United States of America" then
+			         country_data.append(["United States", affsts.insts])
+                            elsif affsts.country == "The Netherlands" then
+                                country_data.append(["Netherlands", affsts.insts])			  
+                            else
+                                country_data.append([affsts.country, affsts.insts])
+                            end
+                        end %>
+		    <%= geo_chart country_data, title: "Contributions" %>
+		 </div>
 			<div class="col-sm-6">
-			    <br/>
-			     <% aut_countries = Affiliation.country_count
-			        aut_countries = aut_countries.sort_by{|k,v| -v}
-				country_data = []
-				aut_countries.each {|ac|
-				if ac[0] == "Peoples Republic of China" then
-				  country_data.append(["China", ac[1]])
-				elsif ac[0] == "United States of America" then
-				  country_data.append(["United States", ac[1]])
-				elsif ac[0] == "The Netherlands" then
-				  country_data.append(["Netherlands", ac[1]])
-				elsif ac[0] == "Brasil" then
-				  country_data.append(["Brazil", ac[1]])				  
-				else
-				  country_data.append([ac[0], ac[1]])
-				end
-				} %>
-		      		<%= geo_chart country_data, title: "Contributions" %>
-			 </div>
-				<div class="col-sm-6">
-				    <% if Author.data_objects_count.length()>0 %>
-				    <h6>Countries of affiliations</h6>
-				    <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..6], count_name: "Institutions"}%>
-				    <% end %>
-				    <p>
-				      <%= link_to 'Download Data', datasets_path, :class => "btn-success btn-sm" %>
-				      <%= link_to 'View Data Objects', datasets_path, :class => "btn-success btn-sm" %>
-				    <p>
-				</div>
-			      </div>
-			    </div>
-			  </div>
-			</div><!--col-sm-12-->
+			    <% if Author.data_objects_count.length()>0 %>
+			    <h6>Countries of origin</h6>
+			    <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..7], count_name: "Institutions"}%>
+			    <% end %>
+			    <p>
+			      <%= link_to 'Download Data', affiliations_path, :class => "btn-success btn-sm" %>
+			      <%= link_to 'View Institutions', affiliations_path, :class => "btn-success btn-sm" %>
+			    <p>
+			</div>
+		      </div>
+		    </div>
+		  </div>
+		</div><!--col-sm-12-->
 	    </div> <!--row mb3 -->   
         
         <!-- Publications per Theme -->
