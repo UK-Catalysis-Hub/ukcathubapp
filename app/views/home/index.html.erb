@@ -127,48 +127,43 @@
         </div>
     </div>
     
-        <!-- Researchers -->
+    <!-- Researchers -->
         
-        <div class="row px-1 my-3">
-	      <div class="col-sm-4">
-		<div class="card">
-		  <div class="card-header">
-		    <h6 style= "margin:auto">Top publishing researchers</h6>
-		  </div>
-		  <div class="card-body p-0">
-		    <% if Author.publications_count.length > 0 %>
-		    <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(5), count_name: "Pubs."}%>
-		    <% end %>
-		  </div>
-		</div>
-	      </div>
-	      <div class="col-sm-4 ">
-		<div class="card">
-          	  <div class="card-header">
-        	    <h6 style= "margin:auto">Top publishing researchers (non P.I.)</h6>
-	          </div>
-                 <div class="card-body p-0">
-                   <% if Author.publications_count.length() > 0 %>              
-                     <% except ='authors.id not in (11, 15, 23, 22, 99, 111, 120, 134, 154, 171, 329)' %>
-                     <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.where(except).limit(5), count_name: "Publications" }%>
-                  <% end %>
-            </div>
-		</div>
-	      </div>
-	      <div class="col-sm-4">
-		<div class="card">
-		  <div class="card-header">
-		    <h6 style= "margin:auto">Most cited researchers</h6>
-		  </div>
-		  <div class="card-body p-0">
-		    <% if Author.publications_count.length() > 0 %>
-		    <% label_for_view = "Citations" %>
-		    <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(5), count_name: label_for_view }%>
-		    <% end %>
-		  </div>
-		</div>
-	      </div><!--col-sm-3-->
-    </div>
+    <div class="row px-1 my-3">
+      <div class="col-sm-12">
+	    <div class="card">
+	        <div class="card-header">
+		        <h6 style= "margin:auto">Researchers</h6>
+		    </div>
+		    <div class="card-body p-0">
+  		        <div class="row">
+		            <div class="col-sm-4">
+		                <h6 style= "text-align: center;">Top publishing researchers</h6>
+		                <% if Author.publications_count.length > 0 %>
+		                <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.limit(5), count_name: "Pubs."}%>
+                        <% end %>
+        		    </div>
+                    <div class="col-sm-4">
+                        <h6 style= "text-align: center;">Top publishing researchers (non P.I.)</h6>
+                        <% if Author.publications_count.length() > 0 %>
+                        <% except ='authors.id not in (11, 15, 23, 22, 99, 111, 120, 134, 154, 171, 329)' %>
+                        <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.where(except).limit(5), count_name: "Publications" }%>
+                        <% end %>
+                    </div>
+                    <div class="col-sm-4">
+                        <h6 style= "text-align: center;">Most cited researchers</h6
+                        <% if Author.publications_count.length() > 0 %>
+                        <% label_for_view = "Citations" %>
+                        <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(5), count_name: label_for_view }%>
+                        <% end %>                      
+                    </div>
+    	      </div><!--row-->
+	      </div><!--card body-->
+	      </div><!--card-->
+        </div><!--col-sm-12-->
+    </div><!-- div row -->
+    
+    
     <!-- Affiliations -->
     <div class="row mb-3">
         <div class="col-sm-12">
@@ -197,7 +192,7 @@
 		 </div>
 			<div class="col-sm-6">
 			    <% if Author.data_objects_count.length()>0 %>
-			    <h6>Countries of origin</h6>
+			    <h6 style= "text-align: center;">Countries of origin</h6>
 			    <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..7], count_name: "Institutions"}%>
 			    <% end %>
 			    <p>
@@ -267,7 +262,7 @@
 		 </div>
                 <div class="col-sm-6">
                     <% if Author.data_objects_count.length()>0 %>
-                    <h6>Top Data Publishing Researchers</h6>
+                    <h6 style= "text-align: center;">Top Data Publishing Researchers</h6>
                     <%= render partial: 'authors/authors_top', locals: {authors: Author.data_objects_count.limit(10), count_name: "Data Objects"}%>
                     <% end %>
 
