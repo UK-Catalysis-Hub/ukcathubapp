@@ -185,10 +185,10 @@ class ArticlesController < ApplicationController
              disp_names += ', ' + this_name
            end
         end
-        bib_list.append(["title"=>article.title, "year"=>article.pub_year, "authors"=>disp_names,
-                         "Publisher" => article.container_title, "doi"=>article.doi, 
+        bib_list.append({"title"=>article.title, "year"=>article.pub_year, "authors"=>disp_names,
+                         "publisher" => article.container_title, "doi"=>article.doi, 
                          "pub_type"=> article.pub_type,'volume'=>article.volume, 
-                         'issue'=>article.issue,'page'=> article.page])
+                         'issue'=>article.issue,'page'=> article.page})
       end
       return bib_list
     end
