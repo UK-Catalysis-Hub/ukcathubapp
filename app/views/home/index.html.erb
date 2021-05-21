@@ -89,46 +89,35 @@
         </div> <!-- info box -->
       </div>
     </div>
+
+    <!--Publications-->
     <div class="row px-1 my-3">
-      <div class="col-sm-6 col-lg-6">
-        <div class="card">
-          <div class="card-header bg-light">
-            <h6 style= "margin:auto">Recent publications</h6>
-          </div>
-          <div class="card-body p-0" style= "margin:auto">
-            <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-lg-6">
-        <div class="card">
-          <div class="card-header">
-            <h6 style= "margin:auto">Publications by Year</h6>
-          </div>
-          <div class="card-body p-0">
-             <% 
-	      # chartkick has not implemented combo chart, sot this code will not work
-	      # combo_chart(year_series[1], library: { :series => { 1 => { type: "line"} } }, title:"Accumulating" )
-	      # and in this one the extra options are just ignored
-	      # column_chart(year_series[1], library: { :series => { 1 => { type: "line"} } }, title:"Accumulating" )
-	      %>
-             <% year_series = []
-              arts_by_year = Article.where(:status => "Added").group(:pub_year).count
-              year_series[0] = {name:"Annual", data: arts_by_year}
-              sum = 0
-              year_series[1] = {name:"Accumulating", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
-           
-            <% themes_per_year = Theme.joins(:articles).group(:short,:pub_year).order(:id).count
-              themes_per_year = themes_per_year.map{|tpy| {name: tpy[0][0], data: [tpy[0][1],tpy[1]]}}
-            %>
-            <%= column_chart(year_series, :legend=> "bottom", title:"Annual vs Accumulating")%>
-            </div>
-          </div>
-        </div>
-    </div>
-    
+        <div class="col-sm-12 col-lg-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h6 style= "margin:auto">Publications</h6>
+                </div>
+                <div class="card-body p-0" style= "margin:auto">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <% year_series = []
+                              arts_by_year = Article.where(:status => "Added").group(:pub_year).count
+                              year_series[0] = {name:"Annual", data: arts_by_year}
+                              sum = 0
+                              year_series[1] = {name:"Accumulating", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
+                            <%= column_chart(year_series, :legend=> "bottom", title:"Publications Annual vs Accumulating")%>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 style= "text-align:center">Recent publications</h6>
+                            <%= render partial: 'articles/articles_recent', locals: {articles: Article.latest.limit(5) }%>
+                        </div><!--col-sm-6-->
+                    </div><!--row-->
+	            </div><!--card body-->
+	        </div><!--card-->
+        </div><!--col-sm-12-->
+    </div><!-- div row -->
+
     <!-- Researchers -->
-        
     <div class="row px-1 my-3">
       <div class="col-sm-12">
 	    <div class="card">
@@ -156,11 +145,11 @@
                         <% label_for_view = "Citations" %>
                         <%= render partial: 'authors/authors_top', locals: {authors: Author.citations_count.limit(5), count_name: label_for_view }%>
                         <% end %>                      
-                    </div>
-    	      </div><!--row-->
-	      </div><!--card body-->
-	      </div><!--card-->
-        </div><!--col-sm-12-->
+                    </div><!--col-sm-4-->
+                </div><!--row-->
+            </div><!--card body-->
+	    </div><!--card-->
+      </div><!--col-sm-12-->
     </div><!-- div row -->
     
     
