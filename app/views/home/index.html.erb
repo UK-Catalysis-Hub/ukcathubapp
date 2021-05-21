@@ -201,7 +201,7 @@
 			    <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..7], count_name: "Institutions"}%>
 			    <% end %>
 			    <p>
-			      <%= link_to 'Download Data', affiliations_path, :class => "btn-success btn-sm" %>
+			      <%= link_to 'Download Data', {:action => "ctry_affi_count", :controller => "affiliations"}, :class => "btn-success btn-sm" %>
 			      <%= link_to 'View Institutions', affiliations_path, :class => "btn-success btn-sm" %>
 			    <p>
 			</div>

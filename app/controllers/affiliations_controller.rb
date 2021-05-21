@@ -71,6 +71,14 @@ class AffiliationsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  # download country stats
+  def ctry_affi_count
+    ctry_affi_stats = InstCtryStat.all.order('insts desc').collect{|ca| [ca.country, ca.insts, ca.res, ca.collab]}
+    theme_csv = get_csv(['country','institutions','researchers','collaborations'], ctry_affi_stats)
+    send_data(theme_csv, 
+              :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_ctry_stats.csv')
+  end 
 
   private
     # Use callbacks to share common setup or constraints between actions.
