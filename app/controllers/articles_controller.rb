@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user!, except: [:index, :show, :bib_query]
   class ArticleSearch < FortyFacets::FacetSearch
     model 'Article' # which model to search for
     scope :active  # only return articles which are in the scope 'active'
@@ -91,7 +91,7 @@ class ArticlesController < ApplicationController
 
   # return publications as bib json data
   def bib_query   
-    articles = Article.active
+    articles = Article.active.all()
     if (params.has_key?('year') and  params.has_key?('theme'))
       articles = Article.active.where(pub_year: params[:year]).joins(:themes).where(:themes=> {short: params[:theme]})
     elsif
