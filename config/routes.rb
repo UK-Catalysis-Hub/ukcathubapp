@@ -22,6 +22,6 @@ Rails.application.routes.draw do
   get 'themes_count' => 'themes#themes_count', as: 'themes_count'
   get 'data_count' => 'datasets#data_count', as: 'data_count'
   get 'ctry_stats' => 'affiliations#ctry_affi_count', as: 'ctry_stats'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  get 'get_pubs' => 'articles#bib_query', as: :getpubs
   root 'home#index'
 end

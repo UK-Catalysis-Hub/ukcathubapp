@@ -39,7 +39,6 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
-    puts article_params
     @article = Article.new(article_params)
     respond_to do |format|
       if @article.save
@@ -87,6 +86,24 @@ class ArticlesController < ApplicationController
       flash[:notice] = 'verify process started'
       format.html { redirect_to action: "index" }
       format.json { head :no_content }
+    end
+  end
+
+  # return publications as bib json data
+  def bib_query   
+    articles = Article.active
+    if (params.has_key?('year') and  params.has_key?('theme'))
+      articles = Article.active.where(pub_year: params[:year]).joins(:themes).where(:themes=> {short: params[:theme]})
+    elsif
+      articles = Article.active.where(pub_year: params[:year])
+    else
+      puts '----- NO PARAMETERS -------' 
+    end
+    bib_data = get_bib_data(articles)
+    puts articles.count
+    respond_to do |format|
+      msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
+      format.json  { render :json => bib_data } # don't do msg.to_json
     end
   end
 
@@ -138,6 +155,8 @@ class ArticlesController < ApplicationController
         'container-title-short']
     end
 
+    
+    
     def getCRData(doi_text)
       begin
           #puts "trying"
@@ -147,6 +166,31 @@ class ArticlesController < ApplicationController
           #puts "failing"
           return nil
       end
+    end
+
+    # get list of publications as bibliography
+    def get_bib_data(articles)
+      bib_list=[]
+      articles.each do |article|
+        author_list = article.authors.all
+        disp_names = ""
+        author_list.each do|auth|
+           pr_name = auth.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
+           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
+           pr_name += auth.last_name
+           this_name = pr_name
+           if disp_names == ""
+             disp_names =  + this_name
+           else
+             disp_names += ', ' + this_name
+           end
+        end
+        bib_list.append(["title"=>article.title, "year"=>article.pub_year, "authors"=>disp_names,
+                         "Publisher" => article.container_title, "doi"=>article.doi, 
+                         "pub_type"=> article.pub_type,'volume'=>article.volume, 
+                         'issue'=>article.issue,'page'=> article.page])
+      end
+      return bib_list
     end
 
     def getPubData(db_article, doi_text)
