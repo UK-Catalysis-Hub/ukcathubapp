@@ -94,8 +94,10 @@ class ArticlesController < ApplicationController
     articles = Article.active.all()
     if (params.has_key?('year') and  params.has_key?('theme'))
       articles = Article.active.where(pub_year: params[:year]).joins(:themes).where(:themes=> {short: params[:theme]})
-    elsif
+    elsif ( params.has_key?('year') )
       articles = Article.active.where(pub_year: params[:year])
+    elsif ( params.has_key?('theme') )
+      articles = Article.active.joins(:themes).where(:themes=> {short: params[:theme]})
     else
       puts '----- NO PARAMETERS -------' 
     end
