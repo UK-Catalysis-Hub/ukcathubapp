@@ -50,7 +50,7 @@
         <div class="container"><!-- info box -->
           <div class="row bg-success  rounded border-success">
             <div class="col-sm-6">
-              <h1><%= Affiliation.count() %></h1>
+              <h1><%= Affiliation.group("institution").count().count() %></h1>
               <h6>Institutions</h6>
             </div>
             <div class="col-sm my-1">

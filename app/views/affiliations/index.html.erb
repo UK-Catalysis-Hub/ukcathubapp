@@ -91,7 +91,7 @@
             </div>
         <div class="col-md-9"><!--List of items in page -->
           <%= will_paginate @affiliations, renderer: WillPaginate::ActionView::BootstrapLinkRenderer  %>
-	  <b> <%= @affiliations.count%> Institutions found</b> 
+	  <b> <%= @affiliations.count%> Affiliations found</b> 
 	  <%= render 'affiliations_list', affiliations: @affiliations %>
 	</div><!-- col right DIV: list -->
 	</div><!-- row DIV: facets and list -->
@@ -125,11 +125,11 @@
 		 </div>
 			<div class="col-sm-6">
 			    <% if Author.data_objects_count.length()>0 %>
-			    <h6>Countries of origin</h6>
-			    <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..7], count_name: "Institutions"}%>
+			    <h6>Top 10 Countries of origin</h6>
+			    <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..9], count_name: "Institutions"}%>
 			    <% end %>
 			    <p>
-			      <%= link_to 'Download Data', affiliations_path, :class => "btn-success btn-sm" %>
+			      <%= link_to 'Download Data', {:action => "ctry_affi_count", :controller => "affiliations"}, :class => "btn-success btn-sm" %>
 			    <p>
 			</div>
 		      </div>
