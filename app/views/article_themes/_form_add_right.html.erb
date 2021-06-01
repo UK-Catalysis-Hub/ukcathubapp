@@ -30,7 +30,8 @@
             <%= theme.name %>
           </td>
           <td>
-            <%= select(select_year, "project_year"+theme.id.to_s , options = options_for_select((2013..2020), select_year) ) %>
+            <% year_to = Time.current.year %>
+            <%= select(select_year, "project_year"+theme.id.to_s , options = options_for_select((2013..year_to), select_year) ) %>
           </td>
           <td>
             <%= button_to('Assign', {:action => 'link_to_theme', :controller => 'article_themes', :data => {:article_id => article_id,:id => theme.id, :year => select_year}}, :class => 'btn btn-success btn-sm') %>
