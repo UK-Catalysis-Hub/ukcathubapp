@@ -259,12 +259,51 @@
        <div class="col-sm-12">
          <div class="card">
            <div class="card-header">
-             <h6 style= "margin:auto">Most cited publications</h6>
+             <h6 style= "margin:auto">Citations</h6>
            </div>
            <div class="card-body p-0">
-             <%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
-             <div class="container">
-               Citation count:<%= number_with_delimiter(Article.most_cited.sum(:referenced_by_count)) %>
+             <div class = "row justify-content-center" >
+               <div class="col-sm-4">
+                 <div id="citation_summary" class="container">          
+                   <table class="table table-sm table-striped table-bordered">
+                     <thead class="thead-light">
+                       <tr>
+                         <th colspan="2">Summary</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <td> Citations </td>
+                         <td class="text-right">
+                           <%= number_with_delimiter(Article.most_cited.sum(:referenced_by_count)) %>
+                         </td>
+                       </tr>
+                       <tr>
+                         <td> Average: </td>
+                         <td class="text-right">
+                           <%= (Article.most_cited.sum(:referenced_by_count)/(0.0+Article.count)).round(2) %>
+                         </td>
+                       </tr>
+                       <tr>
+                         <td> Maximum:  </td>
+                         <td class="text-right">
+                           <%= Article.most_cited.length() > 0 ? Article.maximum(:referenced_by_count) : 0 %>
+                         </td>
+                       </tr>
+                       <tr>
+                         <td> Minimum:  </td>
+                         <td class="text-right">
+                           <%= Article.most_cited.length() > 0 ? Article.minimum(:referenced_by_count) : 0 %>
+                         </td>
+                       </tr>
+                     </tbody>
+                   </table>
+                 </div>
+               </div>
+               <div class="col-sm-8">
+                 <h6 style= "text-center">Most cited publications</h6>
+                 <%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>  
+               </div>
              </div>
            </div>
          </div>
