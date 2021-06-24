@@ -15,7 +15,6 @@ class AuthorsTest < ApplicationSystemTestCase
     click_on "New Author"
 
     fill_in "Articles", with: @author.articles
-    fill_in "Full name", with: @author.full_name
     fill_in "Given name", with: @author.given_name
     fill_in "Last name", with: @author.last_name
     fill_in "Orcid", with: @author.orcid
@@ -30,7 +29,6 @@ class AuthorsTest < ApplicationSystemTestCase
     click_on "Edit", match: :first
 
     fill_in "Articles", with: @author.articles
-    fill_in "Full name", with: @author.full_name
     fill_in "Given name", with: @author.given_name
     fill_in "Last name", with: @author.last_name
     fill_in "Orcid", with: @author.orcid

@@ -5,10 +5,9 @@ require 'fuzzystringmatch'
 
 
 class Author
-  attr_accessor :id, :full_name, :last_name, :given_name, :orcid, :articles
+  attr_accessor :id, :last_name, :given_name, :orcid, :articles
   # class attributes
   @id = nil
-  @full_name = ""
   @last_name = ""
   @given_name = ""
   @orcid = nil
@@ -110,12 +109,6 @@ if $0 == __FILE__
         new_author.given_name = art_author['given']
         puts "name: " + new_author.given_name
       end
-      if new_author.given_name.length > 0
-        new_author.full_name = new_author.given_name + ", " +new_author.last_name
-      else
-        new_author.full_name = new_author.last_name
-      end
-      puts("full name: " + new_author.full_name)
       if new_author.orcid
         stm = db.prepare "SELECT * FROM Authors WHERE Authors.orcid = '" + new_author.orcid + "'"
         rs = stm.execute
@@ -126,7 +119,8 @@ if $0 == __FILE__
         end
       end
       if new_author.id == nil and found_orcid == false
-        stm = db.prepare "SELECT * FROM Authors WHERE Authors.full_name = '" + new_author.full_name + "'"
+        stm = db.prepare "SELECT * FROM Authors WHERE Authors.last_name = '" + new_author.last_name + \
+                "'AND Authors.given_name = '" + new_author.given_name + "'"
         rs = stm.execute
         rs.each do |row|
           puts "***FOUND EXACT MATCH: " + row[1]
@@ -139,8 +133,9 @@ if $0 == __FILE__
         stm = db.prepare "SELECT * FROM Authors WHERE Authors.last_name like '%" + new_author.last_name + "%'"
         rs = stm.execute
         rs.each do |row|
-          found_fn = row[1]
-          name_similarity = similar(new_author.full_name, found_fn)
+          found_fn = row[2] + row[3]
+          new_auth =  new_author.last_name + new_author.given_name
+          name_similarity = similar(new_auth, found_fn)
           if name_similarity > 0.7
             puts "***MATCH FOUND: " + found_fn + " " + name_similarity.to_s
             found_exact = true
