@@ -238,7 +238,7 @@
               <h6 style= "margin:auto">Top data publishing researchers</h6>
             </div>
             <div class="card-body p-0" >
-              <% if Author.publications_count.length() > 0 %>
+              <% if Author.data_objects_count.length() > 0 %>
               <%= render partial: 'authors/authors_top', locals: {authors: Author.data_objects_count.limit(10), count_name: "Data Objects"}%>
               <% end %>
             </div>
@@ -253,7 +253,7 @@
           <h6 style= "margin:auto">Not verified authors <%= Author.not_verified.count %></h6>
         </div>
         <div class="card-body p-0" style= "margin:auto">
-          <%= render partial: 'authors/filtered_list', locals: {authors: Author.not_verified}%>
+          <%= render partial: 'authors/authors_list', locals: {authors: Author.not_verified}%>
         </div>
       </div>
     </div>
@@ -276,7 +276,7 @@
     </div>
     <div class="tab-pane fade" id="all-auths" role="tabpanel" aria-labelledby="all-auths-tab">
       <div class="container">
-          <%= render partial: 'authors/authors_list', locals: {authors: Author.all}%>
+          <%= render partial: 'authors/authors_list', locals: {authors: Author.active}%>
       </div>
 
     </div>
