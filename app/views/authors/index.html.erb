@@ -215,19 +215,19 @@
               <h6 style= "margin:auto">Countries of oringin</h6>
             </div>
             <div class="card-body" style="height: 370px; margin-left: auto; margin-right: auto;">
-              <% aut_countries = Author.country_count
-                 country_data = []
-                 aut_countries.each {|ac|
-                   if ac[0] == "Peoples Republic of China" then
-                     country_data.append(["China", ac[1]])
-                   elsif ac[0] == "United States of America" then
-                     country_data.append(["United States", ac[1]])
-                   elsif ac[0] == "The Netherlands" then
-                     country_data.append(["Netherlands", ac[1]])
-                   else
-                     country_data.append([ac[0], ac[1]])
-                   end
-                 } %>
+		     <% aff_stats = InstCtryStat.all.order('res_count desc')
+		        country_data = []
+		        aff_stats.each do |affsts|
+		            if affsts.country == "Peoples Republic of China" then
+		                 country_data.append(["China", affsts.res_count])
+                            elsif affsts.country == "United States of America" then
+			         country_data.append(["United States", affsts.res_count])
+                            elsif affsts.country == "The Netherlands" then
+                                country_data.append(["Netherlands", affsts.res_count])
+                            else
+                                country_data.append([affsts.country, affsts.res_count])
+                            end
+                        end %>
               <%= geo_chart country_data %>
             </div>
           </div>

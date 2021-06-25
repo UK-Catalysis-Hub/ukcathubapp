@@ -15,7 +15,7 @@ class CrossrefPublication
     if pub_data != nil
       art_id = article.id
       changes_found = false
-      # only verify fields which may chenge between recoveries: citations
+      # only verify fields which may change between recoveries: citations
       if article.attributes['referenced_by_count'] != pub_data['is-referenced-by-count']
         changes_found = true
         article.attributes['referenced_by_count'] = pub_data['is-referenced-by-count']
@@ -30,6 +30,7 @@ class CrossrefPublication
   def self.generate_author_affiliations(authors_list)
     affi_separator = AffiliationLists.new()
     authors_list.each do |an_author|
+      puts "Author ID: " + an_author.id.to_s()
       article_authors = an_author.article_authors
       article_authors.each do |an_art_aut|
         continue = false
@@ -39,8 +40,8 @@ class CrossrefPublication
           #if affi_lines.count > 4
             return_hash = affi_separator.one_by_one_affi(affi_lines)
             puts "\n***********************************************************"
-            puts "*Author: " + an_art_aut.id.to_s + " Lines: " + affi_lines.count.to_s
-            puts "*input lines: "
+            puts "* Author: " + an_art_aut.id.to_s + " Lines: " + affi_lines.count.to_s
+            puts "* input lines: "
             affi_separator.print_lines(affi_lines)
             print "\n*RETURN HASH " + return_hash.to_s
             n_affis = affi_separator.build_and_save_auth_affis(return_hash, an_art_aut.id)
@@ -513,7 +514,6 @@ class CrossrefPublication
         #         - complete and create a new affi.
         #           - mark as complete requires looking for matches and missing minimal parts in affiliations table: i.e. inst, ctry,
         #           - if inst and ctry blank, use the same as last one (i.e. inst and ctry from previous)
-
         # currently there is no affiliation
         add_another = false
         if affi_hash[indx] == nil then
@@ -664,8 +664,11 @@ class CrossrefPublication
       #                       "institution"=>"University of Reading",
       #                       "ft_44"=>"Reading RG6 6AD",
       #                       "ctry_syn"=>"UK"}},[140]]
+      puts "#####################################"
+      puts new_affi_hash
+      puts "#####################################"
       affis_built = 0
-      if new_affi_hash.count > 0 then
+      if new_affi_hash.count > 0 and new_affi_hash != {0=>nil}  then
         affi_previous = nil
         previous = nil
         previous_ids = nil
