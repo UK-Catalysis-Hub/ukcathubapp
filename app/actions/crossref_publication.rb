@@ -664,9 +664,9 @@ class CrossrefPublication
       #                       "institution"=>"University of Reading",
       #                       "ft_44"=>"Reading RG6 6AD",
       #                       "ctry_syn"=>"UK"}},[140]]
-      puts "#####################################"
+      puts "\n#####################################"
       puts new_affi_hash
-      puts "#####################################"
+      puts "\n#####################################"
       affis_built = 0
       if new_affi_hash.count > 0 and new_affi_hash != {0=>nil}  then
         affi_previous = nil
