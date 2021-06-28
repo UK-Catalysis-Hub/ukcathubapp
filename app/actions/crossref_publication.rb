@@ -27,6 +27,32 @@ class CrossrefPublication
     end
   end
 
+  def self.get_author_affiliations()
+    article_authors = ArticleAuthor.all()
+    missing_affi = []
+    article_authors.each do |an_author|
+      if an_author.author_affiliations.count == 0
+        missing_affi.append(an_author)
+      end
+    end
+    current_doi = ""
+    pub_data = nil
+    missing_affi.each do |an_author| 
+        puts "Missing Affiliation for:" + an_author.given_name.to_s() + " " + an_author.last_name.to_s()
+        puts "DOI " + an_author.doi.to_s() + " Article: " +an_author.article_id.to_s()
+        if current_doi == "" or current_doi != an_author.doi
+          # get data from crossref
+          pub_data = CrossrefApiClient.getCRData(an_author.doi)
+          current_doi = an_author.doi
+        end
+        # look for author data in the crossref object
+        if pub_data != nil
+          puts "looking up authors"
+          puts pub_data
+        end
+    end
+  end
+
   def self.generate_author_affiliations(authors_list)
     affi_separator = AffiliationLists.new()
     authors_list.each do |an_author|
