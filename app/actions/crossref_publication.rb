@@ -30,17 +30,17 @@ class CrossrefPublication
   def self.generate_author_affiliations(authors_list)
     affi_separator = AffiliationLists.new()
     authors_list.each do |an_author|
-      puts "Author ID: " + an_author.id.to_s()
+      #puts "Author ID: " + an_author.id.to_s()
       article_authors = an_author.article_authors
       article_authors.each do |an_art_aut|
         continue = false
         affi_lines = an_art_aut.cr_affiliations.where(author_affiliation_id: nil)
         if affi_lines.length > 0
-          #puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
+          puts "Afiliatios for Article " + an_art_aut.article_id.to_s + ": "+ affi_lines.length.to_s
           #if affi_lines.count > 4
             return_hash = affi_separator.one_by_one_affi(affi_lines)
             puts "\n***********************************************************"
-            puts "* Author: " + an_art_aut.id.to_s + " Lines: " + affi_lines.count.to_s
+            puts "* Author: " + an_art_aut.id.to_s + " " + an_art_aut.given_name + " " + an_art_aut.last_name   + " Lines: " + affi_lines.count.to_s
             puts "* input lines: "
             affi_separator.print_lines(affi_lines)
             print "\n*RETURN HASH " + return_hash.to_s
@@ -87,6 +87,7 @@ class CrossrefPublication
       # (need to persist somewhere)
       @institution_synonyms = {"The ISIS facility":"ISIS Neutron and Muon Source",
         "ISIS Neutron and Muon Facility":"ISIS Neutron and Muon Source",
+        "ISIS Pulsed Neutron and Muon Facility":"ISIS Neutron and Muon Source",
         "STFC":"Science and Technology Facilities Council",
         "Oxford University":"University of Oxford",
         "University of St Andrews":"University of St. Andrews",
@@ -756,6 +757,15 @@ class CrossrefPublication
               affis_built += 1
             else
               puts "Found existing affiliation: " + existing_affi.id.to_s
+              # need to update cr_affis to register affiliation found
+              puts "\nUpdating Affiliations"
+              # mark the cr_affis with the id of the corresponding author_affiliation
+              cr_affis = lines_list[1]
+              cr_affis.each {|cr_affi_id|
+                cr_affi = CrAffiliation.find(cr_affi_id)
+                cr_affi.author_affiliation_id = existing_affi.id
+                cr_affi.save
+              }
             end
           else
             puts "**Found error in new affiliation**"

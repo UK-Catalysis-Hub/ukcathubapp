@@ -2,9 +2,11 @@ class AffiliationsController < ApplicationController
   before_action :set_affiliation, only: [:show, :edit, :update, :destroy]
   class AffiliationSearch < FortyFacets::FacetSearch
     model 'Affiliation' # which model to search for
-    text  :institution # filter by a generic string entered by the user
+    #text  :institution # filter by a generic string entered by the user
+    facet  :institution, name: 'Institution'
     facet :country, name: 'Country'
-
+    facet :department, name: 'Department'
+    
     orders 'Institution, Ascendign' => {institution: :asc, department: :asc},
            'Institution, Descending' => {institution: :desc, department: :desc},
            'Country, Ascending' => {country: :asc},
