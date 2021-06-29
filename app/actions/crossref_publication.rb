@@ -49,6 +49,24 @@ class CrossrefPublication
         if pub_data != nil
           puts "looking up authors"
           puts pub_data
+          pub_data['author'].each do |pub_author|
+            if pub_author["given"] == an_author.given_name and pub_author["family"] == an_author.last_name
+              if pub_author["affiliation"].length > 0
+                # double check that cr_affi does not exist
+                cr_affi_saved = CrAffiliation.where("article_author_id = #{an_author.id}")
+                if cr_affi_saved.length == 0
+                  pub_author["affiliation"].each do |affil_line|
+                    new_line = CrAffiliation.new()
+                    new_line.name = affil_line["name"]
+                    new_line.article_author_id = an_author.id
+                    new_line.save
+                  end
+                end
+              else
+                break
+              end
+            end
+          end
         end
     end
   end
@@ -528,7 +546,7 @@ class CrossrefPublication
       temp_pair = []
       affi_lines.each do |cr_affi|
         # split element by keywords
-        temp_split = split_by_keywords(cr_affi.name.strip)#.gsub("'","''"))
+        temp_split = split_by_keywords(cr_affi.name.strip.gsub("\r"," "))#.gsub("'","''"))
         # when no fragment is recognised as a keyword?
         if temp_split == {} then
           temp_split = {"line_"+other_lines.to_s => cr_affi.name.strip}
