@@ -76,7 +76,7 @@ class AffiliationsController < ApplicationController
   
   # download country stats
   def ctry_affi_count
-    ctry_affi_stats = InstCtryStat.all.order('insts desc').collect{|ca| [ca.country, ca.insts, ca.res, ca.collab]}
+    ctry_affi_stats = InstCtryStat.all.order('inst_count desc').collect{|ca| [ca.country, ca.inst_count, ca.res_count, ca.pub_count]}
     theme_csv = get_csv(['country','institutions','researchers','collaborations'], ctry_affi_stats)
     send_data(theme_csv, 
               :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_ctry_stats.csv')
