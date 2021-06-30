@@ -176,24 +176,23 @@
 	        </div>
 	        <div class="card-body p-0">
 	        <div class="row">
-		    <div class="col-sm-6">
-		        <br/>
-		     <% aff_stats = InstCtryStat.all.order('inst_count desc')
-		        country_data = []
-		        aff_stats.each do |affsts|
-		            if affsts.country == "Peoples Republic of China" then
-		                 country_data.append(["China", affsts.inst_count])
-                            elsif affsts.country == "United States of America" then
-			         country_data.append(["United States", affsts.inst_count])
-                            elsif affsts.country == "The Netherlands" then
-                                country_data.append(["Netherlands", affsts.inst_count])
-                            else
-                                country_data.append([affsts.country, affsts.inst_count])
-                            end
-                        end %>
-		    <%= geo_chart country_data, title: "Contributions" %>
-		 </div>
-			<div class="col-sm-6">
+	        <% aff_stats = InstCtryStat.all.order('inst_count desc')
+             country_data = []
+             aff_stats.each do |affsts|
+               if affsts.country == "Peoples Republic of China" then
+                 country_data.append(["China", affsts.inst_count])
+               elsif affsts.country == "United States of America" then
+                 country_data.append(["United States", affsts.inst_count])
+               elsif affsts.country == "The Netherlands" then
+                 country_data.append(["Netherlands", affsts.inst_count])
+               else
+                 country_data.append([affsts.country, affsts.inst_count])
+               end
+            end %>
+		    <div class="col-sm-6 container">
+		      <%= render partial: 'affiliations/affiliation_map', locals:{country_data: country_data} %>
+		    </div>
+			<div class="col-sm-6 container">
 			    <% if Author.data_objects_count.length()>0 %>
 			    <h6>Top 10 Countries of Origin</h6>
 			    <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..9], count_name: "Institutions"}%>
