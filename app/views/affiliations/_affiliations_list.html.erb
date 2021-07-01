@@ -6,6 +6,8 @@
       <tr>
         <th>Affiliations (<%= affiliations.length() %>)</th>
         <th>Country</th>
+        <th>Articles</th>
+        <th>Data Objects</th>
       </tr>
     </thead>
     <tbody>
@@ -23,6 +25,14 @@
           </td>
           <td>
             <%= affiliation.country %>
+          </td>
+          <td>
+            <% au_affis = affiliation.author_affiliations %>
+            <% art_count = au_affis.joins("INNER JOIN article_authors on author_affiliations.article_author_id = article_authors.id").group(:article_id).count().count() %>
+            <%= art_count %>
+          </td>
+          <td>
+            <%= affiliation.articles.count() %>
           </td>
         </tr>
       <% end %>
