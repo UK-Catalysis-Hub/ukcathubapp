@@ -32,7 +32,8 @@
             <%= art_count %>
           </td>
           <td>
-            <%= affiliation.articles.count() %>
+            <% do_count = au_affis.joins("INNER JOIN article_authors on author_affiliations.article_author_id = article_authors.id").joins("INNER JOIN article_datasets on article_authors.article_id = article_datasets.article_id").group("article_datasets.id").count().count() %>
+            <%= do_count %>
           </td>
         </tr>
       <% end %>
