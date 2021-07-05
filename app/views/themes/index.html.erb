@@ -2,7 +2,18 @@
   <p id="notice"><%= notice %></p>
 
   <h2>Research Themes</h2>
-    
+    <div class="rounded border-light bg-light ">
+      <div class="container col-sm-10 col-10">
+        <p>
+	      The Research activities of the UK Catalysis Hub are organised in <b> <%= Theme.where("phase != 0").count() %> themes
+	      ( <%= Theme.where("phase = 1").count() %> Phase I and <%= Theme.where("phase = 2").count() %> Phase II) </b>. The theme
+	      activities have produced <b><%= ListTheme.where("phase = 2").sum(:article_count) %> publications in phase II </b> and
+	      <b><%= ListTheme.where("phase = 1").sum(:article_count) %> publications in phase I</b>. Additionally,
+	      Non-project collaborations, Block Allocation Group Reseachers and Post-graduates have also been supported, 
+	      producing <%= ListTheme.where("phase = 0").sum(:article_count) %> publications.
+         </p>
+      </div>
+    </div>
     <div class="row mb-3">
       <div class="col-sm-12">
         <div class="card">
