@@ -1,0 +1,40 @@
+<!-- Affiliations -->
+<div class="row mb-3">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+	        <h6 style= "margin:auto">Institutions</h6>
+            </div>
+            <div class="card-body p-0">
+            <div class="row">
+	        <div class="col-sm-6 container" >
+	         <% aff_stats = InstCtryStat.all.order('inst_count desc')
+	            country_data = []
+	            aff_stats.each do |affsts|
+	                if affsts.country == "Peoples Republic of China" then
+	                     country_data.append(["China", affsts.inst_count])
+                            elsif affsts.country == "United States of America" then
+		             country_data.append(["United States", affsts.inst_count])
+                            elsif affsts.country == "The Netherlands" then
+                                country_data.append(["Netherlands", affsts.inst_count])
+                            else
+                                country_data.append([affsts.country, affsts.inst_count])
+                            end
+                        end %>
+	        <%= render partial: 'affiliations/affiliation_map', locals:{country_data: country_data} %>
+	     </div>
+		    <div class="col-sm-6 container">
+		        <% if Author.data_objects_count.length()>0 %>
+		        <h6 style= "text-align: center;">Countries of origin</h6>
+		        <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..9], count_name: "Institutions"}%>
+		        <% end %>
+		        <p>
+		          <%= link_to 'Download Data', {:action => "ctry_affi_count", :controller => "affiliations"}, :class => "btn-success btn-sm" %>
+		          <%= link_to 'View Institutions', affiliations_path, :class => "btn-success btn-sm" %>
+		        <p>
+		    </div>
+	        </div>
+	        </div>
+	     </div>
+	</div><!--col-sm-12-->
+</div> <!--row mb3 -->   
