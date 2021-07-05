@@ -1,0 +1,72 @@
+<div class="row my-1"><!-- Qucik info row -->
+  <div class="col-sm col-6">
+    <div class="container"><!-- info box -->
+      <div class="row bg-primary  rounded border-primary">
+        <div class="col-sm-6">
+          <h1><%= Article.active.count() %></h1>
+          <h6>Publications</h6>
+        </div>
+        <div class="col-sm my-1">
+          <%= image_tag('books2.svg', height: '48', width: '48', class: "rounded float-right d-block") %>
+        </div>
+        <%= link_to 'More Info', articles_path, :class => "btn btn-primary btn-sm btn-block text-dark" %>
+      </div>
+    </div>
+  </div>  <!-- info box -->
+  <div class="col-sm col-6">
+    <div class="container"><!-- info box -->
+      <div class="row bg-secondary  rounded border-secondary my-0">
+        <div class="col-sm-6">
+          <h1><%= number_with_delimiter(Author.active.length()) %></h1>
+          <h6>Authors</h6>
+        </div>
+        <div class="col-sm my-1">
+          <%= image_tag('users.svg', height: '48', width: '48', class: "rounded float-right d-block") %>
+        </div>
+        <%= link_to 'More Info', authors_path, :class => "btn btn-secondary btn-sm btn-block text-dark" %>
+      </div>
+    </div> <!-- info box -->
+  </div>
+  <div class="col-sm col-6">
+    <div class="container"><!-- info box -->
+      <div class="row bg-success  rounded border-success">
+        <div class="col-sm-6">
+          <h1><%= Affiliation.group("institution").count().count() %></h1>
+          <h6>Institutions</h6>
+        </div>
+        <div class="col-sm my-1">
+          <%= image_tag('institution.svg', height: '48', width: '48', class: "rounded float-right d-block") %>
+        </div>
+        <%= link_to 'More Info', affiliations_path, :class => "btn btn-success btn-sm btn-block text-dark" %>
+      </div>
+    </div> <!-- info box -->
+  </div>
+  <div class="col-sm col-6">
+    <div class="container"><!-- info box -->
+      <div class="row bg-danger rounded border-danger ">
+        <div class="col-sm-6">
+          <h1><%= Theme.where("phase != 0").count() %></h1>
+          <h6 class="card-title">Themes</h6>
+        </div>
+        <div class="col-sm-6 my-1">
+          <%= image_tag('expert.svg', height: '48', width: '48', class: "rounded float-right d-block") %>
+        </div>
+        <%= link_to 'More Info', themes_path, :class => "btn btn-danger btn-sm btn-block text-dark" %>
+      </div>
+    </div> <!-- info box -->
+  </div>
+  <div class="col-sm col-6">
+    <div class="container"><!-- info box -->
+      <div class="row bg-warning  rounded border-warning ">
+        <div class="col-sm-6">
+          <h1><%= Dataset.count() %></h1>
+          <h6 class="card-title">Datasets</h6>
+        </div>
+        <div class="col-sm-6 my-1">
+          <%= image_tag('database.svg', height: '48', width: '48', class: "rounded float-right d-block") %>
+        </div>
+        <%= link_to 'More Info', datasets_path, :class => "btn btn-warning btn-sm btn-block text-dark" %>
+      </div>
+    </div> <!-- info box -->
+  </div>
+</div>
