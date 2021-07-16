@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   resources :themes
   get 'themes_count' => 'themes#themes_count', as: 'themes_count'
   get 'data_count' => 'datasets#data_count', as: 'data_count'
+  post 'upload_data' => 'datasets#upload_data', as: 'upload_data'
   get 'ctry_stats' => 'affiliations#ctry_affi_count', as: 'ctry_stats'
   get 'get_pubs' => 'articles#bib_query', as: :getpubs
   root 'home#index'

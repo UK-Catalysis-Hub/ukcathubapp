@@ -82,6 +82,14 @@ class DatasetsController < ApplicationController
               :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_dataobject_count.csv')
   end 
 
+  # upload bew datasets (csv)
+  def upload_data
+    puts "***************************************************"
+    puts params
+    puts "***************************************************"
+    
+  end 
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_dataset
