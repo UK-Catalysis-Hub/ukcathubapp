@@ -244,18 +244,20 @@ class ArticlesController < ApplicationController
           if pub_data['journal_issue'].keys.include?('issue') then
             db_article.journal_issue = pub_data['journal_issue']['issue']
           end
-          if pub_data['journal_issue']['published-print']['date-parts'][0].length == 1 then
-            #assume that if date parts has only one element, it is year
-            db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-          elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 2 then
-            #assume that if date parts has two elements, they are year and month
-            db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-            db_article.pub_ol_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
-          elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 3 then
-            # assume year, month and day if date parts has three elements
-            db_article.pub_print_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-            db_article.pub_print_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
-            db_article.pub_print_day = pub_data['journal_issue']['published-print']['date-parts'][0][2]
+          if pub_data['journal_issue'].keys().include?('published-print') then
+            if pub_data['journal_issue']['published-print']['date-parts'][0].length == 1 then
+              #assume that if date parts has only one element, it is year
+              db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
+            elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 2 then
+              #assume that if date parts has two elements, they are year and month
+              db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
+              db_article.pub_ol_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
+            elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 3 then
+              # assume year, month and day if date parts has three elements
+              db_article.pub_print_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
+              db_article.pub_print_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
+              db_article.pub_print_day = pub_data['journal_issue']['published-print']['date-parts'][0][2]
+            end
           end
         end
         db_article.container_title = pub_data['container_title']
