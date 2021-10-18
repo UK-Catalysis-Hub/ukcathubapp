@@ -25,9 +25,9 @@ Currently, the address for the CDI can change. We are working to publish the CDI
 with a stable address. 
 
 At the moment, the CDI can be accessed from **[here](http://188.166.149.246/)**.
+[<img src="http://www.google.com.au/images/nav_logo7.png">](http://google.com.au/)
 
-
-![app screenshot](https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png)
+![[app screenshot](https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png)
 
 ## Authors
 
