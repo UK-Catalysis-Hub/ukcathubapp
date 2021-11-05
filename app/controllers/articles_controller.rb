@@ -102,13 +102,12 @@ class ArticlesController < ApplicationController
       puts '----- NO PARAMETERS -------' 
     end
     bib_data = get_bib_data(articles)
-    puts articles.count
+    #puts articles.count
     respond_to do |format|
       msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
       format.json  { render :json => bib_data } # don't do msg.to_json
     end
   end
-
 
   private
     # Use callbacks to share common setup or constraints between actions.
