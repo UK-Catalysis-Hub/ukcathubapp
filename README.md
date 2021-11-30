@@ -25,9 +25,8 @@ Currently, the address for the CDI can change. We are working to publish the CDI
 with a stable address. 
 
 At the moment, the CDI can be accessed from **[here](http://188.166.149.246/)**.
+[<img src="https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png">](http://188.166.149.246/)
 
-
-![app screenshot](https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png)
 
 ## Authors
 
