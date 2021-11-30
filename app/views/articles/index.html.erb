@@ -627,6 +627,20 @@
        <div class="col-md-3">
          <%= button_to "Verify", {:action => "verify", :controller => "articles"}, :class => 'btn  btn-success float-right'  %>
        </div>
+     </div>     
+     <div class="row">
+       <div class="col-md-1">
+       </div>
+       <div class="col-md-3">
+         <p>Upload CSV file list</p>
+       </div>
+       <div class="col-md-3">
+         <% #= button_to "upload CSV", {:action => "upload_csv", :controller => "articles"}, :class => 'btn  btn-success float-right'  %>
+         <%= form_tag({:action => :upload_csv}, multipart: true) do %>
+              <%= file_field_tag :file %>
+              <%= submit_tag( "Import" ) %>
+         <% end %>
+       </div>
      </div>
    </div>
  </div>

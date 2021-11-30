@@ -89,6 +89,56 @@ class ArticlesController < ApplicationController
     end
   end
 
+  # Upload CSV articles list
+  def upload_csv
+    #VerifyCrossrefWorker.perform_async
+    csv_file = params[:file]
+    @pub_rows = CSV.read(csv_file.path)
+    @pub_rows.each do |pub_row|
+      if pub_row[4] != 'doi' and pub_row[10] != nil
+        p_doi = pub_row[4]
+        
+        p_themes = JSON.load(pub_row[10])
+
+        @art = Article.find_by(doi: p_doi)
+        if @art == nil
+          @art = Article.new()
+          @art.doi = p_doi
+          getPubData(@art, @art.doi)
+          puts("\n*******************************************************")
+          puts("NOT IN DB DOI: " + @art.doi +  @art.title + " themes " + p_themes.to_s() )
+          puts("*******************************************************\n")
+          @art.save()
+          puts("\n*******************************************************")
+          puts("ADDED AS ID " + @art.id.to_s())
+          puts("*******************************************************\n")
+          # add theme links
+          p_themes.each do |theme_id|
+            full_theme = Theme.find(theme_id)
+            article_theme = ArticleTheme.new()
+            article_theme.doi = @art.doi 
+            article_theme.theme_id = theme_id
+            article_theme.project_year = @art.pub_year
+            article_theme.article_id = @art.id
+            article_theme.phase = full_theme.phase
+            article_theme.save()
+          end  
+        else
+          puts("IN DB DOI: " +  p_doi + " themes " + p_themes.to_s())
+        end
+        if pub_row[4].to_i > 12
+          break
+        end
+      end
+    end
+    
+    respond_to do |format|
+      flash[:notice] = 'upload process started ' + @pub_rows.length().to_s() + " entries "
+      format.html { redirect_to action: "index" }
+      format.json { head :no_content }
+    end
+  end
+  
   # return publications as bib json data
   def bib_query   
     articles = Article.active.all()
@@ -262,7 +312,6 @@ class ArticlesController < ApplicationController
         db_article.container_title = pub_data['container_title']
         db_article.page = pub_data['page']
         db_article.abstract = pub_data['abstract']
-        print pub_data.keys
         if pub_data.keys.include?('published_online') then
           if pub_data['published_online']['date-parts'][0].length == 1 then
             #assume that if date parts has only one element, it is year
@@ -292,6 +341,11 @@ class ArticlesController < ApplicationController
             db_article.pub_print_month = pub_data['published_print']['date-parts'][0][1]
             db_article.pub_print_day = pub_data['published_print']['date-parts'][0][2]
           end
+        end
+        if db_article.pub_ol_year != nil
+          db_article.pub_year = db_article.pub_ol_year
+        else
+          db_article.pub_year = db_article.pub_print_year
         end
       end
       # mark incomplete as it is missing authors, affiliation and themes

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :authors
   # custom route to verify methods
   post 'verify' => 'articles#verify', as: :verify
+  post 'upload_csv' => 'articles#upload_csv', as: :upload_csv
   post 'generate_affiliations' => 'authors#generate', as: :generate_auth_affis
   resources :themes
   get 'themes_count' => 'themes#themes_count', as: 'themes_count'
