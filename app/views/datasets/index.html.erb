@@ -323,7 +323,7 @@
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header bg-light">
-                <h6 style= "margin:auto">Data object types</h6>
+                <h6 style= "margin:auto">Data object groups</h6>
               </div>
               <div class="card-body p-0" >
                 <div class = "row" >
@@ -332,15 +332,15 @@
                       <table class="table table-sm table-striped table-bordered">
                         <thead class="thead-light">
                           <tr>
-                            <th>Type</th>
+                            <th>Group</th>
                             <th>Data objects</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <% Dataset.type_count.each do |dot| %>
+                          <% Dataset.simple_type_count.each do |dot| %>
                           <tr>
                             <td>
-                              <%= dot.ds_type %>
+                              <%= dot.do_type %>
                             </td>
                             <td class="text-right">
                               <%= dot.i_count %>
@@ -353,8 +353,8 @@
                   </div>
                   <div class="col-sm-6">
                     <%
-                    do_by_type = Dataset.type_count
-                    dobt = Dataset.type_count.each.collect{ |dot| [dot['ds_type'], dot['i_count']]} %>
+                    do_by_type = Dataset.simple_type_count
+                    dobt = do_by_type.each.collect{ |dot| [dot['do_type'], dot['i_count']]} %>
                     <%= pie_chart dobt, donut: true,  legend: "right" %>
                   </div>
                 </div>
