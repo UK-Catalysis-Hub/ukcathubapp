@@ -1,4 +1,5 @@
 class AffiliationsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show, :ctry_affi_count]
   before_action :set_affiliation, only: [:show, :edit, :update, :destroy]
   class AffiliationSearch < FortyFacets::FacetSearch
     model 'Affiliation' # which model to search for
