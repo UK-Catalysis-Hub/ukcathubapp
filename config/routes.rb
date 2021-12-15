@@ -25,5 +25,7 @@ Rails.application.routes.draw do
   post 'upload_data' => 'datasets#upload_data', as: 'upload_data'
   get 'ctry_stats' => 'affiliations#ctry_affi_count', as: 'ctry_stats'
   get 'get_pubs' => 'articles#bib_query', as: :getpubs
+  # download article stats csv
+  get 'get_art_stats' => 'articles#arts_by_year_stats', as: 'get_art_stats'
   root 'home#index'
 end

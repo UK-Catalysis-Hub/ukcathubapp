@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:index, :show, :bib_query]
+  before_action :authenticate_user!, except: [:index, :show, :bib_query, :arts_by_year_stats]
   class ArticleSearch < FortyFacets::FacetSearch
     model 'Article' # which model to search for
     scope :active  # only return articles which are in the scope 'active'
@@ -158,6 +158,14 @@ class ArticlesController < ApplicationController
       format.json  { render :json => bib_data } # don't do msg.to_json
     end
   end
+  
+  # download publication stats
+  def arts_by_year_stats
+    arts_by_year = Article.where(:status => "Added").group(:pub_year).count.collect{|pb| [pb[0], pb[1]]}
+    arts_by_year_csv = get_csv(['year','count'], arts_by_year)   
+    send_data(arts_by_year_csv, 
+              :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_pub_stats.csv')
+  end 
 
   private
     # Use callbacks to share common setup or constraints between actions.
