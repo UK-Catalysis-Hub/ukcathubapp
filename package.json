@@ -17,7 +17,6 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "webpack": "^5.65.0",
-    "webpack-dev-server": "^4.6.0"
+    "webpack": "^5.65.0"
   }
 }
