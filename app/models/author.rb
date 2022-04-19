@@ -20,7 +20,7 @@ class Author < ApplicationRecord
   scope :citations_count, -> {isap.joins(:articles).select("authors.id, authors.last_name ||', '|| authors.given_name as full_name, SUM(articles.referenced_by_count) AS 'Citations'").order("Citations DESC").group("authors.given_name, authors.last_name")}
   scope :country_count, -> {Author.joins(:author_affiliations).select('author_affiliations.country').group(:country).count('*')}
   def get_full
-    full_n = given_name + " " + last_name
+    full_n = (self.given_name == NIL ? self.last_name : self.last_name + ", " +self.given_name) 
     return full_n
   end
 end
