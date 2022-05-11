@@ -7,6 +7,7 @@ class AffiliationsController < ApplicationController
     facet  :institution, name: 'Institution'
     facet :country, name: 'Country'
     facet :department, name: 'Department'
+    facet :school, name: 'School'
     facet :sector, name: 'Sector'
     
     orders 'Institution, Ascendign' => {institution: :asc, department: :asc},
@@ -92,6 +93,6 @@ class AffiliationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def affiliation_params
-      params.require(:affiliation).permit(:institution, :department, :faculty, :work_group, :country)
+      params.require(:affiliation).permit(:institution, :department,:school, :faculty, :work_group, :country)
     end
 end
