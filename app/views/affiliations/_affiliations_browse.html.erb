@@ -95,14 +95,53 @@
                     <ul class="selectable">
                       <% filter.facet.reject(&:selected).each do |facet_value| %>
                         <% entity = facet_value.entity %>
-                        <li>
+                        <% if entity != nil %>
+                          <li>
+                            <% display = entity %>
+                            <%= link_to display, filter.add(entity).path %>
+                            <span class="count">
+                              <!--Cannot have inactives the filter does not work with scopes -->
+                              <%= "(#{facet_value.count})" %>
+                            </span>
+                          </li>
+                        <% end %>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              <% end %><!--end of each do-->
+             <!-- Facet filter for school -->
+             <% [:school].each do |filter_name| %>
+                <% filter = affi_search.filter(filter_name)  %>
+                <div class="filter">
+                  <div class="filter-title">
+                    <%= filter.name %>
+                    <span class="small text-muted">
+                      <%= "(#{filter.facet.length})" %>
+                    </span>
+                  </div>
+                  <div class="filter-values">
+                    <ul class="selected">
+                      <% filter.selected.each do |entity| %>
                           <% display = entity %>
-                          <%= link_to display, filter.add(entity).path %>
-                          <span class="count">
-                            <!--Cannot have inactives the filter does not work with scopes -->
-                            <%= "(#{facet_value.count})" %>
-                          </span>
-                        </li>
+                          <li>
+                            <%= link_to display, filter.remove(entity).path %>
+                          </li>
+                      <% end %>
+                    </ul>
+                    <ul class="selectable">
+                      <% filter.facet.reject(&:selected).each do |facet_value| %>
+                        <% entity = facet_value.entity %>
+                        <% if entity != nil %>
+                          <li>
+                            <% display = entity %>
+                            <%= link_to display, filter.add(entity).path %>
+                            <span class="count">
+                              <!--Cannot have inactives the filter does not work with scopes -->
+                              <%= "(#{facet_value.count})" %>
+                            </span>
+                          </li>
+                        <% end %>
                       <% end %>
                     </ul>
                   </div>
