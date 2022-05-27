@@ -15,19 +15,19 @@
 <div class="tab-content" id="pills-tabContent">
   <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
     <!-- World Map -->
-    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", colorAxis: {colors: ['#36da45','#044904']} }   %>
+    <%= geo_chart country_data, library: {colorAxis: {colors: ['#36da45','#044904']} }   %>
   </div>
   <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
     <!-- Europe Map -->
-    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", region: '150',  colorAxis: {colors: ['#36da45','#044904']} }  %>
+    <%= geo_chart country_data, library: { region: '150',  colorAxis: {colors: ['#36da45','#044904']} }  %>
   </div>
   <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
     <!-- Asia Map -->
-    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", region: '142', colorAxis: {colors: ['#36da45','#044904']}}   %>
+    <%= geo_chart country_data, library: { region: '142', colorAxis: {colors: ['#36da45','#044904']}}   %>
   </div>
   <div class="tab-pane fade" id="pills-uk" role="tabpanel" aria-labelledby="pills-uk-tab">
     <!-- UK Map -->
     <% uk_data = [['Scotland',7],['Wales',3],['England',51],['Northern Ireland',1]]%>
-    <%= geo_chart uk_data, library: {backgroundColor: "#00FFFF", region: 'GB', resolution: 'provinces', colorAxis: {colors: ['#36da45','#044904']}}   %>
+    <%= geo_chart uk_data, library: {region: 'GB', resolution: 'provinces', colorAxis: {colors: ['#36da45','#044904']}}   %>
   </div>
 </div>
