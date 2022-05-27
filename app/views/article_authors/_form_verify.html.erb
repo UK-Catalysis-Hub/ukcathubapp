@@ -2,14 +2,23 @@
   <div class="card-body">
     <ul class="nav nav-tabs" id="author-tabs" role="tablist">
       <% for auth in article_authors %>
-        <li class="nav-item">
-          <a class="nav-link<%= auth.author_seq.downcase == "first" ? " active":"" %>" id="auth<%= auth.id %>-tab" data-toggle="tab" href="#auth<%= auth.id %>" role="tab" aria-controls="auth<%= auth.id %>" aria-selected="true">
-            <%= auth.given_name %> <%= auth.last_name %>
-            <% if auth.status != "verified" %>
+        <% if auth.status != "verified" %>
+          <li class="nav-item">
+            <a class="nav-link<%= auth.author_seq.downcase == "first" ? " active":"" %>" id="auth<%= auth.id %>-tab" data-toggle="tab" href="#auth<%= auth.id %>" role="tab" aria-controls="auth<%= auth.id %>" aria-selected="true">
+              <%= auth.given_name %> <%= auth.last_name %>
               <%= "x" %>
-            <% end %>
-          </a>
-        </li>
+            </a>
+          </li>
+        <% end %>
+      <% end %>
+      <% for auth in article_authors %>
+        <% if auth.status == "verified" %>
+          <li class="nav-item">
+            <a class="nav-link <%= auth.author_seq.downcase == "first" ? " active":"" %>" " id="auth<%= auth.id %>-tab" data-toggle="tab" href="#auth<%= auth.id %>" role="tab" aria-controls="auth<%= auth.id %>" aria-selected="true">
+              <%= auth.given_name %> <%= auth.last_name %>
+            </a>
+          </li>
+        <% end %>
       <% end %>
     </ul>
     <div class="tab-content" id="authorTabContent">
