@@ -15,18 +15,65 @@
 <div class="tab-content" id="pills-tabContent">
   <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
     <!-- World Map -->
-    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", colors: ['#FF0000','#0000FF']}   %>
+    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", colorAxis: {colors: ['#36da45','#044904']} }   %>
   </div>
   <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
     <!-- Europe Map -->
-    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", region: '150', colors: ['#FF0000','#0000FF']}   %>
+    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", region: '150',  colorAxis: {colors: ['#36da45','#044904']} }  %>
   </div>
   <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
     <!-- Asia Map -->
-    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", region: '142', colors: ['#FF0000','#0000FF']}   %>
+    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", region: '142', colorAxis: {colors: ['#36da45','#044904']}}   %>
   </div>
   <div class="tab-pane fade" id="pills-uk" role="tabpanel" aria-labelledby="pills-uk-tab">
-    <!-- Asia Map -->
-    <%= geo_chart country_data, library: {backgroundColor: "#00FFFF", region: 'GB', colorAxis: {colors: ['green', 'blue']}}   %>
+    <!-- UK Map -->
+    <% uk_data = [['Scotland',3],['Wales',2],['England',16],['Northern Ireland',1]]%>
+    <%= geo_chart uk_data, library: {backgroundColor: "#00FFFF", region: 'GB', resolution: 'provinces', colorAxis: {colors: ['#36da45','#044904']}}   %>
+    <%        
+        # puts(uk_data)
+    %>
+        <%#= geo_chart Affiliation.group(:country).count %>
+    <% 
+        it_data = [
+           {city: 'Rome', population: 2761477, area: 1285.31},
+           {city: 'Milan', population: 1324110, area: 181.76}
+        ]       
+        #puts(it_data)
+        #chartkick_chart config[mapsApiKey] = "AIzaSyCOuAYGDLBw1u190OwZ0fe6AUZ56U60yto"
+        it_data = [
+            ['City',   'Population', 'Area'],
+            ['Rome',      2761477,    1285.31],
+            ['Milan',     1324110,    181.76]]
+            
+        #puts(it_data)
+        it_data = { :data =>[
+           {'City' => 'Rome', 'Population' => 2761477, 'Area' => 1285.31},
+           {'City' => 'Milan','Population' => 1324110, 'Area' => 181.76}]}
+        #puts(it_data)
+        it_data = { :data => [
+            ['City',   'Population', 'Area'],
+            ['Rome',      2761477,    1285.31],
+            ['Milan',     1324110,    181.76]]}
+        #puts(it_data)
+        it_data = [
+            ['IT-65','10'],
+            ['IT-77','15'],
+            ['IT-78','15']]
+        #puts(it_data)
+        it_data = [
+            ['City',   'Population', 'Area'],
+            ['Rome',      2761477,    1285.31],
+            ['Milan',     1324110,    181.76]]
+         it_data = [['Abruzzo', 1],[' Basilicata ', 2],[' Calabria ', 3], [' Campania ', 4],
+                    ['Emilia-Romagna ', 5],['Lazio', 6],[' Liguria ', 7],[' Lombardia ', 8],
+                    ['Marche', 9],[' Molise', 10],[' Piemonte ', 11],[' Puglia ', 12],
+                    ['Toscana', 13],['Umbria', 14],[' Veneto ', 15],['Friuli-Venezia Giulia', 16],['Sardegna',17],
+                    ['Sicilia',18],['Trentino-Alto Adige',19],["Valle d'Aosta",20]]
+
+
+        puts(it_data)
+        %>
+        <%= geo_chart it_data, config:{mapsApiKey: "AIzaSyCOuAYGDLBw1u190OwZ0fe6AUZ56U60yto"}, library: {region: 'IT', resolution: 'provinces', colorAxis: {colors: ['#36da45','#044904']}}   %>
+        
   </div>
 </div>

@@ -334,6 +334,7 @@
              sum = 0
              year_series[1] = arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } %>
              <%= column_chart(year_series[1], library: { :series => { 1 => { type: "line"} } } )%>
+             
            </div>
          </div>
        </div>
@@ -350,7 +351,11 @@
              year_series[0] = {name:"per year", data: arts_by_year}
              sum = 0
              year_series[1] = {name:"accumulated", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
-             <%= line_chart(year_series)%>
+             <%= line_chart(year_series) %>
+             <% puts("**************************************")
+                puts(year_series)
+                puts("**************************************")
+                %>
            </div>
          </div>
        </div><!--col-sm-6-->
