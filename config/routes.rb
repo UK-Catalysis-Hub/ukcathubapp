@@ -11,7 +11,6 @@ Rails.application.routes.draw do
   post 'link_to_theme' => 'article_themes#link_to_theme', as: :link_to_theme
   resources :article_authors
   post 'link_to_researcher' => 'article_authors#link_to_researcher', as: :link_to_researcher
-  resources :affiliation_links
   resources :affiliations
   resources :addresses
   resources :authors
