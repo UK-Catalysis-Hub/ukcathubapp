@@ -8,9 +8,8 @@ class Author < ApplicationRecord
   has_many :author_affiliations, through: :article_authors
 
   # relationships to affiliations
-  has_many :affiliation_links
-  has_many :affiliations, through: :affiliation_links
-
+  has_many :affiliations, through: :author_affiliations
+  
   # scopes
   scope :isap, -> {where("authors.isap = 1")}
   scope :not_verified, -> {joins("INNER JOIN article_authors ON article_authors.author_id = authors.id").where("article_authors.status is not 'verified'") }
