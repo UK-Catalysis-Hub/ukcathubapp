@@ -8,10 +8,6 @@ class Article < ApplicationRecord
   has_many :article_themes
   has_many :themes, through: :article_themes
 
-  # relationships to affiliations
-  has_many :affiliation_links
-  has_many :affiliations, through: :affiliation_links
-
   #relationships to dataset
   has_many :article_datasets
   has_many :datasets, through: :article_datasets

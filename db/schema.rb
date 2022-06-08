@@ -23,17 +23,6 @@ ActiveRecord::Schema.define(version: 2022_05_11_120625) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "affiliation_links", force: :cascade do |t|
-    t.integer "affiliation_id"
-    t.string "doi"
-    t.integer "author_id"
-    t.string "sequence"
-    t.integer "address_id"
-    t.integer "article_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "affiliations", force: :cascade do |t|
     t.string "institution"
     t.string "department"
