@@ -214,8 +214,6 @@ class ArticlesController < ApplicationController
         'container-title-short']
     end
 
-    
-    
     def getCRData(doi_text)
       begin
           #puts "trying"
