@@ -34,7 +34,9 @@
                elsif affsts.country == "The Netherlands" then
                  country_data.append(["Netherlands", affsts.inst_count])
                else
-                 country_data.append([affsts.country, affsts.inst_count])
+                 if affsts.country != "United Kingdom"
+                   country_data.append([affsts.country, affsts.inst_count])
+                 end
                end
             end %>
 		    <div class="col-sm-6 container">
