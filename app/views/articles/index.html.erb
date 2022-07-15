@@ -190,7 +190,7 @@
               <% @articles.each do |article| %>
                 <tr>
                   <td>
-                    <b>Title:</b> <%= link_to(article.title, article) %> <b>Year:</b> <%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>
+                    <b>Title:</b> <%= link_to(article.title.html_safe, article) %> <b>Year:</b> <%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>
                     <b>Authors (<%= article.authors.count %>):</b>
                     <% author_links = article.authors.all
                        disp_names = ""

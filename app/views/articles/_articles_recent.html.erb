@@ -19,7 +19,7 @@
                   a_title = article.title
               end
             %>
-            <%= link_to(a_title, article) %>
+            <%= link_to(a_title.html_safe, article) %>
           </td>
           <td>
             <%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>

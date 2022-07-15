@@ -12,7 +12,7 @@
       <% articles.each do |article| %>
         <tr>
           <td>
-            <b>Title:</b> <%= link_to(article.title, article) %> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>)
+            <b>Title:</b> <%= link_to(article.title.html_safe, article) %> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>)
             <br><b>Authors (<%= article.authors.count %>):</b>
             <% author_links = article.article_authors.all
                disp_names = ""
@@ -31,7 +31,7 @@
                  end
                end %>
             <%= disp_names.to_s.html_safe %>
-            <br><%= article.container_title %>
+            <br><%= article.container_title.html_safe %>
             <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
             <% theme_links = article.article_themes.all
               disp_themes = ""
