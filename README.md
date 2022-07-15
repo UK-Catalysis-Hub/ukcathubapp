@@ -21,10 +21,8 @@ quick look at the possiblities for data sharing and not the final version.
 * Rails version: 6.0.3.3
 
 ## Current Online Version
-Currently, the address for the CDI can change. We are working to publish the CDI 
-with a stable address. 
+The current version of the CDI can be accessed from **[http://cdi.ukcatalysishub.org](http://cdi.ukcatalysishub.org)**.
 
-At the moment, the CDI can be accessed from **[http://cdi.ukcatalysishub.org](http://cdi.ukcatalysishub.org)**.
 [<img src="https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png">](http://188.166.149.246/)
 
 
