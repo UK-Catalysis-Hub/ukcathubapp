@@ -345,19 +345,19 @@
            <div class="card-header">
              <h6 style= "margin:auto">Publications accumulated vs. per year (line) </h6>
            </div>
-           <div class="card-body p-0">
+           <div class="card-body ">
              <% year_series = []
              arts_by_year = Article.where(:status => "Added").group(:pub_year).count
-             year_series[0] = {name:"Yearly", data: arts_by_year}
+             year_series[0] = {name:"Annual", data: arts_by_year}
              sum = 0
              year_series[1] = {name:"Accum.", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
-             <%= line_chart(year_series) %>
+             <%= column_chart(year_series, :legend=> "bottom", title:"Publications Annual vs Accumulating")%>
              <% puts("**************************************")
                 puts(year_series)
                 puts("**************************************")
                 %>
-           </div>
-         </div>
+           </div> <!-- card-body -->
+           </div> <!-- card -->
        </div><!--col-sm-6-->
 
        <div class="col-sm-6 themed-grid-col">
@@ -365,14 +365,17 @@
            <div class="card-header">
              <h6 style= "margin:auto">Publications accumulated avg. vs. per year (bar)</h6>
            </div>
-           <div class="card-body p-0">
+           <div class="card-body ">
              <% year_series[1][:data].each {|dtp| (dtp[1] = dtp[1]/(dtp[0]-2013+1))} %>
              <% year_series[1][:name] = "Acc. Avg." %>
-             <%= column_chart(year_series, library: { :series => { 1 => { type: "line"} } })%>
+             <%= column_chart(year_series, library: { :series => { 1 => { type: "line"}}, :legend=> "bottom", title:"Pubs Annual vs Acc. Average" })%>
            </div>
          </div>
        </div><!--col-sm-6-->
      </div><!--row mb3 -->
+     
+     
+     
      <%  group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
          j_pub_stats = {}
          j_pub_data = {}
