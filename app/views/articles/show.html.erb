@@ -1,6 +1,6 @@
 <div class="container">
   <p id="notice"><%= notice %></p>
-  <h3> <strong>Title:</strong>   <%= @article.title %>  </h3>
+  <h3> <strong>Title:</strong>   <%= @article.title.html_safe %>  </h3>
   <p>
     <% if @article.authors.count > 0 %>
     <b>Authors (<%= @article.authors.count %>):</b>

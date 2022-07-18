@@ -32,7 +32,7 @@
     <%
       art_list = ""
       for art in author.articles.active.order(:title)
-        art_list += ' ' + link_to(art.title, art)
+        art_list += ' ' + link_to(art.title.html_safe, art)
       end
     %>
     <%= art_list.html_safe %>

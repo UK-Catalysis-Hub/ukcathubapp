@@ -17,7 +17,7 @@
               if article.title.length > 100 then
                   a_title = article.title[0,96] + "..."
               else
-                  a_title = article.title
+                  a_title = article.title.html_safe
               end
             %>
             <%= link_to(a_title, article) %>
