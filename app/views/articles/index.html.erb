@@ -348,9 +348,9 @@
            <div class="card-body p-0">
              <% year_series = []
              arts_by_year = Article.where(:status => "Added").group(:pub_year).count
-             year_series[0] = {name:"per year", data: arts_by_year}
+             year_series[0] = {name:"Yearly", data: arts_by_year}
              sum = 0
-             year_series[1] = {name:"accumulated", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
+             year_series[1] = {name:"Accum.", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
              <%= line_chart(year_series) %>
              <% puts("**************************************")
                 puts(year_series)
@@ -363,12 +363,11 @@
        <div class="col-sm-6 themed-grid-col">
          <div class="card">
            <div class="card-header">
-             <h6 style= "margin:auto">Publications accumulated vs. per year (bar)</h6>
+             <h6 style= "margin:auto">Publications accumulated avg. vs. per year (bar)</h6>
            </div>
            <div class="card-body p-0">
-             <% themes_per_year = Theme.joins(:articles).group(:short,:pub_year).order(:id).count
-             themes_per_year = themes_per_year.map{|tpy| {name: tpy[0][0], data: [tpy[0][1],tpy[1]]}}
-             %>
+             <% year_series[1][:data].each {|dtp| (dtp[1] = dtp[1]/(dtp[0]-2013+1))} %>
+             <% year_series[1][:name] = "Acc. Avg." %>
              <%= column_chart(year_series, library: { :series => { 1 => { type: "line"} } })%>
            </div>
          </div>
