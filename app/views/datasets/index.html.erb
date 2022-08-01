@@ -147,7 +147,14 @@
                 <tr>
                   <td>
                     <b>Name: </b><%= link_to dataset.dataset_name, dataset %> <b>Date:</b> <%= dataset.dataset_startdate %> <br>
-                    <b>Description:</b> <%= dataset.dataset_description %> <br>
+                    <%
+                      if dataset.dataset_description.length > 100 then
+                          do_desc = dataset.dataset_description[0,96] + "..."
+                      else
+                          do_desc = dataset.dataset_description
+                      end
+                    %>
+                    <b>Description:</b> <%= do_desc %> <br>
                     <b>DOI:</b> <%= dataset.dataset_doi %>
                     <b>Location:</b> <%= link_to dataset.dataset_location, dataset.dataset_location.html_safe, target: "_blank", rel: "nofollow" %>
                     <% if dataset.articles != [] then %>
