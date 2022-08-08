@@ -87,7 +87,17 @@ class DatasetsController < ApplicationController
     puts "***************************************************"
     puts params
     puts "***************************************************"
-    
+    csv_file = params[:file]
+    @data_rows = CSV.read(csv_file.path)
+    @data_rows.each do |pub_row|
+      puts pub_row
+      
+    end
+    respond_to do |format|
+      flash[:notice] = 'upload process started ' + @data_rows.length().to_s() + " entries "
+      format.html { redirect_to action: "index" }
+      format.json { head :no_content }
+    end
   end 
 
   private
