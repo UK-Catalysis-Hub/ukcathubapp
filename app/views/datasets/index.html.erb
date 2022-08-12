@@ -393,7 +393,11 @@
        <div class="col-md-1">
        </div>
        <div class="col-md-3">
-         <p>Upload Data Objects</p>
+         <% #= button_to "upload CSV", {:action => "upload_data", :controller => "datasets"}, :class => 'btn  btn-success float-right'  %>
+         <%= form_tag({:action => :upload_data}, multipart: true) do %>
+              <%= file_field_tag :file %>
+              <%= submit_tag( "Import" ) %>
+         <% end %>
        </div>
        <div class="col-md-3">
           
