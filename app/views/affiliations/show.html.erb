@@ -9,6 +9,10 @@
     <strong>Country:</strong>
     <%= @affiliation.country %>
   </p>
+  <p>
+    <strong>Sector:</strong>
+    <%= @affiliation.sector %>
+  </p>
   <% addr_list = @affiliation.get_addresses() %>
   <% addr_list.each do |unique_add| %>
     <br><strong>Address:</strong>
