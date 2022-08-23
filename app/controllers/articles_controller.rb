@@ -108,7 +108,11 @@ class ArticlesController < ApplicationController
           puts("\n*******************************************************")
           puts("NOT IN DB DOI: " + @art.doi +  @art.title + " themes " + p_themes.to_s() )
           puts("*******************************************************\n")
+          if @art.container_title == nil
+            @art.container_title = pub_row[15]
+          end
           @art.save()
+          
           puts("\n*******************************************************")
           puts("ADDED AS ID " + @art.id.to_s())
           puts("*******************************************************\n")
@@ -252,6 +256,9 @@ class ArticlesController < ApplicationController
 
     def getPubData(db_article, doi_text)
       if doi_text != ""
+        # need to raise an exeption if doi is incorrect or no data is returned
+        # need to check the doi is not in DB before saving (lower and uppercase versions)
+        # need to trim dois before saving
         pub_data = getCRData(doi_text)
         data_keys = pub_data.keys()
         pub_columns = []
