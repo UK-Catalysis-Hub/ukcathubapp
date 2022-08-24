@@ -13,10 +13,11 @@ class CrossrefPublication
     digital_object_identifier = article.doi
     pub_data = CrossrefApiClient.getCRData(digital_object_identifier)
     # Thing that may change:
-    # Citation counts
-    # Details added to authors (affiliation address, ORCID number)
+    #   Citation counts
+    #   Details of authors (affiliation address, ORCID number)
     if pub_data != nil
       citation_count_change(article, pub_data)
+      change_in_authors(article, pub_data)
     end
   end
 
@@ -33,6 +34,74 @@ class CrossrefPublication
     end
   end
 
+  def self.change_in_authors(article, pub_data)
+    if article.article_authors.count == 0 \
+      or article.article_authors[0].last_name == nil
+      puts "article does not have authors"
+      self.get_authors(article, pub_data)
+    end
+  end
+  
+  # get authors data and store to DB
+  def self.get_authors(article, pub_data)
+    puts "\nPub data: " + pub_data.class.to_s
+    aut_order = 1
+    aut_count = pub_data['author'].count
+    pub_data['author'].each do |art_author|
+      new_author = ArticleAuthor.new()
+      if article.id != nil
+        tem_auth = ArticleAuthor.find_by article_id: article.id, author_order: aut_order
+        if tem_auth != nil then
+          new_author = tem_auth
+        end
+      end
+      if art_author.keys.include?('ORCID')
+        new_author.orcid = art_author['ORCID']
+      end
+      if art_author.keys.include?('family')
+        new_author.last_name = art_author['family']
+      end
+      if art_author.keys.include?('given')
+        new_author.given_name = art_author['given']
+      end
+      new_author.author_seq = art_author['sequence'].to_s
+      new_author.author_order = aut_order
+      new_author.article_id = article.id
+      new_author.status = "not verified"
+      new_author.doi = article.doi
+      new_author.author_count = aut_count
+      # Before save get best author match
+      found_id = self.get_researcher_match(new_author)
+      if found_id != 0 then
+        new_author.author_id = found_id
+      else
+        # create a new researcher (author)
+        new_researcher = Author.new(given_name: new_author.given_name,
+          last_name: new_author.last_name, orcid: new_author.orcid)
+        if new_researcher.save then
+          new_author.author_id = new_researcher.id
+        end
+      end
+      if new_author.save then
+        if art_author.keys.include?('affiliation')
+          # get new affiliations and save them
+          puts "**********************************************************"
+          puts art_author['affiliation'].to_s
+          puts "**********************************************************"
+          if art_author['affiliation'].count > 0 then
+            art_author['affiliation'].each { |temp_affi|
+              new_tmp_affi = CrAffiliation.new()
+              new_tmp_affi.name = temp_affi['name']
+              new_tmp_affi.article_author_id = new_author.id
+              new_tmp_affi.save
+            }
+          end
+        end
+        aut_order += 1
+      end
+    end
+  end
+
   def self.get_author_affiliations()
     article_authors = ArticleAuthor.all()
     missing_affi = []
@@ -44,37 +113,92 @@ class CrossrefPublication
     current_doi = ""
     pub_data = nil
     missing_affi.each do |an_author| 
-        puts "Missing Affiliation for:" + an_author.given_name.to_s() + " " + an_author.last_name.to_s()
-        puts "DOI " + an_author.doi.to_s() + " Article: " +an_author.article_id.to_s()
-        if current_doi == "" or current_doi != an_author.doi
-          # get data from crossref
-          pub_data = CrossrefApiClient.getCRData(an_author.doi)
-          current_doi = an_author.doi
-        end
-        # look for author data in the crossref object
-        if pub_data != nil
-          puts "looking up authors"
-          puts pub_data
-          pub_data['author'].each do |pub_author|
-            if pub_author["given"] == an_author.given_name and pub_author["family"] == an_author.last_name
-              if pub_author["affiliation"].length > 0
-                # double check that cr_affi does not exist
-                cr_affi_saved = CrAffiliation.where("article_author_id = #{an_author.id}")
-                if cr_affi_saved.length == 0
-                  pub_author["affiliation"].each do |affil_line|
-                    new_line = CrAffiliation.new()
-                    new_line.name = affil_line["name"]
-                    new_line.article_author_id = an_author.id
-                    new_line.save
-                  end
+      puts "Missing Affiliation for:" + an_author.given_name.to_s() + " " + an_author.last_name.to_s()
+      puts "DOI " + an_author.doi.to_s() + " Article: " +an_author.article_id.to_s()
+      if current_doi == "" or current_doi != an_author.doi
+        # get data from crossref
+        pub_data = CrossrefApiClient.getCRData(an_author.doi)
+        current_doi = an_author.doi
+      end
+      # look for author data in the crossref object
+      if pub_data != nil
+        puts "looking up authors"
+        puts pub_data
+        pub_data['author'].each do |pub_author|
+          if pub_author["given"] == an_author.given_name and pub_author["family"] == an_author.last_name
+            if pub_author["affiliation"].length > 0
+              # double check that cr_affi does not exist
+              cr_affi_saved = CrAffiliation.where("article_author_id = #{an_author.id}")
+              if cr_affi_saved.length == 0
+                pub_author["affiliation"].each do |affil_line|
+                  new_line = CrAffiliation.new()
+                  new_line.name = affil_line["name"]
+                  new_line.article_author_id = an_author.id
+                  new_line.save
                 end
-              else
-                break
               end
+            else
+              break
             end
           end
         end
+      end
     end
+  end  
+  def self.make_plain_line(a_string)
+    plain_ln = "XXXXX%"
+    if a_string.include?('-')
+      plain_ln = a_string.gsub('-',' ')
+    end
+    return plain_ln
+  end
+    
+  def self.make_like_string(a_string)
+    # get a strig with only letters with no punctuations
+    like_string = "XXXX%"
+    if (a_string =~ /[^a-zA-Z\s:]/) != nil
+      non_alpha_found = true
+      like_string = a_string.gsub(" ","%")
+      while non_alpha_found
+        c_idx = (like_string =~ /[^a-zA-Z\s:]/)
+        if c_idx != nil
+          like_string[c_idx] = " "
+        else
+          non_alpha_found = false
+        end
+      end
+      like_string.gsub!(' ','%')
+    end
+    return like_string
+  end
+    
+  def self.get_researcher_match(new_author)
+    # Get best author match
+    # get a string with no dashes
+    plain_ln = self.make_plain_line(new_author.last_name)
+    
+    # get a strig with only letters with no punctuations
+    like_name = self.make_like_string(new_author.last_name)
+    authors_list = Author.where(orcid: new_author.orcid, last_name: new_author.last_name)
+      .or(Author.where(given_name: new_author.given_name, last_name: new_author.last_name))
+      .or(Author.where(last_name: new_author.last_name))
+      .or(Author.where(last_name: plain_ln))
+      .or(Author.where("last_name LIKE ?", "%" + like_name + "%"))
+    ## just return the first author that closely matches the author
+    ## needs improvement
+    found_id = 0
+    authors_list.each { |researcher|
+      if new_author.orcid !=nil and  researcher.orcid != nil \
+         and researcher.orcid == new_author.orcid
+         found_id = researcher.id
+         break
+      elsif new_author.given_name == researcher.given_name and \
+        new_author.last_name == researcher.last_name
+        found_id = researcher.id
+        break
+      end
+    }
+    return found_id
   end
 
   def self.generate_author_affiliations(authors_list)
