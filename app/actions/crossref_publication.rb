@@ -12,18 +12,24 @@ class CrossrefPublication
     puts "** Verifying this: " + article.title
     digital_object_identifier = article.doi
     pub_data = CrossrefApiClient.getCRData(digital_object_identifier)
+    # Thing that may change:
+    # Citation counts
+    # Details added to authors (affiliation address, ORCID number)
     if pub_data != nil
-      art_id = article.id
-      changes_found = false
-      # only verify fields which may change between recoveries: citations
-      if article.attributes['referenced_by_count'] != pub_data['is-referenced-by-count']
-        changes_found = true
-        article.attributes['referenced_by_count'] = pub_data['is-referenced-by-count']
-        article.referenced_by_count = pub_data['is-referenced-by-count']
-      end
-      if changes_found
-        article.save
-      end
+      citation_count_change(article, pub_data)
+    end
+  end
+
+  def self.citation_count_change(article, pub_data)
+    changes_found = false
+    # only verify fields which may change between recoveries: citations
+    if article.attributes['referenced_by_count'] != pub_data['is-referenced-by-count']
+      changes_found = true
+      article.attributes['referenced_by_count'] = pub_data['is-referenced-by-count']
+      article.referenced_by_count = pub_data['is-referenced-by-count']
+    end
+    if changes_found
+      article.save
     end
   end
 
