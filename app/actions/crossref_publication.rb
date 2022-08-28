@@ -171,20 +171,28 @@ class CrossrefPublication
     end
     return like_string
   end
-    
-  def self.get_researcher_match(new_author)
-    # Get best author match
+
+  def self.get_similar_authors(an_author)
+    # Get list of similar authors by last name and orcid only
     # get a string with no dashes
-    plain_ln = self.make_plain_line(new_author.last_name)
+    plain_ln = make_plain_line(an_author.last_name)
     
-    # get a strig with only letters with no punctuations
-    like_name = self.make_like_string(new_author.last_name)
-    authors_list = Author.where(orcid: new_author.orcid, last_name: new_author.last_name)
-      .or(Author.where(given_name: new_author.given_name, last_name: new_author.last_name))
-      .or(Author.where(last_name: new_author.last_name))
+    # get a strig with only letters with no special characters
+    like_name = make_like_string(an_author.last_name)
+    authors_list = Author.where(orcid: an_author.orcid, last_name: an_author.last_name)
+      .or(Author.where(given_name: an_author.given_name, last_name: an_author.last_name))
+      .or(Author.where(last_name: an_author.last_name))
       .or(Author.where(last_name: plain_ln))
       .or(Author.where("last_name LIKE ?", "%" + like_name + "%"))
-    ## just return the first author that closely matches the author
+    ## retun list of authors 
+    return authors_list
+  end
+  
+  def self.get_researcher_match(new_author)
+    # Get best author match
+    # get list of similar authors
+    authors_list = self.get_similar_authors(an_author)
+    ## return the first author that closely matches the author
     ## needs improvement
     found_id = 0
     authors_list.each { |researcher|
