@@ -251,6 +251,7 @@ class CrossrefPublication
       @affi_departments = Affiliation.where('department IS NOT NULL').distinct.pluck(:department)
       @affi_faculties = Affiliation.where('faculty IS NOT NULL').distinct.pluck(:faculty)
       @affi_work_groups = Affiliation.where('work_group IS NOT NULL').distinct.pluck(:work_group)
+      @affi_schools = Affiliation.where('school IS NOT NULL').distinct.pluck(:school)
 
       # list of country synonyms
       # (need to persist somewhere)
@@ -286,7 +287,13 @@ class CrossrefPublication
         "University of Edinburgh":"The University of Edinburgh",
         "SynCat@Beijing, Synfuels China Technology Co. Ltd.":"SynCat@Beijing Synfuels China Company Limited",
         "Synfuels China Compnay Limited":"SynCat@Beijing Synfuels China Company Limited",
-        "Finden Limited":"Finden Ltd"
+        "Finden Limited":"Finden Ltd",
+        "Univ. Pablo de Olavide":"Universidad Pablo de Olavide",
+        "Univ Rennes":"Université de Rennes",
+        "Université Rennes":"Université de Rennes",
+        "Institut Laue Langevin":"Institut Laue-Langevin",
+        "Esfera UAB":"Universitat Autònoma de Barcelona",
+        "Kings College London":"King's College London"
       }
 
       # list of institutions hosted by other institutions
@@ -556,6 +563,21 @@ class CrossrefPublication
       return found_wg
     end
 
+    # if a value in the school list is in string, return that value
+    def get_school(affi_string)
+      found_sch = nil
+      @affi_schools.each do |a_school|
+        if affi_string.include?(a_school) then
+          if found_sch == nil then
+            found_sch = a_school
+          elsif found_sch != nil and found_sch.length < a_school.length then
+            found_sch = a_school
+          end
+        end
+      end
+      return found_sch
+    end
+
     # split affiliation strings with keywords lists before building affi objects
     def split_by_keywords(affi_string)
       # get the indexes of each element found
@@ -593,6 +615,15 @@ class CrossrefPublication
           return {"work_group" => found_workgroup}
         end
       end
+      
+      found_school = get_school(affi_string)
+      if found_school != nil then
+        kw_indexes[affi_string.index(found_school)] = [found_school.length, "work_group"]
+        if is_simple(affi_string) and affi_string == found_school then
+          return {"school" => found_school}
+        end
+      end
+      
       found_department = get_department(affi_string)
       if found_department != nil then
         kw_indexes[affi_string.index(found_department)] = [found_department.length,"department"]
@@ -808,6 +839,7 @@ class CrossrefPublication
       #verify if item has two or more affilition elements
       items_found={}
       items_found["institution"] = get_institution(an_item)
+      items_found["school"] = get_school(an_item)
       items_found["department"] = get_department(an_item)
       items_found["faculty"] = get_faculty(an_item)
       items_found["work_group"] = get_workgroup(an_item)
@@ -821,7 +853,7 @@ class CrossrefPublication
     end
 
     def one_affi(affi_hash)
-      valid_keys = ["institution","work_group","department","faculty","country"]
+      valid_keys = ["institution","work_group","department","faculty","country","school"]
       find_str = ""
       affi_hash.keys.each do |item_key|
         if affi_hash[item_key].to_s != "" and valid_keys.include?(item_key.to_s)
@@ -849,6 +881,7 @@ class CrossrefPublication
       #                       "ft_44"=>"Reading RG6 6AD",
       #                       "ctry_syn"=>"UK"}},[140]]
       puts "\n#####################################"
+      puts " OK up to this point "
       puts new_affi_hash
       puts "\n#####################################"
       affis_built = 0
@@ -864,7 +897,7 @@ class CrossrefPublication
           if previous != nil and current != nil then
             if affi_current != nil
               curr_inst = affi_current.institution.strip
-              prev_inst = affi_previous.institution.strip
+              prev_inst = affi_previous != nil ? affi_previous.institution.strip : ''
               if @institution_hostings[prev_inst.to_sym] == curr_inst then
                 # prev_inst is hosted by curr_inst
                 # create single affi for prev_inst, appending values of current
