@@ -16,7 +16,11 @@
                     elsif affsts.country == "United States of America" then
 		                  country_data.append(["United States", affsts.inst_count])
                     elsif affsts.country == "The Netherlands" then
-                          country_data.append(["Netherlands", affsts.inst_count])                          
+                          country_data.append(["Netherlands", affsts.inst_count])
+                    elsif affsts.country == "Republic of Moldova" then
+                          country_data.append(["MD", affsts.inst_count])
+                    elsif affsts.country == "Czech Republic" then
+                          country_data.append(["CZ", affsts.inst_count])
                     else
                         if affsts.country != "United Kingdom"
                           country_data.append([affsts.country, affsts.inst_count])
