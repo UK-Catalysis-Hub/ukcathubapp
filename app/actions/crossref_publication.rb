@@ -293,7 +293,8 @@ class CrossrefPublication
         "Université Rennes":"Université de Rennes",
         "Institut Laue Langevin":"Institut Laue-Langevin",
         "Esfera UAB":"Universitat Autònoma de Barcelona",
-        "Kings College London":"King's College London"
+        "Kings College London":"King's College London",
+        "King’s College London":"King's College London"
       }
 
       # list of institutions hosted by other institutions
@@ -870,7 +871,7 @@ class CrossrefPublication
       return false
     end
 
-    # analise the affi hashes and determine if they belong to a single or various
+    # Revise the affi hashes and determine if they belong to a single or various
     # affiliations. Last step before actually building the affiliations
     def build_and_save_auth_affis(new_affi_hash, auth_id = 0)
       # new_affi_hash = { 0 => [{"institution" => "Diamond Light Source Ltd.",
@@ -886,6 +887,7 @@ class CrossrefPublication
       puts "\n#####################################"
       affis_built = 0
       if new_affi_hash.count > 0 and new_affi_hash != {0=>nil}  then
+        puts "--checking new_affi_hash"
         affi_previous = nil
         previous = nil
         previous_ids = nil
@@ -944,7 +946,7 @@ class CrossrefPublication
           previous_ids = current_ids
           affi_previous = affi_current
         }
-        if build_affis.count == 0 then
+        if build_affis.count == 0 and affi_previous.id != nil then
           # there was only one affiliation in hash, build it
           build_affis[affi_previous.id] = [previous.values, previous_ids]
         end
@@ -998,7 +1000,7 @@ class CrossrefPublication
     # get the bets matching affilition for a given hash
     # helper for build affi stubs
     def get_affi(affi_hash)
-      valid_keys = ["institution","work_group","department","faculty","country"]
+      valid_keys = ["institution","work_group","department","faculty","country","school"]
       find_str = ""
       has_keys = []
       affi_hash.keys.each do |item_key|
@@ -1074,3 +1076,147 @@ class CrossrefPublication
     end
   end
 end
+
+class AffiliationParser
+  attr_accessor :affi_countries, :affi_institutions, :affi_work_groups,
+      :affi_departments, :affi_faculties
+  # lists of institution entities (affiliations in old model) as class
+  # attributes
+  @affi_countries = []
+  @affi_institutions = []
+  @affi_departments = []
+  @affi_faculties = []
+  @affi_work_groups = []
+  @affi_shcools = []
+  def initialize()
+    @affi_countries = Affiliation.distinct.pluck(:country)
+    @affi_institutions = Affiliation.distinct.pluck(:institution)
+    @affi_departments = Affiliation.where('department IS NOT NULL').distinct.pluck(:department)
+    @affi_faculties = Affiliation.where('faculty IS NOT NULL').distinct.pluck(:faculty)
+    @affi_work_groups = Affiliation.where('work_group IS NOT NULL').distinct.pluck(:work_group)
+    @affi_schools = Affiliation.where('school IS NOT NULL').distinct.pluck(:school)
+    # list of country synonyms
+    # (need to persist somewhere)
+    @country_synonyms = {"(UK)":"United Kingdom", "UK":"United Kingdom",
+      "U.K.":"United Kingdom", "U. K.":"United Kingdom",
+      "U.K":"United Kingdom", "PRC":"Peoples Republic of China",
+      "P.R.C.":"Peoples Republic of China", "China":"Peoples Republic of China",
+      "P.R.China":"Peoples Republic of China",
+      "P.R. China":"Peoples Republic of China",
+      "United States":"United States of America",
+      "USA":"United States of America","U.S.A.":"United States of America",
+      "U. S. A.":"United States of America", "U.S.":"United States of America",
+      "U. S.":"United States of America","US":"United States of America"}
+    # list of institution sysnonyms
+    # (need to persist somewhere)
+    @institution_synonyms = {"The ISIS facility":"ISIS Neutron and Muon Source",
+      "ISIS Neutron and Muon Facility":"ISIS Neutron and Muon Source",
+      "ISIS Pulsed Neutron and Muon Facility":"ISIS Neutron and Muon Source",
+      "STFC":"Science and Technology Facilities Council",
+      "Oxford University":"University of Oxford",
+      "University of St Andrews":"University of St. Andrews",
+      "Diamond Light Source Ltd Harwell Science and Innovation Campus":"Diamond Light Source Ltd.",
+      "Diamond Light Source":"Diamond Light Source Ltd.",
+      "ISIS Facility":"ISIS Neutron and Muon Source",
+      "University College of London":"University College London",
+      "UCL":"University College London", "UOP LLC":"UOP LLC, A Honeywell Company",
+      "University of Manchester":"The University of Manchester",
+      "Johnson-Matthey Technology Centre":"Johnson Matthey Technology Centre",
+      "Research Complex at Harwell (RCaH)":"Research Complex at Harwell",
+      "RCaH":"Research Complex at Harwell",
+      "Queens University Belfast":"Queen's University Belfast",
+      "University of Edinburgh":"The University of Edinburgh",
+      "SynCat@Beijing, Synfuels China Technology Co. Ltd.":"SynCat@Beijing Synfuels China Company Limited",
+      "Synfuels China Compnay Limited":"SynCat@Beijing Synfuels China Company Limited",
+      "Finden Limited":"Finden Ltd",
+      "Univ. Pablo de Olavide":"Universidad Pablo de Olavide",
+      "Univ Rennes":"Université de Rennes",
+      "Université Rennes":"Université de Rennes",
+      "Institut Laue Langevin":"Institut Laue-Langevin",
+      "Esfera UAB":"Universitat Autònoma de Barcelona",
+      "Kings College London":"King's College London",
+      "King’s College London":"King's College London"
+    }
+
+    # list of institutions hosted by other institutions
+    # institution1:institution2 => institution1 is hosted by institution2
+    # (need to persist somewhere)
+    @institution_hostings = {
+      "ISIS Neutron and Muon Source":"Science and Technology Facilities Council",
+      "Diamond Light Source Ltd.":"Science and Technology Facilities Council",
+      "Research Complex at Harwell":"Science and Technology Facilities Council",
+      "UK Catalysis Hub":"Research Complex at Harwell",
+      "HarwellXPS":"Research Complex at Harwell",
+      "Cardiff Catalysis Institute":"Cardiff University"
+    }
+
+    # list ofstrings which contain country names but are not countries, such as
+    # streets, institution names, etc.
+    # (need to persist somewhere)
+    @country_exceptions = ["Denmark Hill", "UK Catalysis Hub", "Sasol Technology U.K.", "N. Ireland"]
+  end
+  
+  # get a set of affi lines and determie how many belong to an affiliation
+  # e.g. "Interdisciplinary Nanoscience Center (iNANO) and Department of Physics and Astronomy"
+  #      "Aarhus University"
+  #      "DK-8000 Aarhus C, Denmark"
+  #      "Department of Chemistry and Interdisciplinary Nanoscience Center (iNANO)"
+  def one_by_one_affi(affi_lines, accummulated = [])
+    # split the first line
+    # add it to affi_lines if affi_lines empty
+    # in next line try to see if the string belongs to same affiliation
+    # after first line try adding to affi_hash, if resulting in same affi, add, else start new affi_hash item
+    affi_hash = {}
+    indx = 0
+    other_lines = 1
+    affi_hash[indx] = nil
+    temp_pair = []
+    affi_lines.each do |cr_affi|
+      # split element by keywords
+      temp_split = split_by_keywords(cr_affi.name.strip.gsub("\r"," "))#.gsub("'","''"))
+      # when no fragment is recognised as a keyword?
+      if temp_split == {} then
+        temp_split = {"line_"+other_lines.to_s => cr_affi.name.strip}
+        other_lines += 1
+      end
+      #   - test if current affiliation is full (i.e. inst, dep, fcty, wg, cty.)
+      #     or already contains the elements just returned
+      #     - not complete then test if it fits with current affiliation
+      #       - if an affi is element already filled then mark current affi as
+      #         - complete and create a new affi.
+      #           - mark as complete requires looking for matches and missing minimal parts in affiliations table: i.e. inst, ctry,
+      #           - if inst and ctry blank, use the same as last one (i.e. inst and ctry from previous)
+      # currently there is no affiliation
+      add_another = false
+      if affi_hash[indx] == nil then
+        # if all elements are from same affi just add them
+        if one_affi(temp_split) then
+          affi_hash[indx] = [temp_split,[cr_affi.id]]
+        # if they are from different affis then create two?
+        end
+      # if the element can be added to current then just add
+      elsif affi_hash[indx] != nil
+        current_pair = affi_hash[indx]
+        if current_pair[0].keys.to_set.disjoint?(temp_split.keys.to_set)
+        # see if they can be in same affi merge and see if it works
+          temp_pair = [current_pair[0].merge(temp_split),current_pair[1].append(cr_affi.id)]
+          if one_affi(temp_pair[0])
+            affi_hash[indx] = temp_pair
+          else
+            # the new set of strings does not fit into current affi
+            add_another = true
+          end
+        else
+          # the new set of strings has keys already present in current affi
+          add_another = true
+        end
+      end
+      if add_another
+        indx += 1
+        affi_hash[indx] =  [temp_split,[cr_affi.id]]
+      end
+    end
+    return affi_hash
+  end
+end
+
