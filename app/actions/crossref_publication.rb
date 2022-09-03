@@ -14,7 +14,8 @@ class CrossrefPublication
     pub_data = CrossrefApiClient.getCRData(digital_object_identifier)
     # Thing that may change:
     #   Citation counts
-    #   Details of authors (affiliation address, ORCID number)
+    #   Details of authors (affiliation address, ORCID number) P
+    #   container title update P
     if pub_data != nil
       citation_count_change(article, pub_data)
       change_in_authors(article, pub_data)
@@ -188,7 +189,7 @@ class CrossrefPublication
     return authors_list
   end
   
-  def self.get_researcher_match(new_author)
+  def self.get_researcher_match(an_author)
     # Get best author match
     # get list of similar authors
     authors_list = self.get_similar_authors(an_author)
@@ -196,12 +197,12 @@ class CrossrefPublication
     ## needs improvement
     found_id = 0
     authors_list.each { |researcher|
-      if new_author.orcid !=nil and  researcher.orcid != nil \
-         and researcher.orcid == new_author.orcid
+      if an_author.orcid !=nil and  researcher.orcid != nil \
+         and researcher.orcid == an_author.orcid
          found_id = researcher.id
          break
-      elsif new_author.given_name == researcher.given_name and \
-        new_author.last_name == researcher.last_name
+      elsif an_author.given_name == researcher.given_name and \
+        an_author.last_name == researcher.last_name
         found_id = researcher.id
         break
       end
