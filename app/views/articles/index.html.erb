@@ -366,7 +366,8 @@
              <h6 style= "margin:auto">Publications accumulated avg. vs. per year (bar)</h6>
            </div>
            <div class="card-body ">
-             <% year_series[1][:data].each {|dtp| (dtp[1] = dtp[1]/(dtp[0]-2013+1))} %>
+             <% min_year = Article.minimum(:pub_year)%>
+             <% year_series[1][:data].each {|dtp| (dtp[1] = dtp[1]/(dtp[0]-min_year+1))} %>
              <% year_series[1][:name] = "Acc. Avg." %>
              <%= column_chart(year_series, library: { :series => { 1 => { type: "line"}}, :legend=> "bottom", title:"Pubs Annual vs Acc. Average" })%>
            </div>
