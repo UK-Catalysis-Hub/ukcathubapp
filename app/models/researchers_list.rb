@@ -1,0 +1,2 @@
+class ResearchersList < ApplicationRecord
+end

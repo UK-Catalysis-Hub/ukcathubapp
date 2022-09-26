@@ -30,10 +30,8 @@
 	        <%= render partial: 'affiliations/affiliation_map', locals:{country_data: country_data} %>
 	     </div>
 		    <div class="col-sm-6 container">
-		        <% if Author.data_objects_count.length()>0 %>
 		        <h6 style= "text-align: center;">Countries of origin</h6>
 		        <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..9], count_name: "Institutions"}%>
-		        <% end %>
 		        <p>
 		          <%= link_to 'Download Data', {:action => "ctry_affi_count", :controller => "affiliations"}, :class => "btn btn-success btn-sm" %>
 		          <%= link_to 'View Institutions', affiliations_path, :class => "btn btn-success btn-sm" %>
