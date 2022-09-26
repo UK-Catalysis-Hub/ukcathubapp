@@ -1,3 +1,4 @@
+<!-- Publications browse -->
  <div class="rounded border-light bg-light ">
     <div class="container">
         <h5>UK Catalysis Hub Publications</h5>
@@ -13,20 +14,22 @@
  </div>
  <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
    <li class="nav-item">
-     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Publications</a>
+     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#browse" type="button" role="tab" aria-controls="browse" aria-selected="true">Publications</button>
    </li>
    <li class="nav-item">
-     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="false">Indicators</a>
+     <button class="nav-link" id="indicators-tab" data-bs-toggle="tab" data-bs-target="#indicators" type="button" role="tab" aria-controls="indicators" aria-selected="true">Indicators</button>
    </li>
    <% if user_signed_in? %>
    <li class="nav-item">
-     <a class="nav-link" id="inactive-tab" data-toggle="tab" href="#inactive" role="tab" aria-controls="inactive" aria-selected="false">inactive</a>
+     <button class="nav-link" id="inactive-tab" data-bs-toggle="tab" data-bs-target="#inactive" type="button" role="tab" aria-controls="inactive" aria-selected="true">Inactive</button>
    </li>
    <li class="nav-item">
-     <a class="nav-link" id="actions-tab" data-toggle="tab" href="#actions" role="tab" aria-controls="inactive" aria-selected="false">Actions</a>
+     <button class="nav-link" id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab" aria-controls="actions" aria-selected="true">Actions</button>
    </li>
    <% end %>
  </ul>
+ 
+ 
  <div class="tab-content" id="myTabContent">
    <div class="tab-pane fade show active" id="browse" role="tabpanel" aria-labelledby="browse-tab">
      <div class="row">
@@ -232,7 +235,7 @@
         </div>
         </div>
    </div>
-   <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="statistics-tab">
+   <div class="tab-pane fade" id="indicators" role="tabpanel" aria-labelledby="indicators-tab">
      <div class="row mb-3">
        <div class="col-sm-6 col-lg-7">
          <div class="card">

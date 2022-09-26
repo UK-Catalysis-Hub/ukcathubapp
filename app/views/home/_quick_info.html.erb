@@ -3,7 +3,7 @@
     <div class="container"><!-- info box -->
       <div class="row bg-primary  rounded border-primary">
         <div class="col-sm-6">
-          <h1><%= Article.active.count() %></h1>
+          <h1><%= number_with_delimiter(Article.active.count()) %></h1>
           
         </div>
         <div class="col-sm my-1">

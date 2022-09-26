@@ -1,4 +1,5 @@
- <div class="rounded border-light bg-light ">
+<!-- Data objects browse -->
+<div class="rounded border-light bg-light ">
     <div class="container">
         <h5>UK Catalysis Hub Data Objects</h5>
     </div>
@@ -6,14 +7,14 @@
 <div class="container">
   <ul class="nav nav-tabs" id="datasetsTab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Browse</a>
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#browse" type="button" role="tab" aria-controls="browse" aria-selected="true">Data Objects</button>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#indicators" role="tab" aria-controls="indicators" aria-selected="false">Indicators</a>
+      <button class="nav-link" id="indicators-tab" data-bs-toggle="tab" data-bs-target="#indicators" type="button" role="tab" aria-controls="indicators" aria-selected="false">Indicators</button>
     </li>
     <% if user_signed_in? %>
       <li class="nav-item">
-        <a class="nav-link" id="actions-tab" data-toggle="tab" href="#actions" role="tab" aria-controls="inactive" aria-selected="false">Actions</a>
+        <button class="nav-link" id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab" aria-controls="actions" aria-selected="false">Actions</button>
       </li> 
     <% end %>   
   </ul>
