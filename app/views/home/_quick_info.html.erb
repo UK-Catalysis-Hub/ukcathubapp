@@ -4,10 +4,9 @@
       <div class="row bg-primary  rounded border-primary">
         <div class="col-sm-6">
           <h1><%= number_with_delimiter(Article.active.count()) %></h1>
-          
         </div>
         <div class="col-sm my-1">
-          <%= image_tag('books2.svg', height: '48', width: '48', class: "rounded float-right d-block") %>
+          <%= image_tag('books2.svg', height: '48', width: '48', class: "rounded float-end d-block ") %>
         </div>
         <%= link_to 'Publications', articles_path, :class => "btn btn-primary btn-sm btn-block text-dark" %>
       </div>
@@ -20,7 +19,7 @@
           <h1><%= number_with_delimiter(Author.active.length()) %></h1>
         </div>
         <div class="col-sm my-1">
-          <%= image_tag('users.svg', height: '48', width: '48', class: "rounded float-right d-block") %>
+          <%= image_tag('users.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
         </div>
         <%= link_to 'Authors', authors_path, :class => "btn btn-danger btn-sm btn-block text-dark" %>
       </div>
@@ -33,7 +32,7 @@
           <h1><%= Affiliation.group("institution").count().count() %></h1>
         </div>
         <div class="col-sm my-1">
-          <%= image_tag('institution.svg', height: '48', width: '48', class: "rounded float-right d-block") %>
+          <%= image_tag('institution.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
         </div>
         <%= link_to 'Institutions', affiliations_path, :class => "btn btn-success btn-sm btn-block text-dark" %>
       </div>
@@ -46,7 +45,7 @@
           <h1><%= Dataset.count() %></h1>
         </div>
         <div class="col-sm-6 my-1">
-          <%= image_tag('database.svg', height: '48', width: '48', class: "rounded float-right d-block") %>
+          <%= image_tag('database.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
         </div>
         <%= link_to 'Data Objects', datasets_path, :class => "btn btn-warning btn-sm btn-block text-dark" %>
       </div>
