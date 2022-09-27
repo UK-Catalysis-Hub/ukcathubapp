@@ -1,3 +1,4 @@
+<!--Edit Articles -->
 <ul class="nav nav-tabs" id="publications_tab" role="tablist">
   <li class="nav-item">
     <button class="nav-link" id="details-tab" data-bs-toggle="tab" href="#article_details" role="tab" aria-controls="article_details" aria-selected="true">
@@ -17,25 +18,10 @@
 </ul>
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane form-inline fade" id="article_details" role="tabpanel" aria-labelledby="article_details-tab">
-    <%= render 'form_article_detail', article: @article, article_id: @article.id %> 
+    <%= render 'form_article_detail', article: @article%> 
   </div>
   <div class="tab-pane fade" id="themes" role="tabpanel" aria-labelledby="themes-tab">
-    <div class="">
-      <% theme_links = @article.article_themes.all
-        disp_themes = ""
-        for theme_lnk in theme_links
-          theme_name = theme_lnk.theme.short
-          theme_string = theme_lnk.theme.short + " ("+ theme_lnk.project_year.to_s() +")"
-          if disp_themes =="" then
-            disp_themes = link_to(theme_string, theme_lnk.theme)
-          else
-            disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
-          end
-        end
-       %>
-       <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
-     </div>
-     <%= render '/article_themes/form_add_tab', article_themes: @article.article_themes, article_id: @article.id %> 
+     <%= render 'form_article_theme', article: @article %> 
   </div>
   <div class="tab-pane fade show active" id="authors" role="tabpanel" aria-labelledby="authors-tab">
     <%= render '/article_authors/form_verify', article_authors: @article.article_authors %>
