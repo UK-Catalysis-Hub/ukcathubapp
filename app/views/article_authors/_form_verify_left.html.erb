@@ -3,15 +3,15 @@
   <div class="card-body">
     <ul class="nav nav-tabs" id="myTab<%= article_author.id %>" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="art-author-tab<%= article_author.id %>" data-toggle="tab" href="#art-author<%= article_author.id %>" role="tab" aria-controls="art-author<%= article_author.id %>" aria-selected="true">Author details</a>
+        <button class="nav-link active" id="art-author-tab<%= article_author.id %>" data-bs-toggle="tab" href="#art-author<%= article_author.id %>" role="tab" aria-controls="art-author<%= article_author.id %>" aria-selected="true">Author details</button>
       </li>
       <% if article_author.cr_affiliations.count != 0 %>
       <li class="nav-item">
-        <a class="nav-link" id="cr-affiliation-tab<%= article_author.id %>" data-toggle="tab" href="#cr-affiliation<%= article_author.id %>" role="tab" aria-controls="cr-affiliation<%= article_author.id %>" aria-selected="false">Affiliations</a>
+        <button class="nav-link" id="cr-affiliation-tab<%= article_author.id %>" data-bs-toggle="tab" href="#cr-affiliation<%= article_author.id %>" role="tab" aria-controls="cr-affiliation<%= article_author.id %>" aria-selected="false">Affiliations</button>
       </li>
       <% end %>
       <li class="nav-item">
-        <a class="nav-link" id="researcher-tab<%= article_author.id %>" data-toggle="tab" href="#researcher<%= article_author.id %>" role="tab" aria-controls="researcher<%= article_author.id %>" aria-selected="false">Researcher details</a>
+        <button class="nav-link" id="researcher-tab<%= article_author.id %>" data-bs-toggle="tab" href="#researcher<%= article_author.id %>" role="tab" aria-controls="researcher<%= article_author.id %>" aria-selected="false">Researcher details</button>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent<%= article_author.id %>">

@@ -1,16 +1,18 @@
 <ul class="nav nav-tabs" id="publications_tab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link" id="details-tab" data-toggle="tab" href="#article_details" role="tab" aria-controls="article_details" aria-selected="true">Article details</a>
+    <button class="nav-link" id="details-tab" data-bs-toggle="tab" href="#article_details" role="tab" aria-controls="article_details" aria-selected="true">
+      Article details 
+    </button>
   </li>
   <li class="nav-item">
-    <a class="nav-link active" id="authors-tab" data-toggle="tab" href="#authors" role="tab" aria-controls="authors" aria-selected="false">
+    <button class="nav-link active" id="authors-tab" data-bs-toggle="tab" href="#authors" role="tab" aria-controls="authors" aria-selected="false">
       Authors (<%= @article.article_authors.count %>)
-    </a>
+    </button>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="themes-tab" data-toggle="tab" href="#themes" role="tab" aria-controls="themes" aria-selected="false">
+    <button class="nav-link" id="themes-tab" data-bs-toggle="tab" href="#themes" role="tab" aria-controls="themes" aria-selected="false">
       Themes (<%= @article.themes.count %>)
-    </a>
+    </button>
   </li>
 </ul>
 <div class="tab-content" id="myTabContent">
