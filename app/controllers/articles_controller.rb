@@ -218,17 +218,6 @@ class ArticlesController < ApplicationController
         'container-title-short']
     end
 
-    def getCRData(doi_text)
-      begin
-          #puts "trying"
-          art_bib = JSON.parse(Serrano.content_negotiation(ids: doi_text, format: "citeproc-json"))
-          return art_bib
-      rescue
-          #puts "failing"
-          return nil
-      end
-    end
-
     # get list of publications as bibliography
     def get_bib_data(articles)
       bib_list=[]
@@ -259,7 +248,7 @@ class ArticlesController < ApplicationController
         # need to raise an exeption if doi is incorrect or no data is returned
         # need to check the doi is not in DB before saving (lower and uppercase versions)
         # need to trim dois before saving
-        pub_data = getCRData(doi_text)
+        pub_data = XrefClient.getCRData(doi_text)
         data_keys = pub_data.keys()
         pub_columns = []
         exclude_columns = get_excluded()

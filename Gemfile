@@ -96,3 +96,6 @@ gem 'font-awesome-sass', '~> 5.11.2'
 
 #jquery-ui
 gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
+
+# XRef mapping gem for mapping crossref data to XDI
+gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git'
