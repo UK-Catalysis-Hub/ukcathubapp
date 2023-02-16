@@ -27,4 +27,6 @@ Rails.application.routes.draw do
   # download article stats csv
   get 'get_art_stats' => 'articles#arts_by_year_stats', as: 'get_art_stats'
   root 'home#index'
+  # Xref Mapping engine
+  mount XrefClient::Engine => "/xref_client"
 end
