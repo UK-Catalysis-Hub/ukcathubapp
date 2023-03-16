@@ -95,6 +95,6 @@ class ArticleAuthorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def article_author_params
-      params.require(:article_author).permit(:doi, :author_id, :author_count, :author_order, :status, :sequence, :article_id, :orcid, :last_name, :given_name)
+      params.require(:article_author).permit(:doi, :author_id, :author_count, :author_order, :status, :author_seq, :article_id, :orcid, :last_name, :given_name)
     end
 end
