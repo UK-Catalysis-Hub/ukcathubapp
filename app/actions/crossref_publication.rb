@@ -18,7 +18,7 @@ class CrossrefPublication
     #   container title update P
     if pub_data != nil
       citation_count_change(article, pub_data)
-      change_in_authors(article, pub_data)
+      #change_in_authors(article, pub_data)
     end
   end
 

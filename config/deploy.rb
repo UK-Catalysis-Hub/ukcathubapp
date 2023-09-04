@@ -1,3 +1,6 @@
+set :stages, ["staging", "production"]
+set :default_stage, "staging"
+
 set :application, "ukchapp"
 set :repo_url, "https://github.com/scman1/ukcathubapp.git"
 
