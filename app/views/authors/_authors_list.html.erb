@@ -9,11 +9,22 @@
       </tr>
     </thead>
     <tbody>
-      <% authors.each do |author| %>
+      <% authors.each do |auth| %>
+      <% if auth.given_name != nil
+           pr_name = auth.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
+           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
+           pr_name += auth.last_name
+           this_name = pr_name
+           if auth.isap == true
+             this_name = pr_name
+             this_name = link_to(pr_name, auth)
+           end
+	     end 
+        %>
           <tr>
-            <td> <%= link_to(author.fullname, controller: "authors", action: "show", id: author.id) %></td>
-            <th> <%= author.articles %> </td>
-            <th> <%= author.orcid %></td>
+            <td> <%= link_to(this_name, controller: "authors", action: "show", id: auth.id) %></td>
+            <th> <%= auth.articles %> </td>
+            <th> <%= auth.orcid %></td>
           </tr>
       <% end %>
     </tbody>
