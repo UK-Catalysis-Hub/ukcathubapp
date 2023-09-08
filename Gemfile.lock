@@ -156,6 +156,7 @@ GEM
     matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.4)
     minitest (5.20.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
@@ -172,6 +173,9 @@ GEM
       net-protocol
     net-ssh (7.2.0)
     nio4r (2.5.9)
+    nokogiri (1.15.4)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -267,6 +271,8 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    sqlite3 (1.6.4)
+      mini_portile2 (~> 2.8.0)
     sqlite3 (1.6.4-x86_64-linux)
     sshkit (1.21.5)
       net-scp (>= 1.1.2)
@@ -308,6 +314,7 @@ GEM
     zeitwerk (2.6.11)
 
 PLATFORMS
+  ruby
   x86_64-linux
 
 DEPENDENCIES
