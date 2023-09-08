@@ -1,6 +1,7 @@
 <!-- Authors browse -->
 <div class="container">
- <div class="rounded border-light bg-light ">
+  <p id="notice"><%= notice %></p>
+  <div class="rounded border-light bg-light ">
     <div class="container">
         <h5> Researcher Authoring UK Catalysis Hub Publications</h5>
         <p>
@@ -13,27 +14,19 @@
          </ul>
     </div>
   </div>
-  
-  <ul class="nav nav-tabs" id="researchersTab" role="tablist">
-    <li class="nav-item">
-      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#browse" type="button" role="tab" aria-controls="browse" aria-selected="true">Researchers</button>
-    </li>
-    <li class="nav-item">
-      <button class="nav-link" id="indicators-tab" data-bs-toggle="tab" data-bs-target="#indicators" type="button" role="tab" aria-controls="indicators" aria-selected="false">Indicators</button>
-    </li>
-    <% if user_signed_in? %>
-    <li class="nav-item">
-      <button class="nav-link" id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab" aria-controls="actions" aria-selected="false">Actions</button>
-    </li>
-    <li class="nav-item">
-      <button class="nav-link" id="all-auths-tab" data-bs-toggle="tab" data-bs-target="#all-auths" type="button" role="tab" aria-controls="all-auths" aria-selected="false">All Authors</button>
-    </li>
-    <% end %>
-  </ul>
-  
-  
-  <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="browse" role="tabpanel" aria-labelledby="browse-tab">
+  <br/>
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" id="nav-authors-tab" data-toggle="tab" href="#nav-authors" role="tab" aria-controls="nav-home" aria-selected="false">Researchers</a>
+      <a class="nav-item nav-link" id="nav-indicators-tab" data-toggle="tab" href="#nav-indicators" role="tab" aria-controls="nav-profile" aria-selected="true">Indicators</a>
+      <% if user_signed_in? %>
+        <a class="nav-item nav-link" id="nav-actions-tab" data-toggle="tab" href="#nav-actions" role="tab" aria-controls="nav-contact" aria-selected="false">Actions</a>
+        <a class="nav-item nav-link" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-contact" aria-selected="false">All Authors</a>
+      <% end %>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-authors" role="tabpanel" aria-labelledby="nav-authors-tab">
       <!-- Browse tab - Default with search and filtering -->
       <div class="row">
         <!-- Top DIV: search, order, reset -->
@@ -66,30 +59,29 @@
             </div>
             <% end %>
           </div>
+      </div>
+      <div class="row">
+        <!-- no facets -->
+        <div class="col-md-12">
+          <%= render partial: 'authors/researchers_list', locals: {authors: @authors}%>
         </div>
-        <div class="row">
-          <!-- no facets -->
-          <div class="col-md-12">
-            <%= render partial: 'authors/researchers_list', locals: {authors: @authors}%>
-          </div>
-        </div>
+      </div>
     </div>
-
-    <div class="tab-pane fade" id="indicators" role="tabpanel" aria-labelledby="indicators-tab">
+    <div class="tab-pane fade" id="nav-indicators" role="tabpanel" aria-labelledby="nav-indicators-tab">
       <% group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
-      aut_pub_stats = {}
-      aut_pub_data = {}
-      pub_sum = 0
-      Author.publications_count.reorder(pub_count: :asc).each {|apc|
-        pub_sum += apc.pub_count
-        idx = ((apc.pub_count-1)/5).to_i
-        idx > 3 ? idx = 4 : idx
-        aut_pub_stats.include?(idx) ? aut_pub_stats[idx] += 1 : aut_pub_stats[idx] = 1
-      }
-      aut_pub_data = {}
-      aut_pub_stats.each { |aps|
-        aut_pub_data[group_labels[aps[0]]] = aps[1]
-      }
+        aut_pub_stats = {}
+        aut_pub_data = {}
+        pub_sum = 0
+        Author.publications_count.reorder(pub_count: :asc).each {|apc|
+          pub_sum += apc.pub_count
+          idx = ((apc.pub_count-1)/5).to_i
+          idx > 3 ? idx = 4 : idx
+          aut_pub_stats.include?(idx) ? aut_pub_stats[idx] += 1 : aut_pub_stats[idx] = 1
+        }
+        aut_pub_data = {}
+        aut_pub_stats.each { |aps|
+          aut_pub_data[group_labels[aps[0]]] = aps[1]
+        }
       %>
       <div class="row px-1 my-3">
         <div class="col-sm-12 ">
@@ -169,7 +161,7 @@
           </div>
         </div>
       </div>
-      <div class="row px-1 my-3">
+            <div class="row px-1 my-3">
         <div class="col-sm-4">
           <div class="card">
             <div class="card-header">
@@ -245,9 +237,9 @@
           </div>
         </div><!--col-sm-7-->
       </div><!--row mb3 -->
-    </div>
+    </div> <!--end of indicators pane-->
     <% if user_signed_in? %>
-    <div class="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="actions-tab">
+    <div class="tab-pane fade" id="nav-actions" role="tabpanel" aria-labelledby="nav-actions-tab">
       <div class="row">
         <div class="col-md-12">
           <p>The actions below are scheduled and processed in the background</p>
@@ -263,13 +255,12 @@
           <%= button_to "Generate Affis", {:action => "generate", :controller => "authors"}, :class => 'btn  btn-success float-right'  %>
         </div>
       </div>
-    </div>
-    <div class="tab-pane fade" id="all-auths" role="tabpanel" aria-labelledby="all-auths-tab">
+    </div> <!--end of actions pane-->
+    <div class="tab-pane fade" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
       <div class="container">
-          <%= render partial: 'authors/authors_list', locals: {authors: ResearchersList.all()}%>
+        <%= render partial: 'authors/authors_list', locals: {authors: Author.all()}%>
       </div>
-
-    </div>
+    </div> <!--end of all pane-->
     <% end %>
-  </div> <!-- Tabs Contents-->
-</div><!-- container -->
+  </div>
+</div>
