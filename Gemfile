@@ -73,7 +73,7 @@ gem 'devise'
 gem 'serrano'
 
 # sidekiq gem for handling background processes
-gem 'sidekiq', '6.5.1'
+gem 'sidekiq', '7.1.3'
 
 
 # the scenic and scenic_sqlite_adapter gems are required for handling views in
