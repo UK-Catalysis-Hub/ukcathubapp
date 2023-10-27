@@ -23,7 +23,7 @@
         %>
           <tr>
             <td> <%= link_to(this_name, controller: "authors", action: "show", id: auth.id) %></td>
-            <th> <%= auth.articles %> </td>
+            <th> <%= auth.articles.count() %> </td>
             <th> <%= auth.orcid %></td>
           </tr>
       <% end %>
