@@ -10,7 +10,11 @@
     </thead>
     <tbody>
       <% authors.each do |auth| %>
+<<<<<<< HEAD
         <% if auth.given_name != nil
+=======
+      <% if auth.given_name != nil
+>>>>>>> 1e8c84c7e540d0dcaab61a76c3910784fc4b8c09
            pr_name = auth.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
            pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
            pr_name += auth.last_name
@@ -23,7 +27,11 @@
         %>
           <tr>
             <td> <%= link_to(this_name, controller: "authors", action: "show", id: auth.id) %></td>
+<<<<<<< HEAD
             <th> <%= auth.articles %> </td>
+=======
+            <th> <%= auth.articles.count() %> </td>
+>>>>>>> 1e8c84c7e540d0dcaab61a76c3910784fc4b8c09
             <th> <%= auth.orcid %></td>
           </tr>
       <% end %>

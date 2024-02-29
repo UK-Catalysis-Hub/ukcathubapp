@@ -89,28 +89,39 @@ class DatasetsController < ApplicationController
     puts "***************************************************"
     csv_file = params[:file]
     @data_rows = CSV.read(csv_file.path)
-    @data_rows.each do |pub_row|
-      if pub_row[4] != 'do_description' and pub_row[11] != nil
-        ds_id = pub_row[6]
+    @data_rows.each do |do_row|
+      if do_row[3] != 'do_description' and do_row[7] != nil
+        ds_id = do_row[5]
+        puts do_row
         @dor = Dataset.find_by(dataset_location: ds_id)
-        art_id = pub_row[1]
-        art_doi = pub_row[2]
+        art_id = do_row[1]
+        art_doi = do_row[2]
+        # add new do record
         if @dor == nil
           @dor = Dataset.new()
-          @dor.dataset_description = pub_row[4]
-          @dor.dataset_doi = pub_row[5] 
-          @dor.dataset_location = pub_row[6]
-          @dor.dataset_name = pub_row[9]
-          @dor.dataset_startdate = pub_row[10]
-          @dor.ds_type = pub_row[11]
-          @dor.repository = pub_row[12]
+          @dor.dataset_description = do_row[3]
+          @dor.dataset_doi = do_row[4]
+          @dor.dataset_location = do_row[5]
+          @dor.dataset_name = do_row[6]
+          @dor.dataset_startdate = do_row[7]
+          @dor.ds_type = do_row[8]
+          @dor.repository = do_row[9]
           @dor.save()
-          # add article_dataset_link
-          @art_ds_link = ArticleDataset.new()
-          @art_ds_link.doi = art_doi 
-          @art_ds_link.article_id = art_id
-          @art_ds_link.dataset_id = @dor.id
-          puts @art_ds_link.inspect()
+        end
+        # add article_dataset_link
+        if @dor.id > 1
+          @art_ds_link = ArticleDataset.find_by(article_id: art_id,
+                                                dataset_id: @dor.id)
+          if @art_ds_link == nil
+            @art_ds_link = ArticleDataset.new()
+            @art_ds_link.doi = art_doi
+            @art_ds_link.article_id = art_id
+            @art_ds_link.dataset_id = @dor.id
+            puts @art_ds_link.inspect()
+            @art_ds_link.save()
+          else
+            puts "article-do link record exists"
+          end
         end
       end
     end
