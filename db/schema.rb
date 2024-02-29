@@ -181,19 +181,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_104600) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "xref_client_mappings", force: :cascade do |t|
-    t.string "obj_name"
-    t.string "origin"
-    t.string "target"
-    t.string "target_type"
-    t.string "default"
-    t.string "json_paths"
-    t.string "evaluate"
-    t.string "other"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
 
   create_view "list_themes", sql_definition: <<-SQL
       SELECT themes.id, themes.phase, themes.name, themes.short, themes.lead, count() AS article_count
@@ -205,12 +192,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_104600) do
     ORDER BY themes.id
   SQL
   create_view "authors_by_pub", sql_definition: <<-SQL
-    		SELECT group_concat(art_authors, ', ') AS author_list, article_id as article_id
-		FROM (SELECT article_authors.last_name || ', ' || article_authors.given_name as art_authors, article_authors.article_id
+    		SELECT group_concat(art_authors, ", ") AS author_list, article_id as article_id
+		FROM (SELECT article_authors.last_name || ", " || article_authors.given_name as art_authors, article_authors.article_id
 				FROM article_authors ORDER BY article_authors.article_id, article_authors.author_order) GROUP BY article_id
   SQL
   create_view "article_base", sql_definition: <<-SQL
-      SELECT CASE WHEN Articles.pub_ol_year = '' THEN Articles.pub_print_year ELSE Articles.pub_ol_year END as Published, Articles.title, Articles.container_title as Journal, Articles.volume, Articles.issue, Articles.page, Articles.DOI, articles.id FROM Articles WHERE Articles.status <> 'Remove'
+      SELECT CASE WHEN Articles.pub_ol_year = "" THEN Articles.pub_print_year ELSE Articles.pub_ol_year END as Published, Articles.title, Articles.container_title as Journal, Articles.volume, Articles.issue, Articles.page, Articles.DOI, articles.id FROM Articles WHERE Articles.status <> "Remove"
   SQL
   create_view "bib_list", sql_definition: <<-SQL
       SELECT authors_by_pub.author_list, article_base.* FROM authors_by_pub inner join article_base on authors_by_pub.article_id = article_base.id
@@ -266,7 +253,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_104600) do
 			GROUP BY country
   SQL
   create_view "researchers_lists", sql_definition: <<-SQL
-      SELECT authors.id, authors.last_name || ', ' || ifnull(authors.given_name , '') AS fullname, count() AS articles, authors.orcid
+      SELECT authors.id, authors.last_name || ", " || ifnull(authors.given_name , '') AS fullname, count() AS articles, authors.orcid
     FROM authors 
     INNER JOIN article_authors ON article_authors.author_id = authors.id
     GROUP BY authors.id, authors.last_name, authors.given_name, authors.orcid
