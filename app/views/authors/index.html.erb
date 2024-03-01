@@ -15,18 +15,25 @@
     </div>
   </div>
   <br/>
-  <nav>
-    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <a class="nav-item nav-link active" id="nav-authors-tab" data-toggle="tab" href="#nav-authors" role="tab" aria-controls="nav-home" aria-selected="false">Researchers</a>
-      <a class="nav-item nav-link" id="nav-indicators-tab" data-toggle="tab" href="#nav-indicators" role="tab" aria-controls="nav-profile" aria-selected="true">Indicators</a>
-      <% if user_signed_in? %>
-        <a class="nav-item nav-link" id="nav-actions-tab" data-toggle="tab" href="#nav-actions" role="tab" aria-controls="nav-contact" aria-selected="false">Actions</a>
-        <a class="nav-item nav-link" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-contact" aria-selected="false">All Authors</a>
-      <% end %>
-    </div>
-  </nav>
-  <div class="tab-content" id="nav-tabContent">
-    <div class="tab-pane fade show active" id="nav-authors" role="tabpanel" aria-labelledby="nav-authors-tab">
+
+  <ul class="nav nav-tabs" id="researchersTab" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#nav-authors" type="button" role="tab" aria-controls="browse" aria-selected="true">Researchers</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="indicators-tab" data-bs-toggle="tab" data-bs-target="#indicators" type="button" role="tab" aria-controls="indicators" aria-selected="false">Indicators</button>
+    </li>
+    <% if user_signed_in? %>
+    <li class="nav-item">
+      <button class="nav-link" id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab" aria-controls="actions" aria-selected="false">Actions</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="all-auths-tab" data-bs-toggle="tab" data-bs-target="#all-auths" type="button" role="tab" aria-controls="all-auths" aria-selected="false">All Authors</button>
+    </li>
+    <% end %>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="nav-authors" role="tabpanel" aria-labelledby="authors-tab">
       <!-- Browse tab - Default with search and filtering -->
       <div class="row">
         <!-- Top DIV: search, order, reset -->
@@ -45,7 +52,7 @@
             </div>
             <div class="col-md-4">
               <!-- Set sort order -->
-              <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
+              <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                   <% @search.orders.reject(&:active).each do |order| %>
@@ -54,7 +61,7 @@
                 </ul>
               </div>
               <div class="col-md-2">
-                <%= link_to 'reset', '?', class: 'btn  btn-success float-right' %>
+                <%= link_to 'reset', '?', class: 'btn  btn-success float-right' %>b
               </div>
             </div>
             <% end %>
@@ -67,7 +74,7 @@
         </div>
       </div>
     </div>
-    <div class="tab-pane fade" id="nav-indicators" role="tabpanel" aria-labelledby="nav-indicators-tab">
+    <div class="tab-pane fade" id="indicators" role="tabpanel" aria-labelledby="indicators-tab">
       <% group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
         aut_pub_stats = {}
         aut_pub_data = {}
@@ -239,7 +246,7 @@
       </div><!--row mb3 -->
     </div> <!--end of indicators pane-->
     <% if user_signed_in? %>
-    <div class="tab-pane fade" id="nav-actions" role="tabpanel" aria-labelledby="nav-actions-tab">
+    <div class="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="nav-actions-tab">
       <div class="row">
         <div class="col-md-12">
           <p>The actions below are scheduled and processed in the background</p>
@@ -256,7 +263,7 @@
         </div>
       </div>
     </div> <!--end of actions pane-->
-    <div class="tab-pane fade" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+    <div class="tab-pane fade" id="all-auths" role="tabpanel" aria-labelledby="nav-all-tab">
       <div class="container">
         <%= render partial: 'authors/authors_list', locals: {authors: Author.all()}%>
       </div>

@@ -52,126 +52,121 @@
     <strong>Pub type:</strong>
     <%= @article.pub_type %>
   </p>
-  <br/>
-
-  <div id="publicationsAccordion" class="accordion" >
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingOne">
-        <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-          Publisher Details
-        </button>
-      </h2>
-      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-parent="#publicationsAccordion">
-        <div class="accordion-body">
-          <p>
-            <strong>Publisher:</strong>
-            <%= @article.publisher %>
-          </p>
-          <p>
-            <strong>Issue:</strong>
-            <%= @article.issue %>
-          </p>
-          <p>
-            <strong>License:</strong>
-            <%= @article.license %>
-          </p>
-          <p>
-            <strong>Publication date(s):</strong>
-            <%
-              p_date_s = ""
-              if @article.pub_print_year != nil then
-                p_date_s = "%04d" % @article.pub_print_year
-              end
-              if @article.pub_print_month != nil then
-                p_date_s += "/%02d" % @article.pub_print_month
-              end
-              if @article.pub_print_day != nil then
-                p_date_s += "/%02d" % @article.pub_print_day
-              end
-              if p_date_s != "" then
-                p_date_s += " (print) "
-              end
-              o_date_s = ""
-              if @article.pub_ol_year != nil then
-                o_date_s = "%04d" % @article.pub_ol_year
-              end
-              if @article.pub_ol_month != nil then
-                o_date_s += "/%02d" % @article.pub_ol_month
-              end
-              if @article.pub_ol_day != nil then
-                o_date_s += "/%02d" % @article.pub_ol_day
-              end
-              if o_date_s != "" then
-                o_date_s += " (online)"
-              end
-            %>
-            <%= p_date_s + o_date_s %>
-          </p>
-          <p>
-            <strong>Pages:</strong>
-            <%= @article.page %>
-          </p>
-          <p>
-            <strong>Volume:</strong>
-            <%= @article.volume %>
-            <strong>Issue:</strong>
-            <%= @article.journal_issue %>
-          </p>
-          <p>
-            <strong>Journal:</strong>
-            <%= @article.container_title %>
-          </p>
-          <p>
-            <strong>Link:</strong>
-            <%= link_to @article.link, @article.link, target: "_blank", rel: "nofollow"  %>
-          </p>
-            <strong>URL:</strong>
-            <% if  @article.url %>
-            <%= link_to @article.url, @article.url.html_safe, target: "_blank", rel: "nofollow" %>
-            <% end %>
-          </p>
-        </div>
-      </div>
-    </div>
-    <!--only show abstract if present-->
-    <% unless @article.abstract.nil? or @article.abstract == "" %>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingTwo">
-        <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          Abstract
-        </button>
-      </h2>
-      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-parent="#publicationsAccordion">
-        <div class="accordion-body">
-          <p>
-            <% if @article.abstract %>
-              <%= @article.abstract.html_safe %>
-            <% end %>
-          </p>
-        </div>
-      </div>
-    </div>
-    <% end %>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingThree">
-        <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          Associated Data Objects
-        </button>
-      </h2>
-      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-parent="#publicationsAccordion">
-        <div class="accordion-body">
-          <p>
-            <% if @article.datasets.count > 0 %>
-              <%= render partial: 'datasets/dataobject_list', locals: {data_objects: @article.datasets }%>
-              <% else @article.datasets.count > 0 %>
-                <%= "There are no objects associated to this publication" %>
-              <% end %>
-            </p>
-        </div>          
+<div class="accordion" id="accordionPanelsStayOpenExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+        Publisher Details
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+      <div class="accordion-body">
+        <p>
+          <strong>Publisher:</strong>
+          <%= @article.publisher %>
+        </p>
+        <p>
+          <strong>Issue:</strong>
+          <%= @article.issue %>
+        </p>
+        <p>
+          <strong>License:</strong>
+          <%= @article.license %>
+        </p>
+        <p>
+          <strong>Publication date(s):</strong>
+          <%
+            p_date_s = ""
+            if @article.pub_print_year != nil then
+              p_date_s = "%04d" % @article.pub_print_year
+            end
+            if @article.pub_print_month != nil then
+              p_date_s += "/%02d" % @article.pub_print_month
+            end
+            if @article.pub_print_day != nil then
+              p_date_s += "/%02d" % @article.pub_print_day
+            end
+            if p_date_s != "" then
+              p_date_s += " (print) "
+            end
+            o_date_s = ""
+            if @article.pub_ol_year != nil then
+              o_date_s = "%04d" % @article.pub_ol_year
+            end
+            if @article.pub_ol_month != nil then
+              o_date_s += "/%02d" % @article.pub_ol_month
+            end
+            if @article.pub_ol_day != nil then
+              o_date_s += "/%02d" % @article.pub_ol_day
+            end
+            if o_date_s != "" then
+              o_date_s += " (online)"
+            end
+           %>
+          <%= p_date_s + o_date_s %>
+        </p>
+        <p>
+          <strong>Pages:</strong>
+          <%= @article.page %>
+        </p>
+        <p>
+          <strong>Volume:</strong>
+          <%= @article.volume %>
+          <strong>Issue:</strong>
+          <%= @article.journal_issue %>
+        </p>
+        <p>
+          <strong>Journal:</strong>
+          <%= @article.container_title %>
+        </p>
+        <p>
+          <strong>Link:</strong>
+          <%= link_to @article.link, @article.link, target: "_blank", rel: "nofollow"  %>
+        </p>
+          <strong>URL:</strong>
+          <% if  @article.url %>
+          <%= link_to @article.url, @article.url.html_safe, target: "_blank", rel: "nofollow" %>
+          <% end %>
+        </p>
       </div>
     </div>
   </div>
-  </br>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+        Abstract
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+      <div class="accordion-body">
+        <p>
+          <% if @article.abstract %>
+            <%= @article.abstract.html_safe %>
+          <% end %>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+        Associated Data Objects
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+      <div class="accordion-body">
+        <p>
+          <% if @article.datasets.count > 0 %>
+            <%= render partial: 'datasets/dataobject_list', locals: {data_objects: @article.datasets }%>
+            <% else @article.datasets.count > 0 %>
+              <%= "There are no objects associated to this publication" %>
+            <% end %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<br/>
   
   <% if user_signed_in? %>
     <%= link_to 'Edit', edit_article_path(@article), :class => "btn btn-primary btn-sm" %>

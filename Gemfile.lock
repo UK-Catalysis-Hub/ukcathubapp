@@ -323,7 +323,7 @@ DEPENDENCIES
   listen (~> 3.3)
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
-  rails (~> 7.0.7)
+  rails (~> 7.0.8)
   sassc-rails
   scenic
   scenic_sqlite_adapter

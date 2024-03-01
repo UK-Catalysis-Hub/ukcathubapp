@@ -227,35 +227,4 @@
         margin-bottom: 15px;
       }
     }
-.accordion-header{
- height:100%;
- background-color: #77b35d;
-}
- 
-.accordion-button {
-  height:100%;
-  width: 100%;
-  font-size: 20px;
-  color: #FFFFFF;
-  background: none;
-  box-shadow: none;
-  border: 0;
-}
-
-.accordion-button:hover {
-  
-}
-.accordion-button:not(.collapsed) {
-  height:100%;
-  width: 100%;
-  font-size: 20px;
-  color: #111111;
-  background: none;
-  box-shadow: none;
-  border: 0;
-}
-.accordion-item {
-    border: 1px solid #bbb;
-    border-radius: 5px;
-}
 

@@ -4,12 +4,12 @@
     <% if user_signed_in? %>
       <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" id="details-tab" data-toggle="tab" href="#article_details" role="tab" aria-controls="article_details" aria-selected="true">
+          <a class="nav-link active" id="details-tab" data-bs-toggle="tab" href="#article_details" role="tab" aria-controls="article_details" aria-selected="true">
             Article Links (<%= @author.article_authors.count %>)
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="authors-tab" data-toggle="tab" href="#authors" role="tab" aria-controls="authors" aria-selected="false">
+          <a class="nav-link" id="authors-tab" data-bs-toggle="tab" href="#authors" role="tab" aria-controls="authors" aria-selected="false">
             Affiliations from article links(<%= @author.author_affiliations.count %>)
           </a>
         </li>
@@ -36,7 +36,7 @@
           <li>Contact the CDI admin if you give your consent to display your information at: cdi_amin@rcah.ac.uk </li>
          </ul>
     </div>
-  </div>
+  </div>  
   <% end %>
   <%= link_to 'Back', authors_path, :class => "btn btn-secondary btn-sm" %>
 </div>
