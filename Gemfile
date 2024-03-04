@@ -94,3 +94,5 @@ gem 'jquery-rails', '~> 4.3', '>= 4.3.5'
 
 #jquery-ui
 gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
+
+gem "cssbundling-rails", "~> 1.4"
