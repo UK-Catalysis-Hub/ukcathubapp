@@ -104,8 +104,6 @@ GEM
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
     crass (1.0.6)
-    cssbundling-rails (1.4.0)
-      railties (>= 6.0.0)
     date (3.3.4)
     devise (4.9.3)
       bcrypt (~> 3.0)
@@ -317,7 +315,6 @@ DEPENDENCIES
   capistrano-rbenv (~> 2.1, >= 2.1.4)
   capybara (>= 3.26)
   chartkick
-  cssbundling-rails (~> 1.4)
   devise
   forty_facets
   jbuilder (~> 2.7)

@@ -45,6 +45,3 @@ yarn-debug.log*
 *.sqbpro
 
 
-
-/app/assets/builds/*
-!/app/assets/builds/.keep
