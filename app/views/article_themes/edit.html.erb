@@ -1,6 +1,10 @@
-<h1>Editing Article Theme</h1>
+<h1>Editing article theme</h1>
 
-<%= render 'form', article_theme: @article_theme %>
+<%= render "form", article_theme: @article_theme %>
 
-<%= link_to 'Show', @article_theme %> |
-<%= link_to 'Back', article_themes_path %>
+<br>
+
+<div>
+  <%= link_to "Show this article theme", @article_theme %> |
+  <%= link_to "Back to article themes", article_themes_path %>
+</div>

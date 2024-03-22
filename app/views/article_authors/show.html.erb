@@ -1,53 +1,10 @@
-<p id="notice"><%= notice %></p>
+<p style="color: green"><%= notice %></p>
 
-<p>
-  <strong>Doi:</strong>
-  <%= @article_author.doi %>
-</p>
+<%= render @article_author %>
 
-<p>
-  <strong>Author:</strong>
-  <%= @article_author.author_id %>
-</p>
+<div>
+  <%= link_to "Edit this article author", edit_article_author_path(@article_author) %> |
+  <%= link_to "Back to article authors", article_authors_path %>
 
-<p>
-  <strong>Article:</strong>
-  <%= @article_author.article_id %>
-</p>
-
-<p>
-  <strong>Author count:</strong>
-  <%= @article_author.author_count %>
-</p>
-
-<p>
-  <strong>ORCID:</strong>
-  <%= @article_author.orcid %>
-</p>
-<p>
-  <strong>Last Name:</strong>
-  <%= @article_author.last_name %>
-</p>
-<p>
-  <strong>Name:</strong>
-  <%= @article_author.given_name %>
-</p>
-<p>
-  <strong>Author order:</strong>
-  <%= @article_author.author_order %>
-</p>
-
-<p>
-  <strong>Status:</strong>
-  <%= @article_author.status %>
-</p>
-
-<p>
-  <strong>Sequence:</strong>
-  <%= @article_author.author_seq %>
-</p>
-
-
-
-<%= link_to 'Edit', edit_article_author_path(@article_author) %> |
-<%= link_to 'Back', article_authors_path %>
+  <%= button_to "Destroy this article author", @article_author, method: :delete %>
+</div>

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class AddressesControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -16,8 +16,8 @@ class AddressesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create address" do
-    assert_difference('Address.count') do
-      post addresses_url, params: { address: { add_01: @address.add_01, add_02: @address.add_02, add_03: @address.add_03, add_04: @address.add_04, affiliation_id: @address.affiliation_id, country: @address.country } }
+    assert_difference("Address.count") do
+      post addresses_url, params: { address: { add_01: @address.add_01, add_02: @address.add_02, add_03: @address.add_03, add_04: @address.add_04, affiliation_id: @address.affiliation_id, city: @address.city, country: @address.country, province: @address.province } }
     end
 
     assert_redirected_to address_url(Address.last)
@@ -34,12 +34,12 @@ class AddressesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update address" do
-    patch address_url(@address), params: { address: { add_01: @address.add_01, add_02: @address.add_02, add_03: @address.add_03, add_04: @address.add_04, affiliation_id: @address.affiliation_id, country: @address.country } }
+    patch address_url(@address), params: { address: { add_01: @address.add_01, add_02: @address.add_02, add_03: @address.add_03, add_04: @address.add_04, affiliation_id: @address.affiliation_id, city: @address.city, country: @address.country, province: @address.province } }
     assert_redirected_to address_url(@address)
   end
 
   test "should destroy address" do
-    assert_difference('Address.count', -1) do
+    assert_difference("Address.count", -1) do
       delete address_url(@address)
     end
 

@@ -10,9 +10,9 @@ class ThemesTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Themes"
   end
 
-  test "creating a Theme" do
+  test "should create theme" do
     visit themes_url
-    click_on "New Theme"
+    click_on "New theme"
 
     fill_in "Lead", with: @theme.lead
     fill_in "Name", with: @theme.name
@@ -25,9 +25,9 @@ class ThemesTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "updating a Theme" do
-    visit themes_url
-    click_on "Edit", match: :first
+  test "should update Theme" do
+    visit theme_url(@theme)
+    click_on "Edit this theme", match: :first
 
     fill_in "Lead", with: @theme.lead
     fill_in "Name", with: @theme.name
@@ -40,11 +40,9 @@ class ThemesTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Theme" do
-    visit themes_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
+  test "should destroy Theme" do
+    visit theme_url(@theme)
+    click_on "Destroy this theme", match: :first
 
     assert_text "Theme was successfully destroyed"
   end

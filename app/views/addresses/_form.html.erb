@@ -1,47 +1,57 @@
-<%= form_with(model: address, local: true) do |form| %>
+<%= form_with(model: address) do |form| %>
   <% if address.errors.any? %>
-    <div id="error_explanation">
+    <div style="color: red">
       <h2><%= pluralize(address.errors.count, "error") %> prohibited this address from being saved:</h2>
 
       <ul>
-        <% address.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <% address.errors.each do |error| %>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :add_01 %>
+  <div>
+    <%= form.label :add_01, style: "display: block" %>
     <%= form.text_field :add_01 %>
   </div>
 
-  <div class="field">
-    <%= form.label :add_02 %>
+  <div>
+    <%= form.label :add_02, style: "display: block" %>
     <%= form.text_field :add_02 %>
   </div>
 
-  <div class="field">
-    <%= form.label :add_03 %>
+  <div>
+    <%= form.label :add_03, style: "display: block" %>
     <%= form.text_field :add_03 %>
   </div>
 
-  <div class="field">
-    <%= form.label :add_04 %>
+  <div>
+    <%= form.label :add_04, style: "display: block" %>
     <%= form.text_field :add_04 %>
   </div>
 
-  <div class="field">
-    <%= form.label :country %>
+  <div>
+    <%= form.label :city, style: "display: block" %>
+    <%= form.text_field :city %>
+  </div>
+
+  <div>
+    <%= form.label :province, style: "display: block" %>
+    <%= form.text_field :province %>
+  </div>
+
+  <div>
+    <%= form.label :country, style: "display: block" %>
     <%= form.text_field :country %>
   </div>
 
-  <div class="field">
-    <%= form.label :affiliation_id %>
+  <div>
+    <%= form.label :affiliation_id, style: "display: block" %>
     <%= form.number_field :affiliation_id %>
   </div>
 
-  <div class="actions">
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

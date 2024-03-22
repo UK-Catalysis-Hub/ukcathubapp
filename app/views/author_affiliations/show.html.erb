@@ -1,49 +1,10 @@
-<p id="notice"><%= notice %></p>
+<p style="color: green"><%= notice %></p>
 
-<p>
-  <strong>Author:</strong>
-  <%= @author_affiliation.article_author_id %>
-</p>
+<%= render @author_affiliation %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @author_affiliation.name %>
-</p>
+<div>
+  <%= link_to "Edit this author affiliation", edit_author_affiliation_path(@author_affiliation) %> |
+  <%= link_to "Back to author affiliations", author_affiliations_path %>
 
-<p>
-  <strong>Short name:</strong>
-  <%= @author_affiliation.short_name %>
-</p>
-
-<p>
-  <strong>Add 01:</strong>
-  <%= @author_affiliation.add_01 %>
-</p>
-
-<p>
-  <strong>Add 02:</strong>
-  <%= @author_affiliation.add_02 %>
-</p>
-
-<p>
-  <strong>Add 03:</strong>
-  <%= @author_affiliation.add_03 %>
-</p>
-
-<p>
-  <strong>Add 04:</strong>
-  <%= @author_affiliation.add_04 %>
-</p>
-
-<p>
-  <strong>Add 05:</strong>
-  <%= @author_affiliation.add_05 %>
-</p>
-
-<p>
-  <strong>Country:</strong>
-  <%= @author_affiliation.country %>
-</p>
-
-<%= link_to 'Edit', edit_author_affiliation_path(@author_affiliation) %> |
-<%= link_to 'Back', author_affiliations_path %>
+  <%= button_to "Destroy this author affiliation", @author_affiliation, method: :delete %>
+</div>

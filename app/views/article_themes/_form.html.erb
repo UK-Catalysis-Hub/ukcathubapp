@@ -1,46 +1,47 @@
-<%= form_with(model: article_theme, local: true) do |form| %>
+<%= form_with(model: article_theme) do |form| %>
   <% if article_theme.errors.any? %>
-    <div id="error_explanation">
+    <div style="color: red">
       <h2><%= pluralize(article_theme.errors.count, "error") %> prohibited this article_theme from being saved:</h2>
 
       <ul>
-        <% article_theme.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <% article_theme.errors.each do |error| %>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :doi %>
+  <div>
+    <%= form.label :doi, style: "display: block" %>
     <%= form.text_field :doi %>
   </div>
 
-  <div class="field">
-    <%= form.label :phase %>
+  <div>
+    <%= form.label :phase, style: "display: block" %>
     <%= form.number_field :phase %>
   </div>
 
-  <div class="field">
-    <%= form.label :article_id %>
-    <%= form.number_field :article_id %>
-  </div>
-  <div class="field">
-    <%= form.label :collaboration %>
+  <div>
+    <%= form.label :collaboration, style: "display: block" %>
     <%= form.text_field :collaboration %>
   </div>
 
-  <div class="field">
-    <%= form.label :theme_id %>
+  <div>
+    <%= form.label :theme_id, style: "display: block" %>
     <%= form.number_field :theme_id %>
   </div>
 
-  <div class="field">
-    <%= form.label :project_year %>
+  <div>
+    <%= form.label :article_id, style: "display: block" %>
+    <%= form.number_field :article_id %>
+  </div>
+
+  <div>
+    <%= form.label :project_year, style: "display: block" %>
     <%= form.number_field :project_year %>
   </div>
 
-  <div class="actions">
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

@@ -17,8 +17,8 @@ and EP/M013219/1(biocatalysis)):
 The prototype is designed using Ruby on Rails. It is intended to provide a
 quick look at the possiblities for data sharing and not the final version.
 
-* Ruby version: 2.7.0
-* Rails version: 6.0.3.3
+* Ruby version: 3.2.2
+* Rails version: 7.1.3.2
 
 ## Current Online Version
 The current version of the CDI can be accessed from **[http://cdi.ukcatalysishub.org](http://cdi.ukcatalysishub.org)**.

@@ -9,7 +9,10 @@ one:
   add_03: MyString
   add_04: MyString
   add_05: MyString
+  city: MyString
+  province: MyString
   country: MyString
+  affiliation_id: 1
 
 two:
   article_author_id: 1
@@ -20,4 +23,7 @@ two:
   add_03: MyString
   add_04: MyString
   add_05: MyString
+  city: MyString
+  province: MyString
   country: MyString
+  affiliation_id: 1

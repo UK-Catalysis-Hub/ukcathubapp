@@ -1,6 +1,10 @@
-<h1>Editing Article Dataset</h1>
+<h1>Editing article dataset</h1>
 
-<%= render 'form', article_dataset: @article_dataset %>
+<%= render "form", article_dataset: @article_dataset %>
 
-<%= link_to 'Show', @article_dataset %> |
-<%= link_to 'Back', article_datasets_path %>
+<br>
+
+<div>
+  <%= link_to "Show this article dataset", @article_dataset %> |
+  <%= link_to "Back to article datasets", article_datasets_path %>
+</div>

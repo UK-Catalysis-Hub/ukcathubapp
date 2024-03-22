@@ -10,45 +10,47 @@ class DatasetsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Datasets"
   end
 
-  test "creating a Dataset" do
+  test "should create dataset" do
     visit datasets_url
-    click_on "New Dataset"
+    click_on "New dataset"
 
-    fill_in "Dataset complete", with: @dataset.dataset_complete
-    fill_in "Dataset description", with: @dataset.dataset_description
-    fill_in "Dataset doi", with: @dataset.dataset_doi
-    fill_in "Dataset enddate", with: @dataset.dataset_enddate
-    fill_in "Dataset location", with: @dataset.dataset_location
-    fill_in "Dataset name", with: @dataset.dataset_name
-    fill_in "Dataset startdate", with: @dataset.dataset_startdate
+    fill_in "Complete", with: @dataset.complete
+    fill_in "Description", with: @dataset.description
+    fill_in "Doi", with: @dataset.doi
+    fill_in "Ds type", with: @dataset.ds_type
+    fill_in "Enddate", with: @dataset.enddate
+    fill_in "Location", with: @dataset.location
+    fill_in "Name", with: @dataset.name
+    fill_in "Repository", with: @dataset.repository
+    fill_in "Startdate", with: @dataset.startdate
     click_on "Create Dataset"
 
     assert_text "Dataset was successfully created"
     click_on "Back"
   end
 
-  test "updating a Dataset" do
-    visit datasets_url
-    click_on "Edit", match: :first
+  test "should update Dataset" do
+    visit dataset_url(@dataset)
+    click_on "Edit this dataset", match: :first
 
-    fill_in "Dataset complete", with: @dataset.dataset_complete
-    fill_in "Dataset description", with: @dataset.dataset_description
-    fill_in "Dataset doi", with: @dataset.dataset_doi
-    fill_in "Dataset enddate", with: @dataset.dataset_enddate
-    fill_in "Dataset location", with: @dataset.dataset_location
-    fill_in "Dataset name", with: @dataset.dataset_name
-    fill_in "Dataset startdate", with: @dataset.dataset_startdate
+    fill_in "Complete", with: @dataset.complete
+    fill_in "Description", with: @dataset.description
+    fill_in "Doi", with: @dataset.doi
+    fill_in "Ds type", with: @dataset.ds_type
+    fill_in "Enddate", with: @dataset.enddate
+    fill_in "Location", with: @dataset.location
+    fill_in "Name", with: @dataset.name
+    fill_in "Repository", with: @dataset.repository
+    fill_in "Startdate", with: @dataset.startdate
     click_on "Update Dataset"
 
     assert_text "Dataset was successfully updated"
     click_on "Back"
   end
 
-  test "destroying a Dataset" do
-    visit datasets_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
+  test "should destroy Dataset" do
+    visit dataset_url(@dataset)
+    click_on "Destroy this dataset", match: :first
 
     assert_text "Dataset was successfully destroyed"
   end

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ArticleThemesControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -16,8 +16,8 @@ class ArticleThemesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create article_theme" do
-    assert_difference('ArticleTheme.count') do
-      post article_themes_url, params: { article_theme: { collaboration: @article_theme.collaboration, doi: @article_theme.doi, phase: @article_theme.phase, project_year: @article_theme.project_year, theme_id: @article_theme.theme_id } }
+    assert_difference("ArticleTheme.count") do
+      post article_themes_url, params: { article_theme: { article_id: @article_theme.article_id, collaboration: @article_theme.collaboration, doi: @article_theme.doi, phase: @article_theme.phase, project_year: @article_theme.project_year, theme_id: @article_theme.theme_id } }
     end
 
     assert_redirected_to article_theme_url(ArticleTheme.last)
@@ -34,12 +34,12 @@ class ArticleThemesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update article_theme" do
-    patch article_theme_url(@article_theme), params: { article_theme: { collaboration: @article_theme.collaboration, doi: @article_theme.doi, phase: @article_theme.phase, project_year: @article_theme.project_year, theme_id: @article_theme.theme_id } }
+    patch article_theme_url(@article_theme), params: { article_theme: { article_id: @article_theme.article_id, collaboration: @article_theme.collaboration, doi: @article_theme.doi, phase: @article_theme.phase, project_year: @article_theme.project_year, theme_id: @article_theme.theme_id } }
     assert_redirected_to article_theme_url(@article_theme)
   end
 
   test "should destroy article_theme" do
-    assert_difference('ArticleTheme.count', -1) do
+    assert_difference("ArticleTheme.count", -1) do
       delete article_theme_url(@article_theme)
     end
 

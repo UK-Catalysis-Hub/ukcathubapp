@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class AffiliationsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -16,8 +16,8 @@ class AffiliationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create affiliation" do
-    assert_difference('Affiliation.count') do
-      post affiliations_url, params: { affiliation: { country: @affiliation.country, department: @affiliation.department, faculty: @affiliation.faculty, institution: @affiliation.institution, work_group: @affiliation.work_group } }
+    assert_difference("Affiliation.count") do
+      post affiliations_url, params: { affiliation: { country: @affiliation.country, department: @affiliation.department, faculty: @affiliation.faculty, institution: @affiliation.institution, school: @affiliation.school, sector: @affiliation.sector, work_group: @affiliation.work_group } }
     end
 
     assert_redirected_to affiliation_url(Affiliation.last)
@@ -34,12 +34,12 @@ class AffiliationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update affiliation" do
-    patch affiliation_url(@affiliation), params: { affiliation: { country: @affiliation.country, department: @affiliation.department, faculty: @affiliation.faculty, institution: @affiliation.institution, work_group: @affiliation.work_group } }
+    patch affiliation_url(@affiliation), params: { affiliation: { country: @affiliation.country, department: @affiliation.department, faculty: @affiliation.faculty, institution: @affiliation.institution, school: @affiliation.school, sector: @affiliation.sector, work_group: @affiliation.work_group } }
     assert_redirected_to affiliation_url(@affiliation)
   end
 
   test "should destroy affiliation" do
-    assert_difference('Affiliation.count', -1) do
+    assert_difference("Affiliation.count", -1) do
       delete affiliation_url(@affiliation)
     end
 

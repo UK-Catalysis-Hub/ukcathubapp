@@ -1,35 +1,14 @@
-<p id="notice"><%= notice %></p>
+<p style="color: green"><%= notice %></p>
 
-<h1>Article Themes</h1>
+<h1>Article themes</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Doi</th>
-      <th>Phase</th>
-      <th>Collaboration</th>
-      <th>Theme</th>
-      <th>Project year</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div id="article_themes">
+  <% @article_themes.each do |article_theme| %>
+    <%= render article_theme %>
+    <p>
+      <%= link_to "Show this article theme", article_theme %>
+    </p>
+  <% end %>
+</div>
 
-  <tbody>
-    <% @article_themes.each do |article_theme| %>
-      <tr>
-        <td><%= article_theme.doi %></td>
-        <td><%= article_theme.phase %></td>
-        <td><%= article_theme.collaboration %></td>
-        <td><%= article_theme.theme_id %></td>
-        <td><%= article_theme.project_year %></td>
-        <td><%= link_to 'Show', article_theme %></td>
-        <td><%= link_to 'Edit', edit_article_theme_path(article_theme) %></td>
-        <td><%= link_to 'Destroy', article_theme, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Article Theme', new_article_theme_path %>
+<%= link_to "New article theme", new_article_theme_path %>

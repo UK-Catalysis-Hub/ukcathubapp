@@ -5,6 +5,7 @@ one:
   phase: 1
   collaboration: MyString
   theme_id: 1
+  article_id: 1
   project_year: 1
 
 two:
@@ -12,4 +13,5 @@ two:
   phase: 1
   collaboration: MyString
   theme_id: 1
+  article_id: 1
   project_year: 1

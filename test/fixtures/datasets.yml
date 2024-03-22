@@ -1,19 +1,23 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  dataset_complete: MyString
-  dataset_description: MyString
-  dataset_doi: MyString
-  dataset_enddate: MyString
-  dataset_location: MyString
-  dataset_name: MyString
-  dataset_startdate: MyString
+  complete: MyString
+  description: MyString
+  doi: MyString
+  enddate: 2024-03-21 15:59:35
+  location: MyString
+  name: MyString
+  startdate: 2024-03-21 15:59:35
+  ds_type: MyString
+  repository: MyString
 
 two:
-  dataset_complete: MyString
-  dataset_description: MyString
-  dataset_doi: MyString
-  dataset_enddate: MyString
-  dataset_location: MyString
-  dataset_name: MyString
-  dataset_startdate: MyString
+  complete: MyString
+  description: MyString
+  doi: MyString
+  enddate: 2024-03-21 15:59:35
+  location: MyString
+  name: MyString
+  startdate: 2024-03-21 15:59:35
+  ds_type: MyString
+  repository: MyString

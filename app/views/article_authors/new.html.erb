@@ -1,5 +1,9 @@
-<h1>New Article Author</h1>
+<h1>New article author</h1>
 
-<%= render 'form', article_author: @article_author %>
+<%= render "form", article_author: @article_author %>
 
-<%= link_to 'Back', article_authors_path %>
+<br>
+
+<div>
+  <%= link_to "Back to article authors", article_authors_path %>
+</div>

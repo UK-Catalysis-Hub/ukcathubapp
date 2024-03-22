@@ -1,34 +1,10 @@
-<p id="notice"><%= notice %></p>
+<p style="color: green"><%= notice %></p>
 
-<p>
-  <strong>Add 01:</strong>
-  <%= @address.add_01 %>
-</p>
+<%= render @address %>
 
-<p>
-  <strong>Add 02:</strong>
-  <%= @address.add_02 %>
-</p>
+<div>
+  <%= link_to "Edit this address", edit_address_path(@address) %> |
+  <%= link_to "Back to addresses", addresses_path %>
 
-<p>
-  <strong>Add 03:</strong>
-  <%= @address.add_03 %>
-</p>
-
-<p>
-  <strong>Add 04:</strong>
-  <%= @address.add_04 %>
-</p>
-
-<p>
-  <strong>Country:</strong>
-  <%= @address.country %>
-</p>
-
-<p>
-  <strong>Affiliation:</strong>
-  <%= @address.affiliation_id %>
-</p>
-
-<%= link_to 'Edit', edit_address_path(@address) %> |
-<%= link_to 'Back', addresses_path %>
+  <%= button_to "Destroy this address", @address, method: :delete %>
+</div>

@@ -29,7 +29,7 @@
         <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
           <li>Logged in as <strong><%= current_user.email %></strong></li>
           <li><%= link_to 'Edit profile', edit_user_registration_path, :class => "btn btn-secondary btn-sm"  %></li>
-          <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => "btn btn-danger btn-sm"  %></li>
+          <li><%= link_to "Logout", destroy_user_session_path, data: { "turbo-method": :delete }, :class => "btn btn-danger btn-sm"  %></li>
         </ul>
       <% end %>
     </div>

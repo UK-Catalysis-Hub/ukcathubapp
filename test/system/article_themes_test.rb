@@ -7,13 +7,14 @@ class ArticleThemesTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     visit article_themes_url
-    assert_selector "h1", text: "Article Themes"
+    assert_selector "h1", text: "Article themes"
   end
 
-  test "creating a Article theme" do
+  test "should create article theme" do
     visit article_themes_url
-    click_on "New Article Theme"
+    click_on "New article theme"
 
+    fill_in "Article", with: @article_theme.article_id
     fill_in "Collaboration", with: @article_theme.collaboration
     fill_in "Doi", with: @article_theme.doi
     fill_in "Phase", with: @article_theme.phase
@@ -25,10 +26,11 @@ class ArticleThemesTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "updating a Article theme" do
-    visit article_themes_url
-    click_on "Edit", match: :first
+  test "should update Article theme" do
+    visit article_theme_url(@article_theme)
+    click_on "Edit this article theme", match: :first
 
+    fill_in "Article", with: @article_theme.article_id
     fill_in "Collaboration", with: @article_theme.collaboration
     fill_in "Doi", with: @article_theme.doi
     fill_in "Phase", with: @article_theme.phase
@@ -40,11 +42,9 @@ class ArticleThemesTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Article theme" do
-    visit article_themes_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
+  test "should destroy Article theme" do
+    visit article_theme_url(@article_theme)
+    click_on "Destroy this article theme", match: :first
 
     assert_text "Article theme was successfully destroyed"
   end

@@ -1,32 +1,32 @@
-<%= form_with(model: cr_affiliation, local: true) do |form| %>
+<%= form_with(model: cr_affiliation) do |form| %>
   <% if cr_affiliation.errors.any? %>
-    <div id="error_explanation">
+    <div style="color: red">
       <h2><%= pluralize(cr_affiliation.errors.count, "error") %> prohibited this cr_affiliation from being saved:</h2>
 
       <ul>
-        <% cr_affiliation.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <% cr_affiliation.errors.each do |error| %>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
+  <div>
+    <%= form.label :name, style: "display: block" %>
     <%= form.text_field :name %>
   </div>
 
-  <div class="field">
-    <%= form.label :article_author_id %>
-    <%= form.number_field :article_author_id %>
+  <div>
+    <%= form.label :article_author_id, style: "display: block" %>
+    <%= form.text_field :article_author_id %>
   </div>
 
-  <div class="field">
-    <%= form.label :affiliation_id %>
-    <%= form.number_field :affiliation_id %>
+  <div>
+    <%= form.label :author_affiliation_id, style: "display: block" %>
+    <%= form.text_field :author_affiliation_id %>
   </div>
 
-  <div class="actions">
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

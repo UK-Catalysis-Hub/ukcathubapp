@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ThemesControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -16,7 +16,7 @@ class ThemesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create theme" do
-    assert_difference('Theme.count') do
+    assert_difference("Theme.count") do
       post themes_url, params: { theme: { lead: @theme.lead, name: @theme.name, phase: @theme.phase, short: @theme.short, used: @theme.used } }
     end
 
@@ -39,7 +39,7 @@ class ThemesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy theme" do
-    assert_difference('Theme.count', -1) do
+    assert_difference("Theme.count", -1) do
       delete theme_url(@theme)
     end
 

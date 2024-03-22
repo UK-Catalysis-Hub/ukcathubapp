@@ -1,71 +1,67 @@
-<%= form_with(model: article_author, local: true) do |form| %>
+<%= form_with(model: article_author) do |form| %>
   <% if article_author.errors.any? %>
-    <div id="error_explanation">
+    <div style="color: red">
       <h2><%= pluralize(article_author.errors.count, "error") %> prohibited this article_author from being saved:</h2>
 
       <ul>
-        <% article_author.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <% article_author.errors.each do |error| %>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
-  <div class="field">
-    <%= form.label :doi %>
+
+  <div>
+    <%= form.label :doi, style: "display: block" %>
     <%= form.text_field :doi %>
   </div>
 
-  <div class="field">
-    <%= form.label :article_id %>
-    <%= form.number_field :article_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :author_id %>
+  <div>
+    <%= form.label :author_id, style: "display: block" %>
     <%= form.number_field :author_id %>
   </div>
 
-  <div class="field">
-    <%= form.label :author_count %>
+  <div>
+    <%= form.label :author_count, style: "display: block" %>
     <%= form.text_field :author_count %>
   </div>
 
-  <div class="field">
-    <%= form.label :orcid %>
-    <%= form.text_field :orcid %>
-  </div>
-
-  <div class="field">
-    <%= form.label :last_name %>
-    <%= form.text_field :last_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :given_name %>
-    <%= form.text_field :given_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :author_order %>
+  <div>
+    <%= form.label :author_order, style: "display: block" %>
     <%= form.number_field :author_order %>
   </div>
 
-  <div class="field">
-    <%= form.label :status %>
+  <div>
+    <%= form.label :status, style: "display: block" %>
     <%= form.text_field :status %>
   </div>
 
-  <div class="field">
-    <%= form.label :sequence %>
+  <div>
+    <%= form.label :author_seq, style: "display: block" %>
     <%= form.text_field :author_seq %>
   </div>
 
-  <div class="field">
-    <%= form.label :article_id %>
+  <div>
+    <%= form.label :article_id, style: "display: block" %>
     <%= form.number_field :article_id %>
   </div>
 
-  <div class="actions">
+  <div>
+    <%= form.label :orcid, style: "display: block" %>
+    <%= form.text_field :orcid %>
+  </div>
+
+  <div>
+    <%= form.label :last_name, style: "display: block" %>
+    <%= form.text_field :last_name %>
+  </div>
+
+  <div>
+    <%= form.label :given_name, style: "display: block" %>
+    <%= form.text_field :given_name %>
+  </div>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

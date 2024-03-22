@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ArticleDatasetsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -16,7 +16,7 @@ class ArticleDatasetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create article_dataset" do
-    assert_difference('ArticleDataset.count') do
+    assert_difference("ArticleDataset.count") do
       post article_datasets_url, params: { article_dataset: { article_id: @article_dataset.article_id, dataset_id: @article_dataset.dataset_id, doi: @article_dataset.doi } }
     end
 
@@ -39,7 +39,7 @@ class ArticleDatasetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy article_dataset" do
-    assert_difference('ArticleDataset.count', -1) do
+    assert_difference("ArticleDataset.count", -1) do
       delete article_dataset_url(@article_dataset)
     end
 

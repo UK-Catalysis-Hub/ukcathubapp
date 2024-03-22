@@ -7,12 +7,12 @@ class ArticleDatasetsTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     visit article_datasets_url
-    assert_selector "h1", text: "Article Datasets"
+    assert_selector "h1", text: "Article datasets"
   end
 
-  test "creating a Article dataset" do
+  test "should create article dataset" do
     visit article_datasets_url
-    click_on "New Article Dataset"
+    click_on "New article dataset"
 
     fill_in "Article", with: @article_dataset.article_id
     fill_in "Dataset", with: @article_dataset.dataset_id
@@ -23,9 +23,9 @@ class ArticleDatasetsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "updating a Article dataset" do
-    visit article_datasets_url
-    click_on "Edit", match: :first
+  test "should update Article dataset" do
+    visit article_dataset_url(@article_dataset)
+    click_on "Edit this article dataset", match: :first
 
     fill_in "Article", with: @article_dataset.article_id
     fill_in "Dataset", with: @article_dataset.dataset_id
@@ -36,11 +36,9 @@ class ArticleDatasetsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Article dataset" do
-    visit article_datasets_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
+  test "should destroy Article dataset" do
+    visit article_dataset_url(@article_dataset)
+    click_on "Destroy this article dataset", match: :first
 
     assert_text "Article dataset was successfully destroyed"
   end

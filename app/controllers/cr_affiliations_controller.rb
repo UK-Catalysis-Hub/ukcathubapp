@@ -1,14 +1,12 @@
 class CrAffiliationsController < ApplicationController
-  before_action :set_cr_affiliation, only: [:show, :edit, :update, :destroy]
+  before_action :set_cr_affiliation, only: %i[ show edit update destroy ]
 
-  # GET /cr_affiliations
-  # GET /cr_affiliations.json
+  # GET /cr_affiliations or /cr_affiliations.json
   def index
     @cr_affiliations = CrAffiliation.all
   end
 
-  # GET /cr_affiliations/1
-  # GET /cr_affiliations/1.json
+  # GET /cr_affiliations/1 or /cr_affiliations/1.json
   def show
   end
 
@@ -21,42 +19,40 @@ class CrAffiliationsController < ApplicationController
   def edit
   end
 
-  # POST /cr_affiliations
-  # POST /cr_affiliations.json
+  # POST /cr_affiliations or /cr_affiliations.json
   def create
     @cr_affiliation = CrAffiliation.new(cr_affiliation_params)
 
     respond_to do |format|
       if @cr_affiliation.save
-        format.html { redirect_to @cr_affiliation, notice: 'Cr affiliation was successfully created.' }
+        format.html { redirect_to cr_affiliation_url(@cr_affiliation), notice: "Cr affiliation was successfully created." }
         format.json { render :show, status: :created, location: @cr_affiliation }
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @cr_affiliation.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /cr_affiliations/1
-  # PATCH/PUT /cr_affiliations/1.json
+  # PATCH/PUT /cr_affiliations/1 or /cr_affiliations/1.json
   def update
     respond_to do |format|
       if @cr_affiliation.update(cr_affiliation_params)
-        format.html { redirect_to @cr_affiliation, notice: 'Cr affiliation was successfully updated.' }
+        format.html { redirect_to cr_affiliation_url(@cr_affiliation), notice: "Cr affiliation was successfully updated." }
         format.json { render :show, status: :ok, location: @cr_affiliation }
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @cr_affiliation.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /cr_affiliations/1
-  # DELETE /cr_affiliations/1.json
+  # DELETE /cr_affiliations/1 or /cr_affiliations/1.json
   def destroy
-    @cr_affiliation.destroy
+    @cr_affiliation.destroy!
+
     respond_to do |format|
-      format.html { redirect_to cr_affiliations_url, notice: 'Cr affiliation was successfully destroyed.' }
+      format.html { redirect_to cr_affiliations_url, notice: "Cr affiliation was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -69,6 +65,6 @@ class CrAffiliationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def cr_affiliation_params
-      params.require(:cr_affiliation).permit(:name, :article_author_id, :affiliation_id)
+      params.require(:cr_affiliation).permit(:name, :article_author_id, :author_affiliation_id)
     end
 end

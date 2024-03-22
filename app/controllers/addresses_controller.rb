@@ -1,14 +1,12 @@
 class AddressesController < ApplicationController
-  before_action :set_address, only: [:show, :edit, :update, :destroy]
+  before_action :set_address, only: %i[ show edit update destroy ]
 
-  # GET /addresses
-  # GET /addresses.json
+  # GET /addresses or /addresses.json
   def index
     @addresses = Address.all
   end
 
-  # GET /addresses/1
-  # GET /addresses/1.json
+  # GET /addresses/1 or /addresses/1.json
   def show
   end
 
@@ -21,42 +19,40 @@ class AddressesController < ApplicationController
   def edit
   end
 
-  # POST /addresses
-  # POST /addresses.json
+  # POST /addresses or /addresses.json
   def create
     @address = Address.new(address_params)
 
     respond_to do |format|
       if @address.save
-        format.html { redirect_to @address, notice: 'Address was successfully created.' }
+        format.html { redirect_to address_url(@address), notice: "Address was successfully created." }
         format.json { render :show, status: :created, location: @address }
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @address.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /addresses/1
-  # PATCH/PUT /addresses/1.json
+  # PATCH/PUT /addresses/1 or /addresses/1.json
   def update
     respond_to do |format|
       if @address.update(address_params)
-        format.html { redirect_to @address, notice: 'Address was successfully updated.' }
+        format.html { redirect_to address_url(@address), notice: "Address was successfully updated." }
         format.json { render :show, status: :ok, location: @address }
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @address.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /addresses/1
-  # DELETE /addresses/1.json
+  # DELETE /addresses/1 or /addresses/1.json
   def destroy
-    @address.destroy
+    @address.destroy!
+
     respond_to do |format|
-      format.html { redirect_to addresses_url, notice: 'Address was successfully destroyed.' }
+      format.html { redirect_to addresses_url, notice: "Address was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -69,6 +65,6 @@ class AddressesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def address_params
-      params.require(:address).permit(:add_01, :add_02, :add_03, :add_04, :country, :affiliation_id)
+      params.require(:address).permit(:add_01, :add_02, :add_03, :add_04, :city, :province, :country, :affiliation_id)
     end
 end

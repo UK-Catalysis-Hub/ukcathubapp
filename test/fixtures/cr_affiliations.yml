@@ -2,10 +2,10 @@
 
 one:
   name: MyString
-  article_author_id: 1
-  author_affiliation_id: 1
+  article_author_id: MyString
+  author_affiliation_id: MyString
 
 two:
   name: MyString
-  article_author_id: 1
-  author_affiliation_id: 1
+  article_author_id: MyString
+  author_affiliation_id: MyString

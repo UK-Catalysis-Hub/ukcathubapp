@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class CrAffiliationsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -16,8 +16,8 @@ class CrAffiliationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create cr_affiliation" do
-    assert_difference('CrAffiliation.count') do
-      post cr_affiliations_url, params: { cr_affiliation: { affiliation_id: @cr_affiliation.affiliation_id, article_author_id: @cr_affiliation.article_author_id, name: @cr_affiliation.name } }
+    assert_difference("CrAffiliation.count") do
+      post cr_affiliations_url, params: { cr_affiliation: { article_author_id: @cr_affiliation.article_author_id, author_affiliation_id: @cr_affiliation.author_affiliation_id, name: @cr_affiliation.name } }
     end
 
     assert_redirected_to cr_affiliation_url(CrAffiliation.last)
@@ -34,12 +34,12 @@ class CrAffiliationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update cr_affiliation" do
-    patch cr_affiliation_url(@cr_affiliation), params: { cr_affiliation: { affiliation_id: @cr_affiliation.affiliation_id, article_author_id: @cr_affiliation.article_author_id, name: @cr_affiliation.name } }
+    patch cr_affiliation_url(@cr_affiliation), params: { cr_affiliation: { article_author_id: @cr_affiliation.article_author_id, author_affiliation_id: @cr_affiliation.author_affiliation_id, name: @cr_affiliation.name } }
     assert_redirected_to cr_affiliation_url(@cr_affiliation)
   end
 
   test "should destroy cr_affiliation" do
-    assert_difference('CrAffiliation.count', -1) do
+    assert_difference("CrAffiliation.count", -1) do
       delete cr_affiliation_url(@cr_affiliation)
     end
 

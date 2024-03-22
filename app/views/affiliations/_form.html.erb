@@ -1,52 +1,52 @@
-<%= form_with(model: affiliation, local: true) do |form| %>
+<%= form_with(model: affiliation) do |form| %>
   <% if affiliation.errors.any? %>
-    <div id="error_explanation">
+    <div style="color: red">
       <h2><%= pluralize(affiliation.errors.count, "error") %> prohibited this affiliation from being saved:</h2>
 
       <ul>
-        <% affiliation.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <% affiliation.errors.each do |error| %>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :institution %>
+  <div>
+    <%= form.label :institution, style: "display: block" %>
     <%= form.text_field :institution %>
   </div>
 
-  <div class="field">
-    <%= form.label :department %>
+  <div>
+    <%= form.label :department, style: "display: block" %>
     <%= form.text_field :department %>
   </div>
-  
-  <div class="field">
-    <%= form.label :school %>
-    <%= form.text_field :school %>
-  </div>
-  
-  <div class="field">
-    <%= form.label :faculty %>
+
+  <div>
+    <%= form.label :faculty, style: "display: block" %>
     <%= form.text_field :faculty %>
   </div>
 
-  <div class="field">
-    <%= form.label :work_group %>
+  <div>
+    <%= form.label :school, style: "display: block" %>
+    <%= form.text_field :school %>
+  </div>
+
+  <div>
+    <%= form.label :work_group, style: "display: block" %>
     <%= form.text_field :work_group %>
   </div>
 
-  <div class="field">
-    <%= form.label :country %>
+  <div>
+    <%= form.label :country, style: "display: block" %>
     <%= form.text_field :country %>
   </div>
-  
-  <div class="field">
-    <%= form.label :sector %>
+
+  <div>
+    <%= form.label :sector, style: "display: block" %>
     <%= form.text_field :sector %>
   </div>
-  
-  <div class="actions">
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

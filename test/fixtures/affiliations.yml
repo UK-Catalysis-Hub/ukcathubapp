@@ -4,12 +4,16 @@ one:
   institution: MyString
   department: MyString
   faculty: MyString
+  school: MyString
   work_group: MyString
   country: MyString
+  sector: MyString
 
 two:
   institution: MyString
   department: MyString
   faculty: MyString
+  school: MyString
   work_group: MyString
   country: MyString
+  sector: MyString

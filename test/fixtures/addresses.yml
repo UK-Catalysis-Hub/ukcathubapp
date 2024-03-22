@@ -5,6 +5,8 @@ one:
   add_02: MyString
   add_03: MyString
   add_04: MyString
+  city: MyString
+  province: MyString
   country: MyString
   affiliation_id: 1
 
@@ -13,5 +15,7 @@ two:
   add_02: MyString
   add_03: MyString
   add_04: MyString
+  city: MyString
+  province: MyString
   country: MyString
   affiliation_id: 1

@@ -10,12 +10,12 @@ class AuthorsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Authors"
   end
 
-  test "creating a Author" do
+  test "should create author" do
     visit authors_url
-    click_on "New Author"
+    click_on "New author"
 
-    fill_in "Articles", with: @author.articles
     fill_in "Given name", with: @author.given_name
+    check "Isap" if @author.isap
     fill_in "Last name", with: @author.last_name
     fill_in "Orcid", with: @author.orcid
     click_on "Create Author"
@@ -24,12 +24,12 @@ class AuthorsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "updating a Author" do
-    visit authors_url
-    click_on "Edit", match: :first
+  test "should update Author" do
+    visit author_url(@author)
+    click_on "Edit this author", match: :first
 
-    fill_in "Articles", with: @author.articles
     fill_in "Given name", with: @author.given_name
+    check "Isap" if @author.isap
     fill_in "Last name", with: @author.last_name
     fill_in "Orcid", with: @author.orcid
     click_on "Update Author"
@@ -38,11 +38,9 @@ class AuthorsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Author" do
-    visit authors_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
+  test "should destroy Author" do
+    visit author_url(@author)
+    click_on "Destroy this author", match: :first
 
     assert_text "Author was successfully destroyed"
   end

@@ -8,6 +8,9 @@ one:
   status: MyString
   author_seq: MyString
   article_id: 1
+  orcid: MyString
+  last_name: MyString
+  given_name: MyString
 
 two:
   doi: MyString
@@ -17,3 +20,6 @@ two:
   status: MyString
   author_seq: MyString
   article_id: 1
+  orcid: MyString
+  last_name: MyString
+  given_name: MyString

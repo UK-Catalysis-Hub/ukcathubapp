@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class DatasetsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -16,8 +16,8 @@ class DatasetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create dataset" do
-    assert_difference('Dataset.count') do
-      post datasets_url, params: { dataset: { dataset_complete: @dataset.dataset_complete, dataset_description: @dataset.dataset_description, dataset_doi: @dataset.dataset_doi, dataset_enddate: @dataset.dataset_enddate, dataset_location: @dataset.dataset_location, dataset_name: @dataset.dataset_name, dataset_startdate: @dataset.dataset_startdate } }
+    assert_difference("Dataset.count") do
+      post datasets_url, params: { dataset: { complete: @dataset.complete, description: @dataset.description, doi: @dataset.doi, ds_type: @dataset.ds_type, enddate: @dataset.enddate, location: @dataset.location, name: @dataset.name, repository: @dataset.repository, startdate: @dataset.startdate } }
     end
 
     assert_redirected_to dataset_url(Dataset.last)
@@ -34,12 +34,12 @@ class DatasetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update dataset" do
-    patch dataset_url(@dataset), params: { dataset: { dataset_complete: @dataset.dataset_complete, dataset_description: @dataset.dataset_description, dataset_doi: @dataset.dataset_doi, dataset_enddate: @dataset.dataset_enddate, dataset_location: @dataset.dataset_location, dataset_name: @dataset.dataset_name, dataset_startdate: @dataset.dataset_startdate } }
+    patch dataset_url(@dataset), params: { dataset: { complete: @dataset.complete, description: @dataset.description, doi: @dataset.doi, ds_type: @dataset.ds_type, enddate: @dataset.enddate, location: @dataset.location, name: @dataset.name, repository: @dataset.repository, startdate: @dataset.startdate } }
     assert_redirected_to dataset_url(@dataset)
   end
 
   test "should destroy dataset" do
-    assert_difference('Dataset.count', -1) do
+    assert_difference("Dataset.count", -1) do
       delete dataset_url(@dataset)
     end
 

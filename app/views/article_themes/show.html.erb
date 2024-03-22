@@ -1,29 +1,10 @@
-<p id="notice"><%= notice %></p>
+<p style="color: green"><%= notice %></p>
 
-<p>
-  <strong>Doi:</strong>
-  <%= @article_theme.doi %>
-</p>
+<%= render @article_theme %>
 
-<p>
-  <strong>Phase:</strong>
-  <%= @article_theme.phase %>
-</p>
+<div>
+  <%= link_to "Edit this article theme", edit_article_theme_path(@article_theme) %> |
+  <%= link_to "Back to article themes", article_themes_path %>
 
-<p>
-  <strong>Collaboration:</strong>
-  <%= @article_theme.collaboration %>
-</p>
-
-<p>
-  <strong>Theme:</strong>
-  <%= @article_theme.theme_id %>
-</p>
-
-<p>
-  <strong>Project year:</strong>
-  <%= @article_theme.project_year %>
-</p>
-
-<%= link_to 'Edit', edit_article_theme_path(@article_theme) %> |
-<%= link_to 'Back', article_themes_path %>
+  <%= button_to "Destroy this article theme", @article_theme, method: :delete %>
+</div>

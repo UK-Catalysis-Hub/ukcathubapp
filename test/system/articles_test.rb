@@ -10,9 +10,9 @@ class ArticlesTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Articles"
   end
 
-  test "creating a Article" do
+  test "should create article" do
     visit articles_url
-    click_on "New Article"
+    click_on "New article"
 
     fill_in "Abstract", with: @article.abstract
     fill_in "Comment", with: @article.comment
@@ -30,8 +30,9 @@ class ArticlesTest < ApplicationSystemTestCase
     fill_in "Pub print month", with: @article.pub_print_month
     fill_in "Pub print year", with: @article.pub_print_year
     fill_in "Pub type", with: @article.pub_type
+    fill_in "Pub year", with: @article.pub_year
     fill_in "Publisher", with: @article.publisher
-    fill_in "Reference count", with: @article.reference_count
+    fill_in "Referenced by count", with: @article.referenced_by_count
     fill_in "References count", with: @article.references_count
     fill_in "Status", with: @article.status
     fill_in "Title", with: @article.title
@@ -43,9 +44,9 @@ class ArticlesTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "updating a Article" do
-    visit articles_url
-    click_on "Edit", match: :first
+  test "should update Article" do
+    visit article_url(@article)
+    click_on "Edit this article", match: :first
 
     fill_in "Abstract", with: @article.abstract
     fill_in "Comment", with: @article.comment
@@ -63,8 +64,9 @@ class ArticlesTest < ApplicationSystemTestCase
     fill_in "Pub print month", with: @article.pub_print_month
     fill_in "Pub print year", with: @article.pub_print_year
     fill_in "Pub type", with: @article.pub_type
+    fill_in "Pub year", with: @article.pub_year
     fill_in "Publisher", with: @article.publisher
-    fill_in "Reference count", with: @article.reference_count
+    fill_in "Referenced by count", with: @article.referenced_by_count
     fill_in "References count", with: @article.references_count
     fill_in "Status", with: @article.status
     fill_in "Title", with: @article.title
@@ -76,11 +78,9 @@ class ArticlesTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Article" do
-    visit articles_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
+  test "should destroy Article" do
+    visit article_url(@article)
+    click_on "Destroy this article", match: :first
 
     assert_text "Article was successfully destroyed"
   end

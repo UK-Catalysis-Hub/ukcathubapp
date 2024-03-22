@@ -7,15 +7,15 @@ class CrAffiliationsTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     visit cr_affiliations_url
-    assert_selector "h1", text: "Cr Affiliations"
+    assert_selector "h1", text: "Cr affiliations"
   end
 
-  test "creating a Cr affiliation" do
+  test "should create cr affiliation" do
     visit cr_affiliations_url
-    click_on "New Cr Affiliation"
+    click_on "New cr affiliation"
 
-    fill_in "Affiliation", with: @cr_affiliation.affiliation_id
     fill_in "Article author", with: @cr_affiliation.article_author_id
+    fill_in "Author affiliation", with: @cr_affiliation.author_affiliation_id
     fill_in "Name", with: @cr_affiliation.name
     click_on "Create Cr affiliation"
 
@@ -23,12 +23,12 @@ class CrAffiliationsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "updating a Cr affiliation" do
-    visit cr_affiliations_url
-    click_on "Edit", match: :first
+  test "should update Cr affiliation" do
+    visit cr_affiliation_url(@cr_affiliation)
+    click_on "Edit this cr affiliation", match: :first
 
-    fill_in "Affiliation", with: @cr_affiliation.affiliation_id
     fill_in "Article author", with: @cr_affiliation.article_author_id
+    fill_in "Author affiliation", with: @cr_affiliation.author_affiliation_id
     fill_in "Name", with: @cr_affiliation.name
     click_on "Update Cr affiliation"
 
@@ -36,11 +36,9 @@ class CrAffiliationsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Cr affiliation" do
-    visit cr_affiliations_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
+  test "should destroy Cr affiliation" do
+    visit cr_affiliation_url(@cr_affiliation)
+    click_on "Destroy this cr affiliation", match: :first
 
     assert_text "Cr affiliation was successfully destroyed"
   end

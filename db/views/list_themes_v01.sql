@@ -4,4 +4,4 @@ SELECT themes.id, themes.phase, themes.name, themes.short, themes.lead, count() 
   INNER JOIN articles on article_themes.article_id = articles.id
   WHERE articles.status == 'Added'
   GROUP BY themes.phase, themes.name
-  ORDER BY themes.ids
+  ORDER BY themes.id

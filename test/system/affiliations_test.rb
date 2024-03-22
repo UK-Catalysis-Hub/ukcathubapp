@@ -10,14 +10,16 @@ class AffiliationsTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Affiliations"
   end
 
-  test "creating a Affiliation" do
+  test "should create affiliation" do
     visit affiliations_url
-    click_on "New Affiliation"
+    click_on "New affiliation"
 
     fill_in "Country", with: @affiliation.country
     fill_in "Department", with: @affiliation.department
     fill_in "Faculty", with: @affiliation.faculty
     fill_in "Institution", with: @affiliation.institution
+    fill_in "School", with: @affiliation.school
+    fill_in "Sector", with: @affiliation.sector
     fill_in "Work group", with: @affiliation.work_group
     click_on "Create Affiliation"
 
@@ -25,14 +27,16 @@ class AffiliationsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "updating a Affiliation" do
-    visit affiliations_url
-    click_on "Edit", match: :first
+  test "should update Affiliation" do
+    visit affiliation_url(@affiliation)
+    click_on "Edit this affiliation", match: :first
 
     fill_in "Country", with: @affiliation.country
     fill_in "Department", with: @affiliation.department
     fill_in "Faculty", with: @affiliation.faculty
     fill_in "Institution", with: @affiliation.institution
+    fill_in "School", with: @affiliation.school
+    fill_in "Sector", with: @affiliation.sector
     fill_in "Work group", with: @affiliation.work_group
     click_on "Update Affiliation"
 
@@ -40,11 +44,9 @@ class AffiliationsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Affiliation" do
-    visit affiliations_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
+  test "should destroy Affiliation" do
+    visit affiliation_url(@affiliation)
+    click_on "Destroy this affiliation", match: :first
 
     assert_text "Affiliation was successfully destroyed"
   end

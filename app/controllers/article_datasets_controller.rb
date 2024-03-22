@@ -1,14 +1,12 @@
 class ArticleDatasetsController < ApplicationController
-  before_action :set_article_dataset, only: [:show, :edit, :update, :destroy]
+  before_action :set_article_dataset, only: %i[ show edit update destroy ]
 
-  # GET /article_datasets
-  # GET /article_datasets.json
+  # GET /article_datasets or /article_datasets.json
   def index
     @article_datasets = ArticleDataset.all
   end
 
-  # GET /article_datasets/1
-  # GET /article_datasets/1.json
+  # GET /article_datasets/1 or /article_datasets/1.json
   def show
   end
 
@@ -21,42 +19,40 @@ class ArticleDatasetsController < ApplicationController
   def edit
   end
 
-  # POST /article_datasets
-  # POST /article_datasets.json
+  # POST /article_datasets or /article_datasets.json
   def create
     @article_dataset = ArticleDataset.new(article_dataset_params)
 
     respond_to do |format|
       if @article_dataset.save
-        format.html { redirect_to @article_dataset, notice: 'Article dataset was successfully created.' }
+        format.html { redirect_to article_dataset_url(@article_dataset), notice: "Article dataset was successfully created." }
         format.json { render :show, status: :created, location: @article_dataset }
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @article_dataset.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /article_datasets/1
-  # PATCH/PUT /article_datasets/1.json
+  # PATCH/PUT /article_datasets/1 or /article_datasets/1.json
   def update
     respond_to do |format|
       if @article_dataset.update(article_dataset_params)
-        format.html { redirect_to @article_dataset, notice: 'Article dataset was successfully updated.' }
+        format.html { redirect_to article_dataset_url(@article_dataset), notice: "Article dataset was successfully updated." }
         format.json { render :show, status: :ok, location: @article_dataset }
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @article_dataset.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /article_datasets/1
-  # DELETE /article_datasets/1.json
+  # DELETE /article_datasets/1 or /article_datasets/1.json
   def destroy
-    @article_dataset.destroy
+    @article_dataset.destroy!
+
     respond_to do |format|
-      format.html { redirect_to article_datasets_url, notice: 'Article dataset was successfully destroyed.' }
+      format.html { redirect_to article_datasets_url, notice: "Article dataset was successfully destroyed." }
       format.json { head :no_content }
     end
   end

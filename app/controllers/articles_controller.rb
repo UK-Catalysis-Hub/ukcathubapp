@@ -13,16 +13,14 @@ class ArticlesController < ApplicationController
            'Year, newest first' => "pub_year desc",
            'Year, oldest first' => {pub_year: :asc, title: :asc}
   end
+  
 
-  # GET /articles
-  # GET /articles.json
+  # GET /articles or /articles.json
   def index
-    @search = ArticleSearch.new(params) # this initializes your search object from the request params
-    @articles = @search.result.active.paginate(:page => params[:page], :per_page => 10)
+    @articles = Article.all
   end
 
-  # GET /articles/1
-  # GET /articles/1.json
+  # GET /articles/1 or /articles/1.json
   def show
   end
 
@@ -33,112 +31,42 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
-    session[:return_to] = request.referer
   end
 
-  # POST /articles
-  # POST /articles.json
+  # POST /articles or /articles.json
   def create
     @article = Article.new(article_params)
+
     respond_to do |format|
       if @article.save
-        if @article.doi != ""
-          format.html { redirect_to @article, notice: 'Article was created.' }
-          format.json { render :show, status: :created, location: @article }
-        else
-          format.html { redirect_to edit_article_path(@article), notice: 'Input article details' }
-        end
+        format.html { redirect_to article_url(@article), notice: "Article was successfully created." }
+        format.json { render :show, status: :created, location: @article }
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @article.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /articles/1
-  # PATCH/PUT /articles/1.json
+  # PATCH/PUT /articles/1 or /articles/1.json
   def update
     respond_to do |format|
       if @article.update(article_params)
-        format.html { redirect_to @article, notice: 'Article was updated.' }
+        format.html { redirect_to article_url(@article), notice: "Article was successfully updated." }
         format.json { render :show, status: :ok, location: @article }
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @article.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /articles/1
-  # DELETE /articles/1.json
+  # DELETE /articles/1 or /articles/1.json
   def destroy
-    @article.destroy
-    respond_to do |format|
-      format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
+    @article.destroy!
 
-  # VERIFY records in CR
-  def verify
-    VerifyCrossrefWorker.perform_async
     respond_to do |format|
-      flash[:notice] = 'verify process started'
-      format.html { redirect_to action: "index" }
-      format.json { head :no_content }
-    end
-  end
-
-  # Upload CSV articles list
-  def upload_csv
-    #VerifyCrossrefWorker.perform_async
-    csv_file = params[:file]
-    @pub_rows = CSV.read(csv_file.path)
-    @pub_rows.each do |pub_row|
-      if pub_row[4] != 'doi' and pub_row[10] != nil
-        p_doi = pub_row[4]
-        
-        p_themes = JSON.load(pub_row[10])
-
-        @art = Article.find_by(doi: p_doi)
-        if @art == nil
-          @art = Article.new()
-          @art.doi = p_doi
-          getPubData(@art, @art.doi)
-          puts("\n*******************************************************")
-          puts("NOT IN DB DOI: " + @art.doi +  @art.title + " themes " + p_themes.to_s() )
-          puts("*******************************************************\n")
-          if @art.container_title == nil
-            @art.container_title = pub_row[15]
-          end
-          @art.save()
-          
-          puts("\n*******************************************************")
-          puts("ADDED AS ID " + @art.id.to_s())
-          puts("*******************************************************\n")
-          # add theme links
-          p_themes.each do |theme_id|
-            full_theme = Theme.find(theme_id)
-            article_theme = ArticleTheme.new()
-            article_theme.doi = @art.doi 
-            article_theme.theme_id = theme_id
-            article_theme.project_year = @art.pub_year
-            article_theme.article_id = @art.id
-            article_theme.phase = full_theme.phase
-            article_theme.save()
-          end  
-        else
-          puts("IN DB DOI: " +  p_doi + " themes " + p_themes.to_s())
-        end
-        if pub_row[4].to_i > 12
-          break
-        end
-      end
-    end
-    
-    respond_to do |format|
-      flash[:notice] = 'upload process started ' + @pub_rows.length().to_s() + " entries "
-      format.html { redirect_to action: "index" }
+      format.html { redirect_to articles_url, notice: "Article was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -175,333 +103,10 @@ class ArticlesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_article
       @article = Article.find(params[:id])
-      @authors = @article.article_authors
-
-      if @article.title == nil
-         # check if exists in DB by DOI
-         @art = Article.find_by(doi: @article.doi)
-         if @art.title == nil
-
-           getPubData(@article, @article.doi)
-           #save the article so it is not recovered again
-           @article.save()
-         else
-           @article= @art
-         end
-      end
-
-      if @article.article_authors.count == 0 or @article.article_authors[0].last_name == nil
-        # try to get authors from crossref
-        getAutData(@authors, @article.doi, @article.id)
-      end
-
-      if @article.pub_year == nil then
-        @article.pub_ol_year != nil ? @article.pub_year = @article.pub_ol_year : @article.pub_year = @article.pub_print_year
-        #save the article if it did not have pub_year set
-        @article.save()
-      end
-
     end
 
     # Only allow a list of trusted parameters through.
     def article_params
-      params.require(:article).permit(:referenced_by_count, :publisher, :issue, :license, :pub_print_year, :pub_print_month, :pub_print_day, :doi, :pub_type, :page, :title, :volume, :pub_ol_year, :pub_ol_month, :pub_ol_day, :container_title, :link, :references_count, :journal_issue, :url, :abstract, :status, :comment, :pub_year)
+      params.require(:article).permit(:doi, :title, :pub_year, :pub_type, :publisher, :container_title, :volume, :issue, :page, :pub_print_year, :pub_print_month, :pub_print_day, :pub_ol_year, :pub_ol_month, :pub_ol_day, :license, :referenced_by_count, :link, :url, :abstract, :status, :comment, :references_count, :journal_issue)
     end
-
-    # functions for getting data from crossref
-    include Serrano
-    def get_excluded()
-      return ['author','assertion','indexed', 'funder','content-domain',
-        'created','update-policy','source','is-referenced-by-count','prefix',
-        'member','reference','original-title','language','deposited','score',
-        'subtitle', 'short-title', 'issued','alternative-id','relation','ISSN',
-        'container-title-short']
-    end
-
-    def getCRData(doi_text)
-      begin
-          #puts "trying"
-          art_bib = JSON.parse(Serrano.content_negotiation(ids: doi_text, format: "citeproc-json"))
-          return art_bib
-      rescue
-          #puts "failing"
-          return nil
-      end
-    end
-
-    # get list of publications as bibliography
-    def get_bib_data(articles)
-      bib_list=[]
-      articles.each do |article|
-        author_list = article.authors.all
-        disp_names = ""
-        author_list.each do|auth|
-           pr_name = auth.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
-           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
-           pr_name += auth.last_name
-           this_name = pr_name
-           if disp_names == ""
-             disp_names =  + this_name
-           else
-             disp_names += ', ' + this_name
-           end
-        end
-        bib_list.append({"title"=>article.title, "year"=>article.pub_year, "authors"=>disp_names,
-                         "publisher" => article.container_title, "doi"=>article.doi, 
-                         "pub_type"=> article.pub_type,'volume'=>article.volume, 
-                         'issue'=>article.issue,'page'=> article.page})
-      end
-      return bib_list
-    end
-
-    def getPubData(db_article, doi_text)
-      if doi_text != ""
-        # need to raise an exeption if doi is incorrect or no data is returned
-        # need to check the doi is not in DB before saving (lower and uppercase versions)
-        # need to trim dois before saving
-        pub_data = getCRData(doi_text)
-        data_keys = pub_data.keys()
-        pub_columns = []
-        exclude_columns = get_excluded()
-        for key in data_keys do
-          key_cp = key.dup()
-          if not pub_columns.include?(key_cp) and not exclude_columns.include?(key_cp)
-            pub_columns.append(key_cp)
-          end
-        end
-        for key in pub_columns
-          key_cp = key.dup()
-          if key_cp.include?('-')
-            new_key = key_cp.gsub('-','_')
-            pub_columns.delete(key_cp)
-            pub_columns.append(new_key)
-            pub_data[new_key] = pub_data[key]
-            pub_data.delete(key_cp)
-          end
-        end
-        for frzkey in ['container-title', 'journal-issue']
-          pub_columns.delete(frzkey)
-          new_key = frzkey.gsub('-','_')
-          pub_columns.append(new_key)
-          pub_data[new_key] = pub_data[frzkey]
-          pub_data.delete(frzkey)
-        end
-        puts "###################################################################"
-        puts pub_columns
-        puts pub_data
-        puts "###################################################################"
-        puts pub_data['title']
-        db_article.title = pub_data['title']
-        db_article.publisher = pub_data['publisher']
-        db_article.issue = pub_data['issue']
-        db_article.pub_type = pub_data['type']
-        db_article.license = pub_data['license']
-        db_article.volume = pub_data['volume']
-        db_article.referenced_by_count = pub_data['is_referenced_by_count']
-        db_article.references_count = pub_data['references_count']
-        db_article.link = pub_data['link']
-        db_article.url = pub_data['URL']
-        if pub_data.keys.include?('journal_issue') \
-          and pub_data['journal_issue'] != nil then
-          if pub_data['journal_issue'].keys.include?('issue') then
-            db_article.journal_issue = pub_data['journal_issue']['issue']
-          end
-          if pub_data['journal_issue'].keys().include?('published-print') then
-            if pub_data['journal_issue']['published-print']['date-parts'][0].length == 1 then
-              #assume that if date parts has only one element, it is year
-              db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-            elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 2 then
-              #assume that if date parts has two elements, they are year and month
-              db_article.pub_ol_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-              db_article.pub_ol_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
-            elsif pub_data['journal_issue']['published-print']['date-parts'][0].length == 3 then
-              # assume year, month and day if date parts has three elements
-              db_article.pub_print_year = pub_data['journal_issue']['published-print']['date-parts'][0][0]
-              db_article.pub_print_month = pub_data['journal_issue']['published-print']['date-parts'][0][1]
-              db_article.pub_print_day = pub_data['journal_issue']['published-print']['date-parts'][0][2]
-            end
-          end
-        end
-        db_article.container_title = pub_data['container_title']
-        db_article.page = pub_data['page']
-        db_article.abstract = pub_data['abstract']
-        if pub_data.keys.include?('published_online') then
-          if pub_data['published_online']['date-parts'][0].length == 1 then
-            #assume that if date parts has only one element, it is year
-            db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
-          elsif pub_data['published_online']['date-parts'].length == 2 then
-            #assume that if date parts has two elements, they are year and month
-            db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
-            db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
-          elsif pub_data['published_online']['date-parts'][0].length == 3 then
-            # assume year, month and day if date parts has three elements
-            db_article.pub_ol_year = pub_data['published_online']['date-parts'][0][0]
-            db_article.pub_ol_month = pub_data['published_online']['date-parts'][0][1]
-            db_article.pub_ol_day = pub_data['published_online']['date-parts'][0][2]
-          end
-        end
-        if pub_data.keys.include?('published_print') then
-          if pub_data['published_print']['date-parts'][0].length == 1 then
-            #assume that if date parts has only one element, it is year
-            db_article.pub_ol_year = pub_data['published_print']['date-parts'][0][0]
-          elsif pub_data['published_print']['date-parts'][0].length == 2 then
-            #assume that if date parts has two elements, they are year and month
-            db_article.pub_ol_year = pub_data['published_print']['date-parts'][0][0]
-            db_article.pub_ol_month = pub_data['published_print']['date-parts'][0][1]
-          elsif pub_data['published_print']['date-parts'][0].length == 3 then
-            # assume year, month and day if date parts has three elements
-            db_article.pub_print_year = pub_data['published_print']['date-parts'][0][0]
-            db_article.pub_print_month = pub_data['published_print']['date-parts'][0][1]
-            db_article.pub_print_day = pub_data['published_print']['date-parts'][0][2]
-          end
-        end
-        if db_article.pub_ol_year != nil
-          db_article.pub_year = db_article.pub_ol_year
-        else
-          db_article.pub_year = db_article.pub_print_year
-        end
-      end
-      # mark incomplete as it is missing authors, affiliation and themes
-      db_article.status = "Incomplete"
-    end
-
-    def getAutData(db_authors, doi_text, art_id)
-      pub_data = CrossrefApiClient.getCRData(doi_text)
-      if pub_data != nil then
-        puts "\nPub data: " + pub_data.class.to_s
-        aut_order = 1
-        aut_count = pub_data['author'].count
-        pub_data['author'].each do |art_author|
-          new_author = ArticleAuthor.new()
-          if art_id != nil
-            tem_auth = ArticleAuthor.find_by article_id: art_id, author_order: aut_order
-            if tem_auth != nil then
-              new_author = tem_auth
-            end
-          end
-          if art_author.keys.include?('ORCID')
-            new_author.orcid = art_author['ORCID']
-          end
-          if art_author.keys.include?('family')
-            new_author.last_name = art_author['family']
-          end
-          if art_author.keys.include?('given')
-            new_author.given_name = art_author['given']
-          end
-          new_author.author_seq = art_author['sequence'].to_s
-          new_author.author_order = aut_order
-          new_author.article_id = art_id
-          new_author.status = "not verified"
-          new_author.doi = doi_text
-          new_author.author_count = aut_count
-          # Before save get best author match
-          found_id = get_researcher_match(new_author)
-
-          if found_id != 0 then
-            new_author.author_id = found_id
-          else
-            # create a new researcher (author)
-            new_researcher = Author.new(given_name: new_author.given_name,
-              last_name: new_author.last_name, orcid: new_author.orcid)
-            if new_researcher.save then
-              new_author.author_id = new_researcher.id
-            end
-          end
-
-          if new_author.save then
-            print_author(new_author)
-            if art_author.keys.include?('affiliation')
-              # get new affiliations and save them
-              puts "**********************************************************"
-              puts art_author['affiliation'].to_s
-              puts "**********************************************************"
-              if art_author['affiliation'].count > 0 then
-                art_author['affiliation'].each { |temp_affi|
-                  new_tmp_affi = CrAffiliation.new()
-                  new_tmp_affi.name = temp_affi['name']
-                  new_tmp_affi.article_author_id = new_author.id
-                  new_tmp_affi.save
-                }
-              end
-            end
-            aut_order += 1
-          end
-        end
-      end
-    end
-
-    def verify_articles(article)
-      # Check for changes in number of refferences to publication
-      # get the article from crossref
-      doi_text = article.doi
-      art_id = article.id
-      if article.doi != ""
-        pub_data = getCRData(doi_text)
-        changes_found = false
-        # only verify fields which may change between recoveries, eg: citations
-        if article.attributes['referenced_by_count'] != pub_data['is-referenced-by-count']
-          changes_found = true
-          article.attributes['referenced_by_count'] = pub_data['is-referenced-by-count']
-          article.referenced_by_count = pub_data['is-referenced-by-count']
-        end
-        if changes_found
-          article.save
-        end
-      end
-    end
-
-    def get_researcher_match(new_author)
-      # Before save get best author match
-      plain_ln = "XXXXX%"
-      if new_author.last_name.include?('-')
-        plain_ln = new_author.last_name.gsub('-',' ')
-      end
-      # get a strig with only letters with no punctuations
-      like_name = "XXXX%"
-      if (new_author.last_name =~ /[^a-zA-Z\s:]/) != nil
-        non_alpha_found = true
-        like_name = new_author.last_name.gsub(" ","%")
-        while non_alpha_found
-          c_idx = (like_name =~ /[^a-zA-Z\s:]/)
-          if c_idx != nil
-            like_name[c_idx] = " "
-          else
-            non_alpha_found = false
-          end
-        end
-        like_name.gsub!(' ','%')
-      end
-
-      authors_list = Author.where(orcid: new_author.orcid, last_name: new_author.last_name)
-        .or(Author.where(given_name: new_author.given_name, last_name: new_author.last_name))
-        .or(Author.where(last_name: new_author.last_name))
-        .or(Author.where(last_name: plain_ln))
-        .or(Author.where("last_name LIKE ?", "%" + like_name + "%"))
-
-      found_id = 0
-      authors_list.each { |researcher|
-        if new_author.orcid !=nil and  researcher.orcid != nil \
-           and researcher.orcid == new_author.orcid
-           found_id = researcher.id
-           break
-        elsif new_author.given_name == researcher.given_name and \
-          new_author.last_name == researcher.last_name
-          found_id = researcher.id
-          break
-        end
-      }
-      return found_id
-    end
-
-    def print_author(new_author)
-      puts "######################AUTHOR###################################"
-      puts "Name: " + new_author.last_name + " " + new_author.given_name
-      puts "ORCID     " + new_author.orcid.to_s
-      puts "Order:    " + new_author.author_order.to_s
-      puts "Sequence: " + new_author.author_seq.to_s
-      puts "Article ID: " + new_author.article_id.to_s
-      puts "ID:       " + new_author.id.to_s
-      puts "###############################################################"
-    end
-
 end

@@ -4,10 +4,10 @@ one:
   last_name: MyString
   given_name: MyString
   orcid: MyString
-  articles: MyString
+  isap: false
 
 two:
   last_name: MyString
   given_name: MyString
   orcid: MyString
-  articles: MyString
+  isap: false
