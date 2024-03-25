@@ -80,3 +80,5 @@ gem "scenic_sqlite_adapter", "~> 0.1.0"
 gem "forty_facets", "~> 0.2.1"
 
 gem "serrano", "~> 1.4"
+
+gem "google_charts", "~> 1.2"

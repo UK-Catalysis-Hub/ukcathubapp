@@ -120,6 +120,8 @@ GEM
     forty_facets (0.2.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google_charts (1.2.0)
+      actionpack (>= 3.x)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
@@ -282,6 +284,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9)
   forty_facets (~> 0.2.1)
+  google_charts (~> 1.2)
   jbuilder
   jsbundling-rails
   puma (>= 5.0)
