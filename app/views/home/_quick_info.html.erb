@@ -1,3 +1,4 @@
+<!--Big Buttons-->
 <div class="row my-1"><!-- Qucik info row -->
   <div class="col-sm col-6">
     <div class="container"><!-- info box -->
@@ -42,9 +43,9 @@
     <div class="container"><!-- info box -->
       <div class="row bg-warning  rounded border-warning ">
         <div class="col-sm-6">
-          <h1><%= Dataset.count() %></h1>
+          <h1><%= number_with_delimiter(Dataset.count()) %></h1>
         </div>
-        <div class="col-sm-6 my-1">
+        <div class="col-sm my-1">
           <%= image_tag('database.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
         </div>
         <%= link_to 'Data Objects', datasets_path, :class => "btn btn-warning btn-sm btn-block text-dark" %>

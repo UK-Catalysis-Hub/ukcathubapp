@@ -2,14 +2,15 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "About Sharks" %></title>
-    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "About Sharks" %>">
+    <title><%= content_for?(:title) ? yield(:title) : "Publications &middot; UK Catalysis Hub".html_safe %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Publications DB from UK Catalysis Hub" %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+    <%= favicon_link_tag asset_path('ukch_mini_logo.png') %>
   </head>
 
   <body>
