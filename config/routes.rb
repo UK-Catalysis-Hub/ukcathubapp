@@ -23,12 +23,14 @@ Rails.application.routes.draw do
   
   get 'ctry_stats' => 'affiliations#ctry_affi_count', as: 'ctry_stats'
   get 'themes_count' => 'themes#themes_count', as: 'themes_count'
-  get 'data_count' => 'datasets#data_count', as: 'data_count'
   
   post 'link_to_theme' => 'article_themes#link_to_theme', as: :link_to_theme
   
   post 'verify' => 'articles#verify', as: :verify
   post 'upload_csv' => 'articles#upload_csv', as: :upload_csv
+  
+  get 'data_count' => 'datasets#data_count', as: 'data_count'
+  post 'upload_data' => 'datasets#upload_data', as: 'upload_data'
   
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

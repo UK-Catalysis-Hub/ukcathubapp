@@ -1,42 +1,42 @@
-<%= form_with(model: theme) do |form| %>
+<%= form_with(model: theme, local: true) do |form| %>
   <% if theme.errors.any? %>
-    <div style="color: red">
+    <div id="error_explanation">
       <h2><%= pluralize(theme.errors.count, "error") %> prohibited this theme from being saved:</h2>
 
       <ul>
-        <% theme.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% theme.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :short, style: "display: block" %>
+  <div class="field">
+    <%= form.label :short %>
     <%= form.text_field :short %>
   </div>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
+  <div class="field">
+    <%= form.label :name %>
     <%= form.text_field :name %>
   </div>
 
-  <div>
-    <%= form.label :lead, style: "display: block" %>
+  <div class="field">
+    <%= form.label :lead %>
     <%= form.text_field :lead %>
   </div>
 
-  <div>
-    <%= form.label :phase, style: "display: block" %>
+  <div class="field">
+    <%= form.label :phase %>
     <%= form.number_field :phase %>
   </div>
 
-  <div>
-    <%= form.label :used, style: "display: block" %>
+  <div class="field">
+    <%= form.label :used %>
     <%= form.text_field :used %>
   </div>
 
-  <div>
+  <div class="actions">
     <%= form.submit %>
   </div>
 <% end %>

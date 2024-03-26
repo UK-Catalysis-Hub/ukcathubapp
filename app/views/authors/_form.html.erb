@@ -1,37 +1,54 @@
-<%= form_with(model: author) do |form| %>
-  <% if author.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(author.errors.count, "error") %> prohibited this author from being saved:</h2>
+<div class="container">
+  <div class="">
+    <%= form_with(model: author, local: true) do |form| %>
+      <% if author.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(author.errors.count, "error") %> prohibited this author from being saved:</h2>
 
-      <ul>
-        <% author.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+          <ul>
+            <% author.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-  <div>
-    <%= form.label :last_name, style: "display: block" %>
-    <%= form.text_field :last_name %>
+      <div class="field">
+        <%= form.label :last_name %>
+        <%= form.text_field :last_name %>
+      </div>
+
+      <div class="field">
+        <%= form.label :given_name %>
+        <%= form.text_field :given_name %>
+      </div>
+
+      <div class="field">
+        <%= form.label :orcid %>
+        <%= form.text_field :orcid %>
+      </div>
+      <div class="field">
+        <%= form.label "Public" %>
+        <%= form.check_box :isap %>
+      </div>
+      <div class="actions">
+        <%= form.submit %>
+      </div>
+    <% end %>
   </div>
+  <div class="col-sm-12">
+    <% if @author.article_authors.count > 0%>
+      <p> Article Author Links <%= @author.article_authors.count %> </p> <br/>
+      <% if ArticleAuthor.not_verified.count > 0 %>
+        <%= render partial: 'authors/verify_article_author', locals: {author: author } %>
+      <% end %>
+      <% if ArticleAuthor.verified.count > 0 %>
+        <%= render partial: 'article_authors/list', locals: {article_authors: @author.article_authors.verified } %>
+      <% end %>
+    <% elsif @article_author != nil %>
+      <p> Article Author Origin </p> <br/>
+      <%= render partial: 'article_authors/list', locals: {article_authors: [@article_author] } %>
+    <% end %>
 
-  <div>
-    <%= form.label :given_name, style: "display: block" %>
-    <%= form.text_field :given_name %>
   </div>
-
-  <div>
-    <%= form.label :orcid, style: "display: block" %>
-    <%= form.text_field :orcid %>
-  </div>
-
-  <div>
-    <%= form.label :isap, style: "display: block" %>
-    <%= form.check_box :isap %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

@@ -1,10 +1,6 @@
-<h1>Editing affiliation</h1>
+<h1>Editing Affiliation</h1>
 
-<%= render "form", affiliation: @affiliation %>
+<%= render 'form', affiliation: @affiliation %>
 
-<br>
-
-<div>
-  <%= link_to "Show this affiliation", @affiliation %> |
-  <%= link_to "Back to affiliations", affiliations_path %>
-</div>
+<%= link_to 'Show', @affiliation %> |
+<%= link_to 'Back', affiliations_path %>

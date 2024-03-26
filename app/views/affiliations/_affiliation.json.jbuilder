@@ -1,2 +1,2 @@
-json.extract! affiliation, :id, :institution, :department, :faculty, :school, :work_group, :country, :sector, :created_at, :updated_at
+json.extract! affiliation, :id, :institution, :department, :faculty, :work_group, :country, :created_at, :updated_at
 json.url affiliation_url(affiliation, format: :json)

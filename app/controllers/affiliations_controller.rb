@@ -1,9 +1,25 @@
 class AffiliationsController < ApplicationController
-  before_action :set_affiliation, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!, except: [:index, :show, :ctry_affi_count]
+  before_action :set_affiliation, only: [:show, :edit, :update, :destroy]
+  class AffiliationSearch < FortyFacets::FacetSearch
+    model 'Affiliation' # which model to search for
+    #text  :institution # filter by a generic string entered by the user
+    facet  :institution, name: 'Institution'
+    facet :country, name: 'Country'
+    facet :department, name: 'Department'
+    facet :school, name: 'School'
+    facet :sector, name: 'Sector'
+    
+    orders 'Institution, Ascendign' => {institution: :asc, department: :asc},
+           'Institution, Descending' => {institution: :desc, department: :desc},
+           'Country, Ascending' => {country: :asc},
+           'Country, Descending' => {country: :desc}
+  end
 
   # GET /affiliations or /affiliations.json
   def index
-    @affiliations = Affiliation.all
+    @search = AffiliationSearch.new(params) # initializes search object from request params
+    @affiliations = @search.result.paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /affiliations/1 or /affiliations/1.json
@@ -56,6 +72,14 @@ class AffiliationsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  # download country stats
+  def ctry_affi_count
+    ctry_affi_stats = InstCtryStat.all.order('inst_count desc').collect{|ca| [ca.country, ca.inst_count, ca.res_count, ca.pub_count]}
+    theme_csv = get_csv(['country','institutions','researchers','collaborations'], ctry_affi_stats)
+    send_data(theme_csv, 
+              :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_ctry_stats.csv')
+  end 
 
   private
     # Use callbacks to share common setup or constraints between actions.

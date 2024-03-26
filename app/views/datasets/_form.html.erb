@@ -1,62 +1,57 @@
-<%= form_with(model: dataset) do |form| %>
+<%= form_with(model: dataset, local: true) do |form| %>
   <% if dataset.errors.any? %>
-    <div style="color: red">
+    <div id="error_explanation">
       <h2><%= pluralize(dataset.errors.count, "error") %> prohibited this dataset from being saved:</h2>
 
       <ul>
-        <% dataset.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% dataset.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :complete, style: "display: block" %>
-    <%= form.text_field :complete %>
+  <div class="field">
+    <%= form.label :dataset_doi %>
+    <%= form.text_field :dataset_doi %>
   </div>
 
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_field :description %>
+  <div class="field">
+    <%= form.label :dataset_name %>
+    <%= form.text_field :dataset_name %>
   </div>
 
-  <div>
-    <%= form.label :doi, style: "display: block" %>
-    <%= form.text_field :doi %>
+  <div class="field">
+    <%= form.label :dataset_description %>
+    <%= form.text_field :dataset_description %>
   </div>
 
-  <div>
-    <%= form.label :enddate, style: "display: block" %>
-    <%= form.datetime_field :enddate %>
+  <div class="field">
+    <%= form.label :dataset_location %>
+    <%= form.text_field :dataset_location %>
   </div>
 
-  <div>
-    <%= form.label :location, style: "display: block" %>
-    <%= form.text_field :location %>
-  </div>
-
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
-
-  <div>
-    <%= form.label :startdate, style: "display: block" %>
-    <%= form.datetime_field :startdate %>
-  </div>
-
-  <div>
-    <%= form.label :ds_type, style: "display: block" %>
-    <%= form.text_field :ds_type %>
-  </div>
-
-  <div>
-    <%= form.label :repository, style: "display: block" %>
+  <div class="field">
+    <%= form.label :repository %>
     <%= form.text_field :repository %>
   </div>
 
-  <div>
+  <div class="field">
+    <%= form.label :dataset_startdate %>
+    <%= form.text_field :dataset_startdate %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ds_type %>
+    <%= form.text_field :ds_type %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :repository %>
+    <%= form.text_field :repository %>
+  </div>
+
+  <div class="actions">
     <%= form.submit %>
   </div>
 <% end %>

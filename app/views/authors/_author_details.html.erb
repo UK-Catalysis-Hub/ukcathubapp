@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-md-8">
+  <p id="notice"><%= notice %></p>
+  <p>
+    <strong>Last name:</strong>
+    <%= author.last_name %>
+  </p>
+  <p>
+    <strong>Given name:</strong>
+    <%= author.given_name %>
+  </p>
+  <p>
+    <strong>Orcid:</strong>
+    <%= author.orcid %>
+  </p>
+  </div>
+  <div class="col-md-4">
+    <div class="rounded border-light bg-light ">
+    <div class="container">
+        <ul>
+          <li>This author's details have been made public because of explicit consent from the researcher or an authorised proxi.</li>
+          <li>Contact the CDI admin if you do not authorise your information being displayed in this medium at: cdi_amin@rcah.ac.uk </li>
+         </ul>
+    </div>
+  </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+  <p>
+    <strong>Articles (<%= author.articles.active.count %>):</strong>
+    <%
+      art_list = ""
+      for art in author.articles.active.order(:title)
+        art_list += ' ' + link_to(art.title.html_safe, art)
+      end
+    %>
+    <%= art_list.html_safe %>
+  </p>
+  <%
+    expertise = []
+    expertise_lnks = ""
+    author.articles.each do |art|
+      art.article_themes.each do |art_theme|
+        if not expertise.include?(art_theme.theme.short) then
+          expertise.push(art_theme.theme.short)
+          if expertise_lnks == "" then
+            expertise_lnks = link_to(art_theme.theme.short, art_theme.theme)
+          else
+            expertise_lnks += ", ".html_safe + link_to(art_theme.theme.short, art_theme.theme)
+          end
+        end
+      end
+    end
+  %>
+  <p>
+    <strong>Expertise:</strong> <%= expertise_lnks  %>
+  </p>
+  <%
+    affiliation = []
+    affiliation_lnks = ""
+    author.affiliations.each do |afi|
+      if not affiliation.include?(afi) then
+        affiliation.push(afi)
+        if affiliation_lnks == "" then
+          affiliation_lnks = link_to(afi.institution, afi)
+        else
+          affiliation_lnks += ", ".html_safe + link_to(afi.institution, afi)
+        end
+      end
+    end
+  %>
+  </div>
+</div>

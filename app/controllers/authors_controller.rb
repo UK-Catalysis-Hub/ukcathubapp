@@ -1,9 +1,23 @@
 class AuthorsController < ApplicationController
-  before_action :set_author, only: %i[ show edit update destroy ]
+  before_action :set_author, only: [:show, :edit, :update, :destroy]
 
+  class AuthorsSearch < FortyFacets::FacetSearch
+    model 'Author' # which model to search for
+    text  :last_name # filter by a generic string entered by the user
+    #scope :isap # to select only authors that approve sharing their data
+    facet :given_name, name: 'Given Name'
+    facet :last_name, name: 'Last Name'
+
+    orders 'Last name, Ascendign' => {last_name: :asc, given_name: :asc},
+           'Last name, descending' => "last_name desc",
+           'ORCID, ascending' => "orcid asc",
+           'ORCID, Descending' => {orcid: :desc}
+  end
+  
   # GET /authors or /authors.json
   def index
-    @authors = Author.all
+    @search = AuthorsSearch.new(params)# initializes search object from request params
+    @authors = @search.result.isap.paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /authors/1 or /authors/1.json
