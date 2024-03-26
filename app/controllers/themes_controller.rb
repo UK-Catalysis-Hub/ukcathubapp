@@ -57,6 +57,14 @@ class ThemesController < ApplicationController
     end
   end
 
+  # download theme stats
+  def themes_count
+    theme_pubs = ListTheme.where("NOT (id IN (6,11,14,15))").collect{|th| [th.name, th.article_count.to_i, th.phase.to_i]}
+    theme_csv = get_csv(['name','count','phase'], theme_pubs)
+    send_data(theme_csv, 
+              :type => 'text/plain', :disposition => 'attachment', :filename => 'ukch_theme_count.csv')
+  end 
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_theme
