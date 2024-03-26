@@ -82,3 +82,7 @@ gem "forty_facets", "~> 0.2.1"
 gem "serrano", "~> 1.4"
 
 gem "google_charts", "~> 1.2"
+
+gem "will_paginate", "~> 4.0"
+
+gem "will_paginate-bootstrap-style", "~> 0.3.0"

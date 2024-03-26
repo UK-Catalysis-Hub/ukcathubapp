@@ -17,7 +17,8 @@ class ArticlesController < ApplicationController
 
   # GET /articles or /articles.json
   def index
-    @articles = Article.all
+    @search = ArticleSearch.new(params) # this initializes your search object from the request params
+    @articles = @search.result.active.paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /articles/1 or /articles/1.json

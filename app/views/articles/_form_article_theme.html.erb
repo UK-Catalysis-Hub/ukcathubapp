@@ -1,0 +1,18 @@
+<!-- Select article theme-->
+    <div class="">
+      <% theme_links = article.article_themes.all
+        disp_themes = ""
+        for theme_lnk in theme_links
+          theme_name = theme_lnk.theme.short
+          theme_string = theme_lnk.theme.short + " ("+ theme_lnk.project_year.to_s() +")"
+          if disp_themes =="" then
+            disp_themes = link_to(theme_string, theme_lnk.theme)
+          else
+            disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
+          end
+        end
+       %>
+       <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
+     </div>
+     <%= render '/article_themes/form_add_tab', article_themes: article.article_themes, article_id: article.id %> 
+
