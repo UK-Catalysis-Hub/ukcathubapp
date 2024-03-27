@@ -2,6 +2,7 @@ require "test_helper"
 
 class DatasetsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in users(:one)
     @dataset = datasets(:one)
   end
 

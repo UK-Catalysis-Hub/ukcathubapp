@@ -2,6 +2,7 @@ require "test_helper"
 
 class AffiliationsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in users(:one)
     @affiliation = affiliations(:one)
   end
 

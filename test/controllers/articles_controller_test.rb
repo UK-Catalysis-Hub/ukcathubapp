@@ -11,8 +11,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
-    
+  test "should get new" do  
     get new_article_url
     assert_response :success
   end
