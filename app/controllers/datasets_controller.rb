@@ -108,7 +108,6 @@ class DatasetsController < ApplicationController
             @art_ds_link.doi = art_doi
             @art_ds_link.article_id = art_id
             @art_ds_link.dataset_id = @dor.id
-            puts @art_ds_link.inspect()
             @art_ds_link.save()
           else
             puts "article-do link record exists"

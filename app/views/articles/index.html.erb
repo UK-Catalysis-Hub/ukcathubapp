@@ -354,10 +354,6 @@
              sum = 0
              year_series[1] = {name:"Accum.", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
              <%= column_chart(year_series, :legend=> "bottom", title:"Publications Annual vs Accumulating")%>
-             <% puts("**************************************")
-                puts(year_series)
-                puts("**************************************")
-                %>
            </div> <!-- card-body -->
            </div> <!-- card -->
        </div><!--col-sm-6-->
@@ -375,9 +371,7 @@
            </div>
          </div>
        </div><!--col-sm-6-->
-     </div><!--row mb3 -->
-     
-     
+     </div><!--row mb3 -->   
      
      <%  group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
          j_pub_stats = {}
