@@ -79,26 +79,22 @@ class DatasetsController < ApplicationController
 
   # upload new data objects (csv)
   def upload_data
-    puts "***************************************************"
-    puts params
-    puts "***************************************************"
     csv_file = params[:file]
     @data_rows = CSV.read(csv_file.path)
     @data_rows.each do |do_row|
       if do_row[3] != 'do_description' and do_row[7] != nil
         ds_id = do_row[5]
-        puts do_row
         @dor = Dataset.find_by(dataset_location: ds_id)
         art_id = do_row[1]
         art_doi = do_row[2]
         # add new do record
         if @dor == nil
           @dor = Dataset.new()
-          @dor.dataset_description = do_row[3]
-          @dor.dataset_doi = do_row[4]
-          @dor.dataset_location = do_row[5]
-          @dor.dataset_name = do_row[6]
-          @dor.dataset_startdate = do_row[7]
+          @dor.description = do_row[3]
+          @dor.doi = do_row[4]
+          @dor.location = do_row[5]
+          @dor.name = do_row[6]
+          @dor.startdate = do_row[7]
           @dor.ds_type = do_row[8]
           @dor.repository = do_row[9]
           @dor.save()

@@ -4,19 +4,19 @@
     <%= notice %></p>
   <p>
     <strong>Name:</strong>
-    <%= @dataset.dataset_name %>
+    <%= @dataset.name %>
   </p>
   <p>
     <strong>Description:</strong>
-    <%= @dataset.dataset_description %>
+    <%= @dataset.description %>
   </p>
   <p>
     <strong>DOI:</strong>
-    <%= @dataset.dataset_doi %>
+    <%= @dataset.doi %>
   </p>
   <p>
     <strong>Location:</strong>
-    <%= link_to @dataset.dataset_location, @dataset.dataset_location %>
+    <%= link_to @dataset.location, @dataset.location %>
   </p>
   <p>
     <strong>Resository:</strong>
@@ -24,11 +24,11 @@
   </p>
   <p>
     <strong>Start date:</strong>
-    <%= @dataset.dataset_startdate %>
+    <%= @dataset.startdate %>
   </p>
   <p>
     <strong>End date:</strong>
-    <%= @dataset.dataset_enddate %>
+    <%= @dataset.enddate %>
   </p>
   <% @dataset.articles.each do | article | %>
     <p>
