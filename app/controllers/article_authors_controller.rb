@@ -57,7 +57,26 @@ class ArticleAuthorsController < ApplicationController
     end
   end
 
+  # Assign researcher(author) to article author record
+  def link_to_researcher
+    # get the researcher id from the parameters
+    # get the article id from the parameters
+    # save article_author
+    # redirect to article edit
+    @article_author = ArticleAuthor.find(params["data"]["id"])
+    update_hash = {:author_id=>params["data"]["author_id"], :status => 'verified'}
+    @article_author.update(update_hash)
+    respond_to do |format|
+      flash[:notice] = 'researcher verified'
+      format.html { redirect_to return_url }
+    end
+  end
+
   private
+    def return_url
+      url_for(controller: 'articles', action: 'edit', id: params["data"]["article_id"]) || article_authors_url
+    
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_article_author
       @article_author = ArticleAuthor.find(params[:id])

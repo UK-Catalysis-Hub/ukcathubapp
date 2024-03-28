@@ -90,3 +90,5 @@ gem "will_paginate-bootstrap-style", "~> 0.3.0"
 # XRef gem for mapping crossref data to XDI
 gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git', :branch => 'update_rails'
 
+
+gem "sidekiq", "~> 7.2"

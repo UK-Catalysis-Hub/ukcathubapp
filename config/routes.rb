@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   get 'data_count' => 'datasets#data_count', as: 'data_count'
   post 'upload_data' => 'datasets#upload_data', as: 'upload_data'
   
+  post 'link_to_researcher' => 'article_authors#link_to_researcher', as: :link_to_researcher
+  
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

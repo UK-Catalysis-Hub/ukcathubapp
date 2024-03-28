@@ -1,0 +1,56 @@
+<!--verify assigned author-->
+  <% plain_ln = "XXXXX%"
+     if article_author.last_name.include?('-')
+       plain_ln = article_author.last_name.gsub('-',' ')
+     end
+     like_name = "XXXX%"
+     if (article_author.last_name =~ /[^a-zA-Z\s:]/) != nil
+       non_alpha_found = true
+       like_name = article_author.last_name.gsub(" ","%")
+       while non_alpha_found
+         c_idx = (like_name =~ /[^a-zA-Z\s:]/)
+         if c_idx != nil
+           like_name[c_idx] = " "
+         else
+           non_alpha_found = false
+         end
+       end
+       like_name.gsub!(' ','%')
+     end
+
+     authors_list = Author.where(orcid: article_author.orcid, last_name: article_author.last_name)
+                          .or(Author.where(given_name: article_author.given_name, last_name: article_author.last_name))
+                          .or(Author.where(last_name: article_author.last_name))
+                          .or(Author.where(last_name: plain_ln))
+                          .or(Author.where('last_name LIKE ?', '%' + like_name + '%'))%>
+  <% if authors_list.length > 1 %>
+    <%=  "Researcher possible matches" %>
+  <% else %>
+    <%=  "Unique researcher match" %>
+  <% end %>
+  <table>
+    <thead class="thead-light">
+      <tr>
+        <th>Author</th>
+        <th>ORCID</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% authors_list.each do |researcher| %>
+        <tr>
+          <td>
+            <%= researcher.id %>
+            <%= researcher.given_name %>
+            <%= researcher.last_name %>
+          </td>
+          <td>
+            <%= researcher.orcid %>
+          </td>
+          <td>
+            <%= button_to('Assign', {:action => 'link_to_researcher', :controller => 'article_authors', :data => {:author_id => researcher.id,:id => article_author.id, :article_id=> article_author.article_id }}, :class => 'btn  btn-success btn-sm')%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
