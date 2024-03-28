@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_22_191525) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_28_104119) do
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
     t.string "add_02"
@@ -168,6 +168,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_191525) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "xref_client_mappings", force: :cascade do |t|
+    t.string "obj_name"
+    t.string "origin"
+    t.string "target"
+    t.string "target_type"
+    t.string "default"
+    t.string "json_paths"
+    t.string "evaluate"
+    t.string "other"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 

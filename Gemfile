@@ -86,3 +86,7 @@ gem "google_charts", "~> 1.2"
 gem "will_paginate", "~> 4.0"
 
 gem "will_paginate-bootstrap-style", "~> 0.3.0"
+
+# XRef gem for mapping crossref data to XDI
+gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git', :branch => 'update_rails'
+
