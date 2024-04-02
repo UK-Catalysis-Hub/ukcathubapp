@@ -166,7 +166,6 @@ class ArticlesController < ApplicationController
       # shoudl correct having to get the data from crossref again when article is new
       pub_data = XrefClient.getCRData(doi_text)
       if pub_data != nil then
-        puts "\nPub data: " + pub_data.class.to_s
         aut_order = 1
         aut_count = pub_data['author'].count
         pub_data['author'].each do |art_author|
@@ -207,12 +206,9 @@ class ArticlesController < ApplicationController
           end
 
           if new_author.save then
-            print_author(new_author)
+            #print_author(new_author)
             if art_author.keys.include?('affiliation')
               # get new affiliations and save them
-              puts "**********************************************************"
-              puts art_author['affiliation'].to_s
-              puts "**********************************************************"
               if art_author['affiliation'].count > 0 then
                 art_author['affiliation'].each { |temp_affi|
                   new_tmp_affi = CrAffiliation.new()
