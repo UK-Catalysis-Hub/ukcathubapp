@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  doi: MyString
+  doi: '10.1039/c3cp52653d'
   title: MyString
   pub_year: 1
   pub_type: MyString
@@ -27,7 +27,7 @@ one:
   journal_issue: MyString
 
 two:
-  doi: MyString
+  doi: '10.1021/cs400683e'
   title: MyString
   pub_year: 1
   pub_type: MyString
