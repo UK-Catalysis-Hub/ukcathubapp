@@ -9,7 +9,8 @@ class ArticlesController < ApplicationController
     facet :container_title, name: 'Journal', order: Proc.new { |container_title| container_title }
     facet :publisher, name: 'Publisher', order: Proc.new { |publisher| publisher }
 
-    orders 'Title' => :title,
+    orders 'Title (A-Z)' => :title,
+           'Title desc. (Z-A)' => "title desc",
            'Year, newest first' => "pub_year desc",
            'Year, oldest first' => {pub_year: :asc, title: :asc}
   end
