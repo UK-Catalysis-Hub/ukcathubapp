@@ -8,16 +8,9 @@
             <!-- Field for searching by institution -->
              <%= hidden_field_tag 'search[order]', affi_search.order.definition.request_value if affi_search.order %>
              <div class="row">
-               <div class="col-md-1">
-                 <b> Search: </b>
-               </div>
-               <div class="col-md-5">
-                 <% #institution_filter = affi_search.filter(:institution) %>
-                 <% #= text_field_tag 'search[institution]', institution_filter.value, class: 'form-control', placeholder: institution_filter.name %>
-               </div>
                <div class="col-md-4">
                  <!-- Set sort order -->
-                   <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> sort by: <%= affi_search.order.title 	 if affi_search.order %>
+                   <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"> Sort by: <%= affi_search.order.title 	 if affi_search.order %>
                    <span class="caret"></span></button>
                    <ul class="dropdown-menu">
                      <% affi_search.orders.reject(&:active).each do |order| %>

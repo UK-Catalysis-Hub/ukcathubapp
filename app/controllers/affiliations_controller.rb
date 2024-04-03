@@ -3,6 +3,7 @@ class AffiliationsController < ApplicationController
   before_action :set_affiliation, only: [:show, :edit, :update, :destroy]
   class AffiliationSearch < FortyFacets::FacetSearch
     model 'Affiliation' # which model to search for
+    # issue a filter cannot be also a facet, need 'alias'?
     #text  :institution # filter by a generic string entered by the user
     facet  :institution, name: 'Institution'
     facet :country, name: 'Country'
@@ -10,10 +11,10 @@ class AffiliationsController < ApplicationController
     facet :school, name: 'School'
     facet :sector, name: 'Sector'
     
-    orders 'Institution, Ascendign' => {institution: :asc, department: :asc},
-           'Institution, Descending' => {institution: :desc, department: :desc},
-           'Country, Ascending' => {country: :asc},
-           'Country, Descending' => {country: :desc}
+    orders 'Institution (A-Z)' => {institution: :asc, department: :asc},
+           'Institution (Z-A)' => {institution: :desc, department: :desc},
+           'Country (A-Z)' => {country: :asc},
+           'Country (Z-A)' => {country: :desc}
   end
 
   # GET /affiliations or /affiliations.json
