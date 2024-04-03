@@ -61,6 +61,7 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem "capistrano", "~> 3.18", require: false
 end
 
 group :test do
@@ -90,5 +91,5 @@ gem "will_paginate-bootstrap-style", "~> 0.3.0"
 # XRef gem for mapping crossref data to XDI
 gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git', :branch => 'update_rails'
 
-
 gem "sidekiq", "~> 7.2"
+
