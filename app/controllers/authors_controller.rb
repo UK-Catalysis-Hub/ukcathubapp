@@ -8,10 +8,10 @@ class AuthorsController < ApplicationController
     facet :given_name, name: 'Given Name'
     facet :last_name, name: 'Last Name'
 
-    orders 'Last name, Ascendign' => {last_name: :asc, given_name: :asc},
-           'Last name, descending' => "last_name desc",
-           'ORCID, ascending' => "orcid asc",
-           'ORCID, Descending' => {orcid: :desc}
+    orders 'Name (A-Z)' => {last_name: :asc, given_name: :asc},
+           'Name (Z-A)' => {last_name: :desc, given_name: :desc},
+           'ORCID (A-Z)' => "orcid asc",
+           'ORCID (Z-A)' => {orcid: :desc}
   end
   
   # GET /authors or /authors.json
