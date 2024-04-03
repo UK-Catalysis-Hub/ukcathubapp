@@ -10,11 +10,11 @@
              <div class="row">
                <div class="col-md-4">
                  <!-- Set sort order -->
-                   <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"> Sort by: <%= affi_search.order.title 	 if affi_search.order %>
+                   <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"> Sort by: <%= affi_search.order.title if affi_search.order %>
                    <span class="caret"></span></button>
                    <ul class="dropdown-menu">
                      <% affi_search.orders.reject(&:active).each do |order| %>
-                     <li> <%= link_to order.title, order.by.path %> </li>
+                       <li><a class="dropdown-item" href=<%= order.by.path %>><%= order.title %></a></li>
                      <% end %>
                    </ul>
                </div>

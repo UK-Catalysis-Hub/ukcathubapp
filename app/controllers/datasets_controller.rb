@@ -8,8 +8,10 @@ class DatasetsController < ApplicationController
     facet :ds_type, name: 'Data object type', order: Proc.new { |ds_type| ds_type }
     facet :repository, name: 'Repository', order: Proc.new { |repository| repository }
 
-    orders 'Name' => :name,
-           'Name, descending' => "name desc"
+    orders 'Name (A-Z)' => :name,
+           'Name (Z-A)' => "name desc",
+           'Date, newest first' => "startdate desc",
+           'Date, oldest first' => "startdate asc"
   end
   # GET /datasets or /datasets.json
   def index
