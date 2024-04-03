@@ -7,7 +7,6 @@
     <b>Authors (<%= @article.authors.count %>):</b>
     <% author_links = @article.article_authors.all
        disp_names = ""
-       puts @article.authors.count
        for auth in author_links
          if auth.author.given_name != nil
            pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
