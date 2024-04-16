@@ -1,3 +1,4 @@
+<!--Show Article details-->
 <div class="container">
   <p id="notice"><%= notice %></p>
   <h3> <strong>Title:</strong>   <%= @article.title.html_safe %>  </h3>
@@ -54,11 +55,11 @@
   <div class="accordion" id="publicationsAccordion">
     <div class="card">
       <div class="card-header" id="headingOne">
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapsePublication" aria-expanded="true" aria-controls="collapsePublication">
+        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePublication" aria-expanded="true" aria-controls="collapsePublication">
           Publisher Details
         </button>
       </div>
-      <div id="collapsePublication" class="collapse" aria-labelledby="headingOne" data-parent="#publicationsAccordion">
+      <div id="collapsePublication" class="collapse" aria-labelledby="headingOne" data-bs-parent="#publicationsAccordion">
         <div class="card-body">
           <p>
             <strong>Publisher:</strong>
@@ -133,11 +134,11 @@
     </div>
     <div class="card">
       <div class="card-header" id="abstractHeading">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseAbstract" aria-expanded="false" aria-controls="collapseAbstract">
+        <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAbstract" aria-expanded="false" aria-controls="collapseAbstract">
           Abstract
         </button>
       </div>
-      <div id="collapseAbstract" class="collapse" aria-labelledby="abstractHeading" data-parent="#publicationsAccordion">
+      <div id="collapseAbstract" class="collapse" aria-labelledby="abstractHeading" data-bs-parent="#publicationsAccordion">
         <div class="card-body">
           <p>
             <% if @article.abstract %>
@@ -149,11 +150,11 @@
     </div>
     <div class="card">
       <div class="card-header" id="dataObjHeading">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseDataObjs" aria-expanded="false" aria-controls="collapseAbstract">
+        <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDataObjs" aria-expanded="false" aria-controls="collapseAbstract">
           Associated Data Objects
         </button>
       </div>
-      <div id="collapseDataObjs" class="collapse" aria-labelledby="dataObjHeading" data-parent="#publicationsAccordion">
+      <div id="collapseDataObjs" class="collapse" aria-labelledby="dataObjHeading" data-bs-parent="#publicationsAccordion">
         <div class="card-body">
           <p>
             <% if @article.datasets.count > 0 %>

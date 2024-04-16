@@ -6,14 +6,14 @@
 <div class="container">
   <ul class="nav nav-tabs" id="datasetsTab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Browse</a>
+      <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Browse</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#indicators" role="tab" aria-controls="indicators" aria-selected="false">Indicators</a>
+      <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#indicators" role="tab" aria-controls="indicators" aria-selected="false">Indicators</a>
     </li>
     <% if user_signed_in? %>
       <li class="nav-item">
-        <a class="nav-link" id="actions-tab" data-toggle="tab" href="#actions" role="tab" aria-controls="inactive" aria-selected="false">Actions</a>
+        <a class="nav-link" id="actions-tab" data-bs-toggle="tab" href="#actions" role="tab" aria-controls="inactive" aria-selected="false">Actions</a>
       </li> 
     <% end %>   
   </ul>
@@ -36,7 +36,7 @@
             </div>
             <div class="col-md-4">
               <!-- Set sort order -->
-              <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
+              <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                   <% @search.orders.reject(&:active).each do |order| %>
