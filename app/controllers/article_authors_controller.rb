@@ -72,22 +72,19 @@ class ArticleAuthorsController < ApplicationController
     # get the article id from the parameters
     # save article_author
     # redirect to article edit
-    puts "********************************************************************"
-    puts params
-    puts params["data"]
     @article_author = ArticleAuthor.find(params["data"]["id"])
     update_hash = {:author_id=>params["data"]["author_id"], :status => 'verified'}
     @article_author.update(update_hash)
-    puts "********************************************************************"
     respond_to do |format|
       flash[:notice] = 'researcher verified'
-      return_to = session[:return_to]
-      return_to.include?("/edit") ? true : return_to = return_to + "/edit"
-      format.html { redirect_to return_to }
+      format.html { redirect_to return_url }
     end
   end
 
   private
+    def return_url
+      url_for(controller: 'articles', action: 'edit', id: params["data"]["article_id"]) || article_authors_url
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_article_author
       @article_author = ArticleAuthor.find(params[:id])
