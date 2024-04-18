@@ -97,7 +97,9 @@ class ArticlesController < ApplicationController
     @pub_rows.each do |pub_row|
       if pub_row[4] != 'doi' and pub_row[10] != nil
         p_doi = pub_row[4]
-        
+        puts "&"*80
+        puts p_doi
+        puts "&"*80
         p_themes = JSON.load(pub_row[10])
 
         @art = Article.find_by(doi: p_doi)
@@ -105,8 +107,9 @@ class ArticlesController < ApplicationController
           @art = Article.new()
           @art.doi = p_doi
           getPubData(@art, @art.doi)
+          puts @art.doi
           puts("\n*******************************************************")
-          puts("NOT IN DB DOI: " + @art.doi +  @art.title + " themes " + p_themes.to_s() )
+          puts("NOT IN DB DOI: " + @art.doi.to_s +  @art.title.to_s + " themes " + p_themes.to_s() )
           puts("*******************************************************\n")
           if @art.container_title == nil
             @art.container_title = pub_row[15]
@@ -243,17 +246,22 @@ class ArticlesController < ApplicationController
     end
 
     def getPubData(db_article, doi_text)
+      art_id = nil
+      if db_article.id != nil
+        art_id = db_article.id
+      end
       if doi_text != ""
         # need to raise an exeption if doi is incorrect or no data is returned
         # need to check the doi is not in DB before saving (lower and uppercase versions)
         # need to trim dois before saving
         pub_data = XrefClient.getCRData(doi_text)
         data_mappings = XrefClient::ObjectMapper.map_xref_to_cdi(pub_data) 
-        puts "###################################################################"
-        puts data_mappings
-        db_article = Article.new(data_mappings[0])
-        puts db_article.title
-        puts "*******************************************************************"
+        # remove id, and timestamps from mappings before updating
+        just_article_vals = data_mappings[0]
+        just_article_vals.delete('id')
+        just_article_vals.delete('created_at')
+        just_article_vals.delete('updated_at')
+        db_article.update(just_article_vals)
       end
       # mark incomplete as it is missing authors, affiliation and themes
       db_article.status = "Incomplete"
