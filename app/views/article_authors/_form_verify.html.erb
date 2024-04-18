@@ -4,7 +4,7 @@
       <% for auth in article_authors %>
         <% if auth.status != "verified" %>
           <li class="nav-item">
-            <a class="nav-link<%= auth.author_seq.downcase == "first" ? " active":"" %>" id="auth<%= auth.id %>-tab" data-toggle="tab" href="#auth<%= auth.id %>" role="tab" aria-controls="auth<%= auth.id %>" aria-selected="true">
+            <a class="nav-link<%= auth.author_seq.downcase == "first" ? " active":"" %>" id="auth<%= auth.id %>-tab" data-bs-toggle="tab" href="#auth<%= auth.id %>" role="tab" aria-controls="auth<%= auth.id %>" aria-selected="true">
               <%= auth.given_name %> <%= auth.last_name %>
               <%= "x" %>
             </a>
@@ -14,7 +14,7 @@
       <% for auth in article_authors %>
         <% if auth.status == "verified" %>
           <li class="nav-item">
-            <a class="nav-link <%= auth.author_seq.downcase == "first" ? " active":"" %>" " id="auth<%= auth.id %>-tab" data-toggle="tab" href="#auth<%= auth.id %>" role="tab" aria-controls="auth<%= auth.id %>" aria-selected="true">
+            <a class="nav-link <%= auth.author_seq.downcase == "first" ? " active":"" %>" " id="auth<%= auth.id %>-tab" data-bs-toggle="tab" href="#auth<%= auth.id %>" role="tab" aria-controls="auth<%= auth.id %>" aria-selected="true">
               <%= auth.given_name %> <%= auth.last_name %>
             </a>
           </li>
