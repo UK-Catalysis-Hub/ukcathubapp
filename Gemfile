@@ -79,6 +79,13 @@ gem 'sidekiq', '6.1.3'
 # the scenic and scenic_sqlite_adapter gems are required for handling views in
 # rails
 gem 'scenic'
+
+# Font-awesome
+gem 'font-awesome-sass', '~> 5.11.2'
+
+#jquery-ui
+gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
+
 gem 'scenic_sqlite_adapter'
 
 gem 'capistrano', '~> 3.11'
@@ -90,12 +97,9 @@ gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
 gem 'jquery-rails', '~> 4.3', '>= 4.3.5'
 gem 'popper_js', '~> 1.14', '>= 1.14.5'
 gem 'bootstrap', '~> 4.0'
-
+gem 'bootstrap-sass'
 # Font-awesome
 gem 'font-awesome-sass', '~> 5.11.2'
-
-#jquery-ui
-gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
 
 # XRef mapping gem for mapping crossref data to XDI
 gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git', :branch => 'main'
