@@ -15,20 +15,20 @@
   </div>
   <ul class="nav nav-tabs" id="researchersTab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Researchers</a>
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#browse" role="tab" aria-controls="browse" aria-selected="true">Researchers</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="false">Indicators</a>
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="false">Indicators</a>
     </li>
     <% if user_signed_in? %>
     <li class="nav-item">
-      <a class="nav-link" id="not-verified-tab" data-bs-toggle="tab" href="#not-verified" role="tab" aria-controls="not-verified" aria-selected="false">Not verified</a>
+      <a class="nav-link" id="not-verified-tab" data-toggle="tab" href="#not-verified" role="tab" aria-controls="not-verified" aria-selected="false">Not verified</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="actions-tab" data-bs-toggle="tab" href="#actions" role="tab" aria-controls="not-verified" aria-selected="false">Actions</a>
+      <a class="nav-link" id="actions-tab" data-toggle="tab" href="#actions" role="tab" aria-controls="not-verified" aria-selected="false">Actions</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="all-auths-tab" data-bs-toggle="tab" href="#all-auths" role="tab" aria-controls="not-verified" aria-selected="false">All Authors</a>
+      <a class="nav-link" id="all-auths-tab" data-toggle="tab" href="#all-auths" role="tab" aria-controls="not-verified" aria-selected="false">All Authors</a>
     </li>
     <% end %>
   </ul>
@@ -52,7 +52,7 @@
             </div>
             <div class="col-md-4">
               <!-- Set sort order -->
-              <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
+              <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> sort by: <%= @search.order.title if @search.order %>
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                   <% @search.orders.reject(&:active).each do |order| %>
