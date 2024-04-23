@@ -208,7 +208,12 @@ class ArticlesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def article_params
-      params.require(:article).permit(:referenced_by_count, :publisher, :issue, :license, :pub_print_year, :pub_print_month, :pub_print_day, :doi, :pub_type, :page, :title, :volume, :pub_ol_year, :pub_ol_month, :pub_ol_day, :container_title, :link, :references_count, :journal_issue, :url, :abstract, :status, :comment, :pub_year)
+      params.require(:article).permit(:referenced_by_count, :publisher, :issue,
+          :license, :pub_print_year, :pub_print_month, :pub_print_day, :doi, 
+          :pub_type, :page, :title, :volume, :pub_ol_year, :pub_ol_month, 
+          :pub_ol_day, :container_title, :link, :references_count, 
+          :journal_issue, :url, :abstract, :status, :comment, :pub_year, 
+          :pdf_file)
     end
 
     # functions for getting data from crossref
