@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   
   post 'link_to_researcher' => 'article_authors#link_to_researcher', as: :link_to_researcher
   
+  post 'generate_affiliations' => 'authors#generate', as: :generate_auth_affis
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
