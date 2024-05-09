@@ -1,0 +1,32 @@
+<table>
+  <thead>
+    <tr>
+      <th>Author</th>
+      <th>Name</th>
+      <th>Short name</th>
+      <th>Add 01</th>
+      <th>Add 02</th>
+      <th>Add 03</th>
+      <th>Add 04</th>
+      <th>Add 05</th>
+      <th>Country</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% author_affiliations.each do |author_affiliation| %>
+      <tr>
+        <td><%= author_affiliation.article_author_id %></td>
+        <td><%= author_affiliation.name %></td>
+        <td><%= author_affiliation.short_name %></td>
+        <td><%= author_affiliation.add_01 %></td>
+        <td><%= author_affiliation.add_02 %></td>
+        <td><%= author_affiliation.add_03 %></td>
+        <td><%= author_affiliation.add_04 %></td>
+        <td><%= author_affiliation.add_05 %></td>
+        <td><%= author_affiliation.country %></td>
+        <td><%= link_to 'Show', author_affiliation %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
