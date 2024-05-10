@@ -70,7 +70,74 @@ class ArticlesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  # VERIFY records in CR
+  def verify
+    VerifyCrossrefWorker.perform_async
+    respond_to do |format|
+      flash[:notice] = 'verify process started'
+      format.html { redirect_to action: "index" }
+      format.json { head :no_content }
+    end
+  end
   
+  # Upload CSV articles list
+  def upload_csv
+    #VerifyCrossrefWorker.perform_async
+    csv_file = params[:file]
+    @pub_rows = CSV.read(csv_file.path)
+    @pub_rows.each do |pub_row|
+      if pub_row[4] != 'doi' and pub_row[10] != nil
+        p_doi = pub_row[4]
+        puts "&"*80
+        puts p_doi
+        puts "&"*80
+        p_themes = JSON.load(pub_row[10])
+
+        @art = Article.find_by(doi: p_doi)
+        if @art == nil
+          @art = Article.new()
+          @art.doi = p_doi
+          getPubData(@art, @art.doi)
+          puts @art.doi
+          puts("\n*******************************************************")
+          puts("NOT IN DB DOI: " + @art.doi.to_s +  @art.title.to_s + " themes " + p_themes.to_s() )
+          puts("*******************************************************\n")
+          if @art.container_title == nil
+            @art.container_title = pub_row[15]
+          end
+          @art.save()
+          
+          puts("\n*******************************************************")
+          puts("ADDED AS ID " + @art.id.to_s())
+          puts("*******************************************************\n")
+          # add theme links
+          p_themes.each do |theme_id|
+            full_theme = Theme.find(theme_id)
+            article_theme = ArticleTheme.new()
+            article_theme.doi = @art.doi 
+            article_theme.theme_id = theme_id
+            article_theme.project_year = @art.pub_year
+            article_theme.article_id = @art.id
+            article_theme.phase = full_theme.phase
+            article_theme.save()
+          end  
+        else
+          puts("IN DB DOI: " +  p_doi + " themes " + p_themes.to_s())
+        end
+        if pub_row[4].to_i > 12
+          break
+        end
+      end
+    end
+    
+    respond_to do |format|
+      flash[:notice] = 'upload process started ' + @pub_rows.length().to_s() + " entries "
+      format.html { redirect_to action: "index" }
+      format.json { head :no_content }
+    end
+  end
+
   # return publications as bib json data
   def bib_query   
     articles = Article.active.all()
