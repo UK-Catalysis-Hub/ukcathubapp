@@ -33,6 +33,7 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
+    session[:return_to] = request.referer
   end
 
   # POST /articles or /articles.json
@@ -170,6 +171,7 @@ class ArticlesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
+      puts "CALLED SET ARTICLE"
       # this is ok for an existing article
       @article = Article.find(params[:id])
       @authors = @article.article_authors
@@ -203,11 +205,42 @@ class ArticlesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def article_params
-       params.require(:article).permit(:doi, :title, :pub_year, :pub_type, :publisher, :container_title, :volume, :issue, :page, :pub_print_year, :pub_print_month, :pub_print_day, :pub_ol_year, :pub_ol_month, :pub_ol_day, :license, :referenced_by_count, :link, :url, :abstract, :status, :comment, :references_count, :journal_issue)
+       params.require(:article).permit(:doi, :title, :pub_year, :pub_type, :publisher, :container_title,
+        :volume, :issue, :page, :pub_print_year, :pub_print_month, :pub_print_day, :pub_ol_year, :pub_ol_month,
+        :pub_ol_day, :license, :referenced_by_count, :link, :url, :abstract, :status, :comment, :references_count,
+        :journal_issue)
     end
     
+    # get list of publications as bibliography
+    def get_bib_data(articles)
+      bib_list=[]
+      articles.each do |article|
+        author_list = article.authors.all
+        disp_names = ""
+        author_list.each do|auth|
+           pr_name = auth.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
+           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
+           pr_name += auth.last_name
+           this_name = pr_name
+           if disp_names == ""
+             disp_names =  + this_name
+           else
+             disp_names += ', ' + this_name
+           end
+        end
+        bib_list.append({"title"=>article.title, "year"=>article.pub_year, "authors"=>disp_names,
+                         "publisher" => article.container_title, "doi"=>article.doi, 
+                         "pub_type"=> article.pub_type,'volume'=>article.volume, 
+                         'issue'=>article.issue,'page'=> article.page})
+      end
+      return bib_list
+    end
+
     
     def getPubData(db_article, doi_text)
+      puts "*"*90
+      puts "\nGet pub data\n"
+      puts "*"*90
       art_id = nil
       if db_article.id != nil
         art_id = db_article.id
@@ -220,13 +253,14 @@ class ArticlesController < ApplicationController
         data_mappings = XrefClient::ObjectMapper.map_xref_to_cdi(pub_data) 
         # remove id, and timestamps from mappings before updating
         just_article_vals = data_mappings[0]
-        just_article_vals.delete('id')
-        just_article_vals.delete('created_at')
-        just_article_vals.delete('updated_at')
+         # mark incomplete as it is missing authors, affiliation and themes
+        just_article_vals['status'] = "Incomplete"
+        just_article_vals.compact!() 
         db_article.update(just_article_vals)
+        puts ("*"*80)
+        puts(db_article)
+        puts ("*"*80)
       end
-      # mark incomplete as it is missing authors, affiliation and themes
-      db_article.status = "Incomplete"
       return db_article
     end
     
@@ -274,7 +308,7 @@ class ArticlesController < ApplicationController
           end
 
           if new_author.save then
-            #print_author(new_author)
+            print_author(new_author)
             if art_author.keys.include?('affiliation')
               # get new affiliations and save them
               if art_author['affiliation'].count > 0 then
@@ -291,7 +325,27 @@ class ArticlesController < ApplicationController
         end
       end
     end
-   
+
+    def verify_articles(article)
+      # Check for changes in number of refferences to publication
+      # get the article from crossref
+      doi_text = article.doi
+      art_id = article.id
+      if article.doi != ""
+        pub_data = getCRData(doi_text)
+        changes_found = false
+        # only verify fields which may change between recoveries, eg: citations
+        if article.attributes['referenced_by_count'] != pub_data['is-referenced-by-count']
+          changes_found = true
+          article.attributes['referenced_by_count'] = pub_data['is-referenced-by-count']
+          article.referenced_by_count = pub_data['is-referenced-by-count']
+        end
+        if changes_found
+          article.save
+        end
+      end
+    end
+
     def get_researcher_match(new_author)
       # Before save get best author match
       plain_ln = "XXXXX%"
