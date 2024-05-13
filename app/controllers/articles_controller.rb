@@ -183,7 +183,7 @@ class ArticlesController < ApplicationController
          # check if exists in DB by DOI
          @art = Article.find_by(doi: @article.doi)
          if @art.title == nil
-
+           # this is a new article. Needs authors, and affiliation
            @article = getPubData(@article, @article.doi)
            #save the article so it is not recovered again
            @article.save()
@@ -192,6 +192,9 @@ class ArticlesController < ApplicationController
          end
       end
       if @article.article_authors.count == 0 or @article.article_authors[0].last_name == nil
+        puts "*"*90
+        puts "Getting authors for: " + @article.doi
+        puts "*"*90
         # try to get authors from crossref
         getAutData(@authors, @article.doi, @article.id)
       end      
@@ -200,7 +203,6 @@ class ArticlesController < ApplicationController
         #save the article if it did not have pub_year set
         @article.save()
       end
-           
     end
 
     # Only allow a list of trusted parameters through.
@@ -238,32 +240,81 @@ class ArticlesController < ApplicationController
 
     
     def getPubData(db_article, doi_text)
-      puts "*"*90
-      puts "\nGet pub data\n"
-      puts "*"*90
-      art_id = nil
-      if db_article.id != nil
-        art_id = db_article.id
-      end
+      puts "%"*90
+      puts "Getting pub data"
+      puts "%"*90
       if doi_text != ""
         # need to raise an exeption if doi is incorrect or no data is returned
         # need to check the doi is not in DB before saving (lower and uppercase versions)
         # need to trim dois before saving
-        pub_data = XrefClient.getCRData(doi_text)
-        data_mappings = XrefClient::ObjectMapper.map_xref_to_cdi(pub_data) 
+        data_mappings = getPubDataXRef(doi_text) 
         # remove id, and timestamps from mappings before updating
         just_article_vals = data_mappings[0]
          # mark incomplete as it is missing authors, affiliation and themes
         just_article_vals['status'] = "Incomplete"
         just_article_vals.compact!() 
         db_article.update(just_article_vals)
-        puts ("*"*80)
-        puts(db_article)
-        puts ("*"*80)
+        puts ("%"*80)
+        puts("Added "+ db_article.doi)
+        puts ("%"*80)
+        # now add authors and affiliations
+        addPubAuthors(data_mappings[1], data_mappings[2], db_article)
       end
       return db_article
     end
     
+    def getPubDataXRef(doi_text)
+      pub_data = XrefClient.getCRData(doi_text)
+      data_mappings = XrefClient::ObjectMapper.map_xref_to_cdi(pub_data)
+      return data_mappings   
+    end
+    
+    def addPubAuthors(pub_authors,pub_auth_affis, a_pub)
+      pub_authors.each do |an_author|
+        temp_id = an_author["author_order"]
+        an_author["doi"] =  a_pub.doi
+        an_author["article_id"] =  a_pub.id
+        
+        new_art_author = ArticleAuthor.new(an_author)
+        
+        print_author(new_art_author)
+        
+        # check if the article author is in the researchers table
+	found_id = get_researcher_match(new_art_author)
+        if found_id != 0 then
+          an_author["author_id"] = found_id
+        else
+          # create a new researcher (author)
+          new_researcher = Author.new(given_name: new_art_author.given_name, last_name: new_art_author.last_name, orcid: new_art_author.orcid)
+          if new_researcher.save then
+            an_author["author_id"] = new_researcher.id
+          end
+        end
+        
+        an_author.compact!()
+        
+        new_art_author.update!(an_author)
+ 
+        puts "8"*90
+        puts "New article author saved with id: " + new_art_author.id.to_s
+        puts "New article author assigned researcher id: " + new_art_author.author_id.to_s
+        puts "New article author assigned article id: " + new_art_author.article_id.to_s
+        puts "8"*90
+        
+        pub_auth_affis.each do |affi_line|
+          if affi_line["article_author_id"] == temp_id
+            affi_line["article_author_id"] = new_art_author.id
+            affi_line.compact!()
+            new_cr_affi = CrAffiliation.new(affi_line)
+            new_cr_affi.save
+            puts "8"*90
+            puts "Address Line: " + affi_line["name"]
+            puts "8"*90
+          end
+        end
+      end
+    end
+ 
     def getAutData(db_authors, doi_text, art_id)
       # shoudl correct having to get the data from crossref again when article is new
       pub_data = XrefClient.getCRData(doi_text)
