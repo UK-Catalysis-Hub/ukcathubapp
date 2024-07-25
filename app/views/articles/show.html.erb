@@ -46,7 +46,6 @@
   <%    s_year = "imageInfo.ImageIdentifier.Year=" + @article.pub_year.to_s %>
   <%    src_str = "https://pubs.rsc.org/en/Image/Get?imageInfo.ImageType=GA&"+ s_id + "&"+ s_year%>
   <div>
-      <img src = <%=src_str%> , alt =  "Graphic Abstract">
       <%= image_tag src_str,alt: "Graphic Abstract", class:"img-fluid" %>
   </div>
   
