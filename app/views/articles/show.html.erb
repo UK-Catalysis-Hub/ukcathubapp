@@ -176,13 +176,27 @@
   </div>
 </div>
 <br/>
-  
+  <% @next = Article.find_by('id > ?', @article.id)
+     art_id = @article.id
+     @prev = nil
+     while @prev.nil?
+       art_id = art_id -1
+       @prev = Article.find_by('id = ?', art_id)
+       if art_id < 1
+         break
+       end
+     end
+  %>
   <% if user_signed_in? %>
     <%= link_to 'Edit', edit_article_path(@article), :class => "btn btn-primary btn-sm" %>
     <%= link_to 'New Article', new_article_path, :class => "btn btn-success btn-sm float-right" %>
   <% end %>
+  <% if not @prev.nil? %>
+    <%= link_to '<< Previous', {controller: "articles", action: "show", id: @prev}, :class => "btn btn-success btn-sm float-right" %>
+  <% end %>  
 
   <%= link_to 'Back', articles_path, :class => "btn btn-secondary btn-sm" %>
+  <% if not @next.nil? %>
+    <%= link_to 'Next >>', {controller: "articles", action: "show", id: @next}, :class => "btn btn-success btn-sm float-right" %>
+  <% end %>  
 </div>
-
-
