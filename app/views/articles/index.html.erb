@@ -1,13 +1,189 @@
-<p style="color: green"><%= notice %></p>
+<p style="color: green"><%= notice %></td>
 
 <h1>Articles</h1>
 
 <div id="articles">
-  <% @articles.each do |article| %>
-    <%= render article %>
-    <p>
-      <%= link_to "Show this article", article %>
-    </p>
+    <table class="table">
+        <tdead class="tdead-light">
+            <tr>
+   	        <td>
+		    <strong>Doi:</strong>
+		    
+	        </td>
+		<td>
+		    <strong>Title:</strong>
+		</td>
+		<td>
+		    <strong>Pub year:</strong>
+		</td>
+
+		<td>
+		    <strong>Pub type:</strong>
+		  </td>
+
+		  <td>
+		    <strong>Publisher:</strong>
+		  </td>
+
+		  <td>
+		    <strong>Container title:</strong>
+		  </td>
+
+		  <td>
+		    <strong>Volume:</strong>
+		  </td>
+
+		  <td>
+		    <strong>Issue:</strong>
+		  </td>
+
+		  <td>
+		    <strong>Page:</strong>
+		  </td>
+		  <td>
+		    <strong>Pub print year:</strong>
+		  </td>
+		  <td>
+		    <strong>Pub print montd:</strong>
+		  </td>
+		  <td>
+		    <strong>Pub print day:</strong>
+		  </td>
+		  <td>
+		    <strong>Pub ol year:</strong>
+		  </td>
+		  <td>
+		    <strong>Pub ol montd:</strong>
+		  </td>
+		  <td>
+		    <strong>Pub ol day:</strong>
+		  </td>
+		  <td>
+		    <strong>License:</strong>
+		</td>
+		<td>
+		    <strong>Referenced by count:</strong>
+		</td>
+		<td>
+		    <strong>Link:</strong>
+		</td>
+		<td>
+		    <strong>Url:</strong>
+		</td>
+		<td>
+		    <strong>Abstract:</strong>
+		</td>
+		<td>
+		    <strong>Status:</strong>
+		</td>
+		<td>
+		    <strong>Comment:</strong>
+		</td>
+		<td>
+		    <strong>References count:</strong>
+		</td>
+		<td>
+		    <strong>Journal issue:</strong>
+	        </td>
+            </tr>
+        </tdead>
+        <tbody>
+	<% @articles.each do |article| %>
+	  <td>
+	    <%= article.doi %>
+	  </td>
+	  <td>
+	    <%= link_to(article.title.html_safe, article) %>
+	  </td>
+
+	  <td>
+	    <%= article.pub_year %>
+	  </td>
+
+	  <td>
+	    <%= article.pub_type %>
+	  </td>
+
+	  <td>
+	    <%= article.publisher %>
+	  </td>
+
+	  <td>
+	    <%= article.container_title %>
+	  </td>
+
+	  <td>
+	    <%= article.volume %>
+	  </td>
+
+	  <td>
+	    <%= article.issue %>
+	  </td>
+
+	  <td>
+	    <%= article.page %>
+	  </td>
+
+	  <td>
+	    <%= article.pub_print_year %>
+	  </td>
+
+	  <td>
+	    <%= article.pub_print_month %>
+	  </td>
+	  <td>
+	    <%= article.pub_print_day %>
+	  </td>
+
+	  <td>
+	    <%= article.pub_ol_year %>
+	  </td>
+
+	  <td>
+	    <%= article.pub_ol_month %>
+	  </td>
+
+	  <td>
+	    <%= article.pub_ol_day %>
+	  </td>
+
+	  <td>
+	    <%= article.license %>
+	  </td>
+
+	  <td>
+	    <%= article.referenced_by_count %>
+	  </td>
+
+	  <td>
+	    <%= article.link %>
+	  </td>
+
+	  <td>
+	    <%= article.url %>
+	  </td>
+
+	  <td>
+	    <%= article.abstract %>
+	  </td>
+
+	  <td>
+	    <%= article.status %>
+	  </td>
+
+	  <td>
+	    <%= article.comment %>
+	  </td>
+
+	  <td>
+	    <%= article.references_count %>
+	  </td>
+
+	  <td>
+	    <%= article.journal_issue %>
+	  </td>
+
+	</tbody>
   <% end %>
 </div>
 
