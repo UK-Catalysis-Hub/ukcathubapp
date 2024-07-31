@@ -1,2 +1,0 @@
-class InstCtryStat < ApplicationRecord
-end
