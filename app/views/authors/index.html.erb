@@ -189,7 +189,7 @@
             </div>
             <div class="card-body p-0">
              <% if Author.publications_count.length() > 0 %>              
-              <% except ='authors.id not in (11, 15, 23, 22, 99, 111, 120, 134, 154, 171, 329)' %>
+              <% except ='authors.id not in (11, 15, 23, 22, 99, 111, 120, 134, 154, 171, 329, 112)' %>
               <%= render partial: 'authors/authors_top', locals: {authors: Author.publications_count.where(except).limit(10), count_name: "Publications" }%>
               <% end %>
             </div>
