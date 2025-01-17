@@ -3,27 +3,27 @@
   <div class="col-sm-12">
     <div class="card">
       <div class="card-header bg-light">
-        <h6 style= "margin:auto">Publications by Theme</h6>
+        <h6 style= "margin:auto">Themes</h6>
       </div>
       <div class="card-body p-0" >
         <div class = "row" >
           <div class="col-sm-6">
-    <% # replace model with view
-      themes_list = ListTheme.where("phase = 1").collect{|th|
-        [th.short, th.article_count]} %>
-      <%= pie_chart themes_list,  legend: "right", donut: true, title: 'Phase I (2013-2018)' %>        
+            <% # replace model with view
+              themes_list = ListTheme.where("phase = 1").collect{|th|
+                [th.short, th.article_count]} %>
+              <%= pie_chart themes_list, adapter: "google", donut: true,  title: 'Publicantions Phase I (2013-2018)', legend: "right"  %>
           </div>
           <div class="col-sm-6">
-    <% # replace model with view
-      themes_list = ListTheme.where("phase = 2").collect{|th|
-        [th.short, th.article_count]} %>
-      <%= pie_chart themes_list,  legend: "right", donut: true, title: 'Phase II (2019-2023)' %>
-      <p>
-      <%= link_to 'Download Data', {:action => "themes_count", :controller => "themes"}, :class => "btn btn-success btn-sm" %>
-      <%= link_to 'View Themes', themes_path, :class => "btn btn-success btn-sm" %>
-      <p>
+            <% # replace model with view
+              themes_list = ListTheme.where("phase = 2").collect{|th|
+                [th.short, th.article_count]} %>
+              <%= pie_chart themes_list,  adapter: "google", donut: true, title: 'Publicantions Phase II (2019-2023)', legend: "right" %>
           </div>
         </div>
+        <p>
+            <%= link_to 'Download Data', {:action => "themes_count", :controller => "themes"}, :class => "btn btn-success btn-sm" %>
+            <%= link_to 'View Themes', themes_path, :class => "btn btn-success btn-sm" %>
+        </p>
       </div>
     </div>
   </div>

@@ -75,9 +75,13 @@ end
 
 gem "devise", "~> 4.9"
 
+
 gem "chartkick", "~> 5.0"
 
+gem "google_charts", "~> 1.2"
+
 gem "scenic", "~> 1.7"
+
 
 gem "scenic_sqlite_adapter", "~> 0.1.0"
 
@@ -85,7 +89,7 @@ gem "forty_facets", "~> 0.2.1"
 
 gem "serrano", "~> 1.4"
 
-gem "google_charts", "~> 1.2"
+
 
 gem "will_paginate", "~> 4.0"
 
