@@ -74,7 +74,7 @@ class ArticlesController < ApplicationController
 
   # VERIFY records in CR
   def verify
-    VerifyCrossrefWorker.perform_async
+    VerifyCrossrefWorkerJob.perform_async
     respond_to do |format|
       flash[:notice] = 'verify process started'
       format.html { redirect_to action: "index" }
