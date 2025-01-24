@@ -40,4 +40,7 @@ class CrossrefPublication
       self.get_authors(article, pub_data)
     end
   end
+  # need to add all methods for parsing crossref data here
+  # |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+  # V  V  V  V  V  V  V  V  V  V  V  V  V  V  V  V
 end  #Class CrossrefPublication 
