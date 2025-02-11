@@ -349,6 +349,7 @@ class ArticlesController < ApplicationController
 
           if found_id != 0 then
             new_author.author_id = found_id
+            new_author.status = "verified"
           else
             # create a new researcher (author)
             new_researcher = Author.new(given_name: new_author.given_name,
@@ -425,6 +426,7 @@ class ArticlesController < ApplicationController
         .or(Author.where("last_name LIKE ?", "%" + like_name + "%"))
 
       found_id = 0
+      # If orcid matches or exact name match, no further verification needed
       authors_list.each { |researcher|
         if new_author.orcid !=nil and  researcher.orcid != nil \
            and researcher.orcid == new_author.orcid
