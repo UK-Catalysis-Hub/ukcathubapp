@@ -27,6 +27,9 @@
     <%=  "Researcher possible matches" %>
   <% else %>
     <%=  "Unique researcher match" %>
+    <% update_hash = {:id=>article_author.id, :status => 'verified'}
+      article_author.update!(update_hash)
+      %>
   <% end %>
   <table>
     <thead class="thead-light">
