@@ -303,6 +303,7 @@ class ArticlesController < ApplicationController
         puts "New article author assigned article id: " + new_art_author.article_id.to_s
         puts "8"*90
         
+        # Affiliations not parsed just adding CrAffiliations for later
         pub_auth_affis.each do |affi_line|
           if affi_line["article_author_id"] == temp_id
             affi_line["article_author_id"] = new_art_author.id

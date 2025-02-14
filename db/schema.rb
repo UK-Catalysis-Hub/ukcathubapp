@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_22_155230) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_14_184237) do
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
     t.string "add_02"
@@ -98,6 +98,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_22_155230) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "pdf_file"
+    t.string "graphic_abstract"
   end
 
   create_table "author_affiliations", force: :cascade do |t|
