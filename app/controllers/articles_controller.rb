@@ -87,6 +87,7 @@ class ArticlesController < ApplicationController
     #VerifyCrossrefWorker.perform_async
     csv_file = params[:file]
     @pub_rows = CSV.read(csv_file.path)
+    # load is dependent on CSV layout. shoul be more flexible
     @pub_rows.each do |pub_row|
       if pub_row[4] != 'doi' and pub_row[10] != nil
         p_doi = pub_row[4]
@@ -195,7 +196,7 @@ class ArticlesController < ApplicationController
         puts "*"*90
         puts "Getting authors for: " + @article.doi
         puts "*"*90
-        # try to get authors from crossref
+        # try to get authors from crossref only if there are no authors (upload error case)
         getAutData(@authors, @article.doi, @article.id)
       end      
       if @article.pub_year == nil then
@@ -283,6 +284,7 @@ class ArticlesController < ApplicationController
 	found_id = get_researcher_match(new_art_author)
         if found_id != 0 then
           an_author["author_id"] = found_id
+          an_author["status"] = "verified"
         else
           # create a new researcher (author)
           new_researcher = Author.new(given_name: new_art_author.given_name, last_name: new_art_author.last_name, orcid: new_art_author.orcid)
