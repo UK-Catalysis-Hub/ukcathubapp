@@ -86,7 +86,7 @@ class DatasetsController < ApplicationController
     @data_rows.each do |do_row|
       if do_row[3] != 'do_description' and do_row[7] != nil
         ds_id = do_row[5]
-        @dor = Dataset.find_by(dataset_location: ds_id)
+        @dor = Dataset.find_by(location: ds_id)
         art_id = do_row[1]
         art_doi = do_row[2]
         # add new do record
@@ -94,11 +94,11 @@ class DatasetsController < ApplicationController
           @dor = Dataset.new()
           @dor.description = do_row[3]
           @dor.doi = do_row[4]
-          @dor.location = do_row[5]
-          @dor.name = do_row[6]
-          @dor.startdate = do_row[7]
-          @dor.ds_type = do_row[8]
-          @dor.repository = do_row[9]
+          @dor.location = do_row[6]
+          @dor.name = do_row[7]
+          @dor.startdate = do_row[8]
+          @dor.ds_type = do_row[9]
+          @dor.repository = do_row[10]
           @dor.save()
         end
         # add article_dataset_link
