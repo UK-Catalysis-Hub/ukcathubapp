@@ -12,40 +12,8 @@
       <% articles.each do |article| %>
         <tr>
           <td>
-            <b>Title:</b> <%= link_to(article.title.html_safe, article) %> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>)
-            <br><b>Authors (<%= article.authors.count %>):</b>
-            <% author_links = article.article_authors.all
-               disp_names = ""
-               for auth in author_links
-                 pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
-                 pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
-                 pr_name += auth.author.last_name
-                 this_name = pr_name
-                 if auth.author.isap == true
-                   this_name = link_to(pr_name, auth.author)
-                 end
-                 if disp_names =="" then
-                   disp_names = this_name
-                 else
-                   disp_names += ', '.html_safe + this_name
-                 end
-               end %>
-            <%= disp_names.to_s.html_safe %>
-            <br><%= article.container_title.html_safe %>
-            <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
-            <% theme_links = article.article_themes.all
-              disp_themes = ""
-              for theme_lnk in theme_links
-                theme_name = theme_lnk.theme.short
-                theme_string = theme_lnk.theme.short + " ("+ theme_lnk.project_year.to_s() +")"
-                if disp_themes =="" then
-                  disp_themes = link_to(theme_string, theme_lnk.theme)
-                else
-                  disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
-                end
-              end
-             %>
-             <br><b>Themes: </b> <%= disp_themes.to_s.html_safe %>
+            <%= render partial: 'articles/publication_card', locals: {article: article }%>
+            <%= render partial: 'articles/publication_thumbnail', locals: {article: article }%>
           </td>
         </tr>
       <% end %>

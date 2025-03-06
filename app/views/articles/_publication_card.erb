@@ -1,0 +1,57 @@
+
+<div class="article">
+	<% author_links = article.article_authors[0..2]
+	  disp_names = ""
+	  for auth in author_links
+	    if auth.author.given_name != nil
+	      pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
+	      pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).gsub(' .',' ')
+	      pr_name += auth.author.last_name
+	      this_name = pr_name
+	      if auth.author.isap == true
+		this_name = link_to(pr_name, auth.author)
+	      end 
+	      if disp_names =="" then
+		disp_names = this_name
+	      else
+		disp_names += ', '.html_safe + this_name
+	      end
+	    end
+	  end 
+	  if article.article_authors.count > 3
+	    disp_names += ', et.al'.html_safe  +  ' (' + article.article_authors.count.to_s + ' Authors)'
+	  end
+	  %>
+	  <% theme_links = article.article_themes.all
+             disp_themes = ""
+             for theme_lnk in theme_links
+               theme_name = theme_lnk.theme.short
+               theme_string = theme_lnk.theme.short 
+               if disp_themes =="" then
+                 disp_themes = link_to(theme_string, theme_lnk.theme)
+               else
+                 disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
+               end
+             end
+          %>
+  <% if article.graphic_abstract .present? %>
+    <div style="display: flex;">
+      <div class="article-image" style="margin-right: 10px;">
+        <%= image_tag article.graphic_abstract, alt: article.title, style: "max-height: 100px;" %>
+      </div>
+      <div>
+        <b><%= link_to(article.title.html_safe, article) %> </b> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>) 
+        <b>Authors </b> <%= disp_names.to_s.html_safe %>
+        <b><%= article.pub_type %></b>
+        <b>Publisher:</b> <%= article.container_title %>
+        <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
+        <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
+      </div>
+    </div>
+  <% else %>
+    <h4><%= link_to(article.title.html_safe, article) %> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>)</h4>
+    <p><strong>Author(s):</strong> <%= article.authors %></p>
+    <p><strong>Summary:</strong></p>
+    <p><%= article.abstract %></p>
+  <% end %>
+
