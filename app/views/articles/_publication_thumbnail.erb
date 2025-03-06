@@ -1,38 +1,38 @@
 <!-- Show article thumbnail-->
 <% author_links = article.article_authors[0..2]
-	  disp_names = ""
-	  for auth in author_links
-	    if auth.author.given_name != nil
-	      pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
-	      pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).gsub(' .',' ')
-	      pr_name += auth.author.last_name
-	      this_name = pr_name
-	      if auth.author.isap == true
-		this_name = link_to(pr_name, auth.author)
-	      end 
-	      if disp_names =="" then
-		disp_names = this_name
-	      else
-		disp_names += ', '.html_safe + this_name
-	      end
-	    end
-	  end 
-	  if article.article_authors.count > 3
-	    disp_names += ', et.al'.html_safe  
-	  end
-	  %>
-	  <% theme_links = article.article_themes.all
-             disp_themes = ""
-             for theme_lnk in theme_links
-               theme_name = theme_lnk.theme.short
-               theme_string = theme_lnk.theme.short 
-               if disp_themes =="" then
-                 disp_themes = link_to(theme_string, theme_lnk.theme)
-               else
-                 disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
-               end
-             end
-          %>
+  disp_names = ""
+  for auth in author_links
+    if auth.author.given_name != nil
+      pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
+      pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).gsub(' .',' ')
+      pr_name += auth.author.last_name
+      this_name = pr_name
+      if auth.author.isap == true
+	this_name = link_to(pr_name, auth.author)
+      end 
+      if disp_names =="" then
+	disp_names = this_name
+      else
+	disp_names += ', '.html_safe + this_name
+      end
+    end
+  end 
+  if article.article_authors.count > 3
+    disp_names += ', et.al'.html_safe  
+  end
+%>
+  <% theme_links = article.article_themes.all
+     disp_themes = ""
+     for theme_lnk in theme_links
+       theme_name = theme_lnk.theme.short
+       theme_string = theme_lnk.theme.short 
+       if disp_themes =="" then
+         disp_themes = link_to(theme_string, theme_lnk.theme)
+       else
+         disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
+       end
+     end
+  %>
 
 
 <div class="col-md-4">
@@ -41,19 +41,19 @@
     <%= image_tag article.graphic_abstract, alt: article.title, style: "height: 200px; object-fit: cover;" %>
     <% end %>
     <div class="card-body">
-        <b><%= article.title.html_safe %> </b><br/>
-        <b>Authors   <%= '(' + article.article_authors.count.to_s + '):'%> </b>
-        <%= disp_names.to_s.html_safe %>
-        <b>Publisher:</b> <%= article.container_title %>
-        <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
-        <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="btn-group">
-            <p><%= link_to("View", article, :class => "btn btn-sm btn-outline-secondary", :type =>"button") %> </p>
-          </div>
-          <small class="text-muted"><%= article.doi %></small>
+      <b><%= article.title.html_safe %> </b><br/>
+      <b>Authors   <%= '(' + article.article_authors.count.to_s + '):'%> </b>
+      <%= disp_names.to_s.html_safe %>
+      <b>Publisher:</b> <%= article.container_title %>
+      <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
+      <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="btn-group">
+          <p><%= link_to("View", article, :class => "btn btn-sm btn-outline-secondary", :type =>"button") %> </p>
         </div>
+        <small class="text-muted"><%= article.doi %></small>
       </div>
     </div>
   </div>
+</div>
 
