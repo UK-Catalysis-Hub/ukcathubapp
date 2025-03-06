@@ -13,11 +13,21 @@
         <tr>
           <td>
             <%= render partial: 'articles/publication_card', locals: {article: article }%>
-            <%= render partial: 'articles/publication_thumbnail', locals: {article: article }%>
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
   <br>
+      
+  
+  <div class="container">
+    <div class="row">
+    <p>Articles (<%= articles.length() %>)</p>
+    <% articles.each_slice(3) do |group| %>
+      <% group.each do |item| %>
+        <%= render partial: 'articles/publication_thumbnail', locals: {article: item }%>
+      <% end %>
+    <% end %>
+    </div>
 </div>

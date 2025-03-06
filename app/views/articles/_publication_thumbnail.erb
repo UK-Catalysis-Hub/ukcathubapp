@@ -38,7 +38,7 @@
 <div class="col-md-4">
   <div class="card mb-4 box-shadow">
     <% if article.graphic_abstract .present? %>
-    <%= image_tag article.graphic_abstract, alt: article.title, style: "height: 200px; object-fit: cover;" %>
+    <%= image_tag article.graphic_abstract, alt: article.title, style: "height: 200px; object-fit: contain;" %>
     <% end %>
     <div class="card-body">
       <b><%= article.title.html_safe %> </b><br/>

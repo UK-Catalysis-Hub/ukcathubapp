@@ -36,22 +36,22 @@
           %>
   <% if article.graphic_abstract .present? %>
     <div style="display: flex;">
-      <div class="article-image" style="margin-right: 10px;">
-        <%= image_tag article.graphic_abstract, alt: article.title, style: "max-height: 100px;" %>
+      <div class="card box-shadow" style="width: 225px; height: 100px;">
+        <%= image_tag article.graphic_abstract, alt: article.title, style: "height: 100px; object-fit: contain;" %>
       </div>
       <div>
         <b><%= link_to(article.title.html_safe, article) %> </b> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>) 
         <b>Authors </b> <%= disp_names.to_s.html_safe %>
-        <b><%= article.pub_type %></b>
         <b>Publisher:</b> <%= article.container_title %>
         <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
         <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
       </div>
     </div>
   <% else %>
-    <h4><%= link_to(article.title.html_safe, article) %> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>)</h4>
-    <p><strong>Author(s):</strong> <%= article.authors %></p>
-    <p><strong>Summary:</strong></p>
-    <p><%= article.abstract %></p>
+    <b><%= link_to(article.title.html_safe, article) %> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>)</b>
+    <b>Authors </b> <%= disp_names.to_s.html_safe %>
+    <b>Publisher:</b> <%= article.container_title %>
+    <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
+    <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
   <% end %>
 
