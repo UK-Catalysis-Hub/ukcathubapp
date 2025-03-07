@@ -23,13 +23,13 @@
     </nav>
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        <%= render partial: 'articles/articles_list', locals: {articles: @theme.articles }%>
+        <%= render partial: 'articles/articles_list', locals: {articles: @articles }%>
       </div>
       <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-        <%= render partial: 'authors/authors_list', locals: {authors: @theme.get_authors }%>
+        <% #= render partial: 'authors/authors_list', locals: {authors: @authors }%>
       </div>
       <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-        <%= render partial: 'affiliations/affiliations_list', locals: {affiliations: @theme.get_affiliations }%>
+        <% #= render partial: 'affiliations/affiliations_list', locals: {affiliations: @theme.get_affiliations }%>
       </div>
     </div>
   </div>

@@ -8,6 +8,9 @@ class ThemesController < ApplicationController
 
   # GET /themes/1 or /themes/1.json
   def show
+    @theme = Theme.find(params[:id])
+    @articles = @theme.articles.paginate(page: params[:page], per_page: 10)
+    @authors = @theme.get_authors()
   end
 
   # GET /themes/new
