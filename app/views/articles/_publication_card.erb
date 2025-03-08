@@ -1,5 +1,5 @@
 
-<div class="article">
+
 	<% author_links = article.article_authors[0..2]
 	  disp_names = ""
 	  for auth in author_links
@@ -19,7 +19,7 @@
 	    end
 	  end 
 	  if article.article_authors.count > 3
-	    disp_names += ', et.al'.html_safe  +  ' (' + article.article_authors.count.to_s + ' Authors)'
+	    disp_names += ', et.al'.html_safe  
 	  end
 	  %>
 	  <% theme_links = article.article_themes.all
@@ -34,24 +34,20 @@
                end
              end
           %>
-  <% if article.graphic_abstract .present? %>
+          
+<div class="article">
     <div style="display: flex;">
-      <div class="card box-shadow" style="margin-right: 10px; width: 225px; height: 100px;">
+      <% if article.graphic_abstract .present? %>
+        <div class="card box-shadow" style="margin-right: 10px; width: 225px; height: 100px;">
         <%= image_tag article.graphic_abstract, alt: article.title, style: "height: 100px; max-width: 220px; object-fit: contain;" %>
-      </div>
+        </div>
+      <% end %>
       <div>
-        <b><%= link_to(article.title.html_safe, article) %> </b> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>) 
-        <b>Authors </b> <%= disp_names.to_s.html_safe %>
-        <b>Publisher:</b> <%= article.container_title %>
+        <b>Title:</b> <%= link_to(article.title.html_safe, article) %> <b>Year:</b> <%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>
+        <b>Authors (<%= article.authors.count %>):</b><%= disp_names.to_s.html_safe %>
+        <b>Journal:</b> <%= article.container_title %>
         <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
         <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
       </div>
     </div>
-  <% else %>
-    <b><%= link_to(article.title.html_safe, article) %> (<%= article.pub_ol_year == nil ? article.pub_print_year : article.pub_ol_year %>)</b>
-    <b>Authors </b> <%= disp_names.to_s.html_safe %>
-    <b>Publisher:</b> <%= article.container_title %>
-    <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
-    <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
-  <% end %>
-
+</div>
