@@ -121,8 +121,7 @@ $(document).ready(function() {
                 <div id="top_publishers" class="container">
                   <% theme_pubs = ListTheme.where("phase = 0").collect{|th|
 	          [th.name, th.article_count, th.id]} %>
-	      <br/>
-	      <br/>
+	      <br/><br/>
                   <table class="table table-sm table-striped table-bordered">
                     <thead class="thead-light">
                       <tr>
