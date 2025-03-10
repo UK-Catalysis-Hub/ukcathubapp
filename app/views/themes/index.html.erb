@@ -1,4 +1,14 @@
 <!--Browse themes-->
+<script>
+$(document).ready(function() {
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    // Redraw all charts when switching tabs
+    Chartkick.eachChart(function(chart) {
+      chart.redraw();
+    });
+  });
+});
+</script>
 <div class="rounded border-light bg-light container ">
   <div class="container">
     <h5>UK Catalysis Hub Themes</h5>
@@ -12,25 +22,143 @@
       </p>
     </div>
  </div>
+ 
+<p id="notice"><%= notice %></p>
 
 <div id="themes_list" class="container">
- <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
-   <li class="nav-item">
-     <button class="nav-link active" id="phase-ii-tab" data-bs-toggle="tab" data-bs-target="#phaseii" type="button" role="tab" aria-controls="phase " aria-selected="true">Themes Phase II (2019-2023)</button>
-   </li>
-   <li class="nav-item">
-     <button class="nav-link" id="phase-i-tab" data-bs-toggle="tab" data-bs-target="#phasei" type="button" role="tab" aria-controls="indicators" aria-selected="true">Themes Phase I (2013-2018)</button>
-   </li>
-   <li class="nav-item">
-     <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#nophase" type="button" role="tab" aria-controls="indicators" aria-selected="true">Collaborations, BAG, Other</button>
-   </li>
- </ul>
-  <p id="notice"><%= notice %></p>
+  <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" id="phase-ii-tab" data-bs-toggle="tab" data-bs-target="#phaseii" type="button" role="tab" aria-controls="phase " aria-selected="true">Themes Phase II (2019-2023)</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="phase-i-tab" data-bs-toggle="tab" data-bs-target="#phasei" type="button" role="tab" aria-controls="indicators" aria-selected="true">Themes Phase I (2013-2018)</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="nophase-tab" data-bs-toggle="tab" data-bs-target="#nophase" type="button" role="tab" aria-controls="indicators" aria-selected="true">Collaborations, BAG, Other</button>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="phaseii" role="tabpanel" aria-labelledby="phaseii-tab">
+            <div class = "row" >
+              <div class="col-sm-6">
+                <div id="theme_data" class="container">
+                  <% theme_pubs = ListTheme.where("phase = 2").collect{|th|
+	             [th.name, th.article_count, th.id]} %>
+	          <br/><br/>
+                  <table class="table table-sm table-striped table-bordered">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Theme</th>
+                        <th>Publications</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% theme_pubs.each do |tpl| %>
+                      <tr>
+                        <td>
+                          <%= link_to tpl[0], "/themes/"+tpl[2].to_s %>
+                        </td>
+                        <td class="text-right">
+                          <%= tpl[1] %>
+                        </td>
+                      </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <% # replace model with view (make it faster?)
+                   themes_list = ListTheme.where("phase = 2").collect{|th|
+	           [th.short, th.article_count]} %>
+                <%= pie_chart themes_list, legend: "right", donut: true, adapter: "google", height: "100%" %>
+              </div>
+            </div>
+    </div> <!--tab-pane -->
 
-<div class="tab-content" id="myTabContent">
-   <div class="tab-pane fade show active" id="phaseii" role="tabpanel" aria-labelledby="phaseii-tab">
-      <div class="col-sm-12">
-        <div class="card">
+    <div class="tab-pane fade" id="phasei" role="tabpanel" aria-labelledby="phasei-tab">
+            <div class = "row" >
+              <div class="col-sm-6">
+                <div id="theme_data" class="container">
+                  <% theme_pubs = ListTheme.where("phase = 1").collect{|th|
+	             [th.name, th.article_count, th.id]} %>
+	        <br/><br/>
+                  <table class="table table-sm table-striped table-bordered">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Theme</th>
+                        <th>Publications</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% theme_pubs.each do |tpl| %>
+                      <tr>
+                        <td>
+                          <%= link_to tpl[0], "/themes/"+tpl[2].to_s %>
+                        </td>
+                        <td class="text-right">
+                          <%= tpl[1] %>
+                        </td>
+                      </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-sm-6">
+               
+   	          <% 
+	            themes_list = ListTheme.where("phase = 1").collect{|th|
+	              [th.short, th.article_count]} %>
+  	          <%= pie_chart themes_list, legend: "right", donut: true, adapter: "google", height: "100%" %>
+              </div>
+            </div>
+    </div> <!--tab-pane -->
+
+    <div class="tab-pane fade" id="nophase" role="tabpanel" aria-labelledby="nophase-tab">
+            <div class = "row" >
+              <div class="col-sm-6">
+                <div id="top_publishers" class="container">
+                  <% theme_pubs = ListTheme.where("phase = 0").collect{|th|
+	          [th.name, th.article_count, th.id]} %>
+	      <br/>
+	      <br/>
+                  <table class="table table-sm table-striped table-bordered">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Theme</th>
+                        <th>Publications</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% theme_pubs.each do |tpl| %>
+                      <tr>
+                        <td>
+                          <%= link_to tpl[0], "/themes/"+tpl[2].to_s %>
+                        </td>
+                        <td class="text-right">
+                          <%= tpl[1] %>
+                        </td>
+                      </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-sm-6">
+	        <% # replace model with view
+	          themes_list = ListTheme.where("phase = 0").collect{|th|
+	          [th.short, th.article_count]} %>
+  	      <%= pie_chart themes_list,  legend: "right", donut: true, adapter: "google", height: "100%"  %>
+              </div>
+            </div>
+    </div> <!--tab-pane -->
+  </div> <!-- tabs content -->
+</div> <!-- themes list -->
+<div id="themes_list" class="container">
+          <div class="card-header bg-light">
+            <h6 style= "margin:auto">Phase II (2019-2023) Themes</h6>
+          </div>
           <div class="card-body p-0" >
             <div class = "row" >
               <div class="col-sm-6">
@@ -66,20 +194,14 @@
 	    <% # replace model with view
 	      themes_list = ListTheme.where("phase = 2").collect{|th|
 	        [th.short, th.article_count]} %>
-	      <%= pie_chart themes_list,  legend: "right", donut: true, adapter: "google" %>
-	      <p>
-	      <%= link_to 'Download Data', {:action => "themes_count", :controller => "themes"}, :class => "btn-success btn-sm" %>
-	      <p>
+	      <%= pie_chart themes_list,  legend: "right", donut: true, adapter: "google"  %>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div> <!--tab-pane -->
 
-    <div class="tab-pane fade" id="nophase" role="tabpanel" aria-labelledby="other-tab">
-      <div class="col-sm-12">
-        <div class="card">
+          <div class="card-header bg-light">
+            <h6 style= "margin:auto">Phase I (2013-2018) Themes</h6>
+          </div>
           <div class="card-body p-0" >
             <div class = "row" >
               <div class="col-sm-6">
@@ -115,19 +237,10 @@
 	      themes_list = ListTheme.where("phase = 1").collect{|th|
 	        [th.short, th.article_count]} %>
 	      <%= pie_chart themes_list,  legend: "right", donut: true, adapter: "google"  %>
-	      <p>
-	      <%= link_to 'Download Data', {:action => "themes_count", :controller => "themes"}, :class => "btn-success btn-sm" %>
-	      <p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div> <!--tab-pane -->
-
-    <div class="tab-pane fade" id="phasei" role="tabpanel" aria-labelledby="phasei-tab">
-      <div class="col-sm-12">
-        <div class="card">
+          
           <div class="card-header bg-light">
             <h6 style= "margin:auto">Collaborations, BAG, and other</h6>
           </div>
@@ -166,14 +279,9 @@
 	      themes_list = ListTheme.where("phase = 0").collect{|th|
 	        [th.short, th.article_count]} %>
 	      <%= pie_chart themes_list,  legend: "right", donut: true, adapter: "google"  %>
-	      <p>
-	      <%= link_to 'Download Data', {:action => "themes_count", :controller => "themes"}, :class => "btn-success btn-sm" %>
-	      <p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div> <!--tab-pane -->
 </div>
+
 
