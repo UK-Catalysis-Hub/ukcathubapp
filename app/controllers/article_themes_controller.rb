@@ -1,5 +1,6 @@
 class ArticleThemesController < ApplicationController
   before_action :set_article_theme, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /article_themes or /article_themes.json
   def index

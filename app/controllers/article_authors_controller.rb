@@ -1,5 +1,6 @@
 class ArticleAuthorsController < ApplicationController
   before_action :set_article_author, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /article_authors or /article_authors.json
   def index

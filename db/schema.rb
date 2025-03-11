@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_14_184237) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_11_174827) do
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
     t.string "add_02"
@@ -145,6 +145,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_14_184237) do
     t.datetime "startdate"
     t.string "ds_type"
     t.string "repository"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "sections", force: :cascade do |t|
+    t.string "obj_name"
+    t.string "name"
+    t.string "heading"
+    t.string "description"
+    t.boolean "visible"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

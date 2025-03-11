@@ -1,6 +1,7 @@
 class CrAffiliationsController < ApplicationController
   before_action :set_cr_affiliation, only: %i[ show edit update destroy ]
-
+  before_action :authenticate_user!
+  
   # GET /cr_affiliations or /cr_affiliations.json
   def index
     @cr_affiliations = CrAffiliation.all

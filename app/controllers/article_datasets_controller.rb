@@ -1,6 +1,6 @@
 class ArticleDatasetsController < ApplicationController
   before_action :set_article_dataset, only: %i[ show edit update destroy ]
-
+  before_action :authenticate_user!
   # GET /article_datasets or /article_datasets.json
   def index
     @article_datasets = ArticleDataset.all

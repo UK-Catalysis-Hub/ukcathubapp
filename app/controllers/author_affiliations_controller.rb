@@ -1,5 +1,6 @@
 class AuthorAffiliationsController < ApplicationController
   before_action :set_author_affiliation, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /author_affiliations or /author_affiliations.json
   def index
