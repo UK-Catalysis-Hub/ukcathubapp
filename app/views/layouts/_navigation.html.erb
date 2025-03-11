@@ -2,28 +2,49 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
   <div class = "container-fluid">
     <a class="navbar-brand" title="Publications Explorer" href="/">
-      <%= image_tag('ukchcdi_logo_sm.png',height: '40')%>
+      <%= image_tag('ukchcdi_logo_sm.png',height: '40') %>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    <% art_data = Section.where("obj_name='Articles'")[0]
+       aut_data = Section.where("obj_name='Authors'")[0]
+       affis_data = Section.where("obj_name='Affiliations'")[0]
+       themes_data = Section.where("obj_name='Themes'")[0]
+       do_data = Section.where("obj_name='Datasets'")[0]
+       %>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto nav-pills">
+        <% if art_data.visible %>
         <li class="<%= 'active' if current_page?(articles_path) %>">
-          <%= link_to 'Publications', {:controller => '/articles', :action => 'index'}, {:class => "nav-link", title: "View Publications"}%>
+          <%= link_to art_data.name, {:controller => '/articles', :action => 'index'}, {:class => "nav-link", title: "View Publications"}%>
         </li>
+        <% end %>
+        <% if aut_data.visible %>
         <li class="<%= 'active' if current_page?(authors_path) %>" >
           <%= link_to 'Researchers', {:controller => '/authors', :action => 'index'}, {:class => "nav-link", title: "View authors"} %>
         </li>
+        <% end %>
+        <% if affis_data.visible %>
         <li class="<%= 'active' if current_page?(affiliations_path) %>">
            <%= link_to 'Institutions', {:controller => '/affiliations', :action => 'index'}, {:class => "nav-link ", title: "View affiliations"} %>
         </li>
+        <% end %>
+        <% if themes_data.visible %>
         <li class="<%= 'active' if current_page?(themes_path) %>">
            <%= link_to 'Themes', {:controller => '/themes', :action => 'index'}, {:class => "nav-link ", title: "View experts"} %>
         </li>
+        <% end %>
+        <% if do_data.visible %>
         <li class="<%= 'active' if current_page?(datasets_path) %>">
           <%= link_to 'Data Objects', {:controller => '/datasets', :action => 'index'}, {:class => "nav-link ", title: "View datasets"} %>
         </li> 
+        <% end %>
+        <% if user_signed_in? %>
+        <li class="<%= 'active' if current_page?(datasets_path) %>">
+          <%= link_to 'Sections', {:controller => '/sections', :action => 'index'}, {:class => "nav-link ", title: "View sections"} %>
+        </li>
+        <% end %>
       </ul>
       <% if user_signed_in? %>
         <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
