@@ -10,7 +10,7 @@
     <% art_data = Section.where("obj_name='Articles'")[0]
        aut_data = Section.where("obj_name='Authors'")[0]
        affis_data = Section.where("obj_name='Affiliations'")[0]
-       themes_data = Section.where("obj_name='Themes'")[0]
+       theme_data = Section.where("obj_name='Themes'")[0]
        do_data = Section.where("obj_name='Datasets'")[0]
        %>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -30,7 +30,7 @@
            <%= link_to 'Institutions', {:controller => '/affiliations', :action => 'index'}, {:class => "nav-link ", title: "View affiliations"} %>
         </li>
         <% end %>
-        <% if themes_data.visible %>
+        <% if theme_data.visible %>
         <li class="<%= 'active' if current_page?(themes_path) %>">
            <%= link_to 'Themes', {:controller => '/themes', :action => 'index'}, {:class => "nav-link ", title: "View experts"} %>
         </li>

@@ -1,23 +1,32 @@
+<% home_data = Section.where("obj_name='Home'")[0] 
+   art_data = Section.where("obj_name='Articles'")[0]
+   aut_data = Section.where("obj_name='Authors'")[0]
+   affis_data = Section.where("obj_name='Affiliations'")[0]
+   theme_data = Section.where("obj_name='Themes'")[0]
+   do_data = Section.where("obj_name='Datasets'")[0]
+   %>
 <div class="container">
   <div class="rounded border-light bg-light ">
     <div class="container col-sm-8 col-8">
-        <h1>Catalysis Data Infrastructure (CDI) </h1>
-        <p>
-	      CDI indexes publications and data objects produced by UK Catalysis Hub researchers.
-         </p>
+        <h1><%= home_data.heading %> </h1>
+        <p><%= home_data.description.html_safe() %></p>
     </div>
   </div>
   <main role="main">
-    <%= render partial: 'home/quick_info'%>
+    <%= render partial: 'home/quick_info', locals: {do_data: do_data}%>
     <!--Publications-->
     <%= render partial: 'home/pubs_info'%>
     <!-- Researchers -->
     <%= render partial: 'home/rsrch_info'%>
     <!-- Affiliations -->
     <%= render partial: 'home/affil_info'%>
+    <% if theme_data.visible %>
     <!-- Publications per Theme -->
     <%= render partial: 'home/theme_info'%>
+    <% end %>
+    <% if do_data.visible %>
     <!-- Data Objects -->
     <%= render partial: 'home/dobs_info'%>
+    <% end %>
   </main>
 </div>
