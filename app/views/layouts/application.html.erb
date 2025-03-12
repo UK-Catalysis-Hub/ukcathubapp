@@ -15,7 +15,12 @@
 
   <body>
     <header>
-      <%= render 'layouts/navigation' %>
+      <!-- get data from section helper methods -->
+      <%= render partial: 'layouts/navigation', locals: {art_data: get_article_data,
+                                                         aut_data: get_author_data,
+                                                         affis_data: get_affiliation_data,
+                                                         do_data: get_do_data, 
+                                                         theme_data: get_theme_data } %>
     </header>
     <main role="main">
       <%= content_for?(:content) ? yield(:content) : yield %>
