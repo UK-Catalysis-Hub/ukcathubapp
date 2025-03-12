@@ -1,4 +1,7 @@
 <!-- Publications browse -->
+<% theme_data = Section.where("obj_name='Themes'")[0]
+   do_data = Section.where("obj_name='Datasets'")[0]
+   %>
  <div class="rounded border-light bg-light ">
     <div class="container">
         <h5>UK Catalysis Hub Publications</h5>
@@ -192,7 +195,7 @@
               <% @articles.each do |article| %>
                 <tr>
                   <td>
-                    <%= render partial: 'articles/publication_card', locals: {article: article }%>
+                    <%= render partial: 'articles/publication_card', locals: {article: article, theme_data: theme_data }%>
                   </td>
                 </tr>
               <% end %>
@@ -201,6 +204,8 @@
         </div>
         </div>
    </div>
+   
+   
    <div class="tab-pane fade" id="indicators" role="tabpanel" aria-labelledby="indicators-tab">
      <div class="row mb-3">
        <div class="col-sm-6 col-lg-7">
@@ -213,6 +218,7 @@
            </div>
          </div>
        </div>
+       <% if theme_data.visible %>
        <div class="col-sm-6 col-lg-5">
          <div class="card">
            <div class="card-header">
@@ -223,7 +229,9 @@
            </div>
          </div>
        </div>
+       <% end %>
      </div>
+     
      <div class="row mb-3">
        <div class="col-sm-12">
          <div class="card">
