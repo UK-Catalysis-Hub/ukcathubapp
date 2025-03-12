@@ -1,18 +1,12 @@
 <!-- Publications browse -->
-<% theme_data = Section.where("obj_name='Themes'")[0]
+<% art_data = Section.where("obj_name='Articles'")[0]
+   theme_data = Section.where("obj_name='Themes'")[0]
    do_data = Section.where("obj_name='Datasets'")[0]
    %>
  <div class="rounded border-light bg-light ">
     <div class="container">
-        <h5>UK Catalysis Hub Publications</h5>
-        <p>
-          <%= number_with_delimiter(Author.active.length()) %> researchers have 
-          collaborated in publishing <%= Article.active.count() %> papers supproted by UK Catalysis Hub
-        </p>
-        <ul>
-          <li>The publications tab all known UK Catalysis Hub publications.</li>
-          <li>The indicators tab shows statistics about the publications.</li>
-         </ul>
+        <h5><%= art_data.heading.html_safe %></h5>
+        <p><%= art_data.description.html_safe %></p>
     </div>
  </div>
  <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
