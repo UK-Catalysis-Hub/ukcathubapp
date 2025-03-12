@@ -1,12 +1,8 @@
 <!-- Publications browse -->
-<% art_data = Section.where("obj_name='Articles'")[0]
-   theme_data = Section.where("obj_name='Themes'")[0]
-   do_data = Section.where("obj_name='Datasets'")[0]
-   %>
  <div class="rounded border-light bg-light ">
     <div class="container">
-        <h5><%= art_data.heading.html_safe %></h5>
-        <p><%= art_data.description.html_safe %></p>
+        <h5><%= @art_data.heading.html_safe %></h5>
+        <p><%= @art_data.description.html_safe %></p>
     </div>
  </div>
  <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
@@ -189,7 +185,7 @@
               <% @articles.each do |article| %>
                 <tr>
                   <td>
-                    <%= render partial: 'articles/publication_card', locals: {article: article, theme_data: theme_data }%>
+                    <%= render partial: 'articles/publication_card', locals: {article: article, theme_data: @theme_data }%>
                   </td>
                 </tr>
               <% end %>
@@ -212,7 +208,7 @@
            </div>
          </div>
        </div>
-       <% if theme_data.visible %>
+       <% if @theme_data.visible %>
        <div class="col-sm-6 col-lg-5">
          <div class="card">
            <div class="card-header">
