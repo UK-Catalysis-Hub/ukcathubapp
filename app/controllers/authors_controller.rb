@@ -1,5 +1,6 @@
 class AuthorsController < ApplicationController
   before_action :set_author, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
 
   class AuthorsSearch < FortyFacets::FacetSearch
     model 'Author' # which model to search for

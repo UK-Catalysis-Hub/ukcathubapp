@@ -17,6 +17,7 @@ class DatasetsController < ApplicationController
   def index
     @search = DatasetSearch.new(params)
     @datasets = @search.result.paginate(:page => params[:page], :per_page => 10)
+    @do_data = Section.where("obj_name = 'Datasets'")[0] # get affilitions config data from controller
   end
 
   # GET /datasets/1 or /datasets/1.json

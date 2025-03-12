@@ -1,10 +1,12 @@
 <!-- Data objects browse -->
-<div class="rounded border-light bg-light ">
-    <div class="container">
-        <h5>Research Data Objects</h5>
-    </div>
- </div>
 <div class="container">
+  <div class="rounded border-light bg-light ">
+    <div class="container">
+        <h5><%= @do_data.heading.html_safe %></h5>
+        <p><%= @do_data.description.html_safe %></p>
+    </div>
+  </div>
+
   <ul class="nav nav-tabs" id="datasetsTab" role="tablist">
     <li class="nav-item">
       <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#browse" type="button" role="tab" aria-controls="browse" aria-selected="true">Data Objects</button>
