@@ -3,15 +3,10 @@
   <p id="notice"><%= notice %></p>
   <div class="rounded border-light bg-light ">
     <div class="container">
-        <h5> Researcher Authoring UK Catalysis Hub Publications</h5>
+    	<h5> <%= @author_data.heading.html_safe %> </h5>
         <p>
-          <%= number_with_delimiter(Author.active.length()) %> researchers have 
-          collaborated in publishing <%= Article.active.count() %> papers supproted by UK Catalysis Hub
+          <%= @author_data.description.html_safe  %> 
         </p>
-        <ul>
-          <li>The reserachers tab lists details of those researchers who have consented to being displayed.</li>
-          <li>The indicators tab shows statistics about the production of researchers.</li>
-         </ul>
     </div>
   </div>
   <br/>

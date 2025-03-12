@@ -1,6 +1,6 @@
 <div class="container">
   <% if @author.isap or user_signed_in? %>
-    <%= render partial: 'authors/author_details', locals: {author: @author} %>
+    <%= render partial: 'authors/author_details', locals: {author: @author, theme_data: @theme_data} %>
     <% if user_signed_in? %>
       <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
         <li class="nav-item">
@@ -29,7 +29,6 @@
     <div class="container">
         <p>
           <%= @author.given_name %> <%= @author.last_name %> 
-          
         </p>
         <ul>
           <li>The details for this author are not public.</li>

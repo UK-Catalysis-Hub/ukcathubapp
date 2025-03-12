@@ -37,6 +37,7 @@
     %>
     <%= art_list.html_safe %>
   </p>
+  <% if theme_data.visible %>
   <%
     expertise = []
     expertise_lnks = ""
@@ -70,5 +71,6 @@
       end
     end
   %>
+  <% end %>
   </div>
 </div>
