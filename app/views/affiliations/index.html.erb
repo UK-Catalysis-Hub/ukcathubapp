@@ -1,6 +1,7 @@
 <!--Affiliations index page -->
 <div class='container'>
-  <%= render 'affiliations_notice', affiliations: @affiliations %>
+  <% puts @affi_data.heading %>
+  <%= render 'affiliations_notice', affi_data: @affi_data %>
   <!--Tab control header-->
   <ul class="nav nav-tabs" id="browseTab" role="tablist">
      <li class="nav-item">

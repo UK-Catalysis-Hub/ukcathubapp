@@ -21,6 +21,7 @@ class AffiliationsController < ApplicationController
   def index
     @search = AffiliationSearch.new(params) # initializes search object from request params
     @affiliations = @search.result.paginate(:page => params[:page], :per_page => 10)
+    @affi_data = Section.where("obj_name = 'Affiliations'")[0] # get affilitions config data from controller
   end
 
   # GET /affiliations/1 or /affiliations/1.json

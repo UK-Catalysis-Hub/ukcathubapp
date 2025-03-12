@@ -32,12 +32,12 @@
         <% end %>
         <% if theme_data.visible %>
         <li class="<%= 'active' if current_page?(themes_path) %>">
-           <%= link_to 'Themes', {:controller => '/themes', :action => 'index'}, {:class => "nav-link ", title: "View experts"} %>
+           <%= link_to 'Themes', {:controller => '/themes', :action => 'index'}, {:class => "nav-link ", title: "View themes"} %>
         </li>
         <% end %>
         <% if do_data.visible %>
         <li class="<%= 'active' if current_page?(datasets_path) %>">
-          <%= link_to 'Data Objects', {:controller => '/datasets', :action => 'index'}, {:class => "nav-link ", title: "View datasets"} %>
+          <%= link_to 'Data Objects', {:controller => '/datasets', :action => 'index'}, {:class => "nav-link ", title: "View data objects"} %>
         </li> 
         <% end %>
         <% if user_signed_in? %>
