@@ -25,16 +25,17 @@
            <%= link_to affis_data.name, {:controller => '/affiliations', :action => 'index'}, {:class => "nav-link ", title: "View "+ affis_data.name} %>
         </li>
         <% end %>
+        <% if do_data.visible %>
+        <li class="<%= 'active' if current_page?(datasets_path) %>">
+          <%= link_to do_data.name, {:controller => '/datasets', :action => 'index'}, {:class => "nav-link ", title: "View " + do_data.name} %>
+        </li>
+        <% end %>
         <% if theme_data.visible %>
         <li class="<%= 'active' if current_page?(themes_path) %>">
            <%= link_to theme_data.name, {:controller => '/themes', :action => 'index'}, {:class => "nav-link ", title: "View " + theme_data.name} %>
         </li>
         <% end %>
-        <% if do_data.visible %>
-        <li class="<%= 'active' if current_page?(datasets_path) %>">
-          <%= link_to do_data.name, {:controller => '/datasets', :action => 'index'}, {:class => "nav-link ", title: "View " + do_data.name} %>
-        </li> 
-        <% end %>
+
         <% if user_signed_in? %>
         <li class="<%= 'active' if current_page?(datasets_path) %>">
           <%= link_to 'Sections', {:controller => '/sections', :action => 'index'}, {:class => "nav-link ", title: "View sections"} %>
