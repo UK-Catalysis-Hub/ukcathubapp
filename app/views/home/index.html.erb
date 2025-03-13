@@ -1,23 +1,18 @@
 <div class="container">
-  <div class="rounded border-light bg-light ">
-    <div class="container col-sm-8 col-8">
-        <h1><%= @home_data.heading %> </h1>
-        <p><%= @home_data.description.html_safe() %></p>
-    </div>
-  </div>
+  <%= render partial: 'layouts/index_notice', locals: {obj_data: get_home_section} %>
   <main role="main">
-    <%= render partial: 'home/quick_info', locals: {do_data: get_do_data}%>
+    <%= render partial: 'home/quick_info', locals: {do_data: get_do_section}%>
     <!--Publications-->
     <%= render partial: 'home/pubs_info'%>
     <!-- Researchers -->
     <%= render partial: 'home/rsrch_info'%>
     <!-- Affiliations -->
     <%= render partial: 'home/affil_info'%>
-    <% if @theme_data.visible %>
+    <% if get_theme_section.visible %>
     <!-- Publications per Theme -->
     <%= render partial: 'home/theme_info'%>
     <% end %>
-    <% if @do_data.visible %>
+    <% if get_do_section.visible %>
     <!-- Data Objects -->
     <%= render partial: 'home/dobs_info'%>
     <% end %>

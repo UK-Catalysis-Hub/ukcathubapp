@@ -10,29 +10,34 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto nav-pills">
-        <% if art_data.visible %>
+        <% if get_article_section.visible %>
         <li class="<%= 'active' if current_page?(articles_path) %>">
-          <%= link_to art_data.name, {:controller => '/articles', :action => 'index'}, {:class => "nav-link", title: "View "+ art_data.name}%>
+          <%= link_to get_article_section.name, {:controller => '/articles', :action => 'index'},
+                                                {:class => "nav-link", title: "View "+ get_article_section.name}%>
         </li>
         <% end %>
-        <% if aut_data.visible %>
+        <% if get_author_section.visible %>
         <li class="<%= 'active' if current_page?(authors_path) %>" >
-          <%= link_to aut_data.name, {:controller => '/authors', :action => 'index'}, {:class => "nav-link", title: "View "+ aut_data.name} %>
+          <%= link_to get_author_section.name, {:controller => '/authors', :action => 'index'},
+                                               {:class => "nav-link", title: "View "+ get_author_section.name} %>
         </li>
         <% end %>
-        <% if affis_data.visible %>
+        <% if get_affiliation_section.visible %>
         <li class="<%= 'active' if current_page?(affiliations_path) %>">
-           <%= link_to affis_data.name, {:controller => '/affiliations', :action => 'index'}, {:class => "nav-link ", title: "View "+ affis_data.name} %>
+           <%= link_to get_affiliation_section.name, {:controller => '/affiliations', :action => 'index'},
+                                                     {:class => "nav-link ", title: "View "+ get_affiliation_section.name} %>
         </li>
         <% end %>
-        <% if do_data.visible %>
+        <% if get_do_section.visible %>
         <li class="<%= 'active' if current_page?(datasets_path) %>">
-          <%= link_to do_data.name, {:controller => '/datasets', :action => 'index'}, {:class => "nav-link ", title: "View " + do_data.name} %>
+          <%= link_to get_do_section.name, {:controller => '/datasets', :action => 'index'},
+                                           {:class => "nav-link ", title: "View " + get_do_section.name} %>
         </li>
         <% end %>
-        <% if theme_data.visible %>
+        <% if get_theme_section.visible %>
         <li class="<%= 'active' if current_page?(themes_path) %>">
-           <%= link_to theme_data.name, {:controller => '/themes', :action => 'index'}, {:class => "nav-link ", title: "View " + theme_data.name} %>
+           <%= link_to get_theme_section.name, {:controller => '/themes', :action => 'index'},
+                                               {:class => "nav-link ", title: "View " + get_theme_section.name} %>
         </li>
         <% end %>
 

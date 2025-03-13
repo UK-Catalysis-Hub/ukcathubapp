@@ -19,12 +19,10 @@ class AuthorsController < ApplicationController
   def index
     @search = AuthorsSearch.new(params)# initializes search object from request params
     @authors = @search.result.isap.paginate(:page => params[:page], :per_page => 10)
-    @author_data = Section.where("obj_name = 'Authors'")[0] # get affilitions config data from controller
   end
 
   # GET /authors/1 or /authors/1.json
   def show
-    @theme_data = Section.where("obj_name = 'Themes'")[0] # get affilitions config data from controller
     @aut_articles = @author.articles.active
   end
 

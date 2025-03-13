@@ -47,7 +47,7 @@
         <b>Authors (<%= article.authors.count %>):</b><%= disp_names.to_s.html_safe %>
         <b>Journal:</b> <%= article.container_title %>
         <b>DOI: </b><%= article.doi %> <%= article.pub_type %>
-        <% if theme_data.visible %>
+        <% if get_theme_section.visible %>
         <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
         <% end %>
       </div>

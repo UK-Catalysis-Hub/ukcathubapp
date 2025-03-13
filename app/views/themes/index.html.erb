@@ -1,28 +1,5 @@
 <!--Browse themes-->
-<script>
-$(document).ready(function() {
-  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    // Redraw all charts when switching tabs
-    Chartkick.eachChart(function(chart) {
-      chart.redraw();
-    });
-  });
-});
-</script>
-<div class="rounded border-light bg-light container ">
-  <div class="container">
-    <h5>UK Catalysis Hub Themes</h5>
-      <p>
-        UK Catalysis Hub research activities are organised in <b> <%= Theme.where("phase != 0").count() %> themes
-	( <%= Theme.where("phase = 1").count() %> Phase I and <%= Theme.where("phase = 2").count() %> Phase II) </b>. 
-	The theme activities have produced <b><%= ListTheme.where("phase = 2").sum(:article_count) %> publications 
-	in phase II </b> and <b><%= ListTheme.where("phase = 1").sum(:article_count) %> publications in phase I</b>. 
-	Additionally, Non-project collaborations, Block Allocation Group Reseachers and Post-graduates have also been
-	supported, producing <%= ListTheme.where("phase = 0").sum(:article_count) %> publications.
-      </p>
-    </div>
- </div>
- 
+<%= render partial: 'layouts/index_notice', locals: {obj_data: get_theme_section} %> 
 <p id="notice"><%= notice %></p>
 
 <div id="themes_list" class="container">

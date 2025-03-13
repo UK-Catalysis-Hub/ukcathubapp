@@ -1,11 +1,6 @@
 <!-- Data objects browse -->
 <div class="container">
-  <div class="rounded border-light bg-light ">
-    <div class="container">
-        <h5><%= @do_data.heading.html_safe %></h5>
-        <p><%= @do_data.description.html_safe %></p>
-    </div>
-  </div>
+  <%= render partial: 'layouts/index_notice', locals: {obj_data: get_do_section} %>
 
   <ul class="nav nav-tabs" id="datasetsTab" role="tablist">
     <li class="nav-item">

@@ -1,7 +1,6 @@
 <!--Affiliations index page -->
 <div class='container'>
-  <% puts @affi_data.heading %>
-  <%= render 'affiliations_notice', affi_data: @affi_data %>
+  <%= render partial: 'layouts/index_notice', locals: {obj_data: get_affiliation_section} %>
   <!--Tab control header-->
   <ul class="nav nav-tabs" id="browseTab" role="tablist">
      <li class="nav-item">

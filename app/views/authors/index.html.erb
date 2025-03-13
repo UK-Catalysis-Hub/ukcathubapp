@@ -1,14 +1,7 @@
 <!-- Authors browse -->
 <div class="container">
   <p id="notice"><%= notice %></p>
-  <div class="rounded border-light bg-light ">
-    <div class="container">
-    	<h5> <%= @author_data.heading.html_safe %> </h5>
-        <p>
-          <%= @author_data.description.html_safe  %> 
-        </p>
-    </div>
-  </div>
+  <%= render partial: 'layouts/index_notice', locals: {obj_data: get_author_section} %>
   <br/>
 
   <ul class="nav nav-tabs" id="researchersTab" role="tablist">
@@ -163,7 +156,7 @@
           </div>
         </div>
       </div>
-            <div class="row px-1 my-3">
+      <div class="row px-1 my-3">
         <div class="col-sm-4">
           <div class="card">
             <div class="card-header">
@@ -202,8 +195,8 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-7 themed-grid-col">
+      <div class="row px-1 my-3">
+        <div class="col-sm-12 themed-grid-col">
           <div class="card">
             <div class="card-header">
               <h6 style= "margin:auto">Countries of oringin</h6>
@@ -225,8 +218,11 @@
               <%= geo_chart country_data %>
             </div>
           </div>
-        </div><!--col-sm-7-->
-        <div class="col-sm-5 themed-grid-col">
+        </div><!--col-sm-12-->
+      </div><!--row mb3 -->
+      <% if get_do_section.visible %>
+      <div class="row px-1 my-3">
+        <div class="col-sm-12 themed-grid-col">
           <div class="card">
             <div class="card-header">
               <h6 style= "margin:auto">Top data publishing researchers</h6>
@@ -237,8 +233,9 @@
               <% end %>
             </div>
           </div>
-        </div><!--col-sm-7-->
+        </div><!--col-sm-12-->
       </div><!--row mb3 -->
+      <% end %>
     </div> <!--end of indicators pane-->
     <% if user_signed_in? %>
     <div class="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="nav-actions-tab">

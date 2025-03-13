@@ -20,14 +20,10 @@ class ArticlesController < ApplicationController
   def index
     @search = ArticleSearch.new(params) # this initializes your search object from the request params
     @articles = @search.result.active.paginate(:page => params[:page], :per_page => 10)
-    @art_data = Section.where("obj_name='Articles'")[0]
-    @theme_data = Section.where("obj_name='Themes'")[0]
   end
 
   # GET /articles/1 or /articles/1.json
   def show
-    @theme_data = Section.where("obj_name='Themes'")[0]
-    @do_data = Section.where("obj_name='Datasets'")[0]
   end
 
   # GET /articles/new
