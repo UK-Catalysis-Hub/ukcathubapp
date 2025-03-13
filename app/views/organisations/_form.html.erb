@@ -1,0 +1,47 @@
+<%= form_with(model: organisation) do |form| %>
+  <% if organisation.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(organisation.errors.count, "error") %> prohibited this organisation from being saved:</h2>
+
+      <ul>
+        <% organisation.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :short_name, style: "display: block" %>
+    <%= form.text_field :short_name %>
+  </div>
+
+  <div>
+    <%= form.label :identifier, style: "display: block" %>
+    <%= form.text_field :identifier %>
+  </div>
+
+  <div>
+    <%= form.label :logo, style: "display: block" %>
+    <%= form.text_field :logo %>
+  </div>
+
+  <div>
+    <%= form.label :homepage, style: "display: block" %>
+    <%= form.text_field :homepage %>
+  </div>
+
+  <div>
+    <%= form.label :address_id, style: "display: block" %>
+    <%= form.number_field :address_id %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

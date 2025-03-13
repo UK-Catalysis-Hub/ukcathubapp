@@ -1,0 +1,62 @@
+<%= form_with(model: app_config) do |form| %>
+  <% if app_config.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(app_config.errors.count, "error") %> prohibited this app_config from being saved:</h2>
+
+      <ul>
+        <% app_config.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :broser_tab_name, style: "display: block" %>
+    <%= form.text_field :broser_tab_name %>
+  </div>
+
+  <div>
+    <%= form.label :favicon, style: "display: block" %>
+    <%= form.text_field :favicon %>
+  </div>
+
+  <div>
+    <%= form.label :logo, style: "display: block" %>
+    <%= form.text_field :logo %>
+  </div>
+
+  <div>
+    <%= form.label :organisation_id, style: "display: block" %>
+    <%= form.number_field :organisation_id %>
+  </div>
+
+  <div>
+    <%= form.label :contact_id, style: "display: block" %>
+    <%= form.number_field :contact_id %>
+  </div>
+
+  <div>
+    <%= form.label :contact_email, style: "display: block" %>
+    <%= form.text_field :contact_email %>
+  </div>
+
+  <div>
+    <%= form.label :award_list, style: "display: block" %>
+    <%= form.text_field :award_list %>
+  </div>
+
+  <div>
+    <%= form.label :synon_list, style: "display: block" %>
+    <%= form.text_field :synon_list %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

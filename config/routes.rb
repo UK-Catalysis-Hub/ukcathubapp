@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :app_configs
+  resources :organisations
   resources :sections
   devise_for :users
   

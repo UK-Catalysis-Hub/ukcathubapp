@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_11_174827) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_13_221606) do
   create_table "addresses", force: :cascade do |t|
     t.string "add_01"
     t.string "add_02"
@@ -32,6 +32,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_11_174827) do
     t.string "work_group"
     t.string "country"
     t.string "sector"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "app_configs", force: :cascade do |t|
+    t.string "title"
+    t.string "broser_tab_name"
+    t.string "favicon"
+    t.string "logo"
+    t.integer "organisation_id"
+    t.integer "contact_id"
+    t.string "contact_email"
+    t.string "award_list"
+    t.string "synon_list"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -145,6 +159,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_11_174827) do
     t.datetime "startdate"
     t.string "ds_type"
     t.string "repository"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "organisations", force: :cascade do |t|
+    t.string "name"
+    t.string "short_name"
+    t.string "identifier"
+    t.string "logo"
+    t.string "homepage"
+    t.integer "address_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

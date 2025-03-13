@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  broser_tab_name: MyString
+  favicon: MyString
+  logo: MyString
+  organisation_id: 1
+  contact_id: 1
+  contact_email: MyString
+  award_list: MyString
+  synon_list: MyString
+
+two:
+  title: MyString
+  broser_tab_name: MyString
+  favicon: MyString
+  logo: MyString
+  organisation_id: 1
+  contact_id: 1
+  contact_email: MyString
+  award_list: MyString
+  synon_list: MyString
