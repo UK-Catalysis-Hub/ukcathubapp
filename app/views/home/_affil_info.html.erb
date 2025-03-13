@@ -7,31 +7,11 @@
             </div>
             <div class="card-body p-0">
             <div class="row">
-	        <div class="col-sm-6 container" >
-	         <% aff_stats = InstCtryStat.all.order('inst_count desc')
-	            country_data = []
-	            aff_stats.each do |affsts|
-	                if affsts.country == "Peoples Republic of China" then
-	                     country_data.append(["China", affsts.inst_count])
-                    elsif affsts.country == "United States of America" then
-		                  country_data.append(["United States", affsts.inst_count])
-                    elsif affsts.country == "The Netherlands" then
-                          country_data.append(["Netherlands", affsts.inst_count])
-                    elsif affsts.country == "Republic of Moldova" then
-                          country_data.append(["MD", affsts.inst_count])
-                    elsif affsts.country == "Czech Republic" then
-                          country_data.append(["CZ", affsts.inst_count])
-                    else
-                        if affsts.country != "United Kingdom"
-                          country_data.append([affsts.country, affsts.inst_count])
-                        end
-                    end
-             end %>
-	        <%= render partial: 'affiliations/affiliation_map', locals:{country_data: country_data} %>
+	        <%= render partial: 'affiliations/affiliation_map', locals:{country_data: get_country_counts} %>
 	     </div>
 		    <div class="col-sm-6 container">
 		        <h6 style= "text-align: center;">Countries of origin</h6>
-		        <%= render partial: 'affiliations/affiliation_top', locals: {items: country_data[0..9], count_name: "Institutions"}%>
+		        <%= render partial: 'affiliations/affiliation_top', locals: {items: get_country_counts[0..9], count_name: "Institutions"}%>
 		        <p>
 		          <%= link_to 'Download Data', {:action => "ctry_affi_count", :controller => "affiliations"}, :class => "btn btn-success btn-sm" %>
 		          <%= link_to 'View Institutions', affiliations_path, :class => "btn btn-success btn-sm" %>
