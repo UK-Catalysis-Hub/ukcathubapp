@@ -15,7 +15,7 @@ class ArticleAuthorsControllerTest < ActionDispatch::IntegrationTest
     #    Validation failed: Author must exist, Article must exist 
     #    (ActiveRecord::RecordInvalid)
     # info from: https://stackoverflow.com/questions/9060014/
-    
+    sign_in users(:one)
     @article_author.author_id = authors(:one).id
     @article_author.article_id = articles(:one).id    
    

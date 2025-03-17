@@ -2,6 +2,7 @@ require "test_helper"
 
 class OrganisationsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in users(:one)
     @organisation = organisations(:one)
   end
 

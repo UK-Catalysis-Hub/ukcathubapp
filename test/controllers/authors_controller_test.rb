@@ -2,6 +2,7 @@ require "test_helper"
 
 class AuthorsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in users(:one)
     @author = authors(:one)
   end
 
@@ -29,7 +30,6 @@ class AuthorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    
     get edit_author_url(@author)
     assert_response :success
   end
@@ -43,7 +43,6 @@ class AuthorsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Author.count", -1) do
       delete author_url(@author)
     end
-
     assert_redirected_to authors_url
   end
 end

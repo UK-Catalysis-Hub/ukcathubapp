@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :app_configs
+  resources :app_configs, only: [:edit, :update]
   resources :organisations
   resources :sections
   devise_for :users

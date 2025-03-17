@@ -2,7 +2,12 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "Publications &middot; UK Catalysis Hub".html_safe %></title>
+     <% if AppConfig.first %>
+       <title><%= content_for?(:title) ? yield(:title) : AppConfig.first.browser_tab_name.html_safe %></title>
+    <% else %>
+      <title><%= content_for?(:title) ? yield(:title) : "Publications &middot; UK Catalysis Hub".html_safe %></title>  
+    <% end %>
+    
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Publications DB from UK Catalysis Hub" %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -10,7 +15,12 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
-    <%= favicon_link_tag asset_path('ukch_mini_logo.png') %>
+    <% if AppConfig.first and AppConfig.first.favicon_image.attached? %>
+      <%= favicon_link_tag rails_blob_path(AppConfig.first.favicon_image) %>
+    <% else %>
+      <%= favicon_link_tag asset_path('default_favicon.png') %>
+    <% end %>  
+
   </head>
 
   <body>

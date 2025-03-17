@@ -1,8 +1,16 @@
 <!-- Shared menu -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
   <div class = "container-fluid">
-    <a class="navbar-brand" title="Publications Explorer" href="/">
-      <%= image_tag('ukchcdi_logo_sm.png',height: '40') %>
+    <% if AppConfig.first %>
+      <a class="navbar-brand" title=<%= get_home_section.name %> href="/">
+    <% else %>
+      <a class="navbar-brand" title="Publications Explorer" href="/">
+    <% end %>
+      <% if AppConfig.first and AppConfig.first.navbar_image.attached? %>
+        <%= image_tag(rails_blob_path(AppConfig.first.navbar_image),height: '40') %>
+      <% else %>
+        <%= image_tag('default_logo.png',height: '40') %>
+      <% end %>  
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -42,8 +50,11 @@
         <% end %>
 
         <% if user_signed_in? %>
-        <li class="<%= 'active' if current_page?(datasets_path) %>">
+        <li class="<%= 'active' if current_page?(sections_path) %>">
           <%= link_to 'Sections', {:controller => '/sections', :action => 'index'}, {:class => "nav-link ", title: "View sections"} %>
+        </li>
+        <li class="<%= 'active' if current_page?(organisations_path) %>">
+          <%= link_to 'Organisations', {:controller => '/organisations', :action => 'index'}, {:class => "nav-link ", title: "View organisations"} %>
         </li>
         <% end %>
       </ul>

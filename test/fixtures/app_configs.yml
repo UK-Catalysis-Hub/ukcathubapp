@@ -2,9 +2,7 @@
 
 one:
   title: MyString
-  broser_tab_name: MyString
-  favicon: MyString
-  logo: MyString
+  browser_tab_name: MyString
   organisation_id: 1
   contact_id: 1
   contact_email: MyString
@@ -13,9 +11,7 @@ one:
 
 two:
   title: MyString
-  broser_tab_name: MyString
-  favicon: MyString
-  logo: MyString
+  browser_tab_name: MyString
   organisation_id: 1
   contact_id: 1
   contact_email: MyString

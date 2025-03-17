@@ -2,6 +2,7 @@ require "test_helper"
 
 class ThemesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in users(:one)
     @theme = themes(:one)
   end
 

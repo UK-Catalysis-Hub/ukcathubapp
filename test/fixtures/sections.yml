@@ -13,3 +13,24 @@ two:
   heading: MyString
   description: MyString
   visible: false
+
+theme_test:
+  obj_name: Themes
+  name: Themes
+  heading: ThemesHeading
+  description: ThemesDescription
+  visible: true
+
+dataset_test:
+  obj_name: Datasets
+  name: Dataset
+  heading: DatasetHeading
+  description: DatasetDescription
+  visible: true
+  
+article_test:
+  obj_name: Articles
+  name: Publications
+  heading: ArticlesHeading
+  description: ArticlesDescription
+  visible: true

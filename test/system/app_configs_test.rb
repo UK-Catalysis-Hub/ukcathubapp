@@ -15,11 +15,9 @@ class AppConfigsTest < ApplicationSystemTestCase
     click_on "New app config"
 
     fill_in "Award list", with: @app_config.award_list
-    fill_in "Broser tab name", with: @app_config.broser_tab_name
+    fill_in "Browser tab name", with: @app_config.browser_tab_name
     fill_in "Contact email", with: @app_config.contact_email
     fill_in "Contact", with: @app_config.contact_id
-    fill_in "Favicon", with: @app_config.favicon
-    fill_in "Logo", with: @app_config.logo
     fill_in "Organisation", with: @app_config.organisation_id
     fill_in "Synon list", with: @app_config.synon_list
     fill_in "Title", with: @app_config.title
@@ -34,11 +32,9 @@ class AppConfigsTest < ApplicationSystemTestCase
     click_on "Edit this app config", match: :first
 
     fill_in "Award list", with: @app_config.award_list
-    fill_in "Broser tab name", with: @app_config.broser_tab_name
+    fill_in "Browser tab name", with: @app_config.browser_tab_name
     fill_in "Contact email", with: @app_config.contact_email
     fill_in "Contact", with: @app_config.contact_id
-    fill_in "Favicon", with: @app_config.favicon
-    fill_in "Logo", with: @app_config.logo
     fill_in "Organisation", with: @app_config.organisation_id
     fill_in "Synon list", with: @app_config.synon_list
     fill_in "Title", with: @app_config.title
