@@ -6,6 +6,12 @@
 #
 one: 
  email: value1@server.com
+ confirmed_at: '2025-03-17 01:15'
+ confirmation_sent_at: '2025-03-17 01:15'
+ username: archivaldo
 #
 two: 
  email: value2@server.com
+ confirmed_at: '2025-03-17 01:15'
+ confirmation_sent_at: '2025-03-17 01:15'
+ username: archivaldo

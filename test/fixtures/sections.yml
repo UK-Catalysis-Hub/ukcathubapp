@@ -1,18 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  obj_name: MyString
-  name: MyString
-  heading: MyString
-  description: MyString
-  visible: false
-
-two:
-  obj_name: MyString
-  name: MyString
-  heading: MyString
-  description: MyString
-  visible: false
+  obj_name: one
+  name: Themes
+  heading: ThemesHeading
+  description: ThemesDescription
+  visible: true
 
 theme_test:
   obj_name: Themes
@@ -27,10 +20,31 @@ dataset_test:
   heading: DatasetHeading
   description: DatasetDescription
   visible: true
-  
+
 article_test:
   obj_name: Articles
   name: Publications
   heading: ArticlesHeading
   description: ArticlesDescription
+  visible: true
+
+home_test:
+  obj_name: Home
+  name: Home
+  heading: HomeHeading
+  description: HomeDescription
+  visible: true
+
+author_test:
+  obj_name: Authors
+  name: Researchers
+  heading: AuthorsHeading
+  description: AuthorsDescription
+  visible: true
+
+affiliation_test:
+  obj_name: Affiliations
+  name: Affiliations
+  heading: AffiliationsHeading
+  description: AffiliationsDescription
   visible: true

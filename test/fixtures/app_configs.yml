@@ -1,19 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  browser_tab_name: MyString
+  title: Unique
+  browser_tab_name: UniqueRecord
   organisation_id: 1
   contact_id: 1
-  contact_email: MyString
+  contact_email: MyStringEmail
   award_list: MyString
   synon_list: MyString
 
-two:
-  title: MyString
-  browser_tab_name: MyString
-  organisation_id: 1
-  contact_id: 1
-  contact_email: MyString
-  award_list: MyString
-  synon_list: MyString
