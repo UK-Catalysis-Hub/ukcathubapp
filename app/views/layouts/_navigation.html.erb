@@ -59,11 +59,15 @@
         <% end %>
       </ul>
       <% if user_signed_in? %>
-        <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
-          <li>Logged in as <strong><%= current_user.email %></strong></li>
-          <li><%= link_to 'Edit profile', edit_user_registration_path, :class => "btn btn-secondary btn-sm"  %></li>
-          <li><%= link_to "Logout", destroy_user_session_path, data: { "turbo-method": :delete }, :class => "btn btn-danger btn-sm"  %></li>
-        </ul>
+        <div class="dropdown flex-row flex-wrap ms-md-auto">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            User <%= current_user.username %>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><%= link_to 'Edit profile', edit_user_registration_path, :class => "dropdown-item" %></li>
+            <li><%= link_to 'Logout', destroy_user_session_path, data: { "turbo-method": :delete }, :class => "dropdown-item" %></li>
+          </ul>
+        </div>
       <% end %>
     </div>
   </div>
