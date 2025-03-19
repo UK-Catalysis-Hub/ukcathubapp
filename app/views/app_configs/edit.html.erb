@@ -1,19 +1,6 @@
 <div class="container">
-<h5>Editing app config</h5>
-
-<%= form_with model: @app_config, local: true  do |form| %>
-  <% if @app_config.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@app_config.errors.count, "error") %> prohibited this @app_config from being saved:</h2>
-
-      <ul>
-        <% @app_config.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  <h5>Editing app config</h5>
+  <%= form_with model: @app_config do |form| %>
   <div>
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title %>
@@ -63,5 +50,5 @@
     <%= form.submit %>
   </div>
   
-<% end %>
+  <% end %>
 </div>
