@@ -1,8 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  id: 1
   doi: '10.1039/c3cp52653d'
-  title: MyString
+  title: ArticleOne
   pub_year: 1
   pub_type: MyString
   publisher: MyString
@@ -27,8 +28,9 @@ one:
   journal_issue: MyString
 
 two:
+  id: 2
   doi: '10.1021/cs400683e'
-  title: MyString
+  title: ArticleTwo
   pub_year: 1
   pub_type: MyString
   publisher: MyString

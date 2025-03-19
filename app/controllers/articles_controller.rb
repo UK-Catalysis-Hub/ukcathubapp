@@ -101,18 +101,18 @@ class ArticlesController < ApplicationController
           @art = Article.new()
           @art.doi = p_doi
           getPubData(@art, @art.doi)
-          puts @art.doi
-          puts("\n*******************************************************")
-          puts("NOT IN DB DOI: " + @art.doi.to_s +  @art.title.to_s + " themes " + p_themes.to_s() )
-          puts("*******************************************************\n")
+          #puts @art.doi
+          #puts("\n*******************************************************")
+          #puts("NOT IN DB DOI: " + @art.doi.to_s +  @art.title.to_s + " themes " + p_themes.to_s() )
+          #puts("*******************************************************\n")
           if @art.container_title == nil
             @art.container_title = pub_row[15]
           end
           @art.save()
           
-          puts("\n*******************************************************")
-          puts("ADDED AS ID " + @art.id.to_s())
-          puts("*******************************************************\n")
+          #puts("\n*******************************************************")
+          #puts("ADDED AS ID " + @art.id.to_s())
+          #puts("*******************************************************\n")
           # add theme links
           p_themes.each do |theme_id|
             full_theme = Theme.find(theme_id)
@@ -172,7 +172,7 @@ class ArticlesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
-      puts "CALLED SET ARTICLE"
+      #puts "CALLED SET ARTICLE"
       # this is ok for an existing article
       @article = Article.find(params[:id])
       @authors = @article.article_authors
@@ -192,10 +192,12 @@ class ArticlesController < ApplicationController
            @article= @art
          end
       end
+
+      # puts @article.article_authors.count
       if @article.article_authors.count == 0 or @article.article_authors[0].last_name == nil
-        puts "*"*90
-        puts "Getting authors for: " + @article.doi
-        puts "*"*90
+        # puts "*"*90
+        # puts "Getting authors for: " + @article.doi
+        # puts "*"*90
         # try to get authors from crossref only if there are no authors (upload error case)
         getAutData(@authors, @article.doi, @article.id)
       end      
@@ -278,7 +280,7 @@ class ArticlesController < ApplicationController
         
         new_art_author = ArticleAuthor.new(an_author)
         
-        print_author(new_art_author)
+        #print_author(new_art_author)
         
         # check if the article author is in the researchers table
 	found_id = get_researcher_match(new_art_author)
@@ -363,7 +365,7 @@ class ArticlesController < ApplicationController
           end
 
           if new_author.save then
-            print_author(new_author)
+            #print_author(new_author)
             if art_author.keys.include?('affiliation')
               # get new affiliations and save them
               if art_author['affiliation'].count > 0 then

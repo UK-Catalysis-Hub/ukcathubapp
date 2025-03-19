@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  id: 1
   doi: MyString
   phase: 1
   collaboration: MyString
@@ -9,6 +10,7 @@ one:
   project_year: 1
 
 two:
+  id: 2
   doi: MyString
   phase: 1
   collaboration: MyString

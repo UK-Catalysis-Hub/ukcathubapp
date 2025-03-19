@@ -1,6 +1,5 @@
 class AppConfigsController < ApplicationController
-
-
+  before_action :authenticate_user!
   def edit
     @app_config = AppConfig.first || AppConfig.new
   end

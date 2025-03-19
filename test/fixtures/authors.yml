@@ -1,12 +1,14 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  id: 1
   last_name: MyString
   given_name: MyString
   orcid: MyString
   isap: false
 
 two:
+  id: 2
   last_name: MyString
   given_name: MyString
   orcid: MyString

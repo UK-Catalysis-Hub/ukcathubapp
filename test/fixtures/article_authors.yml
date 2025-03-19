@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  doi: MyString
+  doi: '10.1039/c3cp52653d'
   author_id: 1
   author_count: MyString
   author_order: 1
@@ -13,10 +13,10 @@ one:
   given_name: MyString
 
 two:
-  doi: MyString
-  author_id: 1
+  doi: '10.1039/c3cp52653d'
+  author_id: 2
   author_count: MyString
-  author_order: 1
+  author_order: 2
   status: MyString
   author_seq: MyString
   article_id: 1
