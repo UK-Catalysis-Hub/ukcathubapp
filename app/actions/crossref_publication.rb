@@ -3,12 +3,12 @@ class CrossrefPublication
   # verify article object agains CR record
   def self.verify_article(article)
     # get the article from crossref
-    puts "** Verifying this: " + article.title
+    puts "** 1 Verifying this: " + article.title
     digital_object_identifier = article.doi
     if digital_object_identifier != nil
       pub_data = XrefClient.getCRData(digital_object_identifier)
     else
-      puts "no crossref data, doi is null"
+      puts "2 No crossref data, doi is null"
     end
     # Thing that may change:
     #   Citation counts
@@ -36,8 +36,9 @@ class CrossrefPublication
   def self.change_in_authors(article, pub_data)
     if article.article_authors.count == 0 \
       or article.article_authors[0].last_name == nil
-      puts "article does not have authors"
-      self.get_authors(article, pub_data)
+      puts "3 article does not have authors"
+      # puts pub_data
+      #self.get_authors(article, pub_data) # this is not working need the get)authors method
     end
   end
   # need to add all methods for parsing crossref data here
