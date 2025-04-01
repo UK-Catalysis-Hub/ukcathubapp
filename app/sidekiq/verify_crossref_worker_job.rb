@@ -21,11 +21,14 @@ class VerifyCrossrefWorkerJob
         tmp_counter = 0
       else
         CrossrefPublication.verify_article(an_article)
+        an_article.updated_at = DateTime.now
+        an_article.save!() # changes update date to register the last time it was checked
+        puts "Saved article"
       end
-      #if tmp_counter > 50
-      #  puts "checked five more"
-      #  break
-      #end
+      if tmp_counter > 4
+        puts "checked five more"
+        break
+      end
     end
   end
 end

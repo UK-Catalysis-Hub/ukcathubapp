@@ -1,0 +1,5 @@
+Verify_Crossref:
+  # seconds Minutes Hours Days Months DayOfWeek
+  # cron: "0 0 * * 0"  # Runs weekly at midnight on Sunday
+  cron: "*/30 * * * * *" # schedule a job to run every 30 seconds (just to test it runs).
+  class: "VerifyCrossrefWorkerJob"

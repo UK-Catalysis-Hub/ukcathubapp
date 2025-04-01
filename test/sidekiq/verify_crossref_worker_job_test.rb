@@ -4,9 +4,9 @@ class VerifyCrossrefWorkerJobTest < ActiveSupport::TestCase
 
   test "job is enqueued successfully" do
     Sidekiq::Testing.inline!
-    worker = VerifyCrossrefWorkerJob.new
+    cr_worker = VerifyCrossrefWorkerJob.new
     assert_nothing_raised do
-      worker.perform()
+      cr_worker.perform()
     end
   end
 end

@@ -99,4 +99,5 @@ gem "will_paginate-bootstrap-style", "~> 0.3.0"
 gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git', :branch => 'update_rails'
 
 gem "sidekiq", "~> 7.2"
+gem "sidekiq-cron"
 
