@@ -7,7 +7,7 @@ class VerifyCrossrefWorkerJob
     puts 'verify all publications against CR records'
     date_from = Date.today + 1
     articles_list = Article.where("updated_at < ?", date_from)
-    puts "Articles to verify" + articles_list.length.to_s
+    puts "Articles to verify: " + articles_list.length.to_s
     tmp_counter = 0
     articles_list.each do |an_article|
       tmp_counter += 1
@@ -23,7 +23,7 @@ class VerifyCrossrefWorkerJob
         CrossrefPublication.verify_article(an_article)
         an_article.updated_at = DateTime.now
         an_article.save!() # changes update date to register the last time it was checked
-        puts "Saved article"
+        puts "Saved article " + an_article.id.to_s
       end
       if tmp_counter > 4
         puts "checked five more"

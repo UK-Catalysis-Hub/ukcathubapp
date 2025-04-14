@@ -223,15 +223,12 @@ class ArticlesController < ApplicationController
         author_list = article.authors.all
         disp_names = ""
         author_list.each do|auth|
-           pr_name = auth.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
-           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
-           pr_name += auth.last_name
-           this_name = pr_name
-           if disp_names == ""
-             disp_names =  + this_name
-           else
-             disp_names += ', ' + this_name
-           end
+           pr_name = auth.unicode_normalize(:nfd).gsub(/\p{M}/, '')
+           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}
+                            .sub(/\w+\z/, &:capitalize)
+                            .gsub(' .',' ')
+           this_name = pr_name + auth.last_name
+           disp_names = disp_names.empty? ? this_name : "#{disp_names}, #{this_name}"
         end
         bib_list.append({"title"=>article.title, "year"=>article.pub_year, "authors"=>disp_names,
                          "publisher" => article.container_title, "doi"=>article.doi, 

@@ -49,7 +49,7 @@ gem "bootsnap", require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mswin64]
+  gem "debug", platforms: %i[mri mswin64]
 end
 
 group :development do
@@ -96,7 +96,7 @@ gem "will_paginate", "~> 4.0"
 gem "will_paginate-bootstrap-style", "~> 0.3.0"
 
 # XRef gem for mapping crossref data to XDI
-gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git', :branch => 'update_rails'
+gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git', :branch => 'add_searches'
 
 gem "sidekiq", "~> 7.2"
 gem "sidekiq-cron"
