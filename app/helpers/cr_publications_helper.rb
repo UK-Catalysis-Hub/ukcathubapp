@@ -1,0 +1,2 @@
+module CrPublicationsHelper
+end

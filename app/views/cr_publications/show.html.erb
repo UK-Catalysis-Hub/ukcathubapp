@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @cr_publication %>
+
+<div>
+  <%= link_to "Edit this cr publication", edit_cr_publication_path(@cr_publication) %> |
+  <%= link_to "Back to cr publications", cr_publications_path %>
+
+  <%= button_to "Destroy this cr publication", @cr_publication, method: :delete %>
+</div>

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :cr_publications
   resources :app_configs, only: [:edit, :update, :create]
   resources :organisations
   resources :sections

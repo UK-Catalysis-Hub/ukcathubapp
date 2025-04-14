@@ -1,6 +1,6 @@
 class ThemesController < ApplicationController
   before_action :set_theme, only: %i[ show edit update destroy ]
-
+  before_action :authenticate_user!, except: [:index, :show]
   # GET /themes or /themes.json
   def index
     @themes = Theme.all

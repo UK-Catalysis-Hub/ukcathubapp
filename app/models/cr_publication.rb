@@ -1,0 +1,2 @@
+class CrPublication < ApplicationRecord
+end

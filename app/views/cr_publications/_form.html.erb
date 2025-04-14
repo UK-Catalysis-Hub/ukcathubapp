@@ -1,0 +1,57 @@
+<%= form_with(model: cr_publication) do |form| %>
+  <% if cr_publication.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(cr_publication.errors.count, "error") %> prohibited this cr_publication from being saved:</h2>
+
+      <ul>
+        <% cr_publication.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :authors, style: "display: block" %>
+    <%= form.text_field :authors %>
+  </div>
+
+  <div>
+    <%= form.label :pub_year, style: "display: block" %>
+    <%= form.number_field :pub_year %>
+  </div>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :doi, style: "display: block" %>
+    <%= form.text_field :doi %>
+  </div>
+
+  <div>
+    <%= form.label :awards, style: "display: block" %>
+    <%= form.text_field :awards %>
+  </div>
+
+  <div>
+    <%= form.label :affiliation, style: "display: block" %>
+    <%= form.text_field :affiliation %>
+  </div>
+
+  <div>
+    <%= form.label :themes, style: "display: block" %>
+    <%= form.text_field :themes %>
+  </div>
+
+  <div>
+    <%= form.label :status, style: "display: block" %>
+    <%= form.number_field :status %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

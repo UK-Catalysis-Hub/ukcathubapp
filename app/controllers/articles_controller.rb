@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
-  #before_action :authenticate_user!, except: [:index, :show, :bib_query, :arts_by_year_stats]
+  before_action :authenticate_user!, except: [:index, :show, :bib_query, :arts_by_year_stats]
   class ArticleSearch < FortyFacets::FacetSearch
     model 'Article' # which model to search for
     scope :active  # only return articles which are in the scope 'active'
