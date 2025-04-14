@@ -6,9 +6,10 @@ one:
   title: MyString
   doi: MyString
   awards: MyString
-  affiliation: MyString
+  xref_affi: MyString
   themes: MyString
   status: 1
+  note: MyString
 
 two:
   authors: MyString
@@ -16,6 +17,7 @@ two:
   title: MyString
   doi: MyString
   awards: MyString
-  affiliation: MyString
+  xref_affi: MyString
   themes: MyString
   status: 1
+  note: MyString

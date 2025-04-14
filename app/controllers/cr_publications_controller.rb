@@ -1,5 +1,6 @@
 class CrPublicationsController < ApplicationController
   before_action :set_cr_publication, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /cr_publications or /cr_publications.json
   def index
@@ -65,6 +66,6 @@ class CrPublicationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def cr_publication_params
-      params.require(:cr_publication).permit(:authors, :pub_year, :title, :doi, :awards, :affiliation, :themes, :status)
+      params.require(:cr_publication).permit(:authors, :pub_year, :title, :doi, :awards, :xref_affi, :themes, :status, :note)
     end
 end

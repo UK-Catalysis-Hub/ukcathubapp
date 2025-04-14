@@ -6,9 +6,10 @@ class CreateCrPublications < ActiveRecord::Migration[7.1]
       t.string :title
       t.string :doi
       t.string :awards
-      t.string :affiliation
+      t.string :xref_affi
       t.string :themes
       t.integer :status
+      t.string :note
 
       t.timestamps
     end

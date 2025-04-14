@@ -1,9 +1,14 @@
 class AppConfigsController < ApplicationController
   before_action :authenticate_user!
   def edit
-    @app_config = AppConfig.first || AppConfig.new
+    @app_config = AppConfig.first || AppConfig.new()
   end
 
+  def create
+    @app_config = AppConfig.first || AppConfig.new(app_config_params)
+    @app_config.save()
+  end
+  
   def update
     @app_config = AppConfig.first || AppConfig.new(app_config_params)
     if @app_config.update(app_config_params)
@@ -21,4 +26,6 @@ class AppConfigsController < ApplicationController
                                          :contact_id, :contact_email, :award_list, 
                                          :synon_list, :navbar_image, :favicon_image)
     end
+
+        
 end

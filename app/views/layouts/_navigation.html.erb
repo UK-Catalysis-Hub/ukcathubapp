@@ -50,16 +50,25 @@
         <% end %>
 
         <% if user_signed_in? %>
-        <li class="<%= 'active' if current_page?(sections_path) %>">
-          <%= link_to 'Sections', {:controller => '/sections', :action => 'index'}, {:class => "nav-link ", title: "View sections"} %>
-        </li>
-        <li class="<%= 'active' if current_page?(organisations_path) %>">
-          <%= link_to 'Organisations', {:controller => '/organisations', :action => 'index'}, {:class => "nav-link ", title: "View organisations"} %>
-        </li>
+
         <% end %>
       </ul>
       <% if user_signed_in? %>
-        <div class="dropdown flex-row flex-wrap ms-md-auto">
+         <div class="dropdown flex-row flex-wrap ms-md-auto">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Configuration
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <%= link_to "Application", edit_app_config_path(1), {:class => "nav-link ", title: "View sections"} %>
+            </li>
+            <li class="<%= 'active' if current_page?(sections_path) %>">  
+              <%= link_to 'Sections', {:controller => '/sections', :action => 'index'}, {:class => "nav-link ", title: "View sections"} %>
+            </li>
+            <li class="<%= 'active' if current_page?(organisations_path) %>">
+              <%= link_to 'Organisations', {:controller => '/organisations', :action => 'index'}, {:class => "nav-link ", title: "View organisations"} %>
+            </li>
+          </ul>
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             User <%= current_user.username %>
           </button>

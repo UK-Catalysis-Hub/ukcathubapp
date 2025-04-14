@@ -2,6 +2,7 @@ require "test_helper"
 
 class CrPublicationsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in users(:one)
     @cr_publication = cr_publications(:one)
   end
 
@@ -17,7 +18,7 @@ class CrPublicationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create cr_publication" do
     assert_difference("CrPublication.count") do
-      post cr_publications_url, params: { cr_publication: { affiliation: @cr_publication.affiliation, authors: @cr_publication.authors, awards: @cr_publication.awards, doi: @cr_publication.doi, pub_year: @cr_publication.pub_year, status: @cr_publication.status, themes: @cr_publication.themes, title: @cr_publication.title } }
+      post cr_publications_url, params: { cr_publication: { authors: @cr_publication.authors, awards: @cr_publication.awards, doi: @cr_publication.doi, note: @cr_publication.note, pub_year: @cr_publication.pub_year, status: @cr_publication.status, themes: @cr_publication.themes, title: @cr_publication.title, xref_affi: @cr_publication.xref_affi } }
     end
 
     assert_redirected_to cr_publication_url(CrPublication.last)
@@ -34,7 +35,7 @@ class CrPublicationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update cr_publication" do
-    patch cr_publication_url(@cr_publication), params: { cr_publication: { affiliation: @cr_publication.affiliation, authors: @cr_publication.authors, awards: @cr_publication.awards, doi: @cr_publication.doi, pub_year: @cr_publication.pub_year, status: @cr_publication.status, themes: @cr_publication.themes, title: @cr_publication.title } }
+    patch cr_publication_url(@cr_publication), params: { cr_publication: { authors: @cr_publication.authors, awards: @cr_publication.awards, doi: @cr_publication.doi, note: @cr_publication.note, pub_year: @cr_publication.pub_year, status: @cr_publication.status, themes: @cr_publication.themes, title: @cr_publication.title, xref_affi: @cr_publication.xref_affi } }
     assert_redirected_to cr_publication_url(@cr_publication)
   end
 

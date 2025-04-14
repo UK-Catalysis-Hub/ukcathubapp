@@ -1,14 +1,17 @@
-<p style="color: green"><%= notice %></p>
+<div class="container">
+  <p style="color: green"><%= notice %></p>
 
-<h1>Cr publications</h1>
+  <h1>Cr publications</h1>
 
-<div id="cr_publications">
-  <% @cr_publications.each do |cr_publication| %>
-    <%= render cr_publication %>
-    <p>
-      <%= link_to "Show this cr publication", cr_publication %>
-    </p>
-  <% end %>
+  <div id="cr_publications">
+    <% @cr_publications.each do |cr_publication| %>
+      <%= render cr_publication %>
+      <p>
+        <%= link_to "Show this cr publication", cr_publication %>
+      </p>
+    <% end %>
+  </div>
+
+  <%= link_to "New cr publication", new_cr_publication_path %>
+
 </div>
-
-<%= link_to "New cr publication", new_cr_publication_path %>
