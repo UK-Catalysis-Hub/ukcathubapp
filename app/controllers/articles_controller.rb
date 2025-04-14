@@ -223,7 +223,7 @@ class ArticlesController < ApplicationController
         author_list = article.authors.all
         disp_names = ""
         author_list.each do|auth|
-           pr_name = auth.unicode_normalize(:nfd).gsub(/\p{M}/, '')
+           pr_name = auth.given_name.unicode_normalize(:nfd).gsub(/\p{M}/, '')
            pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}
                             .sub(/\w+\z/, &:capitalize)
                             .gsub(' .',' ')
