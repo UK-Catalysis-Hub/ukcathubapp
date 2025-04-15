@@ -19,42 +19,47 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto nav-pills">
         <% if get_article_section.visible %>
-        <li class="<%= 'active' if current_page?(articles_path) %>">
+        <li class="<%= current_page?(articles_path) ?'nav nav-item' : 'nav-item' %>">
           <%= link_to get_article_section.name, {:controller => '/articles', :action => 'index'},
                                                 {:class => "nav-link", title: "View "+ get_article_section.name}%>
         </li>
         <% end %>
         <% if get_author_section.visible %>
-        <li class="<%= 'active' if current_page?(authors_path) %>" >
+        <li class="<%= current_page?(authors_path) ?'nav nav-item' : 'nav-item' %>" >
           <%= link_to get_author_section.name, {:controller => '/authors', :action => 'index'},
                                                {:class => "nav-link", title: "View "+ get_author_section.name} %>
         </li>
         <% end %>
         <% if get_affiliation_section.visible %>
-        <li class="<%= 'active' if current_page?(affiliations_path) %>">
+        <li class="<%= current_page?(affiliations_path)?'nav nav-item':'nav-item' %>">
            <%= link_to get_affiliation_section.name, {:controller => '/affiliations', :action => 'index'},
                                                      {:class => "nav-link ", title: "View "+ get_affiliation_section.name} %>
         </li>
         <% end %>
         <% if get_do_section.visible %>
-        <li class="<%= 'active' if current_page?(datasets_path) %>">
+        <li class="<%= current_page?(datasets_path) ?'nav nav-item':'nav-item'%>">
           <%= link_to get_do_section.name, {:controller => '/datasets', :action => 'index'},
                                            {:class => "nav-link ", title: "View " + get_do_section.name} %>
         </li>
         <% end %>
         <% if get_theme_section.visible %>
-        <li class="<%= 'active' if current_page?(themes_path) %>">
+        <li class="<%=  current_page?(themes_path)?'nav nav-item':'nav-item' %>">
            <%= link_to get_theme_section.name, {:controller => '/themes', :action => 'index'},
                                                {:class => "nav-link ", title: "View " + get_theme_section.name} %>
         </li>
         <% end %>
 
         <% if user_signed_in? %>
-
+          <li class= "<%= current_page?(cr_publications_path) ? 'nav nav-item' : 'nav-item'  %>" >
+            <%= link_to "New publications #{CrPublication.where('status=0').count()}", 
+                        {:controller => '/cr_publications', :action => 'index'}, 
+                        {:class => 'nav-link', title: "New publications (#{CrPublication.where('status=0').count()})"} %>
+          </li>
         <% end %>
       </ul>
       <% if user_signed_in? %>
          <div class="dropdown flex-row flex-wrap ms-md-auto">
+          <!-- dropdown for app configuration -->
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Configuration
           </button>
@@ -69,6 +74,7 @@
               <%= link_to 'Organisations', {:controller => '/organisations', :action => 'index'}, {:class => "nav-link ", title: "View organisations"} %>
             </li>
           </ul>
+          <!-- drop down for account -->
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             User <%= current_user.username %>
           </button>
