@@ -41,6 +41,39 @@ class CrossrefPublication
       #self.get_authors(article, pub_data) # this is not working need the get)authors method
     end
   end
+
+  def self.search_crossref()
+    # this list should come from configuration
+    ukch_awards = ["EP/R026939/1", "EP/R026815/1", "EP/R026645/1", "EP/R027129/1",
+                   "EP/M013219/1","EP/R026939", "EP/R026815", "EP/R026645",
+                   "EP/R027129", "EP/M013219","EP/K014706/2", "EP/K014668/1",
+                   "EP/K014854/1", "EP/K014714/1","EP/K014706", "EP/K014668",
+                   "EP/K014854", "EP/K014714"]
+    # calculate from_date and to_date, one month from last update until today
+    from_date = (Article.latest()[0].created_at - 30.days).to_s()[0,10]
+    to_date = DateTime.now().to_s()[0,10]
+    # if award list is empty then look for affiliations
+    found_articles = XrefClient.findPubsAward(ukch_awards, from_date, to_date)
+    found_articles.each do |an_article|
+      an_article[:status] = 0 # pending
+      # ignore if doi is in cr_publications
+      next if CrPublication.where("doi= '#{an_article[:doi]}'").exists?()
+      # if doi arxiv then add, set status = 2 (rejected), comment it is a preprint
+      if an_article[:doi].include?('rxiv') 
+        an_article[:status] = 2 # reject
+        an_article[:note] = "It's a preprint"
+      end
+      # if doi in DB already add, set status = 2 (rejected), comment alredy in DB
+      if Article.where("doi= '#{an_article[:doi]}'").exists?()
+        an_article[:status] = 2 # reject
+        an_article[:note] = "Already in DB"
+      end  
+      # add to cr_pubs
+      new_pub = CrPublication.new(an_article)
+      new_pub.save()
+    end
+  end
+
   # need to add all methods for parsing crossref data here
   # |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
   # V  V  V  V  V  V  V  V  V  V  V  V  V  V  V  V

@@ -264,6 +264,7 @@
                </div>
                <div class="col-sm-8">
                  <h6 style= "text-center">Most cited publications</h6>
+                 <%= render partial: 'articles/articles_referenced', locals: {articles: Article.most_cited.limit(5) }%>
                </div>
              </div>
            </div>

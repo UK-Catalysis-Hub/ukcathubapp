@@ -32,7 +32,7 @@
  }
  
  /*nav-link*/
- .nav-link:hover {
+ .nav-link:hover .nav-link.active .navbar-brand.active  {
    background-color: #abd19b;
    border-color: #abd19b;
  }

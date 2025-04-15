@@ -58,6 +58,15 @@ class CrPublicationsController < ApplicationController
     end
   end
 
+  def search_crosreff
+    SearchCrossrefWorkerJob.perform_async
+    respond_to do |format|
+      flash[:notice] = 'started search in the background'
+      format.html { redirect_to action: "index" }
+      format.json { head :no_content }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_cr_publication
