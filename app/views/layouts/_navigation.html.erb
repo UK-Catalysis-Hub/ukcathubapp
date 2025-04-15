@@ -19,41 +19,47 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto nav-pills">
         <% if get_article_section.visible %>
-        <li class="<%= current_page?(articles_path) ?'nav nav-item' : 'nav-item' %>">
+        <li class="nav-item">
           <%= link_to get_article_section.name, {:controller => '/articles', :action => 'index'},
-                                                {:class => "nav-link", title: "View "+ get_article_section.name}%>
+                                                {:class => controller_name == 'articles' ?'nav-link active' : 'nav-link',
+                                                 title: "View "+ get_article_section.name}%>
         </li>
         <% end %>
         <% if get_author_section.visible %>
-        <li class="<%= current_page?(authors_path) ?'nav nav-item' : 'nav-item' %>" >
+        <li class="nav-item" >
           <%= link_to get_author_section.name, {:controller => '/authors', :action => 'index'},
-                                               {:class => "nav-link", title: "View "+ get_author_section.name} %>
+                                               {:class => controller_name == 'authors' ?'nav-link active' : 'nav-link',
+                                                title: "View "+ get_author_section.name} %>
         </li>
         <% end %>
         <% if get_affiliation_section.visible %>
-        <li class="<%= current_page?(affiliations_path)?'nav nav-item':'nav-item' %>">
+        <li class="nav-item">
            <%= link_to get_affiliation_section.name, {:controller => '/affiliations', :action => 'index'},
-                                                     {:class => "nav-link ", title: "View "+ get_affiliation_section.name} %>
+                                                     {:class => controller_name == 'affiliations' ?'nav-link active' : 'nav-link',
+                                                      title: "View "+ get_affiliation_section.name} %>
         </li>
         <% end %>
         <% if get_do_section.visible %>
-        <li class="<%= current_page?(datasets_path) ?'nav nav-item':'nav-item'%>">
+        <li class="nav-item">
           <%= link_to get_do_section.name, {:controller => '/datasets', :action => 'index'},
-                                           {:class => "nav-link ", title: "View " + get_do_section.name} %>
+                                           {:class => controller_name == 'datasets' ?'nav-link active' : 'nav-link',
+                                            title: "View " + get_do_section.name} %>
         </li>
         <% end %>
         <% if get_theme_section.visible %>
-        <li class="<%=  current_page?(themes_path)?'nav nav-item':'nav-item' %>">
+        <li class="nav-item">
            <%= link_to get_theme_section.name, {:controller => '/themes', :action => 'index'},
-                                               {:class => "nav-link ", title: "View " + get_theme_section.name} %>
+                                               {:class => controller_name == 'themes' ?'nav-link active' : 'nav-link',
+                                                title: "View " + get_theme_section.name} %>
         </li>
         <% end %>
 
         <% if user_signed_in? %>
-          <li class= "<%= current_page?(cr_publications_path) ? 'nav nav-item' : 'nav-item'  %>" >
-            <%= link_to "New publications #{CrPublication.where('status=0').count()}", 
+          <li class= "nav-item" >
+            <%= link_to "New publications (#{CrPublication.where('status=0').count()})", 
                         {:controller => '/cr_publications', :action => 'index'}, 
-                        {:class => 'nav-link', title: "New publications (#{CrPublication.where('status=0').count()})"} %>
+                        {:class => controller_name == 'cr_publications' ?'nav-link active' : 'nav-link',
+                         title: "Publications found in crossref"} %>
           </li>
         <% end %>
       </ul>
