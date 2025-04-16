@@ -1,0 +1,67 @@
+<table class="table table-striped table-sm">
+    <thead class="thead-light">
+      <tr>
+        <th>
+          <strong>Authors:</strong>
+        </th>
+        <th>
+          <strong>Pub year:</strong>
+        </th>
+        <th>
+          <strong>Title:</strong>
+        </th>
+        <th>
+          <strong>Doi:</strong>
+        </th>
+        <th>
+          <strong>Awards:</strong>
+        </th>
+        <th>
+          <strong>Xref affi:</strong>
+        </th>
+        <th>
+          <strong>Themes:</strong>
+        </th>
+        <th>
+          <strong>Status:</strong>
+        </th>
+        <th>
+          <strong>Note:</strong>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    <% pubs_list.each do |cr_publication| %>
+      <tr>
+        <td>
+          <%= cr_publication.authors %>
+        </td>
+        <td>
+          <%= cr_publication.pub_year %>
+        </td>
+        <td>
+          <%= cr_publication.title %>
+        </td>
+        <td>
+          <%= cr_publication.doi %>
+        </td>
+        <td>
+          <%= cr_publication.awards %>
+        </td>
+        <td>
+          <%= cr_publication.xref_affi %>
+        </td>
+        <td>
+          <%= cr_publication.themes %>
+        </td>
+        <td>
+          <%= cr_publication.status %>
+        </td>
+        <td>
+          <%= cr_publication.note %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+

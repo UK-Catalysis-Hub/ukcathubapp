@@ -23,4 +23,12 @@ module SectionsHelper
   def get_home_section
     Section.where("obj_name='Home'")[0]
   end
+  
+  def get_new_pubs_section
+    new_pubs = Section.new()
+    new_pubs.obj_name = "cr_publications"
+    new_pubs.heading = "Publications from Crossref"
+    new_pubs.description = "<p>The tabs show publications found in crossref.</p> <ul><li>Pending ones can be assigned a theme and added to DB.</li><li>Rejected ones can be revised and added later</li></ul>"
+    new_pubs
+  end
 end

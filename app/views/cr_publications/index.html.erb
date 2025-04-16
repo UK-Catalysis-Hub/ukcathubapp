@@ -1,7 +1,31 @@
 <div class="container">
+  <% {}%>
+  <%= render partial: 'layouts/index_notice', locals: {obj_data: get_new_pubs_section} %>
   <p style="color: green"><%= notice %></p>
+  
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab" aria-controls="home" aria-selected="true">Review</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#added" type="button" role="tab" aria-controls="profile" aria-selected="false">Added</ button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#rejected" type="button" role="tab" aria-controls="messages" aria-selected="false">Rejected</button>
+    </li>
+  </ul>
 
-  <h1>Cr publications</h1>
+  <div class="tab-content">
+    <div class="tab-pane active" id="review" role="tabpanel" aria-labelledby="home-tab">
+      <%= render partial: 'cr_publications_list', locals: {pubs_list: get_pending}%>
+    </div>
+    <div class="tab-pane" id="added" role="tabpanel" aria-labelledby="profile-tab">
+      <%= render partial: 'cr_publications_list', locals: {pubs_list: get_added}%>
+    </div>
+    <div class="tab-pane" id="rejected" role="tabpanel" aria-labelledby="messages-tab">
+      <%= render partial: 'cr_publications_list', locals: {pubs_list: get_rejected}%>
+    </div>
+  </div>  
 
   <div id="cr_publications">
     <% @cr_publications.each do |cr_publication| %>
