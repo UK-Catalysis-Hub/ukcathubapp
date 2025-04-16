@@ -6,3 +6,6 @@ import { application } from "./application"
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import ThemeMapperController from "./theme_mapper_controller"
+application.register("theme-mapper", ThemeMapperController)
