@@ -11,12 +11,12 @@
 
   <p>
     <strong>Title:</strong>
-    <%= cr_publication.title %>
+    <%= cr_publication.title.html_safe %>
   </p>
 
   <p>
     <strong>Doi:</strong>
-    <%= cr_publication.doi %>
+    <%= link_to cr_publication.doi, "http://doi.org/#{cr_publication.doi}", target: "_blank", rel: "nofollow"  %>
   </p>
 
   <p>

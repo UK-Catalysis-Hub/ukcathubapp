@@ -2,32 +2,36 @@
     <thead class="thead-light">
       <tr>
         <th>
-          <strong>Authors:</strong>
+          <strong>Authors</strong>
         </th>
         <th>
-          <strong>Pub year:</strong>
+          <strong>Published</strong>
         </th>
         <th>
-          <strong>Title:</strong>
+          <strong>Title</strong>
         </th>
         <th>
-          <strong>Doi:</strong>
+          <strong>DOO</strong>
         </th>
         <th>
-          <strong>Awards:</strong>
+          <strong>Awards</strong>
         </th>
         <th>
-          <strong>Xref affi:</strong>
+          <strong>Xref affi</strong>
         </th>
         <th>
-          <strong>Themes:</strong>
+          <strong>Themes</strong>
         </th>
         <th>
-          <strong>Status:</strong>
+          <strong>Status</strong>
         </th>
         <th>
-          <strong>Note:</strong>
+          <strong>Note</strong>
         </th>
+        <th>
+          <strong>Cut Date</strong>
+        </th>
+        
       </tr>
     </thead>
     <tbody>
@@ -40,7 +44,7 @@
           <%= cr_publication.pub_year %>
         </td>
         <td>
-          <%= cr_publication.title %>
+          <%= link_to(cr_publication.title.html_safe, cr_publication) %>
         </td>
         <td>
           <%= cr_publication.doi %>
@@ -59,6 +63,9 @@
         </td>
         <td>
           <%= cr_publication.note %>
+        </td>
+        <td>
+          <%= cr_publication.cut_date %>
         </td>
       </tr>
   <% end %>

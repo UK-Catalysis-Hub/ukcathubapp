@@ -1,0 +1,59 @@
+<%= form_with(model: cr_publication) do |form| %>
+  <% if cr_publication.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(cr_publication.errors.count, "error") %> prohibited this cr_publication from being saved:</h2>
+
+      <ul>
+        <% cr_publication.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <p>
+    <strong>Authors:</strong>
+    <%= cr_publication.authors %>
+  </p>
+  <p>
+    <strong>Pub year:</strong>
+    <%= cr_publication.pub_year %>
+  </p>
+  <p>
+    <strong>Title:</strong>
+    <%= cr_publication.title.html_safe %>
+  </p>
+  <p>
+    <strong>Doi:</strong>
+    <%= link_to cr_publication.doi, "http://doi.org/#{cr_publication.doi}", target: "_blank", rel: "nofollow"  %>
+  </p>
+  <p>
+    <strong>Awards:</strong>
+    <%= cr_publication.awards %>
+  </p>
+  <p>
+    <strong>Xref affi:</strong>
+    <%= cr_publication.xref_affi %>
+  </p>
+  
+  <div>
+    <%= form.label :themes, style: "display: block" %>
+    <%= form.text_field :themes %>
+  </div>
+
+  <div>
+    <%= form.label :status, style: "display: block" %>
+    <%= form.number_field :status %>
+    <% status_array = {"Pending" => 0, "Add"=>  1, "Reject" => 2} %>
+    <%= form.select(:user_type_id, options_for_select(status_array), :selected => (form.number_field :status)) %>
+
+  </div>
+
+  <div>
+    <%= form.label :note, style: "display: block" %>
+    <%= form.text_field :note, :required => true %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
