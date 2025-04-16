@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   resources :cr_publications
+  post 'search_crosreff' => 'cr_publications#search_crosreff', as: :search_crosreff
+
   resources :app_configs, only: [:edit, :update, :create]
   resources :organisations
   resources :sections
