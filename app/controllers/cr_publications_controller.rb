@@ -75,6 +75,6 @@ class CrPublicationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def cr_publication_params
-      params.require(:cr_publication).permit(:authors, :pub_year, :title, :doi, :awards, :xref_affi, :themes, :status, :note)
+      params.require(:cr_publication).permit(:authors, :pub_year, :title, :doi, :awards, :xref_affi, :themes, :status, :note, :cut_date)
     end
 end

@@ -54,12 +54,13 @@ class CrossrefPublication
     to_date = DateTime.now().to_s()[0,10]
     # if award list is empty then look for affiliations
     found_articles = XrefClient.findPubsAward(ukch_awards, from_date, to_date)
-    found_articles.each do |an_article|
+
+    found_articles.each do |a_doi, an_article|
       an_article[:status] = 0 # pending
       # ignore if doi is in cr_publications
-      next if CrPublication.where("doi= '#{an_article[:doi]}'").exists?()
+      next if CrPublication.where("doi= '#{a_doi}'").exists?()
       # if doi arxiv then add, set status = 2 (rejected), comment it is a preprint
-      if an_article[:doi].include?('rxiv') 
+      if a_doi.include?('rxiv') 
         an_article[:status] = 2 # reject
         an_article[:note] = "It's a preprint"
       end
