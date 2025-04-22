@@ -11,33 +11,27 @@
     </div>
   <% end %>
   <p>
-    <strong>Authors:</strong>
-    <%= cr_publication.authors %>
+    <strong>Authors:</strong> <%= cr_publication.authors %>
   </p>
   <p>
-    <strong>Pub year:</strong>
-    <%= cr_publication.pub_year %>
+    <strong>Pub year:</strong> <%= cr_publication.pub_year %>
   </p>
   <p>
-    <strong>Title:</strong>
-    <%= cr_publication.title.html_safe %>
+    <strong>Title:</strong> <%= cr_publication.title.html_safe %>
   </p>
   <p>
     <strong>Doi:</strong>
     <%= link_to cr_publication.doi, "http://doi.org/#{cr_publication.doi}", target: "_blank", rel: "nofollow"  %>
   </p>
   <p>
-    <strong>Awards:</strong>
-    <%= cr_publication.awards %>
+    <strong>Awards:</strong> <%= cr_publication.awards %>
   </p>
   <p>
-    <strong>Xref affi:</strong>
-    <%= cr_publication.xref_affi %>
+    <strong>Xref affi:</strong> <%= cr_publication.xref_affi %>
   </p>
   
   <div>
-    <%= form.label :themes, style: "display: block" %>
-    <%= form.text_field :themes %>
+    <%= render 'themes/theme_select', selected_themes: {}, available_themes: Theme.all %>
   </div>
 
   <div>

@@ -1,0 +1,35 @@
+  <div class="row" id="theme-selector">  
+    <div class = "col-md-5">
+      <label>Available themes</label>
+    </div>
+    <div class = "col-md-2">
+    </div>
+    <div class = "col-md-5">
+      <label>Assigned themes</label>
+    </div>
+  </div>
+  <div class="row" id="theme-selector" data-controller='theme-mapper'>
+    <div class = "col-md-5">
+      <select id="available_themes" multiple>
+        <% available_themes.each do |theme| %>
+          <option value="<%= theme.id %>"><%= theme.name %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class = "col-md-2">
+      <!--<button type="button" class="btn btn-primary btn-lg" onclick="moveTheme('available_themes', 'assigned_themes')">→</button>-->
+      <button class="btn btn-primary btn-lg" data-action="click->theme-mapper#moveTheme" data-from="available_themes" data-to="assigned_themes">Add →</button>
+      <br/>
+      <!--<button type="button" class="btn btn-secondary btn-lg" onclick="moveTheme('assigned_themes', 'available_themes')">← Remove </button>-->
+      <button class="btn btn-primary btn-lg" data-action="click->theme-mapper#moveTheme" data-from="assigned_themes" data-to="available_themes">← Remove</button>
+    </div>
+    <div class = "col-md-5">
+      <select id="assigned_themes" name="theme_container[theme_type_ids][]" multiple>
+        <% selected_themes.each do |theme| %>
+          <option value="<%= theme.id %>"><%= theme.name %></option>
+        <% end %>
+      </select>
+    </div>  
+  </div>
+
+ 

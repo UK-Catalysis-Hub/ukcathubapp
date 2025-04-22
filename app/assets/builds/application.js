@@ -8312,8 +8312,28 @@ var hello_controller_default = class extends Controller {
   }
 };
 
+// app/javascript/controllers/theme_mapper_controller.js
+var theme_mapper_controller_default = class extends Controller {
+  connect() {
+    console.log("IssueMapperController is connected!");
+  }
+  moveTheme(event) {
+    console.log("move theme called!");
+    const fromList = this.element.querySelector(`#${event.target.dataset.from}`);
+    const toList = this.element.querySelector(`#${event.target.dataset.to}`);
+    Array.from(fromList.selectedOptions).forEach((option) => {
+      toList.appendChild(option);
+    });
+    this.validateSelection();
+  }
+  validateSelection() {
+    const assignedList = this.element.querySelector("#assigned_issues");
+  }
+};
+
 // app/javascript/controllers/index.js
 application.register("hello", hello_controller_default);
+application.register("theme-mapper", theme_mapper_controller_default);
 
 // node_modules/@popperjs/core/lib/index.js
 var lib_exports = {};
