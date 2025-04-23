@@ -31,14 +31,15 @@
   </p>
   
   <div>
+    <!-- The hidden field holds the list of IDs selected, id must be 'theme_ids' -->
     <%= form.hidden_field :themes, id: "theme_ids" %>
-    <%= render 'themes/theme_select', selected_themes: Theme.all.where("id = 1"), available_themes: Theme.all.where("id <> 1") %>
+    <%= render 'themes/theme_select', selected_themes: Theme.all.where("id in (#{cr_publication.themes})"), available_themes: Theme.all.where("not id in (#{cr_publication.themes})") %>
   </div>
 
   <div>
     <%= form.label :status, style: "display: block" %>
     <% status_array = {"Pending" => 0, "Add"=>  1, "Reject" => 2} %>
-    <%= form.select(:user_type_id, options_for_select(status_array), :selected => (form.number_field :status)) %>
+    <%= form.select(:status, options_for_select(status_array, cr_publication.status)) %>
   </div>
 
   <div>
