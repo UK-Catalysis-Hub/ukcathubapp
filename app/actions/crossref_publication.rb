@@ -50,11 +50,19 @@ class CrossrefPublication
                    "EP/K014854/1", "EP/K014714/1","EP/K014706", "EP/K014668",
                    "EP/K014854", "EP/K014714"]
     # calculate from_date and to_date, one month from last update until today
+    awards_list = AppConfig.first!.award_list
+    if awards_list.nil? or awards_list.length == 0
+      awards_list = ukch_awards
+    else
+      awards_list = awards_list.split(',').map(&:strip)
+    end
     from_date = (Article.latest()[0].created_at - 30.days).to_s()[0,10]
     to_date = DateTime.now().to_s()[0,10]
-    # if award list is empty then look for affiliations
-    found_articles = XrefClient.findPubsAward(ukch_awards, from_date, to_date)
-
+    # if award list is empty then look for affiliations?
+    found_articles = XrefClient.findPubsAward(awards_list, from_date, to_date)
+    #puts "*"*60
+    #puts "Articles from crossref #{found_articles.count()}"
+    #puts "*"*60
     found_articles.each do |a_doi, an_article|
       an_article[:status] = 0 # pending
       # ignore if doi is in cr_publications
