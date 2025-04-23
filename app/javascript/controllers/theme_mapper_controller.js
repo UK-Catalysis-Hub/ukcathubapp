@@ -1,9 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="theme-mapper"
-//export default class extends Controller {
-//  connect() {
-//  }
 export default class extends Controller {
   connect(){
     console.log("IssueMapperController is connected!");
@@ -17,11 +14,16 @@ export default class extends Controller {
       toList.appendChild(option);
     });
 
-    //this.validateSelection();
+    this.validateSelection();
   }
 
   validateSelection() {
-    const assignedList = this.element.querySelector('#assigned_issues');
+    console.log("Validating Selection")
+    const assignedList = this.element.querySelector('#assigned_themes');
+    const themesList = document.getElementById('theme_ids');
+    var selectedIds = Array.from(assignedList.options).map(option => option.value);
+    console.log(selectedIds.join(","));
+    themesList.value = selectedIds.join(","); 
     // const submitButton = this.element.querySelector('#submit_button');
     // submitButton.disabled = assignedList.options.length === 0;
   }

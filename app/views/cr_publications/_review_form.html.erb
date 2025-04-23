@@ -31,15 +31,14 @@
   </p>
   
   <div>
-    <%= render 'themes/theme_select', selected_themes: {}, available_themes: Theme.all %>
+    <%= form.hidden_field :themes, id: "theme_ids" %>
+    <%= render 'themes/theme_select', selected_themes: Theme.all.where("id = 1"), available_themes: Theme.all.where("id <> 1") %>
   </div>
 
   <div>
     <%= form.label :status, style: "display: block" %>
-    <%= form.number_field :status %>
     <% status_array = {"Pending" => 0, "Add"=>  1, "Reject" => 2} %>
     <%= form.select(:user_type_id, options_for_select(status_array), :selected => (form.number_field :status)) %>
-
   </div>
 
   <div>

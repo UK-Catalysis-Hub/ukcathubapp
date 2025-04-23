@@ -8327,7 +8327,12 @@ var theme_mapper_controller_default = class extends Controller {
     this.validateSelection();
   }
   validateSelection() {
-    const assignedList = this.element.querySelector("#assigned_issues");
+    console.log("Validating Selection");
+    const assignedList = this.element.querySelector("#assigned_themes");
+    const themesList = document.getElementById("theme_ids");
+    var selectedIds = Array.from(assignedList.options).map((option) => option.value);
+    console.log(selectedIds.join(","));
+    themesList.value = selectedIds.join(",");
   }
 };
 
