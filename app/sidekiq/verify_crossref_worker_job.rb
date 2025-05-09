@@ -25,8 +25,8 @@ class VerifyCrossrefWorkerJob
         an_article.save!() # changes update date to register the last time it was checked
         puts "Saved article " + an_article.id.to_s
       end
-      if tmp_counter > 4
-        puts "checked five more"
+      if tmp_counter > 20
+        puts "checked 20 more"
         break
       end
     end

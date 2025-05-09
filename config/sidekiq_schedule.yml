@@ -1,5 +1,16 @@
 Verify_Crossref:
+  # using fugit sintax
   # seconds Minutes Hours Days Months DayOfWeek
-  # cron: "0 0 * * 0"  # Runs weekly at midnight on Sunday
-  cron: "*/30 * * * * *" # schedule a job to run every 30 seconds (just to test it runs).
+  # cron: "0 0 * * 6"  # Runs weekly at midnight on Saturday
+  # cron: "0 9 * * sun%2" which can be read as "every other Sunday at 9am".
+  # cron:"0 5 * * mon#1"  # the first Monday of the month at 05:00
+  cron: '*/5 * * * *' # every five minutes for testing
+  #cron: "*/30 * * * * *" # schedule a job to run every 30 seconds (just to test it).
   class: "VerifyCrossrefWorkerJob"
+  
+Search_CR:
+  # cron: "0 1 * *  sun#1" #first sunday of the month at 1 AM
+  cron: '*/12 * * * *' # every 12 minutes ** OK for testing
+  class: "SearchCrossrefWorkerJob"
+  #in: 40s  # Runs immediately after restart ** does not work, need to verify
+  
