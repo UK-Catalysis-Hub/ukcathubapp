@@ -1,4 +1,5 @@
 class CrPublicationsController < ApplicationController
+  include ArticlesHelper
   before_action :set_cr_publication, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
 
@@ -39,6 +40,9 @@ class CrPublicationsController < ApplicationController
   def update
     respond_to do |format|
       if @cr_publication.update(cr_publication_params)
+        if @cr_publication.status == 1
+          add_article_by_doi(p_doi=@cr_publication.doi,p_themes = @cr_publication.themes.split(','))
+        end
         format.html { redirect_to @cr_publication, notice: "Cr publication was successfully updated." }
         format.json { render :show, status: :ok, location: @cr_publication }
       else
