@@ -18,7 +18,7 @@ Additional the collaboration in the Phycal Sciences Data Infrastructure (PSDI pr
 has also provided funding through EPSRC grants: EP/X032701/1, EP/X032663/1, and EP/W032252/1
 
 The app is currently being rewriten to facilitate its use as a community portal for PSDI
-[<img "https://github.com/scman1/ukcathubapp/blob/rewrite/public/cdi_logos.png">](https://resources.psdi.ac.uk/tool/fa4cf273-773f-48b3-aace-7aebdbc27306)
+[<img "https://github.com/UK-Catalysis-Hub/ukcathubapp/blob/rewrite/public/cdi_logos.png">](https://resources.psdi.ac.uk/tool/fa4cf273-773f-48b3-aace-7aebdbc27306)
 
 ## Development
 The prototype is designed using Ruby on Rails. It is intended to provide a
