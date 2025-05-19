@@ -629,8 +629,7 @@ __export(turbo_es2017_esm_exports, {
   visit: () => visit
 });
 (function(prototype) {
-  if (typeof prototype.requestSubmit == "function")
-    return;
+  if (typeof prototype.requestSubmit == "function") return;
   prototype.requestSubmit = function(submitter2) {
     if (submitter2) {
       validateSubmitter(submitter2, this);
@@ -666,8 +665,7 @@ function clickCaptured(event) {
   }
 }
 (function() {
-  if ("submitter" in Event.prototype)
-    return;
+  if ("submitter" in Event.prototype) return;
   let prototype = window.Event.prototype;
   if ("SubmitEvent" in window) {
     const prototypeOfSubmitEvent = window.SubmitEvent.prototype;
@@ -991,8 +989,7 @@ function uuid() {
 }
 function getAttribute(attributeName, ...elements2) {
   for (const value of elements2.map((element) => element?.getAttribute(attributeName))) {
-    if (typeof value == "string")
-      return value;
+    if (typeof value == "string") return value;
   }
   return null;
 }
@@ -1091,8 +1088,7 @@ function doesNotTargetIFrame(name) {
     return false;
   } else if (name) {
     for (const element of document.getElementsByName(name)) {
-      if (element instanceof HTMLIFrameElement)
-        return false;
+      if (element instanceof HTMLIFrameElement) return false;
     }
     return true;
   } else {
@@ -1429,8 +1425,7 @@ var FetchRequest = class {
       target: this.target
     });
     this.url = event.detail.url;
-    if (event.defaultPrevented)
-      await requestInterception;
+    if (event.defaultPrevented) await requestInterception;
     return event;
   }
   #willDelegateErrorHandling(error2) {
@@ -1458,10 +1453,8 @@ function buildResourceAndBody(resource, method, requestBody, enctype) {
 function entriesExcludingFiles(requestBody) {
   const entries = [];
   for (const [name, value] of requestBody) {
-    if (value instanceof File)
-      continue;
-    else
-      entries.push([name, value]);
+    if (value instanceof File) continue;
+    else entries.push([name, value]);
   }
   return entries;
 }
@@ -1540,8 +1533,7 @@ var PrefetchCache = class {
     this.#prefetched = { url, request, expire: new Date((/* @__PURE__ */ new Date()).getTime() + ttl) };
   }
   clear() {
-    if (this.#prefetchTimeout)
-      clearTimeout(this.#prefetchTimeout);
+    if (this.#prefetchTimeout) clearTimeout(this.#prefetchTimeout);
     this.#prefetched = null;
   }
 };
@@ -1633,8 +1625,7 @@ var FormSubmission = class _FormSubmission {
   }
   requestStarted(_request) {
     this.state = FormSubmissionState.waiting;
-    if (this.submitter)
-      config.forms.submitter.beforeSubmit(this.submitter);
+    if (this.submitter) config.forms.submitter.beforeSubmit(this.submitter);
     this.setSubmitsWith();
     markAsBusy(this.formElement);
     dispatch("turbo:submit-start", {
@@ -1672,8 +1663,7 @@ var FormSubmission = class _FormSubmission {
   }
   requestFinished(_request) {
     this.state = FormSubmissionState.stopped;
-    if (this.submitter)
-      config.forms.submitter.afterSubmit(this.submitter);
+    if (this.submitter) config.forms.submitter.afterSubmit(this.submitter);
     this.resetSubmitterText();
     clearBusyState(this.formElement);
     dispatch("turbo:submit-end", {
@@ -1684,8 +1674,7 @@ var FormSubmission = class _FormSubmission {
   }
   // Private
   setSubmitsWith() {
-    if (!this.submitter || !this.submitsWith)
-      return;
+    if (!this.submitter || !this.submitsWith) return;
     if (this.submitter.matches("button")) {
       this.originalSubmitText = this.submitter.innerHTML;
       this.submitter.innerHTML = this.submitsWith;
@@ -1696,8 +1685,7 @@ var FormSubmission = class _FormSubmission {
     }
   }
   resetSubmitterText() {
-    if (!this.submitter || !this.originalSubmitText)
-      return;
+    if (!this.submitter || !this.originalSubmitText) return;
     if (this.submitter.matches("button")) {
       this.submitter.innerHTML = this.originalSubmitText;
     } else if (this.submitter.matches("input")) {
@@ -1904,8 +1892,7 @@ var View = class {
         const renderInterception = new Promise((resolve2) => this.#resolveInterceptionPromise = resolve2);
         const options = { resume: this.#resolveInterceptionPromise, render: this.renderer.renderElement, renderMethod: this.renderer.renderMethod };
         const immediateRender = this.delegate.allowsImmediateRender(snapshot, options);
-        if (!immediateRender)
-          await renderInterception;
+        if (!immediateRender) await renderInterception;
         await this.renderSnapshot(renderer);
         this.delegate.viewRenderedSnapshot(snapshot, isPreview, this.renderer.renderMethod);
         this.delegate.preloadOnLoadLinksForView(this.element);
@@ -2067,20 +2054,15 @@ var FormLinkClickObserver = class {
     form.setAttribute("action", action.href);
     form.setAttribute("hidden", "");
     const method = link.getAttribute("data-turbo-method");
-    if (method)
-      form.setAttribute("method", method);
+    if (method) form.setAttribute("method", method);
     const turboFrame = link.getAttribute("data-turbo-frame");
-    if (turboFrame)
-      form.setAttribute("data-turbo-frame", turboFrame);
+    if (turboFrame) form.setAttribute("data-turbo-frame", turboFrame);
     const turboAction = getVisitAction(link);
-    if (turboAction)
-      form.setAttribute("data-turbo-action", turboAction);
+    if (turboAction) form.setAttribute("data-turbo-action", turboAction);
     const turboConfirm = link.getAttribute("data-turbo-confirm");
-    if (turboConfirm)
-      form.setAttribute("data-turbo-confirm", turboConfirm);
+    if (turboConfirm) form.setAttribute("data-turbo-confirm", turboConfirm);
     const turboStream = link.hasAttribute("data-turbo-stream");
-    if (turboStream)
-      form.setAttribute("data-turbo-stream", "");
+    if (turboStream) form.setAttribute("data-turbo-stream", "");
     this.delegate.submittedFormLinkToLocation(link, location2, form);
     document.body.appendChild(form);
     form.addEventListener("turbo:submit-end", () => form.remove(), { once: true });
@@ -2183,8 +2165,7 @@ var Renderer = class {
   }
   // Bardo delegate
   enteringBardo(currentPermanentElement) {
-    if (this.#activeElement)
-      return;
+    if (this.#activeElement) return;
     if (currentPermanentElement.contains(this.currentSnapshot.activeElement)) {
       this.#activeElement = this.currentSnapshot.activeElement;
     }
@@ -2346,8 +2327,7 @@ var Idiomorph = function() {
     return childNodes.slice(index2, childNodes.length - rightMargin);
   }
   function saveAndRestoreFocus(ctx, fn2) {
-    if (!ctx.config.restoreFocus)
-      return fn2();
+    if (!ctx.config.restoreFocus) return fn2();
     let activeElement = (
       /** @type {HTMLInputElement|HTMLTextAreaElement|null} */
       document.activeElement
@@ -2418,8 +2398,7 @@ var Idiomorph = function() {
       }
     }
     function createNode(oldParent, newChild, insertionPoint, ctx) {
-      if (ctx.callbacks.beforeNodeAdded(newChild) === false)
-        return null;
+      if (ctx.callbacks.beforeNodeAdded(newChild) === false) return null;
       if (ctx.idMap.has(newChild)) {
         const newEmptyChild = document.createElement(
           /** @type {Element} */
@@ -2460,8 +2439,7 @@ var Idiomorph = function() {
               softMatch = void 0;
             }
           }
-          if (cursor.contains(document.activeElement))
-            break;
+          if (cursor.contains(document.activeElement)) break;
           cursor = cursor.nextSibling;
         }
         return softMatch || null;
@@ -2469,8 +2447,7 @@ var Idiomorph = function() {
       function isIdSetMatch(ctx, oldNode, newNode) {
         let oldSet = ctx.idMap.get(oldNode);
         let newSet = ctx.idMap.get(newNode);
-        if (!newSet || !oldSet)
-          return false;
+        if (!newSet || !oldSet) return false;
         for (const id of oldSet) {
           if (newSet.has(id)) {
             return true;
@@ -2498,8 +2475,7 @@ var Idiomorph = function() {
       if (ctx.idMap.has(node)) {
         moveBefore(ctx.pantry, node, null);
       } else {
-        if (ctx.callbacks.beforeNodeRemoved(node) === false)
-          return;
+        if (ctx.callbacks.beforeNodeRemoved(node) === false) return;
         node.parentNode?.removeChild(node);
         ctx.callbacks.afterNodeRemoved(node);
       }
@@ -2558,8 +2534,7 @@ var Idiomorph = function() {
       if (ctx.callbacks.beforeNodeMorphed(oldNode, newContent) === false) {
         return oldNode;
       }
-      if (oldNode instanceof HTMLHeadElement && ctx.head.ignore)
-        ;
+      if (oldNode instanceof HTMLHeadElement && ctx.head.ignore) ;
       else if (oldNode instanceof HTMLHeadElement && ctx.head.style !== "morph") {
         handleHeadElement(
           oldNode,
@@ -2599,8 +2574,7 @@ var Idiomorph = function() {
         }
         for (let i = oldAttributes.length - 1; 0 <= i; i--) {
           const oldAttribute = oldAttributes[i];
-          if (!oldAttribute)
-            continue;
+          if (!oldAttribute) continue;
           if (!newElt.hasAttribute(oldAttribute.name)) {
             if (ignoreAttribute(oldAttribute.name, oldElt, "remove", ctx)) {
               continue;
@@ -2831,8 +2805,7 @@ var Idiomorph = function() {
               idMap.set(current, idSet);
             }
             idSet.add(elt.id);
-            if (current === root)
-              break;
+            if (current === root) break;
             current = current.parentElement;
           }
         }
@@ -3245,10 +3218,8 @@ var PageSnapshot = class _PageSnapshot extends Snapshot {
     const clonedSelectElements = clonedElement.querySelectorAll("select");
     for (const [index2, source] of selectElements.entries()) {
       const clone3 = clonedSelectElements[index2];
-      for (const option of clone3.selectedOptions)
-        option.selected = false;
-      for (const option of source.selectedOptions)
-        clone3.options[option.index].selected = true;
+      for (const option of clone3.selectedOptions) option.selected = false;
+      for (const option of source.selectedOptions) clone3.options[option.index].selected = true;
     }
     for (const clonedPasswordInput of clonedElement.querySelectorAll('input[type="password"]')) {
       clonedPasswordInput.value = "";
@@ -3487,10 +3458,8 @@ var Visit = class {
     if (this.response) {
       const { statusCode, responseHTML } = this.response;
       this.render(async () => {
-        if (this.shouldCacheSnapshot)
-          this.cacheSnapshot();
-        if (this.view.renderPromise)
-          await this.view.renderPromise;
+        if (this.shouldCacheSnapshot) this.cacheSnapshot();
+        if (this.view.renderPromise) await this.view.renderPromise;
         if (isSuccessful(statusCode) && responseHTML != null) {
           const snapshot = PageSnapshot.fromHTMLString(responseHTML);
           await this.renderPageSnapshot(snapshot, false);
@@ -3529,8 +3498,7 @@ var Visit = class {
         if (this.isSamePage || this.isPageRefresh) {
           this.adapter.visitRendered(this);
         } else {
-          if (this.view.renderPromise)
-            await this.view.renderPromise;
+          if (this.view.renderPromise) await this.view.renderPromise;
           await this.renderPageSnapshot(snapshot, isPreview);
           this.adapter.visitRendered(this);
           if (!isPreview) {
@@ -3917,8 +3885,7 @@ var History = class {
     this.update(history.replaceState, location2, restorationIdentifier);
   }
   update(method, location2, restorationIdentifier = uuid()) {
-    if (method === history.pushState)
-      ++this.currentIndex;
+    if (method === history.pushState) ++this.currentIndex;
     const state = { turbo: { restorationIdentifier, restorationIndex: this.currentIndex } };
     method.call(history, state, "", location2.href);
     this.location = location2;
@@ -3983,8 +3950,7 @@ var LinkPrefetchObserver = class {
     this.eventTarget = eventTarget;
   }
   start() {
-    if (this.started)
-      return;
+    if (this.started) return;
     if (this.eventTarget.readyState === "loading") {
       this.eventTarget.addEventListener("DOMContentLoaded", this.#enable, { once: true });
     } else {
@@ -3992,8 +3958,7 @@ var LinkPrefetchObserver = class {
     }
   }
   stop() {
-    if (!this.started)
-      return;
+    if (!this.started) return;
     this.eventTarget.removeEventListener("mouseenter", this.#tryToPrefetchRequest, {
       capture: true,
       passive: true
@@ -4018,8 +3983,7 @@ var LinkPrefetchObserver = class {
     this.started = true;
   };
   #tryToPrefetchRequest = (event) => {
-    if (getMetaContent("turbo-prefetch") === "false")
-      return;
+    if (getMetaContent("turbo-prefetch") === "false") return;
     const target = event.target;
     const isLink = target.matches && target.matches("a[href]:not([target^=_]):not([download])");
     if (isLink && this.#isPrefetchable(target)) {
@@ -4039,8 +4003,7 @@ var LinkPrefetchObserver = class {
     }
   };
   #cancelRequestIfObsolete = (event) => {
-    if (event.target === this.#prefetchedLink)
-      this.#cancelPrefetchRequest();
+    if (event.target === this.#prefetchedLink) this.#cancelPrefetchRequest();
   };
   #cancelPrefetchRequest = () => {
     prefetchCache.clear();
@@ -4082,18 +4045,12 @@ var LinkPrefetchObserver = class {
   }
   #isPrefetchable(link) {
     const href = link.getAttribute("href");
-    if (!href)
-      return false;
-    if (unfetchableLink(link))
-      return false;
-    if (linkToTheSamePage(link))
-      return false;
-    if (linkOptsOut(link))
-      return false;
-    if (nonSafeLink(link))
-      return false;
-    if (eventPrevented(link))
-      return false;
+    if (!href) return false;
+    if (unfetchableLink(link)) return false;
+    if (linkToTheSamePage(link)) return false;
+    if (linkOptsOut(link)) return false;
+    if (nonSafeLink(link)) return false;
+    if (eventPrevented(link)) return false;
     return true;
   }
 };
@@ -4104,25 +4061,18 @@ var linkToTheSamePage = (link) => {
   return link.pathname + link.search === document.location.pathname + document.location.search || link.href.startsWith("#");
 };
 var linkOptsOut = (link) => {
-  if (link.getAttribute("data-turbo-prefetch") === "false")
-    return true;
-  if (link.getAttribute("data-turbo") === "false")
-    return true;
+  if (link.getAttribute("data-turbo-prefetch") === "false") return true;
+  if (link.getAttribute("data-turbo") === "false") return true;
   const turboPrefetchParent = findClosestRecursively(link, "[data-turbo-prefetch]");
-  if (turboPrefetchParent && turboPrefetchParent.getAttribute("data-turbo-prefetch") === "false")
-    return true;
+  if (turboPrefetchParent && turboPrefetchParent.getAttribute("data-turbo-prefetch") === "false") return true;
   return false;
 };
 var nonSafeLink = (link) => {
   const turboMethod = link.getAttribute("data-turbo-method");
-  if (turboMethod && turboMethod.toLowerCase() !== "get")
-    return true;
-  if (isUJS(link))
-    return true;
-  if (link.hasAttribute("data-turbo-confirm"))
-    return true;
-  if (link.hasAttribute("data-turbo-stream"))
-    return true;
+  if (turboMethod && turboMethod.toLowerCase() !== "get") return true;
+  if (isUJS(link)) return true;
+  if (link.hasAttribute("data-turbo-confirm")) return true;
+  if (link.hasAttribute("data-turbo-stream")) return true;
   return false;
 };
 var isUJS = (link) => {
@@ -4417,8 +4367,7 @@ async function withPreservedFocus(callback2) {
 function firstAutofocusableElementInStreams(nodeListOfStreamElements) {
   for (const streamElement of nodeListOfStreamElements) {
     const elementWithAutofocus = queryAutofocusableElement(streamElement.templateElement.content);
-    if (elementWithAutofocus)
-      return elementWithAutofocus;
+    if (elementWithAutofocus) return elementWithAutofocus;
   }
   return null;
 }
@@ -4694,8 +4643,7 @@ var MorphingPageRenderer = class extends PageRenderer {
       }
     });
     for (const frame of currentElement.querySelectorAll("turbo-frame")) {
-      if (canRefreshFrame(frame))
-        frame.reload();
+      if (canRefreshFrame(frame)) frame.reload();
     }
     dispatch("turbo:morph", { detail: { currentElement, newElement } });
   }
@@ -4746,8 +4694,7 @@ var SnapshotCache = class {
   touch(location2) {
     const key = toCacheKey(location2);
     const index2 = this.keys.indexOf(key);
-    if (index2 > -1)
-      this.keys.splice(index2, 1);
+    if (index2 > -1) this.keys.splice(index2, 1);
     this.keys.unshift(key);
     this.trim();
   }
@@ -5373,8 +5320,7 @@ var FrameController = class {
     }
   }
   sourceURLChanged() {
-    if (this.#isIgnoringChangesTo("src"))
-      return;
+    if (this.#isIgnoringChangesTo("src")) return;
     if (this.element.isConnected) {
       this.complete = false;
     }
@@ -5437,8 +5383,7 @@ var FrameController = class {
   }
   submittedFormLinkToLocation(link, _location, form) {
     const frame = this.#findFrameElement(link);
-    if (frame)
-      form.setAttribute("data-turbo-frame", frame.id);
+    if (frame) form.setAttribute("data-turbo-frame", frame.id);
   }
   // Link interceptor delegate
   shouldInterceptLinkClick(element, _location, _event) {
@@ -5551,8 +5496,7 @@ var FrameController = class {
     if (newFrameElement) {
       const snapshot = new Snapshot(newFrameElement);
       const renderer = new rendererClass(this, this.view.snapshot, snapshot, false, false);
-      if (this.view.renderPromise)
-        await this.view.renderPromise;
+      if (this.view.renderPromise) await this.view.renderPromise;
       this.changeHistory();
       await this.view.render(renderer);
       this.complete = true;
@@ -5602,8 +5546,7 @@ var FrameController = class {
             restorationIdentifier: this.restorationIdentifier,
             snapshot: pageSnapshot
           };
-          if (this.action)
-            options.action = this.action;
+          if (this.action) options.action = this.action;
           session.visit(frame.src, options);
         }
       };
@@ -5992,10 +5935,8 @@ if (customElements.get("turbo-stream-source") === void 0) {
 }
 (() => {
   let element = document.currentScript;
-  if (!element)
-    return;
-  if (element.hasAttribute("data-turbo-suppress-warning"))
-    return;
+  if (!element) return;
+  if (element.hasAttribute("data-turbo-suppress-warning")) return;
   element = element.parentElement;
   while (element) {
     if (element == document.body) {
@@ -6038,12 +5979,9 @@ async function subscribeTo(channel, mixin) {
 
 // node_modules/@hotwired/turbo-rails/app/javascript/turbo/snakeize.js
 function walk(obj) {
-  if (!obj || typeof obj !== "object")
-    return obj;
-  if (obj instanceof Date || obj instanceof RegExp)
-    return obj;
-  if (Array.isArray(obj))
-    return obj.map(walk);
+  if (!obj || typeof obj !== "object") return obj;
+  if (obj instanceof Date || obj instanceof RegExp) return obj;
+  if (Array.isArray(obj)) return obj.map(walk);
   return Object.keys(obj).reduce(function(acc, key) {
     var camel = key[0].toLowerCase() + key.slice(1).replace(/([A-Z]+)/g, function(m, x) {
       return "_" + x.toLowerCase();
@@ -6066,8 +6004,7 @@ var TurboCableStreamSourceElement = class extends HTMLElement {
   }
   disconnectedCallback() {
     disconnectStreamSource(this);
-    if (this.subscription)
-      this.subscription.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
     this.subscriptionDisconnected();
   }
   attributeChangedCallback() {
@@ -9627,8 +9564,7 @@ function flip(_ref) {
     };
     for (var _i = numberOfChecks; _i > 0; _i--) {
       var _ret = _loop(_i);
-      if (_ret === "break")
-        break;
+      if (_ret === "break") break;
     }
   }
   if (state.placement !== firstFittingPlacement) {
@@ -13931,8 +13867,7 @@ function isDay(timeUnit) {
   return timeUnit === "day" || timeUnit === "week" || timeUnit === "month" || timeUnit === "year";
 }
 function calculateTimeUnit(values, maxDay) {
-  if (maxDay === void 0)
-    maxDay = false;
+  if (maxDay === void 0) maxDay = false;
   if (values.length === 0) {
     return null;
   }
@@ -15766,8 +15701,7 @@ var LineChart = /* @__PURE__ */ function(Chart4) {
   function LineChart2() {
     Chart4.apply(this, arguments);
   }
-  if (Chart4)
-    LineChart2.__proto__ = Chart4;
+  if (Chart4) LineChart2.__proto__ = Chart4;
   LineChart2.prototype = Object.create(Chart4 && Chart4.prototype);
   LineChart2.prototype.constructor = LineChart2;
   LineChart2.prototype.__processData = function __processData() {
@@ -15782,8 +15716,7 @@ var PieChart = /* @__PURE__ */ function(Chart4) {
   function PieChart2() {
     Chart4.apply(this, arguments);
   }
-  if (Chart4)
-    PieChart2.__proto__ = Chart4;
+  if (Chart4) PieChart2.__proto__ = Chart4;
   PieChart2.prototype = Object.create(Chart4 && Chart4.prototype);
   PieChart2.prototype.constructor = PieChart2;
   PieChart2.prototype.__processData = function __processData() {
@@ -15798,8 +15731,7 @@ var ColumnChart = /* @__PURE__ */ function(Chart4) {
   function ColumnChart2() {
     Chart4.apply(this, arguments);
   }
-  if (Chart4)
-    ColumnChart2.__proto__ = Chart4;
+  if (Chart4) ColumnChart2.__proto__ = Chart4;
   ColumnChart2.prototype = Object.create(Chart4 && Chart4.prototype);
   ColumnChart2.prototype.constructor = ColumnChart2;
   ColumnChart2.prototype.__processData = function __processData() {
@@ -15814,8 +15746,7 @@ var BarChart = /* @__PURE__ */ function(Chart4) {
   function BarChart2() {
     Chart4.apply(this, arguments);
   }
-  if (Chart4)
-    BarChart2.__proto__ = Chart4;
+  if (Chart4) BarChart2.__proto__ = Chart4;
   BarChart2.prototype = Object.create(Chart4 && Chart4.prototype);
   BarChart2.prototype.constructor = BarChart2;
   BarChart2.prototype.__processData = function __processData() {
@@ -15830,8 +15761,7 @@ var AreaChart = /* @__PURE__ */ function(Chart4) {
   function AreaChart2() {
     Chart4.apply(this, arguments);
   }
-  if (Chart4)
-    AreaChart2.__proto__ = Chart4;
+  if (Chart4) AreaChart2.__proto__ = Chart4;
   AreaChart2.prototype = Object.create(Chart4 && Chart4.prototype);
   AreaChart2.prototype.constructor = AreaChart2;
   AreaChart2.prototype.__processData = function __processData() {
@@ -15846,8 +15776,7 @@ var GeoChart = /* @__PURE__ */ function(Chart4) {
   function GeoChart2() {
     Chart4.apply(this, arguments);
   }
-  if (Chart4)
-    GeoChart2.__proto__ = Chart4;
+  if (Chart4) GeoChart2.__proto__ = Chart4;
   GeoChart2.prototype = Object.create(Chart4 && Chart4.prototype);
   GeoChart2.prototype.constructor = GeoChart2;
   GeoChart2.prototype.__processData = function __processData() {
@@ -15862,8 +15791,7 @@ var ScatterChart = /* @__PURE__ */ function(Chart4) {
   function ScatterChart2() {
     Chart4.apply(this, arguments);
   }
-  if (Chart4)
-    ScatterChart2.__proto__ = Chart4;
+  if (Chart4) ScatterChart2.__proto__ = Chart4;
   ScatterChart2.prototype = Object.create(Chart4 && Chart4.prototype);
   ScatterChart2.prototype.constructor = ScatterChart2;
   ScatterChart2.prototype.__processData = function __processData() {
@@ -15878,8 +15806,7 @@ var BubbleChart = /* @__PURE__ */ function(Chart4) {
   function BubbleChart2() {
     Chart4.apply(this, arguments);
   }
-  if (Chart4)
-    BubbleChart2.__proto__ = Chart4;
+  if (Chart4) BubbleChart2.__proto__ = Chart4;
   BubbleChart2.prototype = Object.create(Chart4 && Chart4.prototype);
   BubbleChart2.prototype.constructor = BubbleChart2;
   BubbleChart2.prototype.__processData = function __processData() {
@@ -15894,8 +15821,7 @@ var Timeline = /* @__PURE__ */ function(Chart4) {
   function Timeline2() {
     Chart4.apply(this, arguments);
   }
-  if (Chart4)
-    Timeline2.__proto__ = Chart4;
+  if (Chart4) Timeline2.__proto__ = Chart4;
   Timeline2.prototype = Object.create(Chart4 && Chart4.prototype);
   Timeline2.prototype.constructor = Timeline2;
   Timeline2.prototype.__processData = function __processData() {
@@ -17536,6 +17462,7 @@ function drawPointLegend(ctx, options, x, y, w) {
   }
   ctx.beginPath();
   switch (style) {
+    // Default includes circle
     default:
       if (w) {
         ctx.ellipse(x, y, w / 2, radius, 0, 0, TAU);
@@ -17574,6 +17501,7 @@ function drawPointLegend(ctx, options, x, y, w) {
         break;
       }
       rad += QUARTER_PI;
+    /* falls through */
     case "rectRot":
       xOffsetW = Math.cos(rad) * (w ? w / 2 : radius);
       xOffset = Math.cos(rad) * radius;
@@ -17587,6 +17515,7 @@ function drawPointLegend(ctx, options, x, y, w) {
       break;
     case "crossRot":
       rad += QUARTER_PI;
+    /* falls through */
     case "cross":
       xOffsetW = Math.cos(rad) * (w ? w / 2 : radius);
       xOffset = Math.cos(rad) * radius;
@@ -30321,12 +30250,10 @@ var constructFromSymbol = Symbol.for("constructDateFrom");
 
 // node_modules/date-fns/constructFrom.js
 function constructFrom(date, value) {
-  if (typeof date === "function")
-    return date(value);
+  if (typeof date === "function") return date(value);
   if (date && typeof date === "object" && constructFromSymbol in date)
     return date[constructFromSymbol](value);
-  if (date instanceof Date)
-    return new date.constructor(value);
+  if (date instanceof Date) return new date.constructor(value);
   return new Date(value);
 }
 
@@ -30338,10 +30265,8 @@ function toDate2(argument, context) {
 // node_modules/date-fns/addDays.js
 function addDays(date, amount, options) {
   const _date = toDate2(date, options?.in);
-  if (isNaN(amount))
-    return constructFrom(options?.in || date, NaN);
-  if (!amount)
-    return _date;
+  if (isNaN(amount)) return constructFrom(options?.in || date, NaN);
+  if (!amount) return _date;
   _date.setDate(_date.getDate() + amount);
   return _date;
 }
@@ -30349,8 +30274,7 @@ function addDays(date, amount, options) {
 // node_modules/date-fns/addMonths.js
 function addMonths(date, amount, options) {
   const _date = toDate2(date, options?.in);
-  if (isNaN(amount))
-    return constructFrom(options?.in || date, NaN);
+  if (isNaN(amount)) return constructFrom(options?.in || date, NaN);
   if (!amount) {
     return _date;
   }
@@ -30511,10 +30435,8 @@ function addYears(date, amount, options) {
 // node_modules/date-fns/compareAsc.js
 function compareAsc(dateLeft, dateRight) {
   const diff = +toDate2(dateLeft) - +toDate2(dateRight);
-  if (diff < 0)
-    return -1;
-  else if (diff > 0)
-    return 1;
+  if (diff < 0) return -1;
+  else if (diff > 0) return 1;
   return diff;
 }
 
@@ -30570,10 +30492,8 @@ function differenceInDays(laterDate, earlierDate, options) {
 }
 function compareLocalAsc(laterDate, earlierDate) {
   const diff = laterDate.getFullYear() - earlierDate.getFullYear() || laterDate.getMonth() - earlierDate.getMonth() || laterDate.getDate() - earlierDate.getDate() || laterDate.getHours() - earlierDate.getHours() || laterDate.getMinutes() - earlierDate.getMinutes() || laterDate.getSeconds() - earlierDate.getSeconds() || laterDate.getMilliseconds() - earlierDate.getMilliseconds();
-  if (diff < 0)
-    return -1;
-  if (diff > 0)
-    return 1;
+  if (diff < 0) return -1;
+  if (diff > 0) return 1;
   return diff;
 }
 
@@ -30642,8 +30562,7 @@ function differenceInMonths(laterDate, earlierDate, options) {
   const difference = Math.abs(
     differenceInCalendarMonths(workingLaterDate, earlierDate_)
   );
-  if (difference < 1)
-    return 0;
+  if (difference < 1) return 0;
   if (workingLaterDate.getMonth() === 1 && workingLaterDate.getDate() > 27)
     workingLaterDate.setDate(30);
   workingLaterDate.setMonth(workingLaterDate.getMonth() - sign2 * difference);
@@ -31132,12 +31051,10 @@ function findIndex(array, predicate) {
 function buildMatchPatternFn(args) {
   return (string, options = {}) => {
     const matchResult = string.match(args.matchPattern);
-    if (!matchResult)
-      return null;
+    if (!matchResult) return null;
     const matchedString = matchResult[0];
     const parseResult = string.match(args.parsePattern);
-    if (!parseResult)
-      return null;
+    if (!parseResult) return null;
     let value = args.valueCallback ? args.valueCallback(parseResult[0]) : parseResult[0];
     value = options.valueCallback ? options.valueCallback(value) : value;
     const rest = string.slice(matchedString.length);
@@ -31418,12 +31335,15 @@ var formatters2 = {
   G: function(date, token, localize2) {
     const era = date.getFullYear() > 0 ? 1 : 0;
     switch (token) {
+      // AD, BC
       case "G":
       case "GG":
       case "GGG":
         return localize2.era(era, { width: "abbreviated" });
+      // A, B
       case "GGGGG":
         return localize2.era(era, { width: "narrow" });
+      // Anno Domini, Before Christ
       case "GGGG":
       default:
         return localize2.era(era, { width: "wide" });
@@ -31473,22 +31393,28 @@ var formatters2 = {
   Q: function(date, token, localize2) {
     const quarter = Math.ceil((date.getMonth() + 1) / 3);
     switch (token) {
+      // 1, 2, 3, 4
       case "Q":
         return String(quarter);
+      // 01, 02, 03, 04
       case "QQ":
         return addLeadingZeros(quarter, 2);
+      // 1st, 2nd, 3rd, 4th
       case "Qo":
         return localize2.ordinalNumber(quarter, { unit: "quarter" });
+      // Q1, Q2, Q3, Q4
       case "QQQ":
         return localize2.quarter(quarter, {
           width: "abbreviated",
           context: "formatting"
         });
+      // 1, 2, 3, 4 (narrow quarter; could be not numerical)
       case "QQQQQ":
         return localize2.quarter(quarter, {
           width: "narrow",
           context: "formatting"
         });
+      // 1st quarter, 2nd quarter, ...
       case "QQQQ":
       default:
         return localize2.quarter(quarter, {
@@ -31501,22 +31427,28 @@ var formatters2 = {
   q: function(date, token, localize2) {
     const quarter = Math.ceil((date.getMonth() + 1) / 3);
     switch (token) {
+      // 1, 2, 3, 4
       case "q":
         return String(quarter);
+      // 01, 02, 03, 04
       case "qq":
         return addLeadingZeros(quarter, 2);
+      // 1st, 2nd, 3rd, 4th
       case "qo":
         return localize2.ordinalNumber(quarter, { unit: "quarter" });
+      // Q1, Q2, Q3, Q4
       case "qqq":
         return localize2.quarter(quarter, {
           width: "abbreviated",
           context: "standalone"
         });
+      // 1, 2, 3, 4 (narrow quarter; could be not numerical)
       case "qqqqq":
         return localize2.quarter(quarter, {
           width: "narrow",
           context: "standalone"
         });
+      // 1st quarter, 2nd quarter, ...
       case "qqqq":
       default:
         return localize2.quarter(quarter, {
@@ -31532,18 +31464,22 @@ var formatters2 = {
       case "M":
       case "MM":
         return lightFormatters.M(date, token);
+      // 1st, 2nd, ..., 12th
       case "Mo":
         return localize2.ordinalNumber(month + 1, { unit: "month" });
+      // Jan, Feb, ..., Dec
       case "MMM":
         return localize2.month(month, {
           width: "abbreviated",
           context: "formatting"
         });
+      // J, F, ..., D
       case "MMMMM":
         return localize2.month(month, {
           width: "narrow",
           context: "formatting"
         });
+      // January, February, ..., December
       case "MMMM":
       default:
         return localize2.month(month, { width: "wide", context: "formatting" });
@@ -31553,22 +31489,28 @@ var formatters2 = {
   L: function(date, token, localize2) {
     const month = date.getMonth();
     switch (token) {
+      // 1, 2, ..., 12
       case "L":
         return String(month + 1);
+      // 01, 02, ..., 12
       case "LL":
         return addLeadingZeros(month + 1, 2);
+      // 1st, 2nd, ..., 12th
       case "Lo":
         return localize2.ordinalNumber(month + 1, { unit: "month" });
+      // Jan, Feb, ..., Dec
       case "LLL":
         return localize2.month(month, {
           width: "abbreviated",
           context: "standalone"
         });
+      // J, F, ..., D
       case "LLLLL":
         return localize2.month(month, {
           width: "narrow",
           context: "standalone"
         });
+      // January, February, ..., December
       case "LLLL":
       default:
         return localize2.month(month, { width: "wide", context: "standalone" });
@@ -31609,6 +31551,7 @@ var formatters2 = {
   E: function(date, token, localize2) {
     const dayOfWeek = date.getDay();
     switch (token) {
+      // Tue
       case "E":
       case "EE":
       case "EEE":
@@ -31616,16 +31559,19 @@ var formatters2 = {
           width: "abbreviated",
           context: "formatting"
         });
+      // T
       case "EEEEE":
         return localize2.day(dayOfWeek, {
           width: "narrow",
           context: "formatting"
         });
+      // Tu
       case "EEEEEE":
         return localize2.day(dayOfWeek, {
           width: "short",
           context: "formatting"
         });
+      // Tuesday
       case "EEEE":
       default:
         return localize2.day(dayOfWeek, {
@@ -31639,10 +31585,13 @@ var formatters2 = {
     const dayOfWeek = date.getDay();
     const localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
     switch (token) {
+      // Numerical value (Nth day of week with current locale or weekStartsOn)
       case "e":
         return String(localDayOfWeek);
+      // Padded numerical value
       case "ee":
         return addLeadingZeros(localDayOfWeek, 2);
+      // 1st, 2nd, ..., 7th
       case "eo":
         return localize2.ordinalNumber(localDayOfWeek, { unit: "day" });
       case "eee":
@@ -31650,16 +31599,19 @@ var formatters2 = {
           width: "abbreviated",
           context: "formatting"
         });
+      // T
       case "eeeee":
         return localize2.day(dayOfWeek, {
           width: "narrow",
           context: "formatting"
         });
+      // Tu
       case "eeeeee":
         return localize2.day(dayOfWeek, {
           width: "short",
           context: "formatting"
         });
+      // Tuesday
       case "eeee":
       default:
         return localize2.day(dayOfWeek, {
@@ -31673,10 +31625,13 @@ var formatters2 = {
     const dayOfWeek = date.getDay();
     const localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
     switch (token) {
+      // Numerical value (same as in `e`)
       case "c":
         return String(localDayOfWeek);
+      // Padded numerical value
       case "cc":
         return addLeadingZeros(localDayOfWeek, token.length);
+      // 1st, 2nd, ..., 7th
       case "co":
         return localize2.ordinalNumber(localDayOfWeek, { unit: "day" });
       case "ccc":
@@ -31684,16 +31639,19 @@ var formatters2 = {
           width: "abbreviated",
           context: "standalone"
         });
+      // T
       case "ccccc":
         return localize2.day(dayOfWeek, {
           width: "narrow",
           context: "standalone"
         });
+      // Tu
       case "cccccc":
         return localize2.day(dayOfWeek, {
           width: "short",
           context: "standalone"
         });
+      // Tuesday
       case "cccc":
       default:
         return localize2.day(dayOfWeek, {
@@ -31707,27 +31665,34 @@ var formatters2 = {
     const dayOfWeek = date.getDay();
     const isoDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
     switch (token) {
+      // 2
       case "i":
         return String(isoDayOfWeek);
+      // 02
       case "ii":
         return addLeadingZeros(isoDayOfWeek, token.length);
+      // 2nd
       case "io":
         return localize2.ordinalNumber(isoDayOfWeek, { unit: "day" });
+      // Tue
       case "iii":
         return localize2.day(dayOfWeek, {
           width: "abbreviated",
           context: "formatting"
         });
+      // T
       case "iiiii":
         return localize2.day(dayOfWeek, {
           width: "narrow",
           context: "formatting"
         });
+      // Tu
       case "iiiiii":
         return localize2.day(dayOfWeek, {
           width: "short",
           context: "formatting"
         });
+      // Tuesday
       case "iiii":
       default:
         return localize2.day(dayOfWeek, {
@@ -31839,8 +31804,7 @@ var formatters2 = {
   h: function(date, token, localize2) {
     if (token === "ho") {
       let hours = date.getHours() % 12;
-      if (hours === 0)
-        hours = 12;
+      if (hours === 0) hours = 12;
       return localize2.ordinalNumber(hours, { unit: "hour" });
     }
     return lightFormatters.h(date, token);
@@ -31863,8 +31827,7 @@ var formatters2 = {
   // Hour [1-24]
   k: function(date, token, localize2) {
     let hours = date.getHours();
-    if (hours === 0)
-      hours = 24;
+    if (hours === 0) hours = 24;
     if (token === "ko") {
       return localize2.ordinalNumber(hours, { unit: "hour" });
     }
@@ -31895,13 +31858,21 @@ var formatters2 = {
       return "Z";
     }
     switch (token) {
+      // Hours and optional minutes
       case "X":
         return formatTimezoneWithOptionalMinutes(timezoneOffset);
+      // Hours, minutes and optional seconds without `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `XX`
       case "XXXX":
       case "XX":
         return formatTimezone(timezoneOffset);
+      // Hours, minutes and optional seconds with `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `XXX`
       case "XXXXX":
       case "XXX":
+      // Hours and minutes with `:` delimiter
       default:
         return formatTimezone(timezoneOffset, ":");
     }
@@ -31910,13 +31881,21 @@ var formatters2 = {
   x: function(date, token, _localize) {
     const timezoneOffset = date.getTimezoneOffset();
     switch (token) {
+      // Hours and optional minutes
       case "x":
         return formatTimezoneWithOptionalMinutes(timezoneOffset);
+      // Hours, minutes and optional seconds without `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `xx`
       case "xxxx":
       case "xx":
         return formatTimezone(timezoneOffset);
+      // Hours, minutes and optional seconds with `:` delimiter
+      // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+      // so this token always has the same output as `xxx`
       case "xxxxx":
       case "xxx":
+      // Hours and minutes with `:` delimiter
       default:
         return formatTimezone(timezoneOffset, ":");
     }
@@ -31925,10 +31904,12 @@ var formatters2 = {
   O: function(date, token, _localize) {
     const timezoneOffset = date.getTimezoneOffset();
     switch (token) {
+      // Short
       case "O":
       case "OO":
       case "OOO":
         return "GMT" + formatTimezoneShort(timezoneOffset, ":");
+      // Long
       case "OOOO":
       default:
         return "GMT" + formatTimezone(timezoneOffset, ":");
@@ -31938,10 +31919,12 @@ var formatters2 = {
   z: function(date, token, _localize) {
     const timezoneOffset = date.getTimezoneOffset();
     switch (token) {
+      // Short
       case "z":
       case "zz":
       case "zzz":
         return "GMT" + formatTimezoneShort(timezoneOffset, ":");
+      // Long
       case "zzzz":
       default:
         return "GMT" + formatTimezone(timezoneOffset, ":");
@@ -32052,8 +32035,7 @@ function isProtectedWeekYearToken(token) {
 function warnOrThrowProtectedError(token, format2, input) {
   const _message = message(token, format2, input);
   console.warn(_message);
-  if (throwTokens.includes(token))
-    throw new RangeError(_message);
+  if (throwTokens.includes(token)) throw new RangeError(_message);
 }
 function message(token, format2, input) {
   const subject = token[0] === "Y" ? "years" : "days of the month";
@@ -32109,8 +32091,7 @@ function format(date, formatStr, options) {
     locale
   };
   return parts.map((part) => {
-    if (!part.isToken)
-      return part.value;
+    if (!part.isToken) return part.value;
     const token = part.value;
     if (!options?.useAdditionalWeekYearTokens && isProtectedWeekYearToken(token) || !options?.useAdditionalDayOfYearTokens && isProtectedDayOfYearToken(token)) {
       warnOrThrowProtectedError(token, formatStr, String(date));
@@ -32188,8 +32169,7 @@ var DateTimezoneSetter = class extends Setter {
     this.context = context || ((date) => constructFrom(reference2, date));
   }
   set(date, flags) {
-    if (flags.timestampIsSet)
-      return date;
+    if (flags.timestampIsSet) return date;
     return constructFrom(date, transpose(date, this.context));
   }
 };
@@ -32222,12 +32202,15 @@ var EraParser = class extends Parser {
   priority = 140;
   parse(dateString, token, match2) {
     switch (token) {
+      // AD, BC
       case "G":
       case "GG":
       case "GGG":
         return match2.era(dateString, { width: "abbreviated" }) || match2.era(dateString, { width: "narrow" });
+      // A, B
       case "GGGGG":
         return match2.era(dateString, { width: "narrow" });
+      // Anno Domini, Before Christ
       case "GGGG":
       default:
         return match2.era(dateString, { width: "wide" }) || match2.era(dateString, { width: "abbreviated" }) || match2.era(dateString, { width: "narrow" });
@@ -32558,11 +32541,14 @@ var QuarterParser = class extends Parser {
   priority = 120;
   parse(dateString, token, match2) {
     switch (token) {
+      // 1, 2, 3, 4
       case "Q":
       case "QQ":
         return parseNDigits(token.length, dateString);
+      // 1st, 2nd, 3rd, 4th
       case "Qo":
         return match2.ordinalNumber(dateString, { unit: "quarter" });
+      // Q1, Q2, Q3, Q4
       case "QQQ":
         return match2.quarter(dateString, {
           width: "abbreviated",
@@ -32571,11 +32557,13 @@ var QuarterParser = class extends Parser {
           width: "narrow",
           context: "formatting"
         });
+      // 1, 2, 3, 4 (narrow quarter; could be not numerical)
       case "QQQQQ":
         return match2.quarter(dateString, {
           width: "narrow",
           context: "formatting"
         });
+      // 1st quarter, 2nd quarter, ...
       case "QQQQ":
       default:
         return match2.quarter(dateString, {
@@ -32621,11 +32609,14 @@ var StandAloneQuarterParser = class extends Parser {
   priority = 120;
   parse(dateString, token, match2) {
     switch (token) {
+      // 1, 2, 3, 4
       case "q":
       case "qq":
         return parseNDigits(token.length, dateString);
+      // 1st, 2nd, 3rd, 4th
       case "qo":
         return match2.ordinalNumber(dateString, { unit: "quarter" });
+      // Q1, Q2, Q3, Q4
       case "qqq":
         return match2.quarter(dateString, {
           width: "abbreviated",
@@ -32634,11 +32625,13 @@ var StandAloneQuarterParser = class extends Parser {
           width: "narrow",
           context: "standalone"
         });
+      // 1, 2, 3, 4 (narrow quarter; could be not numerical)
       case "qqqqq":
         return match2.quarter(dateString, {
           width: "narrow",
           context: "standalone"
         });
+      // 1st quarter, 2nd quarter, ...
       case "qqqq":
       default:
         return match2.quarter(dateString, {
@@ -32700,13 +32693,16 @@ var MonthParser = class extends Parser {
   parse(dateString, token, match2) {
     const valueCallback = (value) => value - 1;
     switch (token) {
+      // 1, 2, ..., 12
       case "M":
         return mapValue(
           parseNumericPattern(numericPatterns.month, dateString),
           valueCallback
         );
+      // 01, 02, ..., 12
       case "MM":
         return mapValue(parseNDigits(2, dateString), valueCallback);
+      // 1st, 2nd, ..., 12th
       case "Mo":
         return mapValue(
           match2.ordinalNumber(dateString, {
@@ -32714,16 +32710,19 @@ var MonthParser = class extends Parser {
           }),
           valueCallback
         );
+      // Jan, Feb, ..., Dec
       case "MMM":
         return match2.month(dateString, {
           width: "abbreviated",
           context: "formatting"
         }) || match2.month(dateString, { width: "narrow", context: "formatting" });
+      // J, F, ..., D
       case "MMMMM":
         return match2.month(dateString, {
           width: "narrow",
           context: "formatting"
         });
+      // January, February, ..., December
       case "MMMM":
       default:
         return match2.month(dateString, { width: "wide", context: "formatting" }) || match2.month(dateString, {
@@ -32748,13 +32747,16 @@ var StandAloneMonthParser = class extends Parser {
   parse(dateString, token, match2) {
     const valueCallback = (value) => value - 1;
     switch (token) {
+      // 1, 2, ..., 12
       case "L":
         return mapValue(
           parseNumericPattern(numericPatterns.month, dateString),
           valueCallback
         );
+      // 01, 02, ..., 12
       case "LL":
         return mapValue(parseNDigits(2, dateString), valueCallback);
+      // 1st, 2nd, ..., 12th
       case "Lo":
         return mapValue(
           match2.ordinalNumber(dateString, {
@@ -32762,16 +32764,19 @@ var StandAloneMonthParser = class extends Parser {
           }),
           valueCallback
         );
+      // Jan, Feb, ..., Dec
       case "LLL":
         return match2.month(dateString, {
           width: "abbreviated",
           context: "standalone"
         }) || match2.month(dateString, { width: "narrow", context: "standalone" });
+      // J, F, ..., D
       case "LLLLL":
         return match2.month(dateString, {
           width: "narrow",
           context: "standalone"
         });
+      // January, February, ..., December
       case "LLLL":
       default:
         return match2.month(dateString, { width: "wide", context: "standalone" }) || match2.month(dateString, {
@@ -33020,6 +33025,7 @@ var DayParser = class extends Parser {
   priority = 90;
   parse(dateString, token, match2) {
     switch (token) {
+      // Tue
       case "E":
       case "EE":
       case "EEE":
@@ -33027,13 +33033,16 @@ var DayParser = class extends Parser {
           width: "abbreviated",
           context: "formatting"
         }) || match2.day(dateString, { width: "short", context: "formatting" }) || match2.day(dateString, { width: "narrow", context: "formatting" });
+      // T
       case "EEEEE":
         return match2.day(dateString, {
           width: "narrow",
           context: "formatting"
         });
+      // Tu
       case "EEEEEE":
         return match2.day(dateString, { width: "short", context: "formatting" }) || match2.day(dateString, { width: "narrow", context: "formatting" });
+      // Tuesday
       case "EEEE":
       default:
         return match2.day(dateString, { width: "wide", context: "formatting" }) || match2.day(dateString, {
@@ -33062,9 +33071,11 @@ var LocalDayParser = class extends Parser {
       return (value + options.weekStartsOn + 6) % 7 + wholeWeekDays;
     };
     switch (token) {
+      // 3
       case "e":
       case "ee":
         return mapValue(parseNDigits(token.length, dateString), valueCallback);
+      // 3rd
       case "eo":
         return mapValue(
           match2.ordinalNumber(dateString, {
@@ -33072,18 +33083,22 @@ var LocalDayParser = class extends Parser {
           }),
           valueCallback
         );
+      // Tue
       case "eee":
         return match2.day(dateString, {
           width: "abbreviated",
           context: "formatting"
         }) || match2.day(dateString, { width: "short", context: "formatting" }) || match2.day(dateString, { width: "narrow", context: "formatting" });
+      // T
       case "eeeee":
         return match2.day(dateString, {
           width: "narrow",
           context: "formatting"
         });
+      // Tu
       case "eeeeee":
         return match2.day(dateString, { width: "short", context: "formatting" }) || match2.day(dateString, { width: "narrow", context: "formatting" });
+      // Tuesday
       case "eeee":
       default:
         return match2.day(dateString, { width: "wide", context: "formatting" }) || match2.day(dateString, {
@@ -33128,9 +33143,11 @@ var StandAloneLocalDayParser = class extends Parser {
       return (value + options.weekStartsOn + 6) % 7 + wholeWeekDays;
     };
     switch (token) {
+      // 3
       case "c":
       case "cc":
         return mapValue(parseNDigits(token.length, dateString), valueCallback);
+      // 3rd
       case "co":
         return mapValue(
           match2.ordinalNumber(dateString, {
@@ -33138,18 +33155,22 @@ var StandAloneLocalDayParser = class extends Parser {
           }),
           valueCallback
         );
+      // Tue
       case "ccc":
         return match2.day(dateString, {
           width: "abbreviated",
           context: "standalone"
         }) || match2.day(dateString, { width: "short", context: "standalone" }) || match2.day(dateString, { width: "narrow", context: "standalone" });
+      // T
       case "ccccc":
         return match2.day(dateString, {
           width: "narrow",
           context: "standalone"
         });
+      // Tu
       case "cccccc":
         return match2.day(dateString, { width: "short", context: "standalone" }) || match2.day(dateString, { width: "narrow", context: "standalone" });
+      // Tuesday
       case "cccc":
       default:
         return match2.day(dateString, { width: "wide", context: "standalone" }) || match2.day(dateString, {
@@ -33204,11 +33225,14 @@ var ISODayParser = class extends Parser {
       return value;
     };
     switch (token) {
+      // 2
       case "i":
       case "ii":
         return parseNDigits(token.length, dateString);
+      // 2nd
       case "io":
         return match2.ordinalNumber(dateString, { unit: "day" });
+      // Tue
       case "iii":
         return mapValue(
           match2.day(dateString, {
@@ -33223,6 +33247,7 @@ var ISODayParser = class extends Parser {
           }),
           valueCallback
         );
+      // T
       case "iiiii":
         return mapValue(
           match2.day(dateString, {
@@ -33231,6 +33256,7 @@ var ISODayParser = class extends Parser {
           }),
           valueCallback
         );
+      // Tu
       case "iiiiii":
         return mapValue(
           match2.day(dateString, {
@@ -33242,6 +33268,7 @@ var ISODayParser = class extends Parser {
           }),
           valueCallback
         );
+      // Tuesday
       case "iiii":
       default:
         return mapValue(
@@ -33605,8 +33632,7 @@ var ISOTimezoneWithZParser = class extends Parser {
     }
   }
   set(date, flags, value) {
-    if (flags.timestampIsSet)
-      return date;
+    if (flags.timestampIsSet) return date;
     return constructFrom(
       date,
       date.getTime() - getTimezoneOffsetInMilliseconds(date) - value
@@ -33643,8 +33669,7 @@ var ISOTimezoneParser = class extends Parser {
     }
   }
   set(date, flags, value) {
-    if (flags.timestampIsSet)
-      return date;
+    if (flags.timestampIsSet) return date;
     return constructFrom(
       date,
       date.getTime() - getTimezoneOffsetInMilliseconds(date) - value
@@ -33804,8 +33829,7 @@ function parse2(dateStr, formatStr, referenceDate, options) {
     (priority) => setters.filter((setter) => setter.priority === priority).sort((a, b) => b.subPriority - a.subPriority)
   ).map((setterArray) => setterArray[0]);
   let date = toDate2(referenceDate, options?.in);
-  if (isNaN(+date))
-    return invalidDate();
+  if (isNaN(+date)) return invalidDate();
   const flags = {};
   for (const setter of uniquePrioritySetters) {
     if (!setter.validate(date, subFnOptions)) {
@@ -33856,20 +33880,17 @@ function parseISO(argument, options) {
     const parseYearResult = parseYear(dateStrings.date, additionalDigits);
     date = parseDate(parseYearResult.restDateString, parseYearResult.year);
   }
-  if (!date || isNaN(+date))
-    return invalidDate();
+  if (!date || isNaN(+date)) return invalidDate();
   const timestamp = +date;
   let time = 0;
   let offset2;
   if (dateStrings.time) {
     time = parseTime(dateStrings.time);
-    if (isNaN(time))
-      return invalidDate();
+    if (isNaN(time)) return invalidDate();
   }
   if (dateStrings.timezone) {
     offset2 = parseTimezone(dateStrings.timezone);
-    if (isNaN(offset2))
-      return invalidDate();
+    if (isNaN(offset2)) return invalidDate();
   } else {
     const tmpDate = new Date(timestamp + time);
     const result = toDate2(0, options?.in);
@@ -33932,8 +33953,7 @@ function parseYear(dateString, additionalDigits) {
     "^(?:(\\d{4}|[+-]\\d{" + (4 + additionalDigits) + "})|(\\d{2}|[+-]\\d{" + (2 + additionalDigits) + "})$)"
   );
   const captures = dateString.match(regex);
-  if (!captures)
-    return { year: NaN, restDateString: "" };
+  if (!captures) return { year: NaN, restDateString: "" };
   const year = captures[1] ? parseInt(captures[1]) : null;
   const century = captures[2] ? parseInt(captures[2]) : null;
   return {
@@ -33942,11 +33962,9 @@ function parseYear(dateString, additionalDigits) {
   };
 }
 function parseDate(dateString, year) {
-  if (year === null)
-    return /* @__PURE__ */ new Date(NaN);
+  if (year === null) return /* @__PURE__ */ new Date(NaN);
   const captures = dateString.match(dateRegex);
-  if (!captures)
-    return /* @__PURE__ */ new Date(NaN);
+  if (!captures) return /* @__PURE__ */ new Date(NaN);
   const isWeekDate = !!captures[4];
   const dayOfYear = parseDateUnit(captures[1]);
   const month = parseDateUnit(captures[2]) - 1;
@@ -33972,8 +33990,7 @@ function parseDateUnit(value) {
 }
 function parseTime(timeString) {
   const captures = timeString.match(timeRegex);
-  if (!captures)
-    return NaN;
+  if (!captures) return NaN;
   const hours = parseTimeUnit(captures[1]);
   const minutes = parseTimeUnit(captures[2]);
   const seconds = parseTimeUnit(captures[3]);
@@ -33986,11 +34003,9 @@ function parseTimeUnit(value) {
   return value && parseFloat(value.replace(",", ".")) || 0;
 }
 function parseTimezone(timezoneString) {
-  if (timezoneString === "Z")
-    return 0;
+  if (timezoneString === "Z") return 0;
   const captures = timezoneString.match(timezoneRegex);
-  if (!captures)
-    return 0;
+  if (!captures) return 0;
   const sign2 = captures[1] === "+" ? -1 : 1;
   const hours = parseInt(captures[2]);
   const minutes = captures[3] && parseInt(captures[3]) || 0;
