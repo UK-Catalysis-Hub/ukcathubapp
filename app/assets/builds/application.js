@@ -68,12 +68,11 @@ var init_connection_monitor = __esm({
       isRunning() {
         return this.startedAt && !this.stoppedAt;
       }
-      recordPing() {
+      recordMessage() {
         this.pingedAt = now();
       }
       recordConnect() {
         this.reconnectAttempts = 0;
-        this.recordPing();
         delete this.disconnectedAt;
         logger_default.log("ConnectionMonitor recorded connect");
       }
@@ -290,6 +289,7 @@ var init_connection = __esm({
           return;
         }
         const { identifier, message: message2, reason, reconnect, type } = JSON.parse(event.data);
+        this.monitor.recordMessage();
         switch (type) {
           case message_types.welcome:
             if (this.triedToReconnect()) {
@@ -301,7 +301,7 @@ var init_connection = __esm({
             logger_default.log(`Disconnecting. Reason: ${reason}`);
             return this.close({ allowReconnect: reconnect });
           case message_types.ping:
-            return this.monitor.recordPing();
+            return null;
           case message_types.confirmation:
             this.subscriptions.confirmSubscription(identifier);
             if (this.reconnectAttempted) {
@@ -611,6 +611,7 @@ __export(turbo_es2017_esm_exports, {
   StreamSourceElement: () => StreamSourceElement,
   cache: () => cache,
   clearCache: () => clearCache,
+  config: () => config,
   connectStreamSource: () => connectStreamSource,
   disconnectStreamSource: () => disconnectStreamSource,
   fetch: () => fetchWithTurboHeaders,
@@ -630,23 +631,23 @@ __export(turbo_es2017_esm_exports, {
 (function(prototype) {
   if (typeof prototype.requestSubmit == "function")
     return;
-  prototype.requestSubmit = function(submitter) {
-    if (submitter) {
-      validateSubmitter(submitter, this);
-      submitter.click();
+  prototype.requestSubmit = function(submitter2) {
+    if (submitter2) {
+      validateSubmitter(submitter2, this);
+      submitter2.click();
     } else {
-      submitter = document.createElement("input");
-      submitter.type = "submit";
-      submitter.hidden = true;
-      this.appendChild(submitter);
-      submitter.click();
-      this.removeChild(submitter);
+      submitter2 = document.createElement("input");
+      submitter2.type = "submit";
+      submitter2.hidden = true;
+      this.appendChild(submitter2);
+      submitter2.click();
+      this.removeChild(submitter2);
     }
   };
-  function validateSubmitter(submitter, form) {
-    submitter instanceof HTMLElement || raise(TypeError, "parameter 1 is not of type 'HTMLElement'");
-    submitter.type == "submit" || raise(TypeError, "The specified element is not a submit button");
-    submitter.form == form || raise(DOMException, "The specified element is not owned by this form element", "NotFoundError");
+  function validateSubmitter(submitter2, form) {
+    submitter2 instanceof HTMLElement || raise(TypeError, "parameter 1 is not of type 'HTMLElement'");
+    submitter2.type == "submit" || raise(TypeError, "The specified element is not a submit button");
+    submitter2.form == form || raise(DOMException, "The specified element is not owned by this form element", "NotFoundError");
   }
   function raise(errorConstructor, message2, name) {
     throw new errorConstructor("Failed to execute 'requestSubmit' on 'HTMLFormElement': " + message2 + ".", name);
@@ -659,9 +660,9 @@ function findSubmitterFromClickTarget(target) {
   return candidate?.type == "submit" ? candidate : null;
 }
 function clickCaptured(event) {
-  const submitter = findSubmitterFromClickTarget(event.target);
-  if (submitter && submitter.form) {
-    submittersByForm.set(submitter.form, submitter);
+  const submitter2 = findSubmitterFromClickTarget(event.target);
+  if (submitter2 && submitter2.form) {
+    submittersByForm.set(submitter2.form, submitter2);
   }
 }
 (function() {
@@ -748,6 +749,9 @@ var FrameElement = class _FrameElement extends HTMLElement {
     } else {
       this.removeAttribute("refresh");
     }
+  }
+  get shouldReloadWithMorph() {
+    return this.src && this.refresh === "morph";
   }
   /**
    * Determines if the element is loading
@@ -836,107 +840,74 @@ function frameLoadingStyleFromString(style) {
       return FrameLoadingStyle.eager;
   }
 }
-function expandURL(locatable) {
-  return new URL(locatable.toString(), document.baseURI);
-}
-function getAnchor(url) {
-  let anchorMatch;
-  if (url.hash) {
-    return url.hash.slice(1);
-  } else if (anchorMatch = url.href.match(/#(.*)$/)) {
-    return anchorMatch[1];
-  }
-}
-function getAction$1(form, submitter) {
-  const action = submitter?.getAttribute("formaction") || form.getAttribute("action") || form.action;
-  return expandURL(action);
-}
-function getExtension(url) {
-  return (getLastPathComponent(url).match(/\.[^.]*$/) || [])[0] || "";
-}
-function isHTML(url) {
-  return !!getExtension(url).match(/^(?:|\.(?:htm|html|xhtml|php))$/);
-}
-function isPrefixedBy(baseURL, url) {
-  const prefix = getPrefix(url);
-  return baseURL.href === expandURL(prefix).href || baseURL.href.startsWith(prefix);
-}
-function locationIsVisitable(location2, rootLocation) {
-  return isPrefixedBy(location2, rootLocation) && isHTML(location2);
-}
-function getRequestURL(url) {
-  const anchor = getAnchor(url);
-  return anchor != null ? url.href.slice(0, -(anchor.length + 1)) : url.href;
-}
-function toCacheKey(url) {
-  return getRequestURL(url);
-}
-function urlsAreEqual(left2, right2) {
-  return expandURL(left2).href == expandURL(right2).href;
-}
-function getPathComponents(url) {
-  return url.pathname.split("/").slice(1);
-}
-function getLastPathComponent(url) {
-  return getPathComponents(url).slice(-1)[0];
-}
-function getPrefix(url) {
-  return addTrailingSlash(url.origin + url.pathname);
-}
-function addTrailingSlash(value) {
-  return value.endsWith("/") ? value : value + "/";
-}
-var FetchResponse = class {
-  constructor(response) {
-    this.response = response;
-  }
-  get succeeded() {
-    return this.response.ok;
-  }
-  get failed() {
-    return !this.succeeded;
-  }
-  get clientError() {
-    return this.statusCode >= 400 && this.statusCode <= 499;
-  }
-  get serverError() {
-    return this.statusCode >= 500 && this.statusCode <= 599;
-  }
-  get redirected() {
-    return this.response.redirected;
-  }
-  get location() {
-    return expandURL(this.response.url);
-  }
-  get isHTML() {
-    return this.contentType && this.contentType.match(/^(?:text\/([^\s;,]+\b)?html|application\/xhtml\+xml)\b/);
-  }
-  get statusCode() {
-    return this.response.status;
-  }
-  get contentType() {
-    return this.header("Content-Type");
-  }
-  get responseText() {
-    return this.response.clone().text();
-  }
-  get responseHTML() {
-    if (this.isHTML) {
-      return this.response.clone().text();
-    } else {
-      return Promise.resolve(void 0);
-    }
-  }
-  header(name) {
-    return this.response.headers.get(name);
-  }
+var drive = {
+  enabled: true,
+  progressBarDelay: 500,
+  unvisitableExtensions: /* @__PURE__ */ new Set(
+    [
+      ".7z",
+      ".aac",
+      ".apk",
+      ".avi",
+      ".bmp",
+      ".bz2",
+      ".css",
+      ".csv",
+      ".deb",
+      ".dmg",
+      ".doc",
+      ".docx",
+      ".exe",
+      ".gif",
+      ".gz",
+      ".heic",
+      ".heif",
+      ".ico",
+      ".iso",
+      ".jpeg",
+      ".jpg",
+      ".js",
+      ".json",
+      ".m4a",
+      ".mkv",
+      ".mov",
+      ".mp3",
+      ".mp4",
+      ".mpeg",
+      ".mpg",
+      ".msi",
+      ".ogg",
+      ".ogv",
+      ".pdf",
+      ".pkg",
+      ".png",
+      ".ppt",
+      ".pptx",
+      ".rar",
+      ".rtf",
+      ".svg",
+      ".tar",
+      ".tif",
+      ".tiff",
+      ".txt",
+      ".wav",
+      ".webm",
+      ".webp",
+      ".wma",
+      ".wmv",
+      ".xls",
+      ".xlsx",
+      ".xml",
+      ".zip"
+    ]
+  )
 };
 function activateScriptElement(element) {
   if (element.getAttribute("data-turbo-eval") == "false") {
     return element;
   } else {
     const createdScriptElement = document.createElement("script");
-    const cspNonce = getMetaContent("csp-nonce");
+    const cspNonce = getCspNonce();
     if (cspNonce) {
       createdScriptElement.nonce = cspNonce;
     }
@@ -969,6 +940,10 @@ function dispatch(eventName, { target, cancelable, detail } = {}) {
     document.documentElement.dispatchEvent(event);
   }
   return event;
+}
+function cancelEvent(event) {
+  event.preventDefault();
+  event.stopImmediatePropagation();
 }
 function nextRepaint() {
   if (document.visibilityState === "hidden") {
@@ -1075,6 +1050,13 @@ function getMetaContent(name) {
   const element = getMetaElement(name);
   return element && element.content;
 }
+function getCspNonce() {
+  const element = getMetaElement("csp-nonce");
+  if (element) {
+    const { nonce, content } = element;
+    return nonce == "" ? content : nonce;
+  }
+}
 function setMetaContent(name, content) {
   let element = getMetaElement(name);
   if (!element) {
@@ -1131,6 +1113,134 @@ function debounce(fn2, delay) {
     timeoutId = setTimeout(callback2, delay);
   };
 }
+var submitter = {
+  "aria-disabled": {
+    beforeSubmit: (submitter2) => {
+      submitter2.setAttribute("aria-disabled", "true");
+      submitter2.addEventListener("click", cancelEvent);
+    },
+    afterSubmit: (submitter2) => {
+      submitter2.removeAttribute("aria-disabled");
+      submitter2.removeEventListener("click", cancelEvent);
+    }
+  },
+  "disabled": {
+    beforeSubmit: (submitter2) => submitter2.disabled = true,
+    afterSubmit: (submitter2) => submitter2.disabled = false
+  }
+};
+var Config = class {
+  #submitter = null;
+  constructor(config2) {
+    Object.assign(this, config2);
+  }
+  get submitter() {
+    return this.#submitter;
+  }
+  set submitter(value) {
+    this.#submitter = submitter[value] || value;
+  }
+};
+var forms = new Config({
+  mode: "on",
+  submitter: "disabled"
+});
+var config = {
+  drive,
+  forms
+};
+function expandURL(locatable) {
+  return new URL(locatable.toString(), document.baseURI);
+}
+function getAnchor(url) {
+  let anchorMatch;
+  if (url.hash) {
+    return url.hash.slice(1);
+  } else if (anchorMatch = url.href.match(/#(.*)$/)) {
+    return anchorMatch[1];
+  }
+}
+function getAction$1(form, submitter2) {
+  const action = submitter2?.getAttribute("formaction") || form.getAttribute("action") || form.action;
+  return expandURL(action);
+}
+function getExtension(url) {
+  return (getLastPathComponent(url).match(/\.[^.]*$/) || [])[0] || "";
+}
+function isPrefixedBy(baseURL, url) {
+  const prefix = getPrefix(url);
+  return baseURL.href === expandURL(prefix).href || baseURL.href.startsWith(prefix);
+}
+function locationIsVisitable(location2, rootLocation) {
+  return isPrefixedBy(location2, rootLocation) && !config.drive.unvisitableExtensions.has(getExtension(location2));
+}
+function getRequestURL(url) {
+  const anchor = getAnchor(url);
+  return anchor != null ? url.href.slice(0, -(anchor.length + 1)) : url.href;
+}
+function toCacheKey(url) {
+  return getRequestURL(url);
+}
+function urlsAreEqual(left2, right2) {
+  return expandURL(left2).href == expandURL(right2).href;
+}
+function getPathComponents(url) {
+  return url.pathname.split("/").slice(1);
+}
+function getLastPathComponent(url) {
+  return getPathComponents(url).slice(-1)[0];
+}
+function getPrefix(url) {
+  return addTrailingSlash(url.origin + url.pathname);
+}
+function addTrailingSlash(value) {
+  return value.endsWith("/") ? value : value + "/";
+}
+var FetchResponse = class {
+  constructor(response) {
+    this.response = response;
+  }
+  get succeeded() {
+    return this.response.ok;
+  }
+  get failed() {
+    return !this.succeeded;
+  }
+  get clientError() {
+    return this.statusCode >= 400 && this.statusCode <= 499;
+  }
+  get serverError() {
+    return this.statusCode >= 500 && this.statusCode <= 599;
+  }
+  get redirected() {
+    return this.response.redirected;
+  }
+  get location() {
+    return expandURL(this.response.url);
+  }
+  get isHTML() {
+    return this.contentType && this.contentType.match(/^(?:text\/([^\s;,]+\b)?html|application\/xhtml\+xml)\b/);
+  }
+  get statusCode() {
+    return this.response.status;
+  }
+  get contentType() {
+    return this.header("Content-Type");
+  }
+  get responseText() {
+    return this.response.clone().text();
+  }
+  get responseHTML() {
+    if (this.isHTML) {
+      return this.response.clone().text();
+    } else {
+      return Promise.resolve(void 0);
+    }
+  }
+  header(name) {
+    return this.response.headers.get(name);
+  }
+};
 var LimitedSet = class extends Set {
   constructor(maxSize) {
     super();
@@ -1447,17 +1557,17 @@ var FormSubmissionState = {
 };
 var FormSubmission = class _FormSubmission {
   state = FormSubmissionState.initialized;
-  static confirmMethod(message2, _element, _submitter) {
+  static confirmMethod(message2) {
     return Promise.resolve(confirm(message2));
   }
-  constructor(delegate, formElement, submitter, mustRedirect = false) {
-    const method = getMethod(formElement, submitter);
-    const action = getAction(getFormAction(formElement, submitter), method);
-    const body = buildFormData(formElement, submitter);
-    const enctype = getEnctype(formElement, submitter);
+  constructor(delegate, formElement, submitter2, mustRedirect = false) {
+    const method = getMethod(formElement, submitter2);
+    const action = getAction(getFormAction(formElement, submitter2), method);
+    const body = buildFormData(formElement, submitter2);
+    const enctype = getEnctype(formElement, submitter2);
     this.delegate = delegate;
     this.formElement = formElement;
-    this.submitter = submitter;
+    this.submitter = submitter2;
     this.fetchRequest = new FetchRequest(this, method, action, body, formElement, enctype);
     this.mustRedirect = mustRedirect;
   }
@@ -1490,7 +1600,8 @@ var FormSubmission = class _FormSubmission {
     const { initialized, requesting } = FormSubmissionState;
     const confirmationMessage = getAttribute("data-turbo-confirm", this.submitter, this.formElement);
     if (typeof confirmationMessage === "string") {
-      const answer = await _FormSubmission.confirmMethod(confirmationMessage, this.formElement, this.submitter);
+      const confirmMethod = typeof config.forms.confirm === "function" ? config.forms.confirm : _FormSubmission.confirmMethod;
+      const answer = await confirmMethod(confirmationMessage, this.formElement, this.submitter);
       if (!answer) {
         return;
       }
@@ -1522,7 +1633,8 @@ var FormSubmission = class _FormSubmission {
   }
   requestStarted(_request) {
     this.state = FormSubmissionState.waiting;
-    this.submitter?.setAttribute("disabled", "");
+    if (this.submitter)
+      config.forms.submitter.beforeSubmit(this.submitter);
     this.setSubmitsWith();
     markAsBusy(this.formElement);
     dispatch("turbo:submit-start", {
@@ -1560,7 +1672,8 @@ var FormSubmission = class _FormSubmission {
   }
   requestFinished(_request) {
     this.state = FormSubmissionState.stopped;
-    this.submitter?.removeAttribute("disabled");
+    if (this.submitter)
+      config.forms.submitter.afterSubmit(this.submitter);
     this.resetSubmitterText();
     clearBusyState(this.formElement);
     dispatch("turbo:submit-end", {
@@ -1602,10 +1715,10 @@ var FormSubmission = class _FormSubmission {
     return this.submitter?.getAttribute("data-turbo-submits-with");
   }
 };
-function buildFormData(formElement, submitter) {
+function buildFormData(formElement, submitter2) {
   const formData = new FormData(formElement);
-  const name = submitter?.getAttribute("name");
-  const value = submitter?.getAttribute("value");
+  const name = submitter2?.getAttribute("name");
+  const value = submitter2?.getAttribute("value");
   if (name) {
     formData.append(name, value || "");
   }
@@ -1624,10 +1737,10 @@ function getCookieValue(cookieName) {
 function responseSucceededWithoutRedirect(response) {
   return response.statusCode == 200 && !response.redirected;
 }
-function getFormAction(formElement, submitter) {
+function getFormAction(formElement, submitter2) {
   const formElementAction = typeof formElement.action === "string" ? formElement.action : null;
-  if (submitter?.hasAttribute("formaction")) {
-    return submitter.getAttribute("formaction") || "";
+  if (submitter2?.hasAttribute("formaction")) {
+    return submitter2.getAttribute("formaction") || "";
   } else {
     return formElement.getAttribute("action") || formElementAction || "";
   }
@@ -1639,12 +1752,12 @@ function getAction(formAction, fetchMethod) {
   }
   return action;
 }
-function getMethod(formElement, submitter) {
-  const method = submitter?.getAttribute("formmethod") || formElement.getAttribute("method") || "";
+function getMethod(formElement, submitter2) {
+  const method = submitter2?.getAttribute("formmethod") || formElement.getAttribute("method") || "";
   return fetchMethodFromString(method.toLowerCase()) || FetchMethod.get;
 }
-function getEnctype(formElement, submitter) {
-  return fetchEnctypeFromString(submitter?.getAttribute("formenctype") || formElement.enctype);
+function getEnctype(formElement, submitter2) {
+  return fetchEnctypeFromString(submitter2?.getAttribute("formenctype") || formElement.enctype);
 }
 var Snapshot = class {
   constructor(element) {
@@ -1717,21 +1830,21 @@ var FormSubmitObserver = class {
   submitBubbled = (event) => {
     if (!event.defaultPrevented) {
       const form = event.target instanceof HTMLFormElement ? event.target : void 0;
-      const submitter = event.submitter || void 0;
-      if (form && submissionDoesNotDismissDialog(form, submitter) && submissionDoesNotTargetIFrame(form, submitter) && this.delegate.willSubmitForm(form, submitter)) {
+      const submitter2 = event.submitter || void 0;
+      if (form && submissionDoesNotDismissDialog(form, submitter2) && submissionDoesNotTargetIFrame(form, submitter2) && this.delegate.willSubmitForm(form, submitter2)) {
         event.preventDefault();
         event.stopImmediatePropagation();
-        this.delegate.formSubmitted(form, submitter);
+        this.delegate.formSubmitted(form, submitter2);
       }
     }
   };
 };
-function submissionDoesNotDismissDialog(form, submitter) {
-  const method = submitter?.getAttribute("formmethod") || form.getAttribute("method");
+function submissionDoesNotDismissDialog(form, submitter2) {
+  const method = submitter2?.getAttribute("formmethod") || form.getAttribute("method");
   return method != "dialog";
 }
-function submissionDoesNotTargetIFrame(form, submitter) {
-  const target = submitter?.getAttribute("formtarget") || form.getAttribute("target");
+function submissionDoesNotTargetIFrame(form, submitter2) {
+  const target = submitter2?.getAttribute("formtarget") || form.getAttribute("target");
   return doesNotTargetIFrame(target);
 }
 var View = class {
@@ -2027,12 +2140,14 @@ function createPlaceholderForPermanentElement(permanentElement) {
 }
 var Renderer = class {
   #activeElement = null;
-  constructor(currentSnapshot, newSnapshot, renderElement, isPreview, willRender = true) {
+  static renderElement(currentElement, newElement) {
+  }
+  constructor(currentSnapshot, newSnapshot, isPreview, willRender = true) {
     this.currentSnapshot = currentSnapshot;
     this.newSnapshot = newSnapshot;
     this.isPreview = isPreview;
     this.willRender = willRender;
-    this.renderElement = renderElement;
+    this.renderElement = this.constructor.renderElement;
     this.promise = new Promise((resolve2, reject) => this.resolvingFunctions = { resolve: resolve2, reject });
   }
   get shouldRender() {
@@ -2166,6 +2281,761 @@ function readScrollBehavior(value, defaultValue) {
     return defaultValue;
   }
 }
+var Idiomorph = function() {
+  const noOp = () => {
+  };
+  const defaults2 = {
+    morphStyle: "outerHTML",
+    callbacks: {
+      beforeNodeAdded: noOp,
+      afterNodeAdded: noOp,
+      beforeNodeMorphed: noOp,
+      afterNodeMorphed: noOp,
+      beforeNodeRemoved: noOp,
+      afterNodeRemoved: noOp,
+      beforeAttributeUpdated: noOp
+    },
+    head: {
+      style: "merge",
+      shouldPreserve: (elt) => elt.getAttribute("im-preserve") === "true",
+      shouldReAppend: (elt) => elt.getAttribute("im-re-append") === "true",
+      shouldRemove: noOp,
+      afterHeadMorphed: noOp
+    },
+    restoreFocus: true
+  };
+  function morph(oldNode, newContent, config2 = {}) {
+    oldNode = normalizeElement(oldNode);
+    const newNode = normalizeParent(newContent);
+    const ctx = createMorphContext(oldNode, newNode, config2);
+    const morphedNodes = saveAndRestoreFocus(ctx, () => {
+      return withHeadBlocking(
+        ctx,
+        oldNode,
+        newNode,
+        /** @param {MorphContext} ctx */
+        (ctx2) => {
+          if (ctx2.morphStyle === "innerHTML") {
+            morphChildren2(ctx2, oldNode, newNode);
+            return Array.from(oldNode.childNodes);
+          } else {
+            return morphOuterHTML(ctx2, oldNode, newNode);
+          }
+        }
+      );
+    });
+    ctx.pantry.remove();
+    return morphedNodes;
+  }
+  function morphOuterHTML(ctx, oldNode, newNode) {
+    const oldParent = normalizeParent(oldNode);
+    let childNodes = Array.from(oldParent.childNodes);
+    const index2 = childNodes.indexOf(oldNode);
+    const rightMargin = childNodes.length - (index2 + 1);
+    morphChildren2(
+      ctx,
+      oldParent,
+      newNode,
+      // these two optional params are the secret sauce
+      oldNode,
+      // start point for iteration
+      oldNode.nextSibling
+      // end point for iteration
+    );
+    childNodes = Array.from(oldParent.childNodes);
+    return childNodes.slice(index2, childNodes.length - rightMargin);
+  }
+  function saveAndRestoreFocus(ctx, fn2) {
+    if (!ctx.config.restoreFocus)
+      return fn2();
+    let activeElement = (
+      /** @type {HTMLInputElement|HTMLTextAreaElement|null} */
+      document.activeElement
+    );
+    if (!(activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement)) {
+      return fn2();
+    }
+    const { id: activeElementId, selectionStart, selectionEnd } = activeElement;
+    const results = fn2();
+    if (activeElementId && activeElementId !== document.activeElement?.id) {
+      activeElement = ctx.target.querySelector(`#${activeElementId}`);
+      activeElement?.focus();
+    }
+    if (activeElement && !activeElement.selectionEnd && selectionEnd) {
+      activeElement.setSelectionRange(selectionStart, selectionEnd);
+    }
+    return results;
+  }
+  const morphChildren2 = /* @__PURE__ */ function() {
+    function morphChildren3(ctx, oldParent, newParent, insertionPoint = null, endPoint = null) {
+      if (oldParent instanceof HTMLTemplateElement && newParent instanceof HTMLTemplateElement) {
+        oldParent = oldParent.content;
+        newParent = newParent.content;
+      }
+      insertionPoint ||= oldParent.firstChild;
+      for (const newChild of newParent.childNodes) {
+        if (insertionPoint && insertionPoint != endPoint) {
+          const bestMatch = findBestMatch(
+            ctx,
+            newChild,
+            insertionPoint,
+            endPoint
+          );
+          if (bestMatch) {
+            if (bestMatch !== insertionPoint) {
+              removeNodesBetween(ctx, insertionPoint, bestMatch);
+            }
+            morphNode(bestMatch, newChild, ctx);
+            insertionPoint = bestMatch.nextSibling;
+            continue;
+          }
+        }
+        if (newChild instanceof Element && ctx.persistentIds.has(newChild.id)) {
+          const movedChild = moveBeforeById(
+            oldParent,
+            newChild.id,
+            insertionPoint,
+            ctx
+          );
+          morphNode(movedChild, newChild, ctx);
+          insertionPoint = movedChild.nextSibling;
+          continue;
+        }
+        const insertedNode = createNode(
+          oldParent,
+          newChild,
+          insertionPoint,
+          ctx
+        );
+        if (insertedNode) {
+          insertionPoint = insertedNode.nextSibling;
+        }
+      }
+      while (insertionPoint && insertionPoint != endPoint) {
+        const tempNode = insertionPoint;
+        insertionPoint = insertionPoint.nextSibling;
+        removeNode(ctx, tempNode);
+      }
+    }
+    function createNode(oldParent, newChild, insertionPoint, ctx) {
+      if (ctx.callbacks.beforeNodeAdded(newChild) === false)
+        return null;
+      if (ctx.idMap.has(newChild)) {
+        const newEmptyChild = document.createElement(
+          /** @type {Element} */
+          newChild.tagName
+        );
+        oldParent.insertBefore(newEmptyChild, insertionPoint);
+        morphNode(newEmptyChild, newChild, ctx);
+        ctx.callbacks.afterNodeAdded(newEmptyChild);
+        return newEmptyChild;
+      } else {
+        const newClonedChild = document.importNode(newChild, true);
+        oldParent.insertBefore(newClonedChild, insertionPoint);
+        ctx.callbacks.afterNodeAdded(newClonedChild);
+        return newClonedChild;
+      }
+    }
+    const findBestMatch = /* @__PURE__ */ function() {
+      function findBestMatch2(ctx, node, startPoint, endPoint) {
+        let softMatch = null;
+        let nextSibling = node.nextSibling;
+        let siblingSoftMatchCount = 0;
+        let cursor = startPoint;
+        while (cursor && cursor != endPoint) {
+          if (isSoftMatch(cursor, node)) {
+            if (isIdSetMatch(ctx, cursor, node)) {
+              return cursor;
+            }
+            if (softMatch === null) {
+              if (!ctx.idMap.has(cursor)) {
+                softMatch = cursor;
+              }
+            }
+          }
+          if (softMatch === null && nextSibling && isSoftMatch(cursor, nextSibling)) {
+            siblingSoftMatchCount++;
+            nextSibling = nextSibling.nextSibling;
+            if (siblingSoftMatchCount >= 2) {
+              softMatch = void 0;
+            }
+          }
+          if (cursor.contains(document.activeElement))
+            break;
+          cursor = cursor.nextSibling;
+        }
+        return softMatch || null;
+      }
+      function isIdSetMatch(ctx, oldNode, newNode) {
+        let oldSet = ctx.idMap.get(oldNode);
+        let newSet = ctx.idMap.get(newNode);
+        if (!newSet || !oldSet)
+          return false;
+        for (const id of oldSet) {
+          if (newSet.has(id)) {
+            return true;
+          }
+        }
+        return false;
+      }
+      function isSoftMatch(oldNode, newNode) {
+        const oldElt = (
+          /** @type {Element} */
+          oldNode
+        );
+        const newElt = (
+          /** @type {Element} */
+          newNode
+        );
+        return oldElt.nodeType === newElt.nodeType && oldElt.tagName === newElt.tagName && // If oldElt has an `id` with possible state and it doesn't match newElt.id then avoid morphing.
+        // We'll still match an anonymous node with an IDed newElt, though, because if it got this far,
+        // its not persistent, and new nodes can't have any hidden state.
+        (!oldElt.id || oldElt.id === newElt.id);
+      }
+      return findBestMatch2;
+    }();
+    function removeNode(ctx, node) {
+      if (ctx.idMap.has(node)) {
+        moveBefore(ctx.pantry, node, null);
+      } else {
+        if (ctx.callbacks.beforeNodeRemoved(node) === false)
+          return;
+        node.parentNode?.removeChild(node);
+        ctx.callbacks.afterNodeRemoved(node);
+      }
+    }
+    function removeNodesBetween(ctx, startInclusive, endExclusive) {
+      let cursor = startInclusive;
+      while (cursor && cursor !== endExclusive) {
+        let tempNode = (
+          /** @type {Node} */
+          cursor
+        );
+        cursor = cursor.nextSibling;
+        removeNode(ctx, tempNode);
+      }
+      return cursor;
+    }
+    function moveBeforeById(parentNode, id, after, ctx) {
+      const target = (
+        /** @type {Element} - will always be found */
+        ctx.target.querySelector(`#${id}`) || ctx.pantry.querySelector(`#${id}`)
+      );
+      removeElementFromAncestorsIdMaps(target, ctx);
+      moveBefore(parentNode, target, after);
+      return target;
+    }
+    function removeElementFromAncestorsIdMaps(element, ctx) {
+      const id = element.id;
+      while (element = element.parentNode) {
+        let idSet = ctx.idMap.get(element);
+        if (idSet) {
+          idSet.delete(id);
+          if (!idSet.size) {
+            ctx.idMap.delete(element);
+          }
+        }
+      }
+    }
+    function moveBefore(parentNode, element, after) {
+      if (parentNode.moveBefore) {
+        try {
+          parentNode.moveBefore(element, after);
+        } catch (e) {
+          parentNode.insertBefore(element, after);
+        }
+      } else {
+        parentNode.insertBefore(element, after);
+      }
+    }
+    return morphChildren3;
+  }();
+  const morphNode = /* @__PURE__ */ function() {
+    function morphNode2(oldNode, newContent, ctx) {
+      if (ctx.ignoreActive && oldNode === document.activeElement) {
+        return null;
+      }
+      if (ctx.callbacks.beforeNodeMorphed(oldNode, newContent) === false) {
+        return oldNode;
+      }
+      if (oldNode instanceof HTMLHeadElement && ctx.head.ignore)
+        ;
+      else if (oldNode instanceof HTMLHeadElement && ctx.head.style !== "morph") {
+        handleHeadElement(
+          oldNode,
+          /** @type {HTMLHeadElement} */
+          newContent,
+          ctx
+        );
+      } else {
+        morphAttributes(oldNode, newContent, ctx);
+        if (!ignoreValueOfActiveElement(oldNode, ctx)) {
+          morphChildren2(ctx, oldNode, newContent);
+        }
+      }
+      ctx.callbacks.afterNodeMorphed(oldNode, newContent);
+      return oldNode;
+    }
+    function morphAttributes(oldNode, newNode, ctx) {
+      let type = newNode.nodeType;
+      if (type === 1) {
+        const oldElt = (
+          /** @type {Element} */
+          oldNode
+        );
+        const newElt = (
+          /** @type {Element} */
+          newNode
+        );
+        const oldAttributes = oldElt.attributes;
+        const newAttributes = newElt.attributes;
+        for (const newAttribute of newAttributes) {
+          if (ignoreAttribute(newAttribute.name, oldElt, "update", ctx)) {
+            continue;
+          }
+          if (oldElt.getAttribute(newAttribute.name) !== newAttribute.value) {
+            oldElt.setAttribute(newAttribute.name, newAttribute.value);
+          }
+        }
+        for (let i = oldAttributes.length - 1; 0 <= i; i--) {
+          const oldAttribute = oldAttributes[i];
+          if (!oldAttribute)
+            continue;
+          if (!newElt.hasAttribute(oldAttribute.name)) {
+            if (ignoreAttribute(oldAttribute.name, oldElt, "remove", ctx)) {
+              continue;
+            }
+            oldElt.removeAttribute(oldAttribute.name);
+          }
+        }
+        if (!ignoreValueOfActiveElement(oldElt, ctx)) {
+          syncInputValue(oldElt, newElt, ctx);
+        }
+      }
+      if (type === 8 || type === 3) {
+        if (oldNode.nodeValue !== newNode.nodeValue) {
+          oldNode.nodeValue = newNode.nodeValue;
+        }
+      }
+    }
+    function syncInputValue(oldElement, newElement, ctx) {
+      if (oldElement instanceof HTMLInputElement && newElement instanceof HTMLInputElement && newElement.type !== "file") {
+        let newValue = newElement.value;
+        let oldValue = oldElement.value;
+        syncBooleanAttribute(oldElement, newElement, "checked", ctx);
+        syncBooleanAttribute(oldElement, newElement, "disabled", ctx);
+        if (!newElement.hasAttribute("value")) {
+          if (!ignoreAttribute("value", oldElement, "remove", ctx)) {
+            oldElement.value = "";
+            oldElement.removeAttribute("value");
+          }
+        } else if (oldValue !== newValue) {
+          if (!ignoreAttribute("value", oldElement, "update", ctx)) {
+            oldElement.setAttribute("value", newValue);
+            oldElement.value = newValue;
+          }
+        }
+      } else if (oldElement instanceof HTMLOptionElement && newElement instanceof HTMLOptionElement) {
+        syncBooleanAttribute(oldElement, newElement, "selected", ctx);
+      } else if (oldElement instanceof HTMLTextAreaElement && newElement instanceof HTMLTextAreaElement) {
+        let newValue = newElement.value;
+        let oldValue = oldElement.value;
+        if (ignoreAttribute("value", oldElement, "update", ctx)) {
+          return;
+        }
+        if (newValue !== oldValue) {
+          oldElement.value = newValue;
+        }
+        if (oldElement.firstChild && oldElement.firstChild.nodeValue !== newValue) {
+          oldElement.firstChild.nodeValue = newValue;
+        }
+      }
+    }
+    function syncBooleanAttribute(oldElement, newElement, attributeName, ctx) {
+      const newLiveValue = newElement[attributeName], oldLiveValue = oldElement[attributeName];
+      if (newLiveValue !== oldLiveValue) {
+        const ignoreUpdate = ignoreAttribute(
+          attributeName,
+          oldElement,
+          "update",
+          ctx
+        );
+        if (!ignoreUpdate) {
+          oldElement[attributeName] = newElement[attributeName];
+        }
+        if (newLiveValue) {
+          if (!ignoreUpdate) {
+            oldElement.setAttribute(attributeName, "");
+          }
+        } else {
+          if (!ignoreAttribute(attributeName, oldElement, "remove", ctx)) {
+            oldElement.removeAttribute(attributeName);
+          }
+        }
+      }
+    }
+    function ignoreAttribute(attr, element, updateType, ctx) {
+      if (attr === "value" && ctx.ignoreActiveValue && element === document.activeElement) {
+        return true;
+      }
+      return ctx.callbacks.beforeAttributeUpdated(attr, element, updateType) === false;
+    }
+    function ignoreValueOfActiveElement(possibleActiveElement, ctx) {
+      return !!ctx.ignoreActiveValue && possibleActiveElement === document.activeElement && possibleActiveElement !== document.body;
+    }
+    return morphNode2;
+  }();
+  function withHeadBlocking(ctx, oldNode, newNode, callback2) {
+    if (ctx.head.block) {
+      const oldHead = oldNode.querySelector("head");
+      const newHead = newNode.querySelector("head");
+      if (oldHead && newHead) {
+        const promises = handleHeadElement(oldHead, newHead, ctx);
+        return Promise.all(promises).then(() => {
+          const newCtx = Object.assign(ctx, {
+            head: {
+              block: false,
+              ignore: true
+            }
+          });
+          return callback2(newCtx);
+        });
+      }
+    }
+    return callback2(ctx);
+  }
+  function handleHeadElement(oldHead, newHead, ctx) {
+    let added = [];
+    let removed = [];
+    let preserved = [];
+    let nodesToAppend = [];
+    let srcToNewHeadNodes = /* @__PURE__ */ new Map();
+    for (const newHeadChild of newHead.children) {
+      srcToNewHeadNodes.set(newHeadChild.outerHTML, newHeadChild);
+    }
+    for (const currentHeadElt of oldHead.children) {
+      let inNewContent = srcToNewHeadNodes.has(currentHeadElt.outerHTML);
+      let isReAppended = ctx.head.shouldReAppend(currentHeadElt);
+      let isPreserved = ctx.head.shouldPreserve(currentHeadElt);
+      if (inNewContent || isPreserved) {
+        if (isReAppended) {
+          removed.push(currentHeadElt);
+        } else {
+          srcToNewHeadNodes.delete(currentHeadElt.outerHTML);
+          preserved.push(currentHeadElt);
+        }
+      } else {
+        if (ctx.head.style === "append") {
+          if (isReAppended) {
+            removed.push(currentHeadElt);
+            nodesToAppend.push(currentHeadElt);
+          }
+        } else {
+          if (ctx.head.shouldRemove(currentHeadElt) !== false) {
+            removed.push(currentHeadElt);
+          }
+        }
+      }
+    }
+    nodesToAppend.push(...srcToNewHeadNodes.values());
+    let promises = [];
+    for (const newNode of nodesToAppend) {
+      let newElt = (
+        /** @type {ChildNode} */
+        document.createRange().createContextualFragment(newNode.outerHTML).firstChild
+      );
+      if (ctx.callbacks.beforeNodeAdded(newElt) !== false) {
+        if ("href" in newElt && newElt.href || "src" in newElt && newElt.src) {
+          let resolve2;
+          let promise = new Promise(function(_resolve2) {
+            resolve2 = _resolve2;
+          });
+          newElt.addEventListener("load", function() {
+            resolve2();
+          });
+          promises.push(promise);
+        }
+        oldHead.appendChild(newElt);
+        ctx.callbacks.afterNodeAdded(newElt);
+        added.push(newElt);
+      }
+    }
+    for (const removedElement of removed) {
+      if (ctx.callbacks.beforeNodeRemoved(removedElement) !== false) {
+        oldHead.removeChild(removedElement);
+        ctx.callbacks.afterNodeRemoved(removedElement);
+      }
+    }
+    ctx.head.afterHeadMorphed(oldHead, {
+      added,
+      kept: preserved,
+      removed
+    });
+    return promises;
+  }
+  const createMorphContext = /* @__PURE__ */ function() {
+    function createMorphContext2(oldNode, newContent, config2) {
+      const { persistentIds, idMap } = createIdMaps(oldNode, newContent);
+      const mergedConfig = mergeDefaults(config2);
+      const morphStyle = mergedConfig.morphStyle || "outerHTML";
+      if (!["innerHTML", "outerHTML"].includes(morphStyle)) {
+        throw `Do not understand how to morph style ${morphStyle}`;
+      }
+      return {
+        target: oldNode,
+        newContent,
+        config: mergedConfig,
+        morphStyle,
+        ignoreActive: mergedConfig.ignoreActive,
+        ignoreActiveValue: mergedConfig.ignoreActiveValue,
+        restoreFocus: mergedConfig.restoreFocus,
+        idMap,
+        persistentIds,
+        pantry: createPantry(),
+        callbacks: mergedConfig.callbacks,
+        head: mergedConfig.head
+      };
+    }
+    function mergeDefaults(config2) {
+      let finalConfig = Object.assign({}, defaults2);
+      Object.assign(finalConfig, config2);
+      finalConfig.callbacks = Object.assign(
+        {},
+        defaults2.callbacks,
+        config2.callbacks
+      );
+      finalConfig.head = Object.assign({}, defaults2.head, config2.head);
+      return finalConfig;
+    }
+    function createPantry() {
+      const pantry = document.createElement("div");
+      pantry.hidden = true;
+      document.body.insertAdjacentElement("afterend", pantry);
+      return pantry;
+    }
+    function findIdElements(root) {
+      let elements2 = Array.from(root.querySelectorAll("[id]"));
+      if (root.id) {
+        elements2.push(root);
+      }
+      return elements2;
+    }
+    function populateIdMapWithTree(idMap, persistentIds, root, elements2) {
+      for (const elt of elements2) {
+        if (persistentIds.has(elt.id)) {
+          let current = elt;
+          while (current) {
+            let idSet = idMap.get(current);
+            if (idSet == null) {
+              idSet = /* @__PURE__ */ new Set();
+              idMap.set(current, idSet);
+            }
+            idSet.add(elt.id);
+            if (current === root)
+              break;
+            current = current.parentElement;
+          }
+        }
+      }
+    }
+    function createIdMaps(oldContent, newContent) {
+      const oldIdElements = findIdElements(oldContent);
+      const newIdElements = findIdElements(newContent);
+      const persistentIds = createPersistentIds(oldIdElements, newIdElements);
+      let idMap = /* @__PURE__ */ new Map();
+      populateIdMapWithTree(idMap, persistentIds, oldContent, oldIdElements);
+      const newRoot = newContent.__idiomorphRoot || newContent;
+      populateIdMapWithTree(idMap, persistentIds, newRoot, newIdElements);
+      return { persistentIds, idMap };
+    }
+    function createPersistentIds(oldIdElements, newIdElements) {
+      let duplicateIds = /* @__PURE__ */ new Set();
+      let oldIdTagNameMap = /* @__PURE__ */ new Map();
+      for (const { id, tagName } of oldIdElements) {
+        if (oldIdTagNameMap.has(id)) {
+          duplicateIds.add(id);
+        } else {
+          oldIdTagNameMap.set(id, tagName);
+        }
+      }
+      let persistentIds = /* @__PURE__ */ new Set();
+      for (const { id, tagName } of newIdElements) {
+        if (persistentIds.has(id)) {
+          duplicateIds.add(id);
+        } else if (oldIdTagNameMap.get(id) === tagName) {
+          persistentIds.add(id);
+        }
+      }
+      for (const id of duplicateIds) {
+        persistentIds.delete(id);
+      }
+      return persistentIds;
+    }
+    return createMorphContext2;
+  }();
+  const { normalizeElement, normalizeParent } = /* @__PURE__ */ function() {
+    const generatedByIdiomorph = /* @__PURE__ */ new WeakSet();
+    function normalizeElement2(content) {
+      if (content instanceof Document) {
+        return content.documentElement;
+      } else {
+        return content;
+      }
+    }
+    function normalizeParent2(newContent) {
+      if (newContent == null) {
+        return document.createElement("div");
+      } else if (typeof newContent === "string") {
+        return normalizeParent2(parseContent(newContent));
+      } else if (generatedByIdiomorph.has(
+        /** @type {Element} */
+        newContent
+      )) {
+        return (
+          /** @type {Element} */
+          newContent
+        );
+      } else if (newContent instanceof Node) {
+        if (newContent.parentNode) {
+          return createDuckTypedParent(newContent);
+        } else {
+          const dummyParent = document.createElement("div");
+          dummyParent.append(newContent);
+          return dummyParent;
+        }
+      } else {
+        const dummyParent = document.createElement("div");
+        for (const elt of [...newContent]) {
+          dummyParent.append(elt);
+        }
+        return dummyParent;
+      }
+    }
+    function createDuckTypedParent(newContent) {
+      return (
+        /** @type {Element} */
+        /** @type {unknown} */
+        {
+          childNodes: [newContent],
+          /** @ts-ignore - cover your eyes for a minute, tsc */
+          querySelectorAll: (s) => {
+            const elements2 = newContent.querySelectorAll(s);
+            return newContent.matches(s) ? [newContent, ...elements2] : elements2;
+          },
+          /** @ts-ignore */
+          insertBefore: (n, r) => newContent.parentNode.insertBefore(n, r),
+          /** @ts-ignore */
+          moveBefore: (n, r) => newContent.parentNode.moveBefore(n, r),
+          // for later use with populateIdMapWithTree to halt upwards iteration
+          get __idiomorphRoot() {
+            return newContent;
+          }
+        }
+      );
+    }
+    function parseContent(newContent) {
+      let parser = new DOMParser();
+      let contentWithSvgsRemoved = newContent.replace(
+        /<svg(\s[^>]*>|>)([\s\S]*?)<\/svg>/gim,
+        ""
+      );
+      if (contentWithSvgsRemoved.match(/<\/html>/) || contentWithSvgsRemoved.match(/<\/head>/) || contentWithSvgsRemoved.match(/<\/body>/)) {
+        let content = parser.parseFromString(newContent, "text/html");
+        if (contentWithSvgsRemoved.match(/<\/html>/)) {
+          generatedByIdiomorph.add(content);
+          return content;
+        } else {
+          let htmlElement = content.firstChild;
+          if (htmlElement) {
+            generatedByIdiomorph.add(htmlElement);
+          }
+          return htmlElement;
+        }
+      } else {
+        let responseDoc = parser.parseFromString(
+          "<body><template>" + newContent + "</template></body>",
+          "text/html"
+        );
+        let content = (
+          /** @type {HTMLTemplateElement} */
+          responseDoc.body.querySelector("template").content
+        );
+        generatedByIdiomorph.add(content);
+        return content;
+      }
+    }
+    return { normalizeElement: normalizeElement2, normalizeParent: normalizeParent2 };
+  }();
+  return {
+    morph,
+    defaults: defaults2
+  };
+}();
+function morphElements(currentElement, newElement, { callbacks: callbacks2, ...options } = {}) {
+  Idiomorph.morph(currentElement, newElement, {
+    ...options,
+    callbacks: new DefaultIdiomorphCallbacks(callbacks2)
+  });
+}
+function morphChildren(currentElement, newElement) {
+  morphElements(currentElement, newElement.childNodes, {
+    morphStyle: "innerHTML"
+  });
+}
+var DefaultIdiomorphCallbacks = class {
+  #beforeNodeMorphed;
+  constructor({ beforeNodeMorphed } = {}) {
+    this.#beforeNodeMorphed = beforeNodeMorphed || (() => true);
+  }
+  beforeNodeAdded = (node) => {
+    return !(node.id && node.hasAttribute("data-turbo-permanent") && document.getElementById(node.id));
+  };
+  beforeNodeMorphed = (currentElement, newElement) => {
+    if (currentElement instanceof Element) {
+      if (!currentElement.hasAttribute("data-turbo-permanent") && this.#beforeNodeMorphed(currentElement, newElement)) {
+        const event = dispatch("turbo:before-morph-element", {
+          cancelable: true,
+          target: currentElement,
+          detail: { currentElement, newElement }
+        });
+        return !event.defaultPrevented;
+      } else {
+        return false;
+      }
+    }
+  };
+  beforeAttributeUpdated = (attributeName, target, mutationType) => {
+    const event = dispatch("turbo:before-morph-attribute", {
+      cancelable: true,
+      target,
+      detail: { attributeName, mutationType }
+    });
+    return !event.defaultPrevented;
+  };
+  beforeNodeRemoved = (node) => {
+    return this.beforeNodeMorphed(node);
+  };
+  afterNodeMorphed = (currentElement, newElement) => {
+    if (currentElement instanceof Element) {
+      dispatch("turbo:morph-element", {
+        target: currentElement,
+        detail: { currentElement, newElement }
+      });
+    }
+  };
+};
+var MorphingFrameRenderer = class extends FrameRenderer {
+  static renderElement(currentElement, newElement) {
+    dispatch("turbo:before-frame-morph", {
+      target: currentElement,
+      detail: { currentElement, newElement }
+    });
+    morphChildren(currentElement, newElement);
+  }
+  async preservingPermanentElements(callback2) {
+    return await callback2();
+  }
+};
 var ProgressBar = class _ProgressBar {
   static animationDuration = 300;
   /*ms*/
@@ -2257,8 +3127,9 @@ var ProgressBar = class _ProgressBar {
     const element = document.createElement("style");
     element.type = "text/css";
     element.textContent = _ProgressBar.defaultCSS;
-    if (this.cspNonce) {
-      element.nonce = this.cspNonce;
+    const cspNonce = getCspNonce();
+    if (cspNonce) {
+      element.nonce = cspNonce;
     }
     return element;
   }
@@ -2266,9 +3137,6 @@ var ProgressBar = class _ProgressBar {
     const element = document.createElement("div");
     element.className = "turbo-progress-bar";
     return element;
-  }
-  get cspNonce() {
-    return getMetaContent("csp-nonce");
   }
 };
 var HeadSnapshot = class extends Snapshot {
@@ -2774,15 +3642,6 @@ var Visit = class {
     return { ...this.timingMetrics };
   }
   // Private
-  getHistoryMethodForAction(action) {
-    switch (action) {
-      case "replace":
-        return history.replaceState;
-      case "advance":
-      case "restore":
-        return history.pushState;
-    }
-  }
   hasPreloadedResponse() {
     return typeof this.response == "object";
   }
@@ -2803,7 +3662,9 @@ var Visit = class {
   }
   async render(callback2) {
     this.cancelRender();
-    this.frame = await nextRepaint();
+    await new Promise((resolve2) => {
+      this.frame = document.visibilityState === "hidden" ? setTimeout(() => resolve2(), 0) : requestAnimationFrame(() => resolve2());
+    });
     await callback2();
     delete this.frame;
   }
@@ -2881,6 +3742,10 @@ var BrowserAdapter = class {
     this.hideVisitProgressBar();
   }
   visitRendered(_visit) {
+  }
+  // Link prefetching
+  linkPrefetchingIsEnabledForLocation(location2) {
+    return true;
   }
   // Form Submission Delegate
   formSubmissionStarted(_formSubmission) {
@@ -2985,32 +3850,32 @@ var FrameRedirector = class {
     }
   }
   // Form submit observer delegate
-  willSubmitForm(element, submitter) {
-    return element.closest("turbo-frame") == null && this.#shouldSubmit(element, submitter) && this.#shouldRedirect(element, submitter);
+  willSubmitForm(element, submitter2) {
+    return element.closest("turbo-frame") == null && this.#shouldSubmit(element, submitter2) && this.#shouldRedirect(element, submitter2);
   }
-  formSubmitted(element, submitter) {
-    const frame = this.#findFrameElement(element, submitter);
+  formSubmitted(element, submitter2) {
+    const frame = this.#findFrameElement(element, submitter2);
     if (frame) {
-      frame.delegate.formSubmitted(element, submitter);
+      frame.delegate.formSubmitted(element, submitter2);
     }
   }
-  #shouldSubmit(form, submitter) {
-    const action = getAction$1(form, submitter);
+  #shouldSubmit(form, submitter2) {
+    const action = getAction$1(form, submitter2);
     const meta = this.element.ownerDocument.querySelector(`meta[name="turbo-root"]`);
     const rootLocation = expandURL(meta?.content ?? "/");
-    return this.#shouldRedirect(form, submitter) && locationIsVisitable(action, rootLocation);
+    return this.#shouldRedirect(form, submitter2) && locationIsVisitable(action, rootLocation);
   }
-  #shouldRedirect(element, submitter) {
-    const isNavigatable = element instanceof HTMLFormElement ? this.session.submissionIsNavigatable(element, submitter) : this.session.elementIsNavigatable(element);
+  #shouldRedirect(element, submitter2) {
+    const isNavigatable = element instanceof HTMLFormElement ? this.session.submissionIsNavigatable(element, submitter2) : this.session.elementIsNavigatable(element);
     if (isNavigatable) {
-      const frame = this.#findFrameElement(element, submitter);
+      const frame = this.#findFrameElement(element, submitter2);
       return frame ? frame != element.closest("turbo-frame") : false;
     } else {
       return false;
     }
   }
-  #findFrameElement(element, submitter) {
-    const id = submitter?.getAttribute("data-turbo-frame") || element.getAttribute("data-turbo-frame");
+  #findFrameElement(element, submitter2) {
+    const id = submitter2?.getAttribute("data-turbo-frame") || element.getAttribute("data-turbo-frame");
     if (id && id != "_top") {
       const frame = this.element.querySelector(`#${id}:not([disabled])`);
       if (frame instanceof FrameElement) {
@@ -3284,9 +4149,9 @@ var Navigator = class {
     });
     this.currentVisit.start();
   }
-  submitForm(form, submitter) {
+  submitForm(form, submitter2) {
     this.stop();
-    this.formSubmission = new FormSubmission(this, form, submitter, true);
+    this.formSubmission = new FormSubmission(this, form, submitter2, true);
     this.formSubmission.start();
   }
   stop() {
@@ -3359,6 +4224,13 @@ var Navigator = class {
       this.adapter.formSubmissionFinished(formSubmission);
     }
   }
+  // Link prefetching
+  linkPrefetchingIsEnabledForLocation(location2) {
+    if (typeof this.adapter.linkPrefetchingIsEnabledForLocation === "function") {
+      return this.adapter.linkPrefetchingIsEnabledForLocation(location2);
+    }
+    return true;
+  }
   // Visit delegate
   visitStarted(visit2) {
     this.delegate.visitStarted(visit2);
@@ -3384,8 +4256,8 @@ var Navigator = class {
     return this.history.restorationIdentifier;
   }
   #getActionForFormSubmission(formSubmission, fetchResponse) {
-    const { submitter, formElement } = formSubmission;
-    return getVisitAction(submitter, formElement) || this.#getDefaultAction(fetchResponse);
+    const { submitter: submitter2, formElement } = formSubmission;
+    return getVisitAction(submitter2, formElement) || this.#getDefaultAction(fetchResponse);
   }
   #getDefaultAction(fetchResponse) {
     const sameLocationRedirect = fetchResponse.redirected && fetchResponse.location.href === this.location?.href;
@@ -3645,615 +4517,6 @@ var ErrorRenderer = class extends Renderer {
     return document.documentElement.querySelectorAll("script");
   }
 };
-var Idiomorph = /* @__PURE__ */ function() {
-  let EMPTY_SET = /* @__PURE__ */ new Set();
-  let defaults2 = {
-    morphStyle: "outerHTML",
-    callbacks: {
-      beforeNodeAdded: noOp,
-      afterNodeAdded: noOp,
-      beforeNodeMorphed: noOp,
-      afterNodeMorphed: noOp,
-      beforeNodeRemoved: noOp,
-      afterNodeRemoved: noOp,
-      beforeAttributeUpdated: noOp
-    },
-    head: {
-      style: "merge",
-      shouldPreserve: function(elt) {
-        return elt.getAttribute("im-preserve") === "true";
-      },
-      shouldReAppend: function(elt) {
-        return elt.getAttribute("im-re-append") === "true";
-      },
-      shouldRemove: noOp,
-      afterHeadMorphed: noOp
-    }
-  };
-  function morph(oldNode, newContent, config = {}) {
-    if (oldNode instanceof Document) {
-      oldNode = oldNode.documentElement;
-    }
-    if (typeof newContent === "string") {
-      newContent = parseContent(newContent);
-    }
-    let normalizedContent = normalizeContent(newContent);
-    let ctx = createMorphContext(oldNode, normalizedContent, config);
-    return morphNormalizedContent(oldNode, normalizedContent, ctx);
-  }
-  function morphNormalizedContent(oldNode, normalizedNewContent, ctx) {
-    if (ctx.head.block) {
-      let oldHead = oldNode.querySelector("head");
-      let newHead = normalizedNewContent.querySelector("head");
-      if (oldHead && newHead) {
-        let promises = handleHeadElement(newHead, oldHead, ctx);
-        Promise.all(promises).then(function() {
-          morphNormalizedContent(oldNode, normalizedNewContent, Object.assign(ctx, {
-            head: {
-              block: false,
-              ignore: true
-            }
-          }));
-        });
-        return;
-      }
-    }
-    if (ctx.morphStyle === "innerHTML") {
-      morphChildren2(normalizedNewContent, oldNode, ctx);
-      return oldNode.children;
-    } else if (ctx.morphStyle === "outerHTML" || ctx.morphStyle == null) {
-      let bestMatch = findBestNodeMatch(normalizedNewContent, oldNode, ctx);
-      let previousSibling = bestMatch?.previousSibling;
-      let nextSibling = bestMatch?.nextSibling;
-      let morphedNode = morphOldNodeTo(oldNode, bestMatch, ctx);
-      if (bestMatch) {
-        return insertSiblings(previousSibling, morphedNode, nextSibling);
-      } else {
-        return [];
-      }
-    } else {
-      throw "Do not understand how to morph style " + ctx.morphStyle;
-    }
-  }
-  function ignoreValueOfActiveElement(possibleActiveElement, ctx) {
-    return ctx.ignoreActiveValue && possibleActiveElement === document.activeElement && possibleActiveElement !== document.body;
-  }
-  function morphOldNodeTo(oldNode, newContent, ctx) {
-    if (ctx.ignoreActive && oldNode === document.activeElement)
-      ;
-    else if (newContent == null) {
-      if (ctx.callbacks.beforeNodeRemoved(oldNode) === false)
-        return oldNode;
-      oldNode.remove();
-      ctx.callbacks.afterNodeRemoved(oldNode);
-      return null;
-    } else if (!isSoftMatch(oldNode, newContent)) {
-      if (ctx.callbacks.beforeNodeRemoved(oldNode) === false)
-        return oldNode;
-      if (ctx.callbacks.beforeNodeAdded(newContent) === false)
-        return oldNode;
-      oldNode.parentElement.replaceChild(newContent, oldNode);
-      ctx.callbacks.afterNodeAdded(newContent);
-      ctx.callbacks.afterNodeRemoved(oldNode);
-      return newContent;
-    } else {
-      if (ctx.callbacks.beforeNodeMorphed(oldNode, newContent) === false)
-        return oldNode;
-      if (oldNode instanceof HTMLHeadElement && ctx.head.ignore)
-        ;
-      else if (oldNode instanceof HTMLHeadElement && ctx.head.style !== "morph") {
-        handleHeadElement(newContent, oldNode, ctx);
-      } else {
-        syncNodeFrom(newContent, oldNode, ctx);
-        if (!ignoreValueOfActiveElement(oldNode, ctx)) {
-          morphChildren2(newContent, oldNode, ctx);
-        }
-      }
-      ctx.callbacks.afterNodeMorphed(oldNode, newContent);
-      return oldNode;
-    }
-  }
-  function morphChildren2(newParent, oldParent, ctx) {
-    let nextNewChild = newParent.firstChild;
-    let insertionPoint = oldParent.firstChild;
-    let newChild;
-    while (nextNewChild) {
-      newChild = nextNewChild;
-      nextNewChild = newChild.nextSibling;
-      if (insertionPoint == null) {
-        if (ctx.callbacks.beforeNodeAdded(newChild) === false)
-          return;
-        oldParent.appendChild(newChild);
-        ctx.callbacks.afterNodeAdded(newChild);
-        removeIdsFromConsideration(ctx, newChild);
-        continue;
-      }
-      if (isIdSetMatch(newChild, insertionPoint, ctx)) {
-        morphOldNodeTo(insertionPoint, newChild, ctx);
-        insertionPoint = insertionPoint.nextSibling;
-        removeIdsFromConsideration(ctx, newChild);
-        continue;
-      }
-      let idSetMatch = findIdSetMatch(newParent, oldParent, newChild, insertionPoint, ctx);
-      if (idSetMatch) {
-        insertionPoint = removeNodesBetween(insertionPoint, idSetMatch, ctx);
-        morphOldNodeTo(idSetMatch, newChild, ctx);
-        removeIdsFromConsideration(ctx, newChild);
-        continue;
-      }
-      let softMatch = findSoftMatch(newParent, oldParent, newChild, insertionPoint, ctx);
-      if (softMatch) {
-        insertionPoint = removeNodesBetween(insertionPoint, softMatch, ctx);
-        morphOldNodeTo(softMatch, newChild, ctx);
-        removeIdsFromConsideration(ctx, newChild);
-        continue;
-      }
-      if (ctx.callbacks.beforeNodeAdded(newChild) === false)
-        return;
-      oldParent.insertBefore(newChild, insertionPoint);
-      ctx.callbacks.afterNodeAdded(newChild);
-      removeIdsFromConsideration(ctx, newChild);
-    }
-    while (insertionPoint !== null) {
-      let tempNode = insertionPoint;
-      insertionPoint = insertionPoint.nextSibling;
-      removeNode(tempNode, ctx);
-    }
-  }
-  function ignoreAttribute(attr, to2, updateType, ctx) {
-    if (attr === "value" && ctx.ignoreActiveValue && to2 === document.activeElement) {
-      return true;
-    }
-    return ctx.callbacks.beforeAttributeUpdated(attr, to2, updateType) === false;
-  }
-  function syncNodeFrom(from2, to2, ctx) {
-    let type = from2.nodeType;
-    if (type === 1) {
-      const fromAttributes = from2.attributes;
-      const toAttributes = to2.attributes;
-      for (const fromAttribute of fromAttributes) {
-        if (ignoreAttribute(fromAttribute.name, to2, "update", ctx)) {
-          continue;
-        }
-        if (to2.getAttribute(fromAttribute.name) !== fromAttribute.value) {
-          to2.setAttribute(fromAttribute.name, fromAttribute.value);
-        }
-      }
-      for (let i = toAttributes.length - 1; 0 <= i; i--) {
-        const toAttribute = toAttributes[i];
-        if (ignoreAttribute(toAttribute.name, to2, "remove", ctx)) {
-          continue;
-        }
-        if (!from2.hasAttribute(toAttribute.name)) {
-          to2.removeAttribute(toAttribute.name);
-        }
-      }
-    }
-    if (type === 8 || type === 3) {
-      if (to2.nodeValue !== from2.nodeValue) {
-        to2.nodeValue = from2.nodeValue;
-      }
-    }
-    if (!ignoreValueOfActiveElement(to2, ctx)) {
-      syncInputValue(from2, to2, ctx);
-    }
-  }
-  function syncBooleanAttribute(from2, to2, attributeName, ctx) {
-    if (from2[attributeName] !== to2[attributeName]) {
-      let ignoreUpdate = ignoreAttribute(attributeName, to2, "update", ctx);
-      if (!ignoreUpdate) {
-        to2[attributeName] = from2[attributeName];
-      }
-      if (from2[attributeName]) {
-        if (!ignoreUpdate) {
-          to2.setAttribute(attributeName, from2[attributeName]);
-        }
-      } else {
-        if (!ignoreAttribute(attributeName, to2, "remove", ctx)) {
-          to2.removeAttribute(attributeName);
-        }
-      }
-    }
-  }
-  function syncInputValue(from2, to2, ctx) {
-    if (from2 instanceof HTMLInputElement && to2 instanceof HTMLInputElement && from2.type !== "file") {
-      let fromValue = from2.value;
-      let toValue = to2.value;
-      syncBooleanAttribute(from2, to2, "checked", ctx);
-      syncBooleanAttribute(from2, to2, "disabled", ctx);
-      if (!from2.hasAttribute("value")) {
-        if (!ignoreAttribute("value", to2, "remove", ctx)) {
-          to2.value = "";
-          to2.removeAttribute("value");
-        }
-      } else if (fromValue !== toValue) {
-        if (!ignoreAttribute("value", to2, "update", ctx)) {
-          to2.setAttribute("value", fromValue);
-          to2.value = fromValue;
-        }
-      }
-    } else if (from2 instanceof HTMLOptionElement) {
-      syncBooleanAttribute(from2, to2, "selected", ctx);
-    } else if (from2 instanceof HTMLTextAreaElement && to2 instanceof HTMLTextAreaElement) {
-      let fromValue = from2.value;
-      let toValue = to2.value;
-      if (ignoreAttribute("value", to2, "update", ctx)) {
-        return;
-      }
-      if (fromValue !== toValue) {
-        to2.value = fromValue;
-      }
-      if (to2.firstChild && to2.firstChild.nodeValue !== fromValue) {
-        to2.firstChild.nodeValue = fromValue;
-      }
-    }
-  }
-  function handleHeadElement(newHeadTag, currentHead, ctx) {
-    let added = [];
-    let removed = [];
-    let preserved = [];
-    let nodesToAppend = [];
-    let headMergeStyle = ctx.head.style;
-    let srcToNewHeadNodes = /* @__PURE__ */ new Map();
-    for (const newHeadChild of newHeadTag.children) {
-      srcToNewHeadNodes.set(newHeadChild.outerHTML, newHeadChild);
-    }
-    for (const currentHeadElt of currentHead.children) {
-      let inNewContent = srcToNewHeadNodes.has(currentHeadElt.outerHTML);
-      let isReAppended = ctx.head.shouldReAppend(currentHeadElt);
-      let isPreserved = ctx.head.shouldPreserve(currentHeadElt);
-      if (inNewContent || isPreserved) {
-        if (isReAppended) {
-          removed.push(currentHeadElt);
-        } else {
-          srcToNewHeadNodes.delete(currentHeadElt.outerHTML);
-          preserved.push(currentHeadElt);
-        }
-      } else {
-        if (headMergeStyle === "append") {
-          if (isReAppended) {
-            removed.push(currentHeadElt);
-            nodesToAppend.push(currentHeadElt);
-          }
-        } else {
-          if (ctx.head.shouldRemove(currentHeadElt) !== false) {
-            removed.push(currentHeadElt);
-          }
-        }
-      }
-    }
-    nodesToAppend.push(...srcToNewHeadNodes.values());
-    let promises = [];
-    for (const newNode of nodesToAppend) {
-      let newElt = document.createRange().createContextualFragment(newNode.outerHTML).firstChild;
-      if (ctx.callbacks.beforeNodeAdded(newElt) !== false) {
-        if (newElt.href || newElt.src) {
-          let resolve2 = null;
-          let promise = new Promise(function(_resolve2) {
-            resolve2 = _resolve2;
-          });
-          newElt.addEventListener("load", function() {
-            resolve2();
-          });
-          promises.push(promise);
-        }
-        currentHead.appendChild(newElt);
-        ctx.callbacks.afterNodeAdded(newElt);
-        added.push(newElt);
-      }
-    }
-    for (const removedElement of removed) {
-      if (ctx.callbacks.beforeNodeRemoved(removedElement) !== false) {
-        currentHead.removeChild(removedElement);
-        ctx.callbacks.afterNodeRemoved(removedElement);
-      }
-    }
-    ctx.head.afterHeadMorphed(currentHead, { added, kept: preserved, removed });
-    return promises;
-  }
-  function noOp() {
-  }
-  function mergeDefaults(config) {
-    let finalConfig = {};
-    Object.assign(finalConfig, defaults2);
-    Object.assign(finalConfig, config);
-    finalConfig.callbacks = {};
-    Object.assign(finalConfig.callbacks, defaults2.callbacks);
-    Object.assign(finalConfig.callbacks, config.callbacks);
-    finalConfig.head = {};
-    Object.assign(finalConfig.head, defaults2.head);
-    Object.assign(finalConfig.head, config.head);
-    return finalConfig;
-  }
-  function createMorphContext(oldNode, newContent, config) {
-    config = mergeDefaults(config);
-    return {
-      target: oldNode,
-      newContent,
-      config,
-      morphStyle: config.morphStyle,
-      ignoreActive: config.ignoreActive,
-      ignoreActiveValue: config.ignoreActiveValue,
-      idMap: createIdMap(oldNode, newContent),
-      deadIds: /* @__PURE__ */ new Set(),
-      callbacks: config.callbacks,
-      head: config.head
-    };
-  }
-  function isIdSetMatch(node1, node2, ctx) {
-    if (node1 == null || node2 == null) {
-      return false;
-    }
-    if (node1.nodeType === node2.nodeType && node1.tagName === node2.tagName) {
-      if (node1.id !== "" && node1.id === node2.id) {
-        return true;
-      } else {
-        return getIdIntersectionCount(ctx, node1, node2) > 0;
-      }
-    }
-    return false;
-  }
-  function isSoftMatch(node1, node2) {
-    if (node1 == null || node2 == null) {
-      return false;
-    }
-    return node1.nodeType === node2.nodeType && node1.tagName === node2.tagName;
-  }
-  function removeNodesBetween(startInclusive, endExclusive, ctx) {
-    while (startInclusive !== endExclusive) {
-      let tempNode = startInclusive;
-      startInclusive = startInclusive.nextSibling;
-      removeNode(tempNode, ctx);
-    }
-    removeIdsFromConsideration(ctx, endExclusive);
-    return endExclusive.nextSibling;
-  }
-  function findIdSetMatch(newContent, oldParent, newChild, insertionPoint, ctx) {
-    let newChildPotentialIdCount = getIdIntersectionCount(ctx, newChild, oldParent);
-    let potentialMatch = null;
-    if (newChildPotentialIdCount > 0) {
-      let potentialMatch2 = insertionPoint;
-      let otherMatchCount = 0;
-      while (potentialMatch2 != null) {
-        if (isIdSetMatch(newChild, potentialMatch2, ctx)) {
-          return potentialMatch2;
-        }
-        otherMatchCount += getIdIntersectionCount(ctx, potentialMatch2, newContent);
-        if (otherMatchCount > newChildPotentialIdCount) {
-          return null;
-        }
-        potentialMatch2 = potentialMatch2.nextSibling;
-      }
-    }
-    return potentialMatch;
-  }
-  function findSoftMatch(newContent, oldParent, newChild, insertionPoint, ctx) {
-    let potentialSoftMatch = insertionPoint;
-    let nextSibling = newChild.nextSibling;
-    let siblingSoftMatchCount = 0;
-    while (potentialSoftMatch != null) {
-      if (getIdIntersectionCount(ctx, potentialSoftMatch, newContent) > 0) {
-        return null;
-      }
-      if (isSoftMatch(newChild, potentialSoftMatch)) {
-        return potentialSoftMatch;
-      }
-      if (isSoftMatch(nextSibling, potentialSoftMatch)) {
-        siblingSoftMatchCount++;
-        nextSibling = nextSibling.nextSibling;
-        if (siblingSoftMatchCount >= 2) {
-          return null;
-        }
-      }
-      potentialSoftMatch = potentialSoftMatch.nextSibling;
-    }
-    return potentialSoftMatch;
-  }
-  function parseContent(newContent) {
-    let parser = new DOMParser();
-    let contentWithSvgsRemoved = newContent.replace(/<svg(\s[^>]*>|>)([\s\S]*?)<\/svg>/gim, "");
-    if (contentWithSvgsRemoved.match(/<\/html>/) || contentWithSvgsRemoved.match(/<\/head>/) || contentWithSvgsRemoved.match(/<\/body>/)) {
-      let content = parser.parseFromString(newContent, "text/html");
-      if (contentWithSvgsRemoved.match(/<\/html>/)) {
-        content.generatedByIdiomorph = true;
-        return content;
-      } else {
-        let htmlElement = content.firstChild;
-        if (htmlElement) {
-          htmlElement.generatedByIdiomorph = true;
-          return htmlElement;
-        } else {
-          return null;
-        }
-      }
-    } else {
-      let responseDoc = parser.parseFromString("<body><template>" + newContent + "</template></body>", "text/html");
-      let content = responseDoc.body.querySelector("template").content;
-      content.generatedByIdiomorph = true;
-      return content;
-    }
-  }
-  function normalizeContent(newContent) {
-    if (newContent == null) {
-      const dummyParent = document.createElement("div");
-      return dummyParent;
-    } else if (newContent.generatedByIdiomorph) {
-      return newContent;
-    } else if (newContent instanceof Node) {
-      const dummyParent = document.createElement("div");
-      dummyParent.append(newContent);
-      return dummyParent;
-    } else {
-      const dummyParent = document.createElement("div");
-      for (const elt of [...newContent]) {
-        dummyParent.append(elt);
-      }
-      return dummyParent;
-    }
-  }
-  function insertSiblings(previousSibling, morphedNode, nextSibling) {
-    let stack = [];
-    let added = [];
-    while (previousSibling != null) {
-      stack.push(previousSibling);
-      previousSibling = previousSibling.previousSibling;
-    }
-    while (stack.length > 0) {
-      let node = stack.pop();
-      added.push(node);
-      morphedNode.parentElement.insertBefore(node, morphedNode);
-    }
-    added.push(morphedNode);
-    while (nextSibling != null) {
-      stack.push(nextSibling);
-      added.push(nextSibling);
-      nextSibling = nextSibling.nextSibling;
-    }
-    while (stack.length > 0) {
-      morphedNode.parentElement.insertBefore(stack.pop(), morphedNode.nextSibling);
-    }
-    return added;
-  }
-  function findBestNodeMatch(newContent, oldNode, ctx) {
-    let currentElement;
-    currentElement = newContent.firstChild;
-    let bestElement = currentElement;
-    let score = 0;
-    while (currentElement) {
-      let newScore = scoreElement(currentElement, oldNode, ctx);
-      if (newScore > score) {
-        bestElement = currentElement;
-        score = newScore;
-      }
-      currentElement = currentElement.nextSibling;
-    }
-    return bestElement;
-  }
-  function scoreElement(node1, node2, ctx) {
-    if (isSoftMatch(node1, node2)) {
-      return 0.5 + getIdIntersectionCount(ctx, node1, node2);
-    }
-    return 0;
-  }
-  function removeNode(tempNode, ctx) {
-    removeIdsFromConsideration(ctx, tempNode);
-    if (ctx.callbacks.beforeNodeRemoved(tempNode) === false)
-      return;
-    tempNode.remove();
-    ctx.callbacks.afterNodeRemoved(tempNode);
-  }
-  function isIdInConsideration(ctx, id) {
-    return !ctx.deadIds.has(id);
-  }
-  function idIsWithinNode(ctx, id, targetNode) {
-    let idSet = ctx.idMap.get(targetNode) || EMPTY_SET;
-    return idSet.has(id);
-  }
-  function removeIdsFromConsideration(ctx, node) {
-    let idSet = ctx.idMap.get(node) || EMPTY_SET;
-    for (const id of idSet) {
-      ctx.deadIds.add(id);
-    }
-  }
-  function getIdIntersectionCount(ctx, node1, node2) {
-    let sourceSet = ctx.idMap.get(node1) || EMPTY_SET;
-    let matchCount = 0;
-    for (const id of sourceSet) {
-      if (isIdInConsideration(ctx, id) && idIsWithinNode(ctx, id, node2)) {
-        ++matchCount;
-      }
-    }
-    return matchCount;
-  }
-  function populateIdMapForNode(node, idMap) {
-    let nodeParent = node.parentElement;
-    let idElements = node.querySelectorAll("[id]");
-    for (const elt of idElements) {
-      let current = elt;
-      while (current !== nodeParent && current != null) {
-        let idSet = idMap.get(current);
-        if (idSet == null) {
-          idSet = /* @__PURE__ */ new Set();
-          idMap.set(current, idSet);
-        }
-        idSet.add(elt.id);
-        current = current.parentElement;
-      }
-    }
-  }
-  function createIdMap(oldContent, newContent) {
-    let idMap = /* @__PURE__ */ new Map();
-    populateIdMapForNode(oldContent, idMap);
-    populateIdMapForNode(newContent, idMap);
-    return idMap;
-  }
-  return {
-    morph,
-    defaults: defaults2
-  };
-}();
-function morphElements(currentElement, newElement, { callbacks: callbacks2, ...options } = {}) {
-  Idiomorph.morph(currentElement, newElement, {
-    ...options,
-    callbacks: new DefaultIdiomorphCallbacks(callbacks2)
-  });
-}
-function morphChildren(currentElement, newElement) {
-  morphElements(currentElement, newElement.children, {
-    morphStyle: "innerHTML"
-  });
-}
-var DefaultIdiomorphCallbacks = class {
-  #beforeNodeMorphed;
-  constructor({ beforeNodeMorphed } = {}) {
-    this.#beforeNodeMorphed = beforeNodeMorphed || (() => true);
-  }
-  beforeNodeAdded = (node) => {
-    return !(node.id && node.hasAttribute("data-turbo-permanent") && document.getElementById(node.id));
-  };
-  beforeNodeMorphed = (currentElement, newElement) => {
-    if (currentElement instanceof Element) {
-      if (!currentElement.hasAttribute("data-turbo-permanent") && this.#beforeNodeMorphed(currentElement, newElement)) {
-        const event = dispatch("turbo:before-morph-element", {
-          cancelable: true,
-          target: currentElement,
-          detail: { currentElement, newElement }
-        });
-        return !event.defaultPrevented;
-      } else {
-        return false;
-      }
-    }
-  };
-  beforeAttributeUpdated = (attributeName, target, mutationType) => {
-    const event = dispatch("turbo:before-morph-attribute", {
-      cancelable: true,
-      target,
-      detail: { attributeName, mutationType }
-    });
-    return !event.defaultPrevented;
-  };
-  beforeNodeRemoved = (node) => {
-    return this.beforeNodeMorphed(node);
-  };
-  afterNodeMorphed = (currentElement, newElement) => {
-    if (currentElement instanceof Element) {
-      dispatch("turbo:morph-element", {
-        target: currentElement,
-        detail: { currentElement, newElement }
-      });
-    }
-  };
-};
-var MorphingFrameRenderer = class extends FrameRenderer {
-  static renderElement(currentElement, newElement) {
-    dispatch("turbo:before-frame-morph", {
-      target: currentElement,
-      detail: { currentElement, newElement }
-    });
-    morphChildren(currentElement, newElement);
-  }
-};
 var PageRenderer = class extends Renderer {
   static renderElement(currentElement, newElement) {
     if (document.body && newElement instanceof HTMLBodyElement) {
@@ -4432,7 +4695,7 @@ var MorphingPageRenderer = class extends PageRenderer {
     });
     for (const frame of currentElement.querySelectorAll("turbo-frame")) {
       if (canRefreshFrame(frame))
-        refreshFrame(frame);
+        frame.reload();
     }
     dispatch("turbo:morph", { detail: { currentElement, newElement } });
   }
@@ -4448,12 +4711,6 @@ var MorphingPageRenderer = class extends PageRenderer {
 };
 function canRefreshFrame(frame) {
   return frame instanceof FrameElement && frame.src && frame.refresh === "morph" && !frame.closest("[data-turbo-permanent]");
-}
-function refreshFrame(frame) {
-  frame.addEventListener("turbo:before-frame-render", ({ detail }) => {
-    detail.render = MorphingFrameRenderer.renderElement;
-  }, { once: true });
-  frame.reload();
 }
 var SnapshotCache = class {
   keys = [];
@@ -4510,7 +4767,7 @@ var PageView = class extends View {
   renderPage(snapshot, isPreview = false, willRender = true, visit2) {
     const shouldMorphPage = this.isPageRefresh(visit2) && this.snapshot.shouldMorphPage;
     const rendererClass = shouldMorphPage ? MorphingPageRenderer : PageRenderer;
-    const renderer = new rendererClass(this.snapshot, snapshot, rendererClass.renderElement, isPreview, willRender);
+    const renderer = new rendererClass(this.snapshot, snapshot, isPreview, willRender);
     if (!renderer.shouldRender) {
       this.forceReloaded = true;
     } else {
@@ -4520,7 +4777,7 @@ var PageView = class extends View {
   }
   renderError(snapshot, visit2) {
     visit2?.changeHistory();
-    const renderer = new ErrorRenderer(this.snapshot, snapshot, ErrorRenderer.renderElement, false);
+    const renderer = new ErrorRenderer(this.snapshot, snapshot, false);
     return this.render(renderer);
   }
   clearSnapshotCache() {
@@ -4642,11 +4899,8 @@ var Session = class {
   frameRedirector = new FrameRedirector(this, document.documentElement);
   streamMessageRenderer = new StreamMessageRenderer();
   cache = new Cache(this);
-  drive = true;
   enabled = true;
-  progressBarDelay = 500;
   started = false;
-  formMode = "on";
   #pageRefreshDebouncePeriod = 150;
   constructor(recentRequests2) {
     this.recentRequests = recentRequests2;
@@ -4705,7 +4959,8 @@ var Session = class {
   }
   refresh(url, requestId) {
     const isRecentRequest = requestId && this.recentRequests.has(requestId);
-    if (!isRecentRequest && !this.navigator.currentVisit) {
+    const isCurrentUrl = url === document.baseURI;
+    if (!isRecentRequest && !this.navigator.currentVisit && isCurrentUrl) {
       this.visit(url, { action: "replace", shouldCacheSnapshot: false });
     }
   }
@@ -4722,10 +4977,28 @@ var Session = class {
     this.view.clearSnapshotCache();
   }
   setProgressBarDelay(delay) {
+    console.warn(
+      "Please replace `session.setProgressBarDelay(delay)` with `session.progressBarDelay = delay`. The function is deprecated and will be removed in a future version of Turbo.`"
+    );
     this.progressBarDelay = delay;
   }
-  setFormMode(mode) {
-    this.formMode = mode;
+  set progressBarDelay(delay) {
+    config.drive.progressBarDelay = delay;
+  }
+  get progressBarDelay() {
+    return config.drive.progressBarDelay;
+  }
+  set drive(value) {
+    config.drive.enabled = value;
+  }
+  get drive() {
+    return config.drive.enabled;
+  }
+  set formMode(value) {
+    config.forms.mode = value;
+  }
+  get formMode() {
+    return config.forms.mode;
   }
   get location() {
     return this.history.location;
@@ -4779,7 +5052,7 @@ var Session = class {
   }
   // Link hover observer delegate
   canPrefetchRequestToLocation(link, location2) {
-    return this.elementIsNavigatable(link) && locationIsVisitable(location2, this.snapshot.rootLocation);
+    return this.elementIsNavigatable(link) && locationIsVisitable(location2, this.snapshot.rootLocation) && this.navigator.linkPrefetchingIsEnabledForLocation(location2);
   }
   // Link click observer delegate
   willFollowLinkToLocation(link, location2, event) {
@@ -4821,12 +5094,12 @@ var Session = class {
     this.notifyApplicationAfterVisitingSamePageLocation(oldURL, newURL);
   }
   // Form submit observer delegate
-  willSubmitForm(form, submitter) {
-    const action = getAction$1(form, submitter);
-    return this.submissionIsNavigatable(form, submitter) && locationIsVisitable(expandURL(action), this.snapshot.rootLocation);
+  willSubmitForm(form, submitter2) {
+    const action = getAction$1(form, submitter2);
+    return this.submissionIsNavigatable(form, submitter2) && locationIsVisitable(expandURL(action), this.snapshot.rootLocation);
   }
-  formSubmitted(form, submitter) {
-    this.navigator.submitForm(form, submitter);
+  formSubmitted(form, submitter2) {
+    this.navigator.submitForm(form, submitter2);
   }
   // Page observer delegate
   pageBecameInteractive() {
@@ -4938,12 +5211,12 @@ var Session = class {
     });
   }
   // Helpers
-  submissionIsNavigatable(form, submitter) {
-    if (this.formMode == "off") {
+  submissionIsNavigatable(form, submitter2) {
+    if (config.forms.mode == "off") {
       return false;
     } else {
-      const submitterIsNavigatable = submitter ? this.elementIsNavigatable(submitter) : true;
-      if (this.formMode == "optin") {
+      const submitterIsNavigatable = submitter2 ? this.elementIsNavigatable(submitter2) : true;
+      if (config.forms.mode == "optin") {
         return submitterIsNavigatable && form.closest('[data-turbo="true"]') != null;
       } else {
         return submitterIsNavigatable && this.elementIsNavigatable(form);
@@ -4953,7 +5226,7 @@ var Session = class {
   elementIsNavigatable(element) {
     const container = findClosestRecursively(element, "[data-turbo]");
     const withinFrame = findClosestRecursively(element, "turbo-frame");
-    if (this.drive || withinFrame) {
+    if (config.drive.enabled || withinFrame) {
       if (container) {
         return container.getAttribute("data-turbo") != "false";
       } else {
@@ -5012,13 +5285,22 @@ function clearCache() {
   session.clearCache();
 }
 function setProgressBarDelay(delay) {
-  session.setProgressBarDelay(delay);
+  console.warn(
+    "Please replace `Turbo.setProgressBarDelay(delay)` with `Turbo.config.drive.progressBarDelay = delay`. The top-level function is deprecated and will be removed in a future version of Turbo.`"
+  );
+  config.drive.progressBarDelay = delay;
 }
 function setConfirmMethod(confirmMethod) {
-  FormSubmission.confirmMethod = confirmMethod;
+  console.warn(
+    "Please replace `Turbo.setConfirmMethod(confirmMethod)` with `Turbo.config.forms.confirm = confirmMethod`. The top-level function is deprecated and will be removed in a future version of Turbo.`"
+  );
+  config.forms.confirm = confirmMethod;
 }
 function setFormMode(mode) {
-  session.setFormMode(mode);
+  console.warn(
+    "Please replace `Turbo.setFormMode(mode)` with `Turbo.config.forms.mode = mode`. The top-level function is deprecated and will be removed in a future version of Turbo.`"
+  );
+  config.forms.mode = mode;
 }
 var Turbo = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -5029,6 +5311,7 @@ var Turbo = /* @__PURE__ */ Object.freeze({
   PageSnapshot,
   FrameRenderer,
   fetch: fetchWithTurboHeaders,
+  config,
   start,
   registerAdapter,
   visit,
@@ -5050,6 +5333,7 @@ var FrameController = class {
   #connected = false;
   #hasBeenLoaded = false;
   #ignoredAttributes = /* @__PURE__ */ new Set();
+  #shouldMorphFrame = false;
   action = null;
   constructor(element) {
     this.element = element;
@@ -5099,7 +5383,8 @@ var FrameController = class {
     }
   }
   sourceURLReloaded() {
-    const { src } = this.element;
+    const { refresh, src } = this.element;
+    this.#shouldMorphFrame = src && refresh === "morph";
     this.element.removeAttribute("complete");
     this.element.src = null;
     this.element.src = src;
@@ -5137,6 +5422,7 @@ var FrameController = class {
         }
       }
     } finally {
+      this.#shouldMorphFrame = false;
       this.fetchResponseLoaded = () => Promise.resolve();
     }
   }
@@ -5162,14 +5448,14 @@ var FrameController = class {
     this.#navigateFrame(element, location2);
   }
   // Form submit observer delegate
-  willSubmitForm(element, submitter) {
-    return element.closest("turbo-frame") == this.element && this.#shouldInterceptNavigation(element, submitter);
+  willSubmitForm(element, submitter2) {
+    return element.closest("turbo-frame") == this.element && this.#shouldInterceptNavigation(element, submitter2);
   }
-  formSubmitted(element, submitter) {
+  formSubmitted(element, submitter2) {
     if (this.formSubmission) {
       this.formSubmission.stop();
     }
-    this.formSubmission = new FormSubmission(this, element, submitter);
+    this.formSubmission = new FormSubmission(this, element, submitter2);
     const { fetchRequest } = this.formSubmission;
     this.prepareRequest(fetchRequest);
     this.formSubmission.start();
@@ -5261,9 +5547,10 @@ var FrameController = class {
   // Private
   async #loadFrameResponse(fetchResponse, document2) {
     const newFrameElement = await this.extractForeignFrameElement(document2.body);
+    const rendererClass = this.#shouldMorphFrame ? MorphingFrameRenderer : FrameRenderer;
     if (newFrameElement) {
       const snapshot = new Snapshot(newFrameElement);
-      const renderer = new FrameRenderer(this, this.view.snapshot, snapshot, FrameRenderer.renderElement, false, false);
+      const renderer = new rendererClass(this, this.view.snapshot, snapshot, false, false);
       if (this.view.renderPromise)
         await this.view.renderPromise;
       this.changeHistory();
@@ -5290,9 +5577,9 @@ var FrameController = class {
       request.perform();
     });
   }
-  #navigateFrame(element, url, submitter) {
-    const frame = this.#findFrameElement(element, submitter);
-    frame.delegate.proposeVisitIfNavigatedWithAction(frame, getVisitAction(submitter, element, frame));
+  #navigateFrame(element, url, submitter2) {
+    const frame = this.#findFrameElement(element, submitter2);
+    frame.delegate.proposeVisitIfNavigatedWithAction(frame, getVisitAction(submitter2, element, frame));
     this.#withCurrentNavigationElement(element, () => {
       frame.src = url;
     });
@@ -5365,8 +5652,8 @@ var FrameController = class {
     const { location: location2, redirected, statusCode } = wrapped;
     return session.visit(location2, { response: { redirected, statusCode, responseHTML } });
   }
-  #findFrameElement(element, submitter) {
-    const id = getAttribute("data-turbo-frame", submitter, element) || this.element.getAttribute("target");
+  #findFrameElement(element, submitter2) {
+    const id = getAttribute("data-turbo-frame", submitter2, element) || this.element.getAttribute("target");
     return getFrameElementById(id) ?? this.element;
   }
   async extractForeignFrameElement(container) {
@@ -5388,13 +5675,13 @@ var FrameController = class {
     }
     return null;
   }
-  #formActionIsVisitable(form, submitter) {
-    const action = getAction$1(form, submitter);
+  #formActionIsVisitable(form, submitter2) {
+    const action = getAction$1(form, submitter2);
     return locationIsVisitable(expandURL(action), this.rootLocation);
   }
-  #shouldInterceptNavigation(element, submitter) {
-    const id = getAttribute("data-turbo-frame", submitter, element) || this.element.getAttribute("target");
-    if (element instanceof HTMLFormElement && !this.#formActionIsVisitable(element, submitter)) {
+  #shouldInterceptNavigation(element, submitter2) {
+    const id = getAttribute("data-turbo-frame", submitter2, element) || this.element.getAttribute("target");
+    if (element instanceof HTMLFormElement && !this.#formActionIsVisitable(element, submitter2)) {
       return false;
     }
     if (!this.enabled || id == "_top") {
@@ -5409,7 +5696,7 @@ var FrameController = class {
     if (!session.elementIsNavigatable(element)) {
       return false;
     }
-    if (submitter && !session.elementIsNavigatable(submitter)) {
+    if (submitter2 && !session.elementIsNavigatable(submitter2)) {
       return false;
     }
     return true;
@@ -5574,9 +5861,9 @@ var StreamElement = class _StreamElement extends HTMLElement {
    * Gets the list of duplicate children (i.e. those with the same ID)
    */
   get duplicateChildren() {
-    const existingChildren = this.targetElements.flatMap((e) => [...e.children]).filter((c) => !!c.id);
-    const newChildrenIds = [...this.templateContent?.children || []].filter((c) => !!c.id).map((c) => c.id);
-    return existingChildren.filter((c) => newChildrenIds.includes(c.id));
+    const existingChildren = this.targetElements.flatMap((e) => [...e.children]).filter((c) => !!c.getAttribute("id"));
+    const newChildrenIds = [...this.templateContent?.children || []].filter((c) => !!c.getAttribute("id")).map((c) => c.getAttribute("id"));
+    return existingChildren.filter((c) => newChildrenIds.includes(c.getAttribute("id")));
   }
   /**
    * Gets the action function to be performed.
@@ -5768,6 +6055,7 @@ function walk(obj) {
 
 // node_modules/@hotwired/turbo-rails/app/javascript/turbo/cable_stream_source_element.js
 var TurboCableStreamSourceElement = class extends HTMLElement {
+  static observedAttributes = ["channel", "signed-stream-name"];
   async connectedCallback() {
     connectStreamSource(this);
     this.subscription = await subscribeTo(this.channel, {
@@ -5780,6 +6068,13 @@ var TurboCableStreamSourceElement = class extends HTMLElement {
     disconnectStreamSource(this);
     if (this.subscription)
       this.subscription.unsubscribe();
+    this.subscriptionDisconnected();
+  }
+  attributeChangedCallback() {
+    if (this.subscription) {
+      this.disconnectedCallback();
+      this.connectedCallback();
+    }
   }
   dispatchMessageEvent(data) {
     const event = new MessageEvent("message", { data });
@@ -5805,9 +6100,9 @@ if (customElements.get("turbo-cable-stream-source") === void 0) {
 function encodeMethodIntoRequestBody(event) {
   if (event.target instanceof HTMLFormElement) {
     const { target: form, detail: { fetchOptions } } = event;
-    form.addEventListener("turbo:submit-start", ({ detail: { formSubmission: { submitter } } }) => {
+    form.addEventListener("turbo:submit-start", ({ detail: { formSubmission: { submitter: submitter2 } } }) => {
       const body = isBodyInit(fetchOptions.body) ? fetchOptions.body : new URLSearchParams();
-      const method = determineFetchMethod(submitter, body, form);
+      const method = determineFetchMethod(submitter2, body, form);
       if (!/get/i.test(method)) {
         if (/post/i.test(method)) {
           body.delete("_method");
@@ -5819,8 +6114,8 @@ function encodeMethodIntoRequestBody(event) {
     }, { once: true });
   }
 }
-function determineFetchMethod(submitter, body, form) {
-  const formMethod = determineFormMethod(submitter);
+function determineFetchMethod(submitter2, body, form) {
+  const formMethod = determineFormMethod(submitter2);
   const overrideMethod = body.get("_method");
   const method = form.getAttribute("method") || "get";
   if (typeof formMethod == "string") {
@@ -5831,12 +6126,12 @@ function determineFetchMethod(submitter, body, form) {
     return method;
   }
 }
-function determineFormMethod(submitter) {
-  if (submitter instanceof HTMLButtonElement || submitter instanceof HTMLInputElement) {
-    if (submitter.name === "_method") {
-      return submitter.value;
-    } else if (submitter.hasAttribute("formmethod")) {
-      return submitter.formMethod;
+function determineFormMethod(submitter2) {
+  if (submitter2 instanceof HTMLButtonElement || submitter2 instanceof HTMLInputElement) {
+    if (submitter2.name === "_method") {
+      return submitter2.value;
+    } else if (submitter2.hasAttribute("formmethod")) {
+      return submitter2.formMethod;
     } else {
       return null;
     }
@@ -10025,7 +10320,7 @@ var defineJQueryPlugin = (plugin) => {
   });
 };
 var execute = (possibleCallback, args = [], defaultValue = possibleCallback) => {
-  return typeof possibleCallback === "function" ? possibleCallback(...args) : defaultValue;
+  return typeof possibleCallback === "function" ? possibleCallback.call(...args) : defaultValue;
 };
 var executeAfterTransition = (callback2, transitionElement, waitForTransition = true) => {
   if (!waitForTransition) {
@@ -10302,7 +10597,7 @@ var Manipulator = {
     const bsKeys = Object.keys(element.dataset).filter((key) => key.startsWith("bs") && !key.startsWith("bsConfig"));
     for (const key of bsKeys) {
       let pureKey = key.replace(/^bs/, "");
-      pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length);
+      pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1);
       attributes[pureKey] = normalizeData(element.dataset[key]);
     }
     return attributes;
@@ -10311,7 +10606,7 @@ var Manipulator = {
     return normalizeData(element.getAttribute(`data-bs-${normalizeDataKey(key)}`));
   }
 };
-var Config = class {
+var Config2 = class {
   // Getters
   static get Default() {
     return {};
@@ -10322,27 +10617,27 @@ var Config = class {
   static get NAME() {
     throw new Error('You have to implement the static method "NAME", for each component!');
   }
-  _getConfig(config) {
-    config = this._mergeConfigObj(config);
-    config = this._configAfterMerge(config);
-    this._typeCheckConfig(config);
-    return config;
+  _getConfig(config2) {
+    config2 = this._mergeConfigObj(config2);
+    config2 = this._configAfterMerge(config2);
+    this._typeCheckConfig(config2);
+    return config2;
   }
-  _configAfterMerge(config) {
-    return config;
+  _configAfterMerge(config2) {
+    return config2;
   }
-  _mergeConfigObj(config, element) {
+  _mergeConfigObj(config2, element) {
     const jsonConfig = isElement2(element) ? Manipulator.getDataAttribute(element, "config") : {};
     return {
       ...this.constructor.Default,
       ...typeof jsonConfig === "object" ? jsonConfig : {},
       ...isElement2(element) ? Manipulator.getDataAttributes(element) : {},
-      ...typeof config === "object" ? config : {}
+      ...typeof config2 === "object" ? config2 : {}
     };
   }
-  _typeCheckConfig(config, configTypes = this.constructor.DefaultType) {
+  _typeCheckConfig(config2, configTypes = this.constructor.DefaultType) {
     for (const [property, expectedTypes] of Object.entries(configTypes)) {
-      const value = config[property];
+      const value = config2[property];
       const valueType = isElement2(value) ? "element" : toType(value);
       if (!new RegExp(expectedTypes).test(valueType)) {
         throw new TypeError(`${this.constructor.NAME.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`);
@@ -10350,16 +10645,16 @@ var Config = class {
     }
   }
 };
-var VERSION = "5.3.3";
-var BaseComponent = class extends Config {
-  constructor(element, config) {
+var VERSION = "5.3.6";
+var BaseComponent = class extends Config2 {
+  constructor(element, config2) {
     super();
     element = getElement(element);
     if (!element) {
       return;
     }
     this._element = element;
-    this._config = this._getConfig(config);
+    this._config = this._getConfig(config2);
     Data.set(this._element, this.constructor.DATA_KEY, this);
   }
   // Public
@@ -10370,21 +10665,22 @@ var BaseComponent = class extends Config {
       this[propertyName] = null;
     }
   }
+  // Private
   _queueCallback(callback2, element, isAnimated = true) {
     executeAfterTransition(callback2, element, isAnimated);
   }
-  _getConfig(config) {
-    config = this._mergeConfigObj(config, this._element);
-    config = this._configAfterMerge(config);
-    this._typeCheckConfig(config);
-    return config;
+  _getConfig(config2) {
+    config2 = this._mergeConfigObj(config2, this._element);
+    config2 = this._configAfterMerge(config2);
+    this._typeCheckConfig(config2);
+    return config2;
   }
   // Static
   static getInstance(element) {
     return Data.get(getElement(element), this.DATA_KEY);
   }
-  static getOrCreateInstance(element, config = {}) {
-    return this.getInstance(element) || new this(element, typeof config === "object" ? config : null);
+  static getOrCreateInstance(element, config2 = {}) {
+    return this.getInstance(element) || new this(element, typeof config2 === "object" ? config2 : null);
   }
   static get VERSION() {
     return VERSION;
@@ -10517,16 +10813,16 @@ var Alert = class _Alert extends BaseComponent {
     this.dispose();
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
       const data = _Alert.getOrCreateInstance(this);
-      if (typeof config !== "string") {
+      if (typeof config2 !== "string") {
         return;
       }
-      if (data[config] === void 0 || config.startsWith("_") || config === "constructor") {
-        throw new TypeError(`No method named "${config}"`);
+      if (data[config2] === void 0 || config2.startsWith("_") || config2 === "constructor") {
+        throw new TypeError(`No method named "${config2}"`);
       }
-      data[config](this);
+      data[config2](this);
     });
   }
 };
@@ -10549,11 +10845,11 @@ var Button = class _Button extends BaseComponent {
     this._element.setAttribute("aria-pressed", this._element.classList.toggle(CLASS_NAME_ACTIVE$3));
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
       const data = _Button.getOrCreateInstance(this);
-      if (config === "toggle") {
-        data[config]();
+      if (config2 === "toggle") {
+        data[config2]();
       }
     });
   }
@@ -10586,14 +10882,14 @@ var DefaultType$c = {
   leftCallback: "(function|null)",
   rightCallback: "(function|null)"
 };
-var Swipe = class _Swipe extends Config {
-  constructor(element, config) {
+var Swipe = class _Swipe extends Config2 {
+  constructor(element, config2) {
     super();
     this._element = element;
     if (!element || !_Swipe.isSupported()) {
       return;
     }
-    this._config = this._getConfig(config);
+    this._config = this._getConfig(config2);
     this._deltaX = 0;
     this._supportPointerEvents = Boolean(window.PointerEvent);
     this._initEvents();
@@ -10718,8 +11014,8 @@ var DefaultType$b = {
   wrap: "boolean"
 };
 var Carousel = class _Carousel extends BaseComponent {
-  constructor(element, config) {
-    super(element, config);
+  constructor(element, config2) {
+    super(element, config2);
     this._interval = null;
     this._activeElement = null;
     this._isSliding = false;
@@ -10797,9 +11093,9 @@ var Carousel = class _Carousel extends BaseComponent {
     super.dispose();
   }
   // Private
-  _configAfterMerge(config) {
-    config.defaultInterval = config.interval;
-    return config;
+  _configAfterMerge(config2) {
+    config2.defaultInterval = config2.interval;
+    return config2;
   }
   _addEventListeners() {
     if (this._config.keyboard) {
@@ -10945,18 +11241,18 @@ var Carousel = class _Carousel extends BaseComponent {
     return order2 === ORDER_PREV ? DIRECTION_RIGHT : DIRECTION_LEFT;
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
-      const data = _Carousel.getOrCreateInstance(this, config);
-      if (typeof config === "number") {
-        data.to(config);
+      const data = _Carousel.getOrCreateInstance(this, config2);
+      if (typeof config2 === "number") {
+        data.to(config2);
         return;
       }
-      if (typeof config === "string") {
-        if (data[config] === void 0 || config.startsWith("_") || config === "constructor") {
-          throw new TypeError(`No method named "${config}"`);
+      if (typeof config2 === "string") {
+        if (data[config2] === void 0 || config2.startsWith("_") || config2 === "constructor") {
+          throw new TypeError(`No method named "${config2}"`);
         }
-        data[config]();
+        data[config2]();
       }
     });
   }
@@ -11017,8 +11313,8 @@ var DefaultType$a = {
   toggle: "boolean"
 };
 var Collapse = class _Collapse extends BaseComponent {
-  constructor(element, config) {
-    super(element, config);
+  constructor(element, config2) {
+    super(element, config2);
     this._isTransitioning = false;
     this._triggerArray = [];
     const toggleList = SelectorEngine.find(SELECTOR_DATA_TOGGLE$4);
@@ -11122,14 +11418,14 @@ var Collapse = class _Collapse extends BaseComponent {
     this._element.style[dimension] = "";
     this._queueCallback(complete, this._element, true);
   }
+  // Private
   _isShown(element = this._element) {
     return element.classList.contains(CLASS_NAME_SHOW$7);
   }
-  // Private
-  _configAfterMerge(config) {
-    config.toggle = Boolean(config.toggle);
-    config.parent = getElement(config.parent);
-    return config;
+  _configAfterMerge(config2) {
+    config2.toggle = Boolean(config2.toggle);
+    config2.parent = getElement(config2.parent);
+    return config2;
   }
   _getDimension() {
     return this._element.classList.contains(CLASS_NAME_HORIZONTAL) ? WIDTH : HEIGHT;
@@ -11160,18 +11456,18 @@ var Collapse = class _Collapse extends BaseComponent {
     }
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     const _config = {};
-    if (typeof config === "string" && /show|hide/.test(config)) {
+    if (typeof config2 === "string" && /show|hide/.test(config2)) {
       _config.toggle = false;
     }
     return this.each(function() {
       const data = _Collapse.getOrCreateInstance(this, _config);
-      if (typeof config === "string") {
-        if (typeof data[config] === "undefined") {
-          throw new TypeError(`No method named "${config}"`);
+      if (typeof config2 === "string") {
+        if (typeof data[config2] === "undefined") {
+          throw new TypeError(`No method named "${config2}"`);
         }
-        data[config]();
+        data[config2]();
       }
     });
   }
@@ -11240,8 +11536,8 @@ var DefaultType$9 = {
   reference: "(string|element|object)"
 };
 var Dropdown = class _Dropdown extends BaseComponent {
-  constructor(element, config) {
-    super(element, config);
+  constructor(element, config2) {
+    super(element, config2);
     this._popper = null;
     this._parent = this._element.parentNode;
     this._menu = SelectorEngine.next(this._element, SELECTOR_MENU)[0] || SelectorEngine.prev(this._element, SELECTOR_MENU)[0] || SelectorEngine.findOne(SELECTOR_MENU, this._parent);
@@ -11324,17 +11620,18 @@ var Dropdown = class _Dropdown extends BaseComponent {
     this._element.setAttribute("aria-expanded", "false");
     Manipulator.removeDataAttribute(this._menu, "popper");
     EventHandler.trigger(this._element, EVENT_HIDDEN$5, relatedTarget);
+    this._element.focus();
   }
-  _getConfig(config) {
-    config = super._getConfig(config);
-    if (typeof config.reference === "object" && !isElement2(config.reference) && typeof config.reference.getBoundingClientRect !== "function") {
+  _getConfig(config2) {
+    config2 = super._getConfig(config2);
+    if (typeof config2.reference === "object" && !isElement2(config2.reference) && typeof config2.reference.getBoundingClientRect !== "function") {
       throw new TypeError(`${NAME$a.toUpperCase()}: Option "reference" provided type "object" without a required "getBoundingClientRect" method.`);
     }
-    return config;
+    return config2;
   }
   _createPopper() {
     if (typeof lib_exports === "undefined") {
-      throw new TypeError("Bootstrap's dropdowns require Popper (https://popper.js.org)");
+      throw new TypeError("Bootstrap's dropdowns require Popper (https://popper.js.org/docs/v2/)");
     }
     let referenceElement = this._element;
     if (this._config.reference === "parent") {
@@ -11409,7 +11706,7 @@ var Dropdown = class _Dropdown extends BaseComponent {
     }
     return {
       ...defaultBsPopperConfig,
-      ...execute(this._config.popperConfig, [defaultBsPopperConfig])
+      ...execute(this._config.popperConfig, [void 0, defaultBsPopperConfig])
     };
   }
   _selectMenuItem({
@@ -11423,16 +11720,16 @@ var Dropdown = class _Dropdown extends BaseComponent {
     getNextActiveElement(items, target, key === ARROW_DOWN_KEY$1, !items.includes(target)).focus();
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
-      const data = _Dropdown.getOrCreateInstance(this, config);
-      if (typeof config !== "string") {
+      const data = _Dropdown.getOrCreateInstance(this, config2);
+      if (typeof config2 !== "string") {
         return;
       }
-      if (typeof data[config] === "undefined") {
-        throw new TypeError(`No method named "${config}"`);
+      if (typeof data[config2] === "undefined") {
+        throw new TypeError(`No method named "${config2}"`);
       }
-      data[config]();
+      data[config2]();
     });
   }
   static clearMenus(event) {
@@ -11517,10 +11814,10 @@ var DefaultType$8 = {
   isVisible: "boolean",
   rootElement: "(element|string)"
 };
-var Backdrop = class extends Config {
-  constructor(config) {
+var Backdrop = class extends Config2 {
+  constructor(config2) {
     super();
-    this._config = this._getConfig(config);
+    this._config = this._getConfig(config2);
     this._isAppended = false;
     this._element = null;
   }
@@ -11581,9 +11878,9 @@ var Backdrop = class extends Config {
     }
     return this._element;
   }
-  _configAfterMerge(config) {
-    config.rootElement = getElement(config.rootElement);
-    return config;
+  _configAfterMerge(config2) {
+    config2.rootElement = getElement(config2.rootElement);
+    return config2;
   }
   _append() {
     if (this._isAppended) {
@@ -11617,10 +11914,10 @@ var DefaultType$7 = {
   autofocus: "boolean",
   trapElement: "element"
 };
-var FocusTrap = class extends Config {
-  constructor(config) {
+var FocusTrap = class extends Config2 {
+  constructor(config2) {
     super();
-    this._config = this._getConfig(config);
+    this._config = this._getConfig(config2);
     this._isActive = false;
     this._lastTabNavDirection = null;
   }
@@ -11786,8 +12083,8 @@ var DefaultType$6 = {
   keyboard: "boolean"
 };
 var Modal = class _Modal extends BaseComponent {
-  constructor(element, config) {
-    super(element, config);
+  constructor(element, config2) {
+    super(element, config2);
     this._dialog = SelectorEngine.findOne(SELECTOR_DIALOG, this._element);
     this._backdrop = this._initializeBackDrop();
     this._focustrap = this._initializeFocusTrap();
@@ -11980,16 +12277,16 @@ var Modal = class _Modal extends BaseComponent {
     this._element.style.paddingRight = "";
   }
   // Static
-  static jQueryInterface(config, relatedTarget) {
+  static jQueryInterface(config2, relatedTarget) {
     return this.each(function() {
-      const data = _Modal.getOrCreateInstance(this, config);
-      if (typeof config !== "string") {
+      const data = _Modal.getOrCreateInstance(this, config2);
+      if (typeof config2 !== "string") {
         return;
       }
-      if (typeof data[config] === "undefined") {
-        throw new TypeError(`No method named "${config}"`);
+      if (typeof data[config2] === "undefined") {
+        throw new TypeError(`No method named "${config2}"`);
       }
-      data[config](relatedTarget);
+      data[config2](relatedTarget);
     });
   }
 };
@@ -12048,8 +12345,8 @@ var DefaultType$5 = {
   scroll: "boolean"
 };
 var Offcanvas = class _Offcanvas extends BaseComponent {
-  constructor(element, config) {
-    super(element, config);
+  constructor(element, config2) {
+    super(element, config2);
     this._isShown = false;
     this._backdrop = this._initializeBackDrop();
     this._focustrap = this._initializeFocusTrap();
@@ -12164,16 +12461,16 @@ var Offcanvas = class _Offcanvas extends BaseComponent {
     });
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
-      const data = _Offcanvas.getOrCreateInstance(this, config);
-      if (typeof config !== "string") {
+      const data = _Offcanvas.getOrCreateInstance(this, config2);
+      if (typeof config2 !== "string") {
         return;
       }
-      if (data[config] === void 0 || config.startsWith("_") || config === "constructor") {
-        throw new TypeError(`No method named "${config}"`);
+      if (data[config2] === void 0 || config2.startsWith("_") || config2 === "constructor") {
+        throw new TypeError(`No method named "${config2}"`);
       }
-      data[config](this);
+      data[config2](this);
     });
   }
 };
@@ -12310,10 +12607,10 @@ var DefaultContentType = {
   entry: "(string|element|function|null)",
   selector: "(string|element)"
 };
-var TemplateFactory = class extends Config {
-  constructor(config) {
+var TemplateFactory = class extends Config2 {
+  constructor(config2) {
     super();
-    this._config = this._getConfig(config);
+    this._config = this._getConfig(config2);
   }
   // Getters
   static get Default() {
@@ -12327,7 +12624,7 @@ var TemplateFactory = class extends Config {
   }
   // Public
   getContent() {
-    return Object.values(this._config.content).map((config) => this._resolvePossibleFunction(config)).filter(Boolean);
+    return Object.values(this._config.content).map((config2) => this._resolvePossibleFunction(config2)).filter(Boolean);
   }
   hasContent() {
     return this.getContent().length > 0;
@@ -12354,9 +12651,9 @@ var TemplateFactory = class extends Config {
     return template;
   }
   // Private
-  _typeCheckConfig(config) {
-    super._typeCheckConfig(config);
-    this._checkContent(config.content);
+  _typeCheckConfig(config2) {
+    super._typeCheckConfig(config2);
+    this._checkContent(config2.content);
   }
   _checkContent(arg) {
     for (const [selector, content] of Object.entries(arg)) {
@@ -12390,7 +12687,7 @@ var TemplateFactory = class extends Config {
     return this._config.sanitize ? sanitizeHtml(arg, this._config.allowList, this._config.sanitizeFn) : arg;
   }
   _resolvePossibleFunction(arg) {
-    return execute(arg, [this]);
+    return execute(arg, [void 0, this]);
   }
   _putElementInTemplate(element, templateElement) {
     if (this._config.html) {
@@ -12469,11 +12766,11 @@ var DefaultType$3 = {
   trigger: "string"
 };
 var Tooltip = class _Tooltip extends BaseComponent {
-  constructor(element, config) {
+  constructor(element, config2) {
     if (typeof lib_exports === "undefined") {
-      throw new TypeError("Bootstrap's tooltips require Popper (https://popper.js.org)");
+      throw new TypeError("Bootstrap's tooltips require Popper (https://popper.js.org/docs/v2/)");
     }
-    super(element, config);
+    super(element, config2);
     this._isEnabled = true;
     this._timeout = 0;
     this._isHovered = null;
@@ -12511,7 +12808,6 @@ var Tooltip = class _Tooltip extends BaseComponent {
     if (!this._isEnabled) {
       return;
     }
-    this._activeTrigger.click = !this._activeTrigger.click;
     if (this._isShown()) {
       this._leave();
       return;
@@ -12683,7 +12979,7 @@ var Tooltip = class _Tooltip extends BaseComponent {
     return offset2;
   }
   _resolvePossibleFunction(arg) {
-    return execute(arg, [this._element]);
+    return execute(arg, [this._element, this._element]);
   }
   _getPopperConfig(attachment) {
     const defaultBsPopperConfig = {
@@ -12719,7 +13015,7 @@ var Tooltip = class _Tooltip extends BaseComponent {
     };
     return {
       ...defaultBsPopperConfig,
-      ...execute(this._config.popperConfig, [defaultBsPopperConfig])
+      ...execute(this._config.popperConfig, [void 0, defaultBsPopperConfig])
     };
   }
   _setListeners() {
@@ -12793,48 +13089,48 @@ var Tooltip = class _Tooltip extends BaseComponent {
   _isWithActiveTrigger() {
     return Object.values(this._activeTrigger).includes(true);
   }
-  _getConfig(config) {
+  _getConfig(config2) {
     const dataAttributes = Manipulator.getDataAttributes(this._element);
     for (const dataAttribute of Object.keys(dataAttributes)) {
       if (DISALLOWED_ATTRIBUTES.has(dataAttribute)) {
         delete dataAttributes[dataAttribute];
       }
     }
-    config = {
+    config2 = {
       ...dataAttributes,
-      ...typeof config === "object" && config ? config : {}
+      ...typeof config2 === "object" && config2 ? config2 : {}
     };
-    config = this._mergeConfigObj(config);
-    config = this._configAfterMerge(config);
-    this._typeCheckConfig(config);
-    return config;
+    config2 = this._mergeConfigObj(config2);
+    config2 = this._configAfterMerge(config2);
+    this._typeCheckConfig(config2);
+    return config2;
   }
-  _configAfterMerge(config) {
-    config.container = config.container === false ? document.body : getElement(config.container);
-    if (typeof config.delay === "number") {
-      config.delay = {
-        show: config.delay,
-        hide: config.delay
+  _configAfterMerge(config2) {
+    config2.container = config2.container === false ? document.body : getElement(config2.container);
+    if (typeof config2.delay === "number") {
+      config2.delay = {
+        show: config2.delay,
+        hide: config2.delay
       };
     }
-    if (typeof config.title === "number") {
-      config.title = config.title.toString();
+    if (typeof config2.title === "number") {
+      config2.title = config2.title.toString();
     }
-    if (typeof config.content === "number") {
-      config.content = config.content.toString();
+    if (typeof config2.content === "number") {
+      config2.content = config2.content.toString();
     }
-    return config;
+    return config2;
   }
   _getDelegateConfig() {
-    const config = {};
+    const config2 = {};
     for (const [key, value] of Object.entries(this._config)) {
       if (this.constructor.Default[key] !== value) {
-        config[key] = value;
+        config2[key] = value;
       }
     }
-    config.selector = false;
-    config.trigger = "manual";
-    return config;
+    config2.selector = false;
+    config2.trigger = "manual";
+    return config2;
   }
   _disposePopper() {
     if (this._popper) {
@@ -12847,16 +13143,16 @@ var Tooltip = class _Tooltip extends BaseComponent {
     }
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
-      const data = _Tooltip.getOrCreateInstance(this, config);
-      if (typeof config !== "string") {
+      const data = _Tooltip.getOrCreateInstance(this, config2);
+      if (typeof config2 !== "string") {
         return;
       }
-      if (typeof data[config] === "undefined") {
-        throw new TypeError(`No method named "${config}"`);
+      if (typeof data[config2] === "undefined") {
+        throw new TypeError(`No method named "${config2}"`);
       }
-      data[config]();
+      data[config2]();
     });
   }
 };
@@ -12902,16 +13198,16 @@ var Popover = class _Popover extends Tooltip {
     return this._resolvePossibleFunction(this._config.content);
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
-      const data = _Popover.getOrCreateInstance(this, config);
-      if (typeof config !== "string") {
+      const data = _Popover.getOrCreateInstance(this, config2);
+      if (typeof config2 !== "string") {
         return;
       }
-      if (typeof data[config] === "undefined") {
-        throw new TypeError(`No method named "${config}"`);
+      if (typeof data[config2] === "undefined") {
+        throw new TypeError(`No method named "${config2}"`);
       }
-      data[config]();
+      data[config2]();
     });
   }
 };
@@ -12951,8 +13247,8 @@ var DefaultType$1 = {
   threshold: "array"
 };
 var ScrollSpy = class _ScrollSpy extends BaseComponent {
-  constructor(element, config) {
-    super(element, config);
+  constructor(element, config2) {
+    super(element, config2);
     this._targetLinks = /* @__PURE__ */ new Map();
     this._observableSections = /* @__PURE__ */ new Map();
     this._rootElement = getComputedStyle(this._element).overflowY === "visible" ? null : this._element;
@@ -12992,13 +13288,13 @@ var ScrollSpy = class _ScrollSpy extends BaseComponent {
     super.dispose();
   }
   // Private
-  _configAfterMerge(config) {
-    config.target = getElement(config.target) || document.body;
-    config.rootMargin = config.offset ? `${config.offset}px 0px -30%` : config.rootMargin;
-    if (typeof config.threshold === "string") {
-      config.threshold = config.threshold.split(",").map((value) => Number.parseFloat(value));
+  _configAfterMerge(config2) {
+    config2.target = getElement(config2.target) || document.body;
+    config2.rootMargin = config2.offset ? `${config2.offset}px 0px -30%` : config2.rootMargin;
+    if (typeof config2.threshold === "string") {
+      config2.threshold = config2.threshold.split(",").map((value) => Number.parseFloat(value));
     }
-    return config;
+    return config2;
   }
   _maybeEnableSmoothScroll() {
     if (!this._config.smoothScroll) {
@@ -13105,16 +13401,16 @@ var ScrollSpy = class _ScrollSpy extends BaseComponent {
     }
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
-      const data = _ScrollSpy.getOrCreateInstance(this, config);
-      if (typeof config !== "string") {
+      const data = _ScrollSpy.getOrCreateInstance(this, config2);
+      if (typeof config2 !== "string") {
         return;
       }
-      if (data[config] === void 0 || config.startsWith("_") || config === "constructor") {
-        throw new TypeError(`No method named "${config}"`);
+      if (data[config2] === void 0 || config2.startsWith("_") || config2 === "constructor") {
+        throw new TypeError(`No method named "${config2}"`);
       }
-      data[config]();
+      data[config2]();
     });
   }
 };
@@ -13317,16 +13613,16 @@ var Tab = class _Tab extends BaseComponent {
     return elem.closest(SELECTOR_OUTER) || elem;
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
       const data = _Tab.getOrCreateInstance(this);
-      if (typeof config !== "string") {
+      if (typeof config2 !== "string") {
         return;
       }
-      if (data[config] === void 0 || config.startsWith("_") || config === "constructor") {
-        throw new TypeError(`No method named "${config}"`);
+      if (data[config2] === void 0 || config2.startsWith("_") || config2 === "constructor") {
+        throw new TypeError(`No method named "${config2}"`);
       }
-      data[config]();
+      data[config2]();
     });
   }
 };
@@ -13371,8 +13667,8 @@ var Default = {
   delay: 5e3
 };
 var Toast = class _Toast extends BaseComponent {
-  constructor(element, config) {
-    super(element, config);
+  constructor(element, config2) {
+    super(element, config2);
     this._timeout = null;
     this._hasMouseInteraction = false;
     this._hasKeyboardInteraction = false;
@@ -13480,14 +13776,14 @@ var Toast = class _Toast extends BaseComponent {
     this._timeout = null;
   }
   // Static
-  static jQueryInterface(config) {
+  static jQueryInterface(config2) {
     return this.each(function() {
-      const data = _Toast.getOrCreateInstance(this, config);
-      if (typeof config === "string") {
-        if (typeof data[config] === "undefined") {
-          throw new TypeError(`No method named "${config}"`);
+      const data = _Toast.getOrCreateInstance(this, config2);
+      if (typeof config2 === "string") {
+        if (typeof data[config2] === "undefined") {
+          throw new TypeError(`No method named "${config2}"`);
         }
-        data[config](this);
+        data[config2](this);
       }
     });
   }
@@ -14942,12 +15238,12 @@ defaultExport3.prototype.waitForLoaded = function waitForLoaded(chart, pack, cal
         this$1$1.runCallbacks();
       }
     };
-    var config = chart.__config();
-    if (config.language) {
-      loadOptions.language = config.language;
+    var config2 = chart.__config();
+    if (config2.language) {
+      loadOptions.language = config2.language;
     }
-    if (pack === "geochart" && config.mapsApiKey) {
-      loadOptions.mapsApiKey = config.mapsApiKey;
+    if (pack === "geochart" && config2.mapsApiKey) {
+      loadOptions.mapsApiKey = config2.mapsApiKey;
     }
     this.library.charts.load("current", loadOptions);
   }
@@ -16199,7 +16495,7 @@ var Color = class _Color {
   }
 };
 
-// node_modules/chart.js/dist/chunks/helpers.segment.js
+// node_modules/chart.js/dist/chunks/helpers.dataset.js
 function noop2() {
 }
 var uid = /* @__PURE__ */ (() => {
@@ -16207,7 +16503,7 @@ var uid = /* @__PURE__ */ (() => {
   return () => id++;
 })();
 function isNullOrUndef(value) {
-  return value === null || typeof value === "undefined";
+  return value === null || value === void 0;
 }
 function isArray2(value) {
   if (Array.isArray && Array.isArray(value)) {
@@ -16442,8 +16738,11 @@ function _factorize(value) {
   result.sort((a, b) => a - b).pop();
   return result;
 }
+function isNonPrimitive(n) {
+  return typeof n === "symbol" || typeof n === "object" && n !== null && !(Symbol.toPrimitive in n || "toString" in n || "valueOf" in n);
+}
 function isNumber2(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+  return !isNonPrimitive(n) && !isNaN(parseFloat(n)) && isFinite(n);
 }
 function almostWhole(x, epsilon) {
   const rounded = Math.round(x);
@@ -16661,24 +16960,35 @@ function _getStartAndCountOfVisiblePoints(meta, points, animationsDisabled) {
   let start3 = 0;
   let count = pointCount;
   if (meta._sorted) {
-    const { iScale, _parsed } = meta;
+    const { iScale, vScale, _parsed } = meta;
+    const spanGaps = meta.dataset ? meta.dataset.options ? meta.dataset.options.spanGaps : null : null;
     const axis = iScale.axis;
     const { min: min2, max: max2, minDefined, maxDefined } = iScale.getUserBounds();
     if (minDefined) {
-      start3 = _limitValue(Math.min(
+      start3 = Math.min(
         // @ts-expect-error Need to type _parsed
         _lookupByKey(_parsed, axis, min2).lo,
         // @ts-expect-error Need to fix types on _lookupByKey
         animationsDisabled ? pointCount : _lookupByKey(points, axis, iScale.getPixelForValue(min2)).lo
-      ), 0, pointCount - 1);
+      );
+      if (spanGaps) {
+        const distanceToDefinedLo = _parsed.slice(0, start3 + 1).reverse().findIndex((point) => !isNullOrUndef(point[vScale.axis]));
+        start3 -= Math.max(0, distanceToDefinedLo);
+      }
+      start3 = _limitValue(start3, 0, pointCount - 1);
     }
     if (maxDefined) {
-      count = _limitValue(Math.max(
+      let end2 = Math.max(
         // @ts-expect-error Need to type _parsed
         _lookupByKey(_parsed, iScale.axis, max2, true).hi + 1,
         // @ts-expect-error Need to fix types on _lookupByKey
         animationsDisabled ? 0 : _lookupByKey(points, axis, iScale.getPixelForValue(max2), true).hi + 1
-      ), start3, pointCount) - start3;
+      );
+      if (spanGaps) {
+        const distanceToDefinedHi = _parsed.slice(end2 - 1).findIndex((point) => !isNullOrUndef(point[vScale.axis]));
+        end2 += Math.max(0, distanceToDefinedHi);
+      }
+      count = _limitValue(end2, start3, pointCount) - start3;
     } else {
       count = pointCount - start3;
     }
@@ -18566,6 +18876,34 @@ function styleChanged(style, prevStyle) {
   };
   return JSON.stringify(style, replacer) !== JSON.stringify(prevStyle, replacer);
 }
+function getSizeForArea(scale, chartArea, field) {
+  return scale.options.clip ? scale[field] : chartArea[field];
+}
+function getDatasetArea(meta, chartArea) {
+  const { xScale, yScale } = meta;
+  if (xScale && yScale) {
+    return {
+      left: getSizeForArea(xScale, chartArea, "left"),
+      right: getSizeForArea(xScale, chartArea, "right"),
+      top: getSizeForArea(yScale, chartArea, "top"),
+      bottom: getSizeForArea(yScale, chartArea, "bottom")
+    };
+  }
+  return chartArea;
+}
+function getDatasetClipArea(chart, meta) {
+  const clip = meta._clip;
+  if (clip.disabled) {
+    return false;
+  }
+  const area = getDatasetArea(meta, chart.chartArea);
+  return {
+    left: clip.left === false ? 0 : area.left - (clip.left === true ? 0 : clip.left),
+    right: clip.right === false ? chart.width : area.right + (clip.right === true ? 0 : clip.right),
+    top: clip.top === false ? 0 : area.top - (clip.top === true ? 0 : clip.top),
+    bottom: clip.bottom === false ? chart.height : area.bottom + (clip.bottom === true ? 0 : clip.bottom)
+  };
+}
 
 // node_modules/chart.js/dist/chart.js
 var Animator = class {
@@ -18818,19 +19156,19 @@ var Animation = class {
   }
 };
 var Animations = class {
-  constructor(chart, config) {
+  constructor(chart, config2) {
     this._chart = chart;
     this._properties = /* @__PURE__ */ new Map();
-    this.configure(config);
+    this.configure(config2);
   }
-  configure(config) {
-    if (!isObject(config)) {
+  configure(config2) {
+    if (!isObject(config2)) {
       return;
     }
     const animationOptions = Object.keys(defaults.animation);
     const animatedProps = this._properties;
-    Object.getOwnPropertyNames(config).forEach((key) => {
-      const cfg = config[key];
+    Object.getOwnPropertyNames(config2).forEach((key) => {
+      const cfg = config2[key];
       if (!isObject(cfg)) {
         return;
       }
@@ -18995,9 +19333,11 @@ function applyStack(stack, value, dsIndex, options = {}) {
   if (value === null) {
     return;
   }
+  let found = false;
   for (i = 0, ilen = keys.length; i < ilen; ++i) {
     datasetIndex = +keys[i];
     if (datasetIndex === dsIndex) {
+      found = true;
       if (options.all) {
         continue;
       }
@@ -19007,6 +19347,9 @@ function applyStack(stack, value, dsIndex, options = {}) {
     if (isNumberFinite(otherValue) && (singleMode || value === 0 || sign(value) === sign(otherValue))) {
       value += otherValue;
     }
+  }
+  if (!found && !options.all) {
+    return 0;
   }
   return value;
 }
@@ -19251,13 +19594,14 @@ var DatasetController = class {
     this._resyncElements(resetNewElements);
     if (stackChanged || oldStacked !== meta._stacked) {
       updateStacks(this, meta._parsed);
+      meta._stacked = isStacked(meta.vScale, meta);
     }
   }
   configure() {
-    const config = this.chart.config;
-    const scopeKeys = config.datasetScopeKeys(this._type);
-    const scopes = config.getOptionScopes(this.getDataset(), scopeKeys, true);
-    this.options = config.createResolver(scopes, this.getContext());
+    const config2 = this.chart.config;
+    const scopeKeys = config2.datasetScopeKeys(this._type);
+    const scopes = config2.getOptionScopes(this.getDataset(), scopeKeys, true);
+    this.options = config2.createResolver(scopes, this.getContext());
     this._parsing = this.options.parsing;
     this._cachedDataOpts = {};
   }
@@ -19507,8 +19851,8 @@ var DatasetController = class {
     if (cached) {
       return cloneIfNotShared(cached, sharing);
     }
-    const config = this.chart.config;
-    const scopeKeys = config.datasetElementScopeKeys(this._type, elementType2);
+    const config2 = this.chart.config;
+    const scopeKeys = config2.datasetElementScopeKeys(this._type, elementType2);
     const prefixes = active ? [
       `${elementType2}Hover`,
       "hover",
@@ -19518,10 +19862,10 @@ var DatasetController = class {
       elementType2,
       ""
     ];
-    const scopes = config.getOptionScopes(this.getDataset(), scopeKeys);
+    const scopes = config2.getOptionScopes(this.getDataset(), scopeKeys);
     const names2 = Object.keys(defaults.elements[elementType2]);
     const context = () => this.getContext(index2, active, mode);
-    const values = config.resolveNamedOptions(scopes, names2, context, prefixes);
+    const values = config2.resolveNamedOptions(scopes, names2, context, prefixes);
     if (values.$shared) {
       values.$shared = sharing;
       cache2[cacheKey] = Object.freeze(cloneIfNotShared(values, sharing));
@@ -19538,10 +19882,10 @@ var DatasetController = class {
     }
     let options;
     if (chart.options.animation !== false) {
-      const config = this.chart.config;
-      const scopeKeys = config.datasetAnimationScopeKeys(this._type, transition);
-      const scopes = config.getOptionScopes(this.getDataset(), scopeKeys);
-      options = config.createResolver(scopes, this.getContext(index2, active, transition));
+      const config2 = this.chart.config;
+      const scopeKeys = config2.datasetAnimationScopeKeys(this._type, transition);
+      const scopes = config2.getOptionScopes(this.getDataset(), scopeKeys);
+      options = config2.createResolver(scopes, this.getContext(index2, active, transition));
     }
     const animations = new Animations(chart, options && options.animations);
     if (options && options._cacheable) {
@@ -20046,8 +20390,10 @@ var BarController = class extends DatasetController {
     const metasets = iScale.getMatchingVisibleMetas(this._type).filter((meta) => meta.controller.options.grouped);
     const stacked = iScale.options.stacked;
     const stacks = [];
+    const currentParsed = this._cachedMeta.controller.getParsed(dataIndex);
+    const iScaleValue = currentParsed && currentParsed[iScale.axis];
     const skipNull = (meta) => {
-      const parsed = meta.controller.getParsed(dataIndex);
+      const parsed = meta._parsed.find((item) => item[iScale.axis] === iScaleValue);
       const val = parsed && parsed[meta.vScale.axis];
       if (isNullOrUndef(val) || isNaN(val)) {
         return true;
@@ -21166,10 +21512,20 @@ var adapters2 = {
 function binarySearch(metaset, axis, value, intersect) {
   const { controller, data, _sorted } = metaset;
   const iScale = controller._cachedMeta.iScale;
+  const spanGaps = metaset.dataset ? metaset.dataset.options ? metaset.dataset.options.spanGaps : null : null;
   if (iScale && axis === iScale.axis && axis !== "r" && _sorted && data.length) {
     const lookupMethod = iScale._reversePixels ? _rlookupByKey : _lookupByKey;
     if (!intersect) {
-      return lookupMethod(data, axis, value);
+      const result = lookupMethod(data, axis, value);
+      if (spanGaps) {
+        const { vScale } = controller._cachedMeta;
+        const { _parsed } = metaset;
+        const distanceToDefinedLo = _parsed.slice(0, result.lo + 1).reverse().findIndex((point) => !isNullOrUndef(point[vScale.axis]));
+        result.lo -= Math.max(0, distanceToDefinedLo);
+        const distanceToDefinedHi = _parsed.slice(result.hi).findIndex((point) => !isNullOrUndef(point[vScale.axis]));
+        result.hi += Math.max(0, distanceToDefinedHi);
+      }
+      return result;
     } else if (controller._sharedOptions) {
       const el = data[0];
       const range = typeof el.getRange === "function" && el.getRange(axis);
@@ -21299,7 +21655,7 @@ function getAxisItems(chart, position, axis, intersect, useFinalPosition) {
   const rangeMethod = axis === "x" ? "inXRange" : "inYRange";
   let intersectsItem = false;
   evaluateInteractionItems(chart, axis, position, (element, datasetIndex, index2) => {
-    if (element[rangeMethod](position[axis], useFinalPosition)) {
+    if (element[rangeMethod] && element[rangeMethod](position[axis], useFinalPosition)) {
       items.push({
         element,
         datasetIndex,
@@ -21734,15 +22090,15 @@ var BasePlatform = class {
   isAttached(canvas) {
     return true;
   }
-  updateConfig(config) {
+  updateConfig(config2) {
   }
 };
 var BasicPlatform = class extends BasePlatform {
   acquireContext(item) {
     return item && item.getContext && item.getContext("2d") || null;
   }
-  updateConfig(config) {
-    config.options.animation = false;
+  updateConfig(config2) {
+    config2.options.animation = false;
   }
 };
 var EXPANDO_KEY = "$chartjs";
@@ -23643,9 +23999,9 @@ var PluginService = class {
     return descriptors2;
   }
   _createDescriptors(chart, all) {
-    const config = chart && chart.config;
-    const options = valueOrDefault(config.options && config.options.plugins, {});
-    const plugins2 = allPlugins(config);
+    const config2 = chart && chart.config;
+    const options = valueOrDefault(config2.options && config2.options.plugins, {});
+    const plugins2 = allPlugins(config2);
     return options === false && !all ? [] : createDescriptors(chart, plugins2, options, all);
   }
   _notifyStateChanges(chart) {
@@ -23656,14 +24012,14 @@ var PluginService = class {
     this._notify(diff(descriptors2, previousDescriptors), chart, "start");
   }
 };
-function allPlugins(config) {
+function allPlugins(config2) {
   const localIds = {};
   const plugins2 = [];
   const keys = Object.keys(registry.plugins.items);
   for (let i = 0; i < keys.length; i++) {
     plugins2.push(registry.getPlugin(keys[i]));
   }
-  const local = config.plugins || [];
+  const local = config2.plugins || [];
   for (let i = 0; i < local.length; i++) {
     const plugin = local[i];
     if (plugins2.indexOf(plugin) === -1) {
@@ -23704,13 +24060,13 @@ function createDescriptors(chart, { plugins: plugins2, localIds }, options, all)
   }
   return result;
 }
-function pluginOpts(config, { plugin, local }, opts, context) {
-  const keys = config.pluginScopeKeys(plugin);
-  const scopes = config.getOptionScopes(opts, keys);
+function pluginOpts(config2, { plugin, local }, opts, context) {
+  const keys = config2.pluginScopeKeys(plugin);
+  const scopes = config2.getOptionScopes(opts, keys);
   if (local && plugin.defaults) {
     scopes.push(plugin.defaults);
   }
-  return config.createResolver(scopes, context, [
+  return config2.createResolver(scopes, context, [
     ""
   ], {
     scriptable: false,
@@ -23767,21 +24123,21 @@ function getAxisFromDataset(id, axis, dataset) {
     };
   }
 }
-function retrieveAxisFromDatasets(id, config) {
-  if (config.data && config.data.datasets) {
-    const boundDs = config.data.datasets.filter((d) => d.xAxisID === id || d.yAxisID === id);
+function retrieveAxisFromDatasets(id, config2) {
+  if (config2.data && config2.data.datasets) {
+    const boundDs = config2.data.datasets.filter((d) => d.xAxisID === id || d.yAxisID === id);
     if (boundDs.length) {
       return getAxisFromDataset(id, "x", boundDs[0]) || getAxisFromDataset(id, "y", boundDs[0]);
     }
   }
   return {};
 }
-function mergeScaleConfig(config, options) {
-  const chartDefaults = overrides[config.type] || {
+function mergeScaleConfig(config2, options) {
+  const chartDefaults = overrides[config2.type] || {
     scales: {}
   };
   const configScales = options.scales || {};
-  const chartIndexAxis = getIndexAxis(config.type, options);
+  const chartIndexAxis = getIndexAxis(config2.type, options);
   const scales2 = /* @__PURE__ */ Object.create(null);
   Object.keys(configScales).forEach((id) => {
     const scaleConf = configScales[id];
@@ -23791,7 +24147,7 @@ function mergeScaleConfig(config, options) {
     if (scaleConf._proxy) {
       return console.warn(`Ignoring resolver passed as options for scale: ${id}`);
     }
-    const axis = determineAxis(id, scaleConf, retrieveAxisFromDatasets(id, config), defaults.scales[scaleConf.type]);
+    const axis = determineAxis(id, scaleConf, retrieveAxisFromDatasets(id, config2), defaults.scales[scaleConf.type]);
     const defaultId = getDefaultScaleIDFromAxis(axis, chartIndexAxis);
     const defaultScaleOptions = chartDefaults.scales || {};
     scales2[id] = mergeIf(/* @__PURE__ */ Object.create(null), [
@@ -23803,8 +24159,8 @@ function mergeScaleConfig(config, options) {
       defaultScaleOptions[defaultId]
     ]);
   });
-  config.data.datasets.forEach((dataset) => {
-    const type = dataset.type || config.type;
+  config2.data.datasets.forEach((dataset) => {
+    const type = dataset.type || config2.type;
     const indexAxis = dataset.indexAxis || getIndexAxis(type, options);
     const datasetDefaults = overrides[type] || {};
     const defaultScaleOptions = datasetDefaults.scales || {};
@@ -23830,10 +24186,10 @@ function mergeScaleConfig(config, options) {
   });
   return scales2;
 }
-function initOptions(config) {
-  const options = config.options || (config.options = {});
+function initOptions(config2) {
+  const options = config2.options || (config2.options = {});
   options.plugins = valueOrDefault(options.plugins, {});
-  options.scales = mergeScaleConfig(config, options);
+  options.scales = mergeScaleConfig(config2, options);
 }
 function initData(data) {
   data = data || {};
@@ -23841,11 +24197,11 @@ function initData(data) {
   data.labels = data.labels || [];
   return data;
 }
-function initConfig(config) {
-  config = config || {};
-  config.data = initData(config.data);
-  initOptions(config);
-  return config;
+function initConfig(config2) {
+  config2 = config2 || {};
+  config2.data = initData(config2.data);
+  initOptions(config2);
+  return config2;
 }
 var keyCache = /* @__PURE__ */ new Map();
 var keysCached = /* @__PURE__ */ new Set();
@@ -23864,9 +24220,9 @@ var addIfFound = (set2, obj, key) => {
     set2.add(opts);
   }
 };
-var Config2 = class {
-  constructor(config) {
-    this._config = initConfig(config);
+var Config3 = class {
+  constructor(config2) {
+    this._config = initConfig(config2);
     this._scopeCache = /* @__PURE__ */ new Map();
     this._resolverCache = /* @__PURE__ */ new Map();
   }
@@ -23895,9 +24251,9 @@ var Config2 = class {
     return this._config.plugins;
   }
   update() {
-    const config = this._config;
+    const config2 = this._config;
     this.clearCache();
-    initOptions(config);
+    initOptions(config2);
   }
   clearCache() {
     this._scopeCache.clear();
@@ -24049,7 +24405,7 @@ function needContext(proxy, names2) {
   }
   return false;
 }
-var version = "4.4.3";
+var version = "4.4.9";
 var KNOWN_POSITIONS = [
   "top",
   "bottom",
@@ -24118,21 +24474,6 @@ function determineLastEvent(e, lastEvent, inChartArea, isClick) {
   }
   return e;
 }
-function getSizeForArea(scale, chartArea, field) {
-  return scale.options.clip ? scale[field] : chartArea[field];
-}
-function getDatasetArea(meta, chartArea) {
-  const { xScale, yScale } = meta;
-  if (xScale && yScale) {
-    return {
-      left: getSizeForArea(xScale, chartArea, "left"),
-      right: getSizeForArea(xScale, chartArea, "right"),
-      top: getSizeForArea(yScale, chartArea, "top"),
-      bottom: getSizeForArea(yScale, chartArea, "bottom")
-    };
-  }
-  return chartArea;
-}
 var Chart3 = class {
   static defaults = defaults;
   static instances = instances;
@@ -24149,15 +24490,15 @@ var Chart3 = class {
     invalidatePlugins();
   }
   constructor(item, userConfig) {
-    const config = this.config = new Config2(userConfig);
+    const config2 = this.config = new Config3(userConfig);
     const initialCanvas = getCanvas(item);
     const existingChart = getChart(initialCanvas);
     if (existingChart) {
       throw new Error("Canvas is already in use. Chart with ID '" + existingChart.id + "' must be destroyed before the canvas with ID '" + existingChart.canvas.id + "' can be reused.");
     }
-    const options = config.createResolver(config.chartOptionScopes(), this.getContext());
-    this.platform = new (config.platform || _detectPlatform(initialCanvas))();
-    this.platform.updateConfig(config);
+    const options = config2.createResolver(config2.chartOptionScopes(), this.getContext());
+    this.platform = new (config2.platform || _detectPlatform(initialCanvas))();
+    this.platform.updateConfig(config2);
     const context = this.platform.acquireContext(initialCanvas, options.aspectRatio);
     const canvas = context && context.canvas;
     const height = canvas && canvas.height;
@@ -24414,9 +24755,9 @@ var Chart3 = class {
     this.notifyPlugins("reset");
   }
   update(mode) {
-    const config = this.config;
-    config.update();
-    const options = this._options = config.createResolver(config.chartOptionScopes(), this.getContext());
+    const config2 = this.config;
+    config2.update();
+    const options = this._options = config2.createResolver(config2.chartOptionScopes(), this.getContext());
     const animsDisabled = this._animationsDisabled = !options.animation;
     this._updateScales();
     this._checkEventBindings();
@@ -24580,8 +24921,8 @@ var Chart3 = class {
     let i;
     if (this._resizeBeforeDraw) {
       const { width, height } = this._resizeBeforeDraw;
-      this._resize(width, height);
       this._resizeBeforeDraw = null;
+      this._resize(width, height);
     }
     this.clear();
     if (this.width <= 0 || this.height <= 0) {
@@ -24631,27 +24972,20 @@ var Chart3 = class {
   }
   _drawDataset(meta) {
     const ctx = this.ctx;
-    const clip = meta._clip;
-    const useClip = !clip.disabled;
-    const area = getDatasetArea(meta, this.chartArea);
     const args = {
       meta,
       index: meta.index,
       cancelable: true
     };
+    const clip = getDatasetClipArea(this, meta);
     if (this.notifyPlugins("beforeDatasetDraw", args) === false) {
       return;
     }
-    if (useClip) {
-      clipArea(ctx, {
-        left: clip.left === false ? 0 : area.left - clip.left,
-        right: clip.right === false ? this.width : area.right + clip.right,
-        top: clip.top === false ? 0 : area.top - clip.top,
-        bottom: clip.bottom === false ? this.height : area.bottom + clip.bottom
-      });
+    if (clip) {
+      clipArea(ctx, clip);
     }
     meta.controller.draw();
-    if (useClip) {
+    if (clip) {
       unclipArea(ctx);
     }
     args.cancelable = false;
@@ -25182,7 +25516,8 @@ var ArcElement = class extends Element2 {
     ], useFinalPosition);
     const rAdjust = (this.options.spacing + this.options.borderWidth) / 2;
     const _circumference = valueOrDefault(circumference, endAngle - startAngle);
-    const betweenAngles = _circumference >= TAU || _angleBetween(angle, startAngle, endAngle);
+    const nonZeroBetween = _angleBetween(angle, startAngle, endAngle) && startAngle !== endAngle;
+    const betweenAngles = _circumference >= TAU || nonZeroBetween;
     const withinRadius = _isBetween(distance, innerRadius + rAdjust, outerRadius + rAdjust);
     return betweenAngles && withinRadius;
   }
@@ -25844,6 +26179,9 @@ function containsColorsDefinitions(descriptors2) {
 function containsColorsDefinition(descriptor) {
   return descriptor && (descriptor.borderColor || descriptor.backgroundColor);
 }
+function containsDefaultColorsDefenitions() {
+  return defaults.borderColor !== "rgba(0,0,0,0.1)" || defaults.backgroundColor !== "rgba(0,0,0,0.1)";
+}
 var plugin_colors = {
   id: "colors",
   defaults: {
@@ -25856,7 +26194,8 @@ var plugin_colors = {
     }
     const { data: { datasets }, options: chartOptions } = chart.config;
     const { elements: elements2 } = chartOptions;
-    if (!options.forceOverride && (containsColorsDefinitions(datasets) || containsColorsDefinition(chartOptions) || elements2 && containsColorsDefinitions(elements2))) {
+    const containsColorDefenition = containsColorsDefinitions(datasets) || containsColorsDefinition(chartOptions) || elements2 && containsColorsDefinitions(elements2) || containsDefaultColorsDefenitions();
+    if (!options.forceOverride && containsColorDefenition) {
       return;
     }
     const colorizer = getColorizer(chart);
@@ -26447,11 +26786,13 @@ function computeCircularBoundary(source) {
 }
 function _drawfill(ctx, source, area) {
   const target = _getTarget(source);
-  const { line, scale, axis } = source;
+  const { chart, index: index2, line, scale, axis } = source;
   const lineOpts = line.options;
   const fillOption = lineOpts.fill;
   const color2 = lineOpts.backgroundColor;
   const { above = color2, below = color2 } = fillOption || {};
+  const meta = chart.getDatasetMeta(index2);
+  const clip = getDatasetClipArea(chart, meta);
   if (target && line.points.length) {
     clipArea(ctx, area);
     doFill(ctx, {
@@ -26461,13 +26802,14 @@ function _drawfill(ctx, source, area) {
       below,
       area,
       scale,
-      axis
+      axis,
+      clip
     });
     unclipArea(ctx);
   }
 }
 function doFill(ctx, cfg) {
-  const { line, target, above, below, area, scale } = cfg;
+  const { line, target, above, below, area, scale, clip } = cfg;
   const property = line._loop ? "angle" : cfg.axis;
   ctx.save();
   if (property === "x" && below !== above) {
@@ -26477,7 +26819,8 @@ function doFill(ctx, cfg) {
       target,
       color: above,
       scale,
-      property
+      property,
+      clip
     });
     ctx.restore();
     ctx.save();
@@ -26488,7 +26831,8 @@ function doFill(ctx, cfg) {
     target,
     color: below,
     scale,
-    property
+    property,
+    clip
   });
   ctx.restore();
 }
@@ -26522,14 +26866,14 @@ function clipVertical(ctx, target, clipY) {
   ctx.clip();
 }
 function fill(ctx, cfg) {
-  const { line, target, property, color: color2, scale } = cfg;
+  const { line, target, property, color: color2, scale, clip } = cfg;
   const segments = _segments(line, target, property);
   for (const { source: src, target: tgt, start: start3, end: end2 } of segments) {
     const { style: { backgroundColor = color2 } = {} } = src;
     const notShape = target !== true;
     ctx.save();
     ctx.fillStyle = backgroundColor;
-    clipBounds(ctx, scale, notShape && _getBounds(property, start3, end2));
+    clipBounds(ctx, scale, clip, notShape && _getBounds(property, start3, end2));
     ctx.beginPath();
     const lineLoop = !!line.pathSegment(ctx, src);
     let loop;
@@ -26553,12 +26897,30 @@ function fill(ctx, cfg) {
     ctx.restore();
   }
 }
-function clipBounds(ctx, scale, bounds) {
-  const { top: top2, bottom: bottom2 } = scale.chart.chartArea;
+function clipBounds(ctx, scale, clip, bounds) {
+  const chartArea = scale.chart.chartArea;
   const { property, start: start3, end: end2 } = bounds || {};
-  if (property === "x") {
+  if (property === "x" || property === "y") {
+    let left2, top2, right2, bottom2;
+    if (property === "x") {
+      left2 = start3;
+      top2 = chartArea.top;
+      right2 = end2;
+      bottom2 = chartArea.bottom;
+    } else {
+      left2 = chartArea.left;
+      top2 = start3;
+      right2 = chartArea.right;
+      bottom2 = end2;
+    }
     ctx.beginPath();
-    ctx.rect(start3, top2, end2 - start3, bottom2 - top2);
+    if (clip) {
+      left2 = Math.max(left2, clip.left);
+      right2 = Math.min(right2, clip.right);
+      top2 = Math.max(top2, clip.top);
+      bottom2 = Math.min(bottom2, clip.bottom);
+    }
+    ctx.rect(left2, top2, right2 - left2, bottom2 - top2);
     ctx.clip();
   }
 }
@@ -26653,15 +27015,15 @@ var getBoxSize = (labelOpts, fontSize) => {
 };
 var itemsEqual = (a, b) => a !== null && b !== null && a.datasetIndex === b.datasetIndex && a.index === b.index;
 var Legend = class extends Element2 {
-  constructor(config) {
+  constructor(config2) {
     super();
     this._added = false;
     this.legendHitBoxes = [];
     this._hoveredItem = null;
     this.doughnutMode = false;
-    this.chart = config.chart;
-    this.options = config.options;
-    this.ctx = config.ctx;
+    this.chart = config2.chart;
+    this.options = config2.options;
+    this.ctx = config2.ctx;
     this.legendItems = void 0;
     this.columnSizes = void 0;
     this.lineWidths = void 0;
@@ -27190,11 +27552,11 @@ var plugin_legend = {
   }
 };
 var Title = class extends Element2 {
-  constructor(config) {
+  constructor(config2) {
     super();
-    this.chart = config.chart;
-    this.options = config.options;
-    this.ctx = config.ctx;
+    this.chart = config2.chart;
+    this.options = config2.options;
+    this.ctx = config2.ctx;
     this._padding = void 0;
     this.top = void 0;
     this.bottom = void 0;
@@ -27385,6 +27747,9 @@ var positioners = {
         y += pos.y;
         ++count;
       }
+    }
+    if (count === 0 || xSet.size === 0) {
+      return false;
     }
     const xAverage = [
       ...xSet
@@ -27681,7 +28046,7 @@ function invokeCallbackWithFallback(callbacks2, name, ctx, arg) {
 }
 var Tooltip2 = class extends Element2 {
   static positioners = positioners;
-  constructor(config) {
+  constructor(config2) {
     super();
     this.opacity = 0;
     this._active = [];
@@ -27691,8 +28056,8 @@ var Tooltip2 = class extends Element2 {
     this._tooltipItems = [];
     this.$animations = void 0;
     this.$context = void 0;
-    this.chart = config.chart;
-    this.options = config.options;
+    this.chart = config2.chart;
+    this.options = config2.options;
     this.dataPoints = void 0;
     this.title = void 0;
     this.beforeBody = void 0;
@@ -29132,7 +29497,7 @@ function drawRadiusLine(scale, gridLineOpts, radius, labelCount, borderOpts) {
   ctx.save();
   ctx.strokeStyle = color2;
   ctx.lineWidth = lineWidth;
-  ctx.setLineDash(borderOpts.dash);
+  ctx.setLineDash(borderOpts.dash || []);
   ctx.lineDashOffset = borderOpts.dashOffset;
   ctx.beginPath();
   pathRadiusLine(scale, radius, circular, labelCount);
@@ -29336,7 +29701,7 @@ var RadialLinearScale = class extends LinearScaleBase {
         ctx.strokeStyle = color2;
         ctx.setLineDash(optsAtIndex.borderDash);
         ctx.lineDashOffset = optsAtIndex.borderDashOffset;
-        offset2 = this.getDistanceFromCenterForValue(opts.ticks.reverse ? this.min : this.max);
+        offset2 = this.getDistanceFromCenterForValue(opts.reverse ? this.min : this.max);
         position = this.getPointPosition(i, offset2);
         ctx.beginPath();
         ctx.moveTo(this.xCenter, this.yCenter);
@@ -29937,70 +30302,7 @@ var registerables = [
 Chart3.register(...registerables);
 var auto_default = Chart3;
 
-// node_modules/date-fns/toDate.mjs
-function toDate2(argument) {
-  const argStr = Object.prototype.toString.call(argument);
-  if (argument instanceof Date || typeof argument === "object" && argStr === "[object Date]") {
-    return new argument.constructor(+argument);
-  } else if (typeof argument === "number" || argStr === "[object Number]" || typeof argument === "string" || argStr === "[object String]") {
-    return new Date(argument);
-  } else {
-    return /* @__PURE__ */ new Date(NaN);
-  }
-}
-
-// node_modules/date-fns/constructFrom.mjs
-function constructFrom(date, value) {
-  if (date instanceof Date) {
-    return new date.constructor(value);
-  } else {
-    return new Date(value);
-  }
-}
-
-// node_modules/date-fns/addDays.mjs
-function addDays(date, amount) {
-  const _date = toDate2(date);
-  if (isNaN(amount))
-    return constructFrom(date, NaN);
-  if (!amount) {
-    return _date;
-  }
-  _date.setDate(_date.getDate() + amount);
-  return _date;
-}
-
-// node_modules/date-fns/addMonths.mjs
-function addMonths(date, amount) {
-  const _date = toDate2(date);
-  if (isNaN(amount))
-    return constructFrom(date, NaN);
-  if (!amount) {
-    return _date;
-  }
-  const dayOfMonth = _date.getDate();
-  const endOfDesiredMonth = constructFrom(date, _date.getTime());
-  endOfDesiredMonth.setMonth(_date.getMonth() + amount + 1, 0);
-  const daysInMonth = endOfDesiredMonth.getDate();
-  if (dayOfMonth >= daysInMonth) {
-    return endOfDesiredMonth;
-  } else {
-    _date.setFullYear(
-      endOfDesiredMonth.getFullYear(),
-      endOfDesiredMonth.getMonth(),
-      dayOfMonth
-    );
-    return _date;
-  }
-}
-
-// node_modules/date-fns/addMilliseconds.mjs
-function addMilliseconds(date, amount) {
-  const timestamp = +toDate2(date);
-  return constructFrom(date, timestamp + amount);
-}
-
-// node_modules/date-fns/constants.mjs
+// node_modules/date-fns/constants.js
 var daysInYear = 365.2425;
 var maxTime = Math.pow(10, 8) * 24 * 60 * 60 * 1e3;
 var minTime = -maxTime;
@@ -30015,23 +30317,80 @@ var secondsInWeek = secondsInDay * 7;
 var secondsInYear = secondsInDay * daysInYear;
 var secondsInMonth = secondsInYear / 12;
 var secondsInQuarter = secondsInMonth * 3;
+var constructFromSymbol = Symbol.for("constructDateFrom");
 
-// node_modules/date-fns/addHours.mjs
-function addHours(date, amount) {
-  return addMilliseconds(date, amount * millisecondsInHour);
+// node_modules/date-fns/constructFrom.js
+function constructFrom(date, value) {
+  if (typeof date === "function")
+    return date(value);
+  if (date && typeof date === "object" && constructFromSymbol in date)
+    return date[constructFromSymbol](value);
+  if (date instanceof Date)
+    return new date.constructor(value);
+  return new Date(value);
 }
 
-// node_modules/date-fns/_lib/defaultOptions.mjs
+// node_modules/date-fns/toDate.js
+function toDate2(argument, context) {
+  return constructFrom(context || argument, argument);
+}
+
+// node_modules/date-fns/addDays.js
+function addDays(date, amount, options) {
+  const _date = toDate2(date, options?.in);
+  if (isNaN(amount))
+    return constructFrom(options?.in || date, NaN);
+  if (!amount)
+    return _date;
+  _date.setDate(_date.getDate() + amount);
+  return _date;
+}
+
+// node_modules/date-fns/addMonths.js
+function addMonths(date, amount, options) {
+  const _date = toDate2(date, options?.in);
+  if (isNaN(amount))
+    return constructFrom(options?.in || date, NaN);
+  if (!amount) {
+    return _date;
+  }
+  const dayOfMonth = _date.getDate();
+  const endOfDesiredMonth = constructFrom(options?.in || date, _date.getTime());
+  endOfDesiredMonth.setMonth(_date.getMonth() + amount + 1, 0);
+  const daysInMonth = endOfDesiredMonth.getDate();
+  if (dayOfMonth >= daysInMonth) {
+    return endOfDesiredMonth;
+  } else {
+    _date.setFullYear(
+      endOfDesiredMonth.getFullYear(),
+      endOfDesiredMonth.getMonth(),
+      dayOfMonth
+    );
+    return _date;
+  }
+}
+
+// node_modules/date-fns/addMilliseconds.js
+function addMilliseconds(date, amount, options) {
+  return constructFrom(options?.in || date, +toDate2(date) + amount);
+}
+
+// node_modules/date-fns/addHours.js
+function addHours(date, amount, options) {
+  return addMilliseconds(date, amount * millisecondsInHour, options);
+}
+
+// node_modules/date-fns/_lib/defaultOptions.js
 var defaultOptions3 = {};
 function getDefaultOptions() {
   return defaultOptions3;
 }
 
-// node_modules/date-fns/startOfWeek.mjs
+// node_modules/date-fns/startOfWeek.js
 function startOfWeek(date, options) {
   const defaultOptions4 = getDefaultOptions();
   const weekStartsOn = options?.weekStartsOn ?? options?.locale?.options?.weekStartsOn ?? defaultOptions4.weekStartsOn ?? defaultOptions4.locale?.options?.weekStartsOn ?? 0;
-  const _date = toDate2(date);
+  const _date = toDate2(date, options?.in);
   const day = _date.getDay();
   const diff = (day < weekStartsOn ? 7 : 0) + day - weekStartsOn;
   _date.setDate(_date.getDate() - diff);
@@ -30039,20 +30398,20 @@ function startOfWeek(date, options) {
   return _date;
 }
 
-// node_modules/date-fns/startOfISOWeek.mjs
-function startOfISOWeek(date) {
-  return startOfWeek(date, { weekStartsOn: 1 });
+// node_modules/date-fns/startOfISOWeek.js
+function startOfISOWeek(date, options) {
+  return startOfWeek(date, { ...options, weekStartsOn: 1 });
 }
 
-// node_modules/date-fns/getISOWeekYear.mjs
-function getISOWeekYear(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/getISOWeekYear.js
+function getISOWeekYear(date, options) {
+  const _date = toDate2(date, options?.in);
   const year = _date.getFullYear();
-  const fourthOfJanuaryOfNextYear = constructFrom(date, 0);
+  const fourthOfJanuaryOfNextYear = constructFrom(_date, 0);
   fourthOfJanuaryOfNextYear.setFullYear(year + 1, 0, 4);
   fourthOfJanuaryOfNextYear.setHours(0, 0, 0, 0);
   const startOfNextYear = startOfISOWeek(fourthOfJanuaryOfNextYear);
-  const fourthOfJanuaryOfThisYear = constructFrom(date, 0);
+  const fourthOfJanuaryOfThisYear = constructFrom(_date, 0);
   fourthOfJanuaryOfThisYear.setFullYear(year, 0, 4);
   fourthOfJanuaryOfThisYear.setHours(0, 0, 0, 0);
   const startOfThisYear = startOfISOWeek(fourthOfJanuaryOfThisYear);
@@ -30065,14 +30424,7 @@ function getISOWeekYear(date) {
   }
 }
 
-// node_modules/date-fns/startOfDay.mjs
-function startOfDay(date) {
-  const _date = toDate2(date);
-  _date.setHours(0, 0, 0, 0);
-  return _date;
-}
-
-// node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds.mjs
+// node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds.js
 function getTimezoneOffsetInMilliseconds(date) {
   const _date = toDate2(date);
   const utcDate = new Date(
@@ -30090,120 +30442,142 @@ function getTimezoneOffsetInMilliseconds(date) {
   return +date - +utcDate;
 }
 
-// node_modules/date-fns/differenceInCalendarDays.mjs
-function differenceInCalendarDays(dateLeft, dateRight) {
-  const startOfDayLeft = startOfDay(dateLeft);
-  const startOfDayRight = startOfDay(dateRight);
-  const timestampLeft = +startOfDayLeft - getTimezoneOffsetInMilliseconds(startOfDayLeft);
-  const timestampRight = +startOfDayRight - getTimezoneOffsetInMilliseconds(startOfDayRight);
-  return Math.round((timestampLeft - timestampRight) / millisecondsInDay);
+// node_modules/date-fns/_lib/normalizeDates.js
+function normalizeDates(context, ...dates) {
+  const normalize = constructFrom.bind(
+    null,
+    context || dates.find((date) => typeof date === "object")
+  );
+  return dates.map(normalize);
 }
 
-// node_modules/date-fns/startOfISOWeekYear.mjs
-function startOfISOWeekYear(date) {
-  const year = getISOWeekYear(date);
-  const fourthOfJanuary = constructFrom(date, 0);
+// node_modules/date-fns/startOfDay.js
+function startOfDay(date, options) {
+  const _date = toDate2(date, options?.in);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+// node_modules/date-fns/differenceInCalendarDays.js
+function differenceInCalendarDays(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate
+  );
+  const laterStartOfDay = startOfDay(laterDate_);
+  const earlierStartOfDay = startOfDay(earlierDate_);
+  const laterTimestamp = +laterStartOfDay - getTimezoneOffsetInMilliseconds(laterStartOfDay);
+  const earlierTimestamp = +earlierStartOfDay - getTimezoneOffsetInMilliseconds(earlierStartOfDay);
+  return Math.round((laterTimestamp - earlierTimestamp) / millisecondsInDay);
+}
+
+// node_modules/date-fns/startOfISOWeekYear.js
+function startOfISOWeekYear(date, options) {
+  const year = getISOWeekYear(date, options);
+  const fourthOfJanuary = constructFrom(options?.in || date, 0);
   fourthOfJanuary.setFullYear(year, 0, 4);
   fourthOfJanuary.setHours(0, 0, 0, 0);
   return startOfISOWeek(fourthOfJanuary);
 }
 
-// node_modules/date-fns/addMinutes.mjs
-function addMinutes(date, amount) {
-  return addMilliseconds(date, amount * millisecondsInMinute);
+// node_modules/date-fns/addMinutes.js
+function addMinutes(date, amount, options) {
+  const _date = toDate2(date, options?.in);
+  _date.setTime(_date.getTime() + amount * millisecondsInMinute);
+  return _date;
 }
 
-// node_modules/date-fns/addQuarters.mjs
-function addQuarters(date, amount) {
-  const months = amount * 3;
-  return addMonths(date, months);
+// node_modules/date-fns/addQuarters.js
+function addQuarters(date, amount, options) {
+  return addMonths(date, amount * 3, options);
 }
 
-// node_modules/date-fns/addSeconds.mjs
-function addSeconds(date, amount) {
-  return addMilliseconds(date, amount * 1e3);
+// node_modules/date-fns/addSeconds.js
+function addSeconds(date, amount, options) {
+  return addMilliseconds(date, amount * 1e3, options);
 }
 
-// node_modules/date-fns/addWeeks.mjs
-function addWeeks(date, amount) {
-  const days = amount * 7;
-  return addDays(date, days);
+// node_modules/date-fns/addWeeks.js
+function addWeeks(date, amount, options) {
+  return addDays(date, amount * 7, options);
 }
 
-// node_modules/date-fns/addYears.mjs
-function addYears(date, amount) {
-  return addMonths(date, amount * 12);
+// node_modules/date-fns/addYears.js
+function addYears(date, amount, options) {
+  return addMonths(date, amount * 12, options);
 }
 
-// node_modules/date-fns/compareAsc.mjs
+// node_modules/date-fns/compareAsc.js
 function compareAsc(dateLeft, dateRight) {
-  const _dateLeft = toDate2(dateLeft);
-  const _dateRight = toDate2(dateRight);
-  const diff = _dateLeft.getTime() - _dateRight.getTime();
-  if (diff < 0) {
+  const diff = +toDate2(dateLeft) - +toDate2(dateRight);
+  if (diff < 0)
     return -1;
-  } else if (diff > 0) {
+  else if (diff > 0)
     return 1;
-  } else {
-    return diff;
-  }
+  return diff;
 }
 
-// node_modules/date-fns/isDate.mjs
+// node_modules/date-fns/isDate.js
 function isDate2(value) {
   return value instanceof Date || typeof value === "object" && Object.prototype.toString.call(value) === "[object Date]";
 }
 
-// node_modules/date-fns/isValid.mjs
+// node_modules/date-fns/isValid.js
 function isValid(date) {
-  if (!isDate2(date) && typeof date !== "number") {
-    return false;
-  }
-  const _date = toDate2(date);
-  return !isNaN(Number(_date));
+  return !(!isDate2(date) && typeof date !== "number" || isNaN(+toDate2(date)));
 }
 
-// node_modules/date-fns/differenceInCalendarMonths.mjs
-function differenceInCalendarMonths(dateLeft, dateRight) {
-  const _dateLeft = toDate2(dateLeft);
-  const _dateRight = toDate2(dateRight);
-  const yearDiff = _dateLeft.getFullYear() - _dateRight.getFullYear();
-  const monthDiff = _dateLeft.getMonth() - _dateRight.getMonth();
-  return yearDiff * 12 + monthDiff;
+// node_modules/date-fns/differenceInCalendarMonths.js
+function differenceInCalendarMonths(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate
+  );
+  const yearsDiff = laterDate_.getFullYear() - earlierDate_.getFullYear();
+  const monthsDiff = laterDate_.getMonth() - earlierDate_.getMonth();
+  return yearsDiff * 12 + monthsDiff;
 }
 
-// node_modules/date-fns/differenceInCalendarYears.mjs
-function differenceInCalendarYears(dateLeft, dateRight) {
-  const _dateLeft = toDate2(dateLeft);
-  const _dateRight = toDate2(dateRight);
-  return _dateLeft.getFullYear() - _dateRight.getFullYear();
+// node_modules/date-fns/differenceInCalendarYears.js
+function differenceInCalendarYears(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate
+  );
+  return laterDate_.getFullYear() - earlierDate_.getFullYear();
 }
 
-// node_modules/date-fns/differenceInDays.mjs
-function differenceInDays(dateLeft, dateRight) {
-  const _dateLeft = toDate2(dateLeft);
-  const _dateRight = toDate2(dateRight);
-  const sign2 = compareLocalAsc(_dateLeft, _dateRight);
-  const difference = Math.abs(differenceInCalendarDays(_dateLeft, _dateRight));
-  _dateLeft.setDate(_dateLeft.getDate() - sign2 * difference);
+// node_modules/date-fns/differenceInDays.js
+function differenceInDays(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate
+  );
+  const sign2 = compareLocalAsc(laterDate_, earlierDate_);
+  const difference = Math.abs(
+    differenceInCalendarDays(laterDate_, earlierDate_)
+  );
+  laterDate_.setDate(laterDate_.getDate() - sign2 * difference);
   const isLastDayNotFull = Number(
-    compareLocalAsc(_dateLeft, _dateRight) === -sign2
+    compareLocalAsc(laterDate_, earlierDate_) === -sign2
   );
   const result = sign2 * (difference - isLastDayNotFull);
   return result === 0 ? 0 : result;
 }
-function compareLocalAsc(dateLeft, dateRight) {
-  const diff = dateLeft.getFullYear() - dateRight.getFullYear() || dateLeft.getMonth() - dateRight.getMonth() || dateLeft.getDate() - dateRight.getDate() || dateLeft.getHours() - dateRight.getHours() || dateLeft.getMinutes() - dateRight.getMinutes() || dateLeft.getSeconds() - dateRight.getSeconds() || dateLeft.getMilliseconds() - dateRight.getMilliseconds();
-  if (diff < 0) {
+function compareLocalAsc(laterDate, earlierDate) {
+  const diff = laterDate.getFullYear() - earlierDate.getFullYear() || laterDate.getMonth() - earlierDate.getMonth() || laterDate.getDate() - earlierDate.getDate() || laterDate.getHours() - earlierDate.getHours() || laterDate.getMinutes() - earlierDate.getMinutes() || laterDate.getSeconds() - earlierDate.getSeconds() || laterDate.getMilliseconds() - earlierDate.getMilliseconds();
+  if (diff < 0)
     return -1;
-  } else if (diff > 0) {
+  if (diff > 0)
     return 1;
-  } else {
-    return diff;
-  }
+  return diff;
 }
 
-// node_modules/date-fns/_lib/getRoundingMethod.mjs
+// node_modules/date-fns/_lib/getRoundingMethod.js
 function getRoundingMethod(method) {
   return (number) => {
     const round3 = method ? Math[method] : Math.trunc;
@@ -30212,111 +30586,112 @@ function getRoundingMethod(method) {
   };
 }
 
-// node_modules/date-fns/differenceInMilliseconds.mjs
-function differenceInMilliseconds(dateLeft, dateRight) {
-  return +toDate2(dateLeft) - +toDate2(dateRight);
-}
-
-// node_modules/date-fns/differenceInHours.mjs
-function differenceInHours(dateLeft, dateRight, options) {
-  const diff = differenceInMilliseconds(dateLeft, dateRight) / millisecondsInHour;
+// node_modules/date-fns/differenceInHours.js
+function differenceInHours(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate
+  );
+  const diff = (+laterDate_ - +earlierDate_) / millisecondsInHour;
   return getRoundingMethod(options?.roundingMethod)(diff);
 }
 
-// node_modules/date-fns/differenceInMinutes.mjs
+// node_modules/date-fns/differenceInMilliseconds.js
+function differenceInMilliseconds(laterDate, earlierDate) {
+  return +toDate2(laterDate) - +toDate2(earlierDate);
+}
+
+// node_modules/date-fns/differenceInMinutes.js
 function differenceInMinutes(dateLeft, dateRight, options) {
   const diff = differenceInMilliseconds(dateLeft, dateRight) / millisecondsInMinute;
   return getRoundingMethod(options?.roundingMethod)(diff);
 }
 
-// node_modules/date-fns/endOfDay.mjs
-function endOfDay(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/endOfDay.js
+function endOfDay(date, options) {
+  const _date = toDate2(date, options?.in);
   _date.setHours(23, 59, 59, 999);
   return _date;
 }
 
-// node_modules/date-fns/endOfMonth.mjs
-function endOfMonth(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/endOfMonth.js
+function endOfMonth(date, options) {
+  const _date = toDate2(date, options?.in);
   const month = _date.getMonth();
   _date.setFullYear(_date.getFullYear(), month + 1, 0);
   _date.setHours(23, 59, 59, 999);
   return _date;
 }
 
-// node_modules/date-fns/isLastDayOfMonth.mjs
-function isLastDayOfMonth(date) {
-  const _date = toDate2(date);
-  return +endOfDay(_date) === +endOfMonth(_date);
+// node_modules/date-fns/isLastDayOfMonth.js
+function isLastDayOfMonth(date, options) {
+  const _date = toDate2(date, options?.in);
+  return +endOfDay(_date, options) === +endOfMonth(_date, options);
 }
 
-// node_modules/date-fns/differenceInMonths.mjs
-function differenceInMonths(dateLeft, dateRight) {
-  const _dateLeft = toDate2(dateLeft);
-  const _dateRight = toDate2(dateRight);
-  const sign2 = compareAsc(_dateLeft, _dateRight);
-  const difference = Math.abs(
-    differenceInCalendarMonths(_dateLeft, _dateRight)
+// node_modules/date-fns/differenceInMonths.js
+function differenceInMonths(laterDate, earlierDate, options) {
+  const [laterDate_, workingLaterDate, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    laterDate,
+    earlierDate
   );
-  let result;
-  if (difference < 1) {
-    result = 0;
-  } else {
-    if (_dateLeft.getMonth() === 1 && _dateLeft.getDate() > 27) {
-      _dateLeft.setDate(30);
-    }
-    _dateLeft.setMonth(_dateLeft.getMonth() - sign2 * difference);
-    let isLastMonthNotFull = compareAsc(_dateLeft, _dateRight) === -sign2;
-    if (isLastDayOfMonth(toDate2(dateLeft)) && difference === 1 && compareAsc(dateLeft, _dateRight) === 1) {
-      isLastMonthNotFull = false;
-    }
-    result = sign2 * (difference - Number(isLastMonthNotFull));
+  const sign2 = compareAsc(workingLaterDate, earlierDate_);
+  const difference = Math.abs(
+    differenceInCalendarMonths(workingLaterDate, earlierDate_)
+  );
+  if (difference < 1)
+    return 0;
+  if (workingLaterDate.getMonth() === 1 && workingLaterDate.getDate() > 27)
+    workingLaterDate.setDate(30);
+  workingLaterDate.setMonth(workingLaterDate.getMonth() - sign2 * difference);
+  let isLastMonthNotFull = compareAsc(workingLaterDate, earlierDate_) === -sign2;
+  if (isLastDayOfMonth(laterDate_) && difference === 1 && compareAsc(laterDate_, earlierDate_) === 1) {
+    isLastMonthNotFull = false;
   }
+  const result = sign2 * (difference - +isLastMonthNotFull);
   return result === 0 ? 0 : result;
 }
 
-// node_modules/date-fns/differenceInQuarters.mjs
-function differenceInQuarters(dateLeft, dateRight, options) {
-  const diff = differenceInMonths(dateLeft, dateRight) / 3;
+// node_modules/date-fns/differenceInQuarters.js
+function differenceInQuarters(laterDate, earlierDate, options) {
+  const diff = differenceInMonths(laterDate, earlierDate, options) / 3;
   return getRoundingMethod(options?.roundingMethod)(diff);
 }
 
-// node_modules/date-fns/differenceInSeconds.mjs
-function differenceInSeconds(dateLeft, dateRight, options) {
-  const diff = differenceInMilliseconds(dateLeft, dateRight) / 1e3;
+// node_modules/date-fns/differenceInSeconds.js
+function differenceInSeconds(laterDate, earlierDate, options) {
+  const diff = differenceInMilliseconds(laterDate, earlierDate) / 1e3;
   return getRoundingMethod(options?.roundingMethod)(diff);
 }
 
-// node_modules/date-fns/differenceInWeeks.mjs
-function differenceInWeeks(dateLeft, dateRight, options) {
-  const diff = differenceInDays(dateLeft, dateRight) / 7;
+// node_modules/date-fns/differenceInWeeks.js
+function differenceInWeeks(laterDate, earlierDate, options) {
+  const diff = differenceInDays(laterDate, earlierDate, options) / 7;
   return getRoundingMethod(options?.roundingMethod)(diff);
 }
 
-// node_modules/date-fns/differenceInYears.mjs
-function differenceInYears(dateLeft, dateRight) {
-  const _dateLeft = toDate2(dateLeft);
-  const _dateRight = toDate2(dateRight);
-  const sign2 = compareAsc(_dateLeft, _dateRight);
-  const difference = Math.abs(differenceInCalendarYears(_dateLeft, _dateRight));
-  _dateLeft.setFullYear(1584);
-  _dateRight.setFullYear(1584);
-  const isLastYearNotFull = compareAsc(_dateLeft, _dateRight) === -sign2;
-  const result = sign2 * (difference - +isLastYearNotFull);
+// node_modules/date-fns/differenceInYears.js
+function differenceInYears(laterDate, earlierDate, options) {
+  const [laterDate_, earlierDate_] = normalizeDates(
+    options?.in,
+    laterDate,
+    earlierDate
+  );
+  const sign2 = compareAsc(laterDate_, earlierDate_);
+  const diff = Math.abs(differenceInCalendarYears(laterDate_, earlierDate_));
+  laterDate_.setFullYear(1584);
+  earlierDate_.setFullYear(1584);
+  const partial = compareAsc(laterDate_, earlierDate_) === -sign2;
+  const result = sign2 * (diff - +partial);
   return result === 0 ? 0 : result;
 }
 
-// node_modules/date-fns/startOfMinute.mjs
-function startOfMinute(date) {
-  const _date = toDate2(date);
-  _date.setSeconds(0, 0);
-  return _date;
-}
-
-// node_modules/date-fns/startOfQuarter.mjs
-function startOfQuarter(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/startOfQuarter.js
+function startOfQuarter(date, options) {
+  const _date = toDate2(date, options?.in);
   const currentMonth = _date.getMonth();
   const month = currentMonth - currentMonth % 3;
   _date.setMonth(month, 1);
@@ -30324,44 +30699,43 @@ function startOfQuarter(date) {
   return _date;
 }
 
-// node_modules/date-fns/startOfMonth.mjs
-function startOfMonth(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/startOfMonth.js
+function startOfMonth(date, options) {
+  const _date = toDate2(date, options?.in);
   _date.setDate(1);
   _date.setHours(0, 0, 0, 0);
   return _date;
 }
 
-// node_modules/date-fns/endOfYear.mjs
-function endOfYear(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/endOfYear.js
+function endOfYear(date, options) {
+  const _date = toDate2(date, options?.in);
   const year = _date.getFullYear();
   _date.setFullYear(year + 1, 0, 0);
   _date.setHours(23, 59, 59, 999);
   return _date;
 }
 
-// node_modules/date-fns/startOfYear.mjs
-function startOfYear(date) {
-  const cleanDate = toDate2(date);
-  const _date = constructFrom(date, 0);
-  _date.setFullYear(cleanDate.getFullYear(), 0, 1);
-  _date.setHours(0, 0, 0, 0);
-  return _date;
+// node_modules/date-fns/startOfYear.js
+function startOfYear(date, options) {
+  const date_ = toDate2(date, options?.in);
+  date_.setFullYear(date_.getFullYear(), 0, 1);
+  date_.setHours(0, 0, 0, 0);
+  return date_;
 }
 
-// node_modules/date-fns/endOfHour.mjs
-function endOfHour(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/endOfHour.js
+function endOfHour(date, options) {
+  const _date = toDate2(date, options?.in);
   _date.setMinutes(59, 59, 999);
   return _date;
 }
 
-// node_modules/date-fns/endOfWeek.mjs
+// node_modules/date-fns/endOfWeek.js
 function endOfWeek(date, options) {
   const defaultOptions4 = getDefaultOptions();
   const weekStartsOn = options?.weekStartsOn ?? options?.locale?.options?.weekStartsOn ?? defaultOptions4.weekStartsOn ?? defaultOptions4.locale?.options?.weekStartsOn ?? 0;
-  const _date = toDate2(date);
+  const _date = toDate2(date, options?.in);
   const day = _date.getDay();
   const diff = (day < weekStartsOn ? -7 : 0) + 6 - (day - weekStartsOn);
   _date.setDate(_date.getDate() + diff);
@@ -30369,16 +30743,16 @@ function endOfWeek(date, options) {
   return _date;
 }
 
-// node_modules/date-fns/endOfMinute.mjs
-function endOfMinute(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/endOfMinute.js
+function endOfMinute(date, options) {
+  const _date = toDate2(date, options?.in);
   _date.setSeconds(59, 999);
   return _date;
 }
 
-// node_modules/date-fns/endOfQuarter.mjs
-function endOfQuarter(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/endOfQuarter.js
+function endOfQuarter(date, options) {
+  const _date = toDate2(date, options?.in);
   const currentMonth = _date.getMonth();
   const month = currentMonth - currentMonth % 3 + 3;
   _date.setMonth(month, 0);
@@ -30386,14 +30760,14 @@ function endOfQuarter(date) {
   return _date;
 }
 
-// node_modules/date-fns/endOfSecond.mjs
-function endOfSecond(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/endOfSecond.js
+function endOfSecond(date, options) {
+  const _date = toDate2(date, options?.in);
   _date.setMilliseconds(999);
   return _date;
 }
 
-// node_modules/date-fns/locale/en-US/_lib/formatDistance.mjs
+// node_modules/date-fns/locale/en-US/_lib/formatDistance.js
 var formatDistanceLocale = {
   lessThanXSeconds: {
     one: "less than a second",
@@ -30477,7 +30851,7 @@ var formatDistance = (token, count, options) => {
   return result;
 };
 
-// node_modules/date-fns/locale/_lib/buildFormatLongFn.mjs
+// node_modules/date-fns/locale/_lib/buildFormatLongFn.js
 function buildFormatLongFn(args) {
   return (options = {}) => {
     const width = options.width ? String(options.width) : args.defaultWidth;
@@ -30486,7 +30860,7 @@ function buildFormatLongFn(args) {
   };
 }
 
-// node_modules/date-fns/locale/en-US/_lib/formatLong.mjs
+// node_modules/date-fns/locale/en-US/_lib/formatLong.js
 var dateFormats = {
   full: "EEEE, MMMM do, y",
   long: "MMMM do, y",
@@ -30520,7 +30894,7 @@ var formatLong = {
   })
 };
 
-// node_modules/date-fns/locale/en-US/_lib/formatRelative.mjs
+// node_modules/date-fns/locale/en-US/_lib/formatRelative.js
 var formatRelativeLocale = {
   lastWeek: "'last' eeee 'at' p",
   yesterday: "'yesterday at' p",
@@ -30531,7 +30905,7 @@ var formatRelativeLocale = {
 };
 var formatRelative = (token, _date, _baseDate, _options) => formatRelativeLocale[token];
 
-// node_modules/date-fns/locale/_lib/buildLocalizeFn.mjs
+// node_modules/date-fns/locale/_lib/buildLocalizeFn.js
 function buildLocalizeFn(args) {
   return (value, options) => {
     const context = options?.context ? String(options.context) : "standalone";
@@ -30550,7 +30924,7 @@ function buildLocalizeFn(args) {
   };
 }
 
-// node_modules/date-fns/locale/en-US/_lib/localize.mjs
+// node_modules/date-fns/locale/en-US/_lib/localize.js
 var eraValues = {
   narrow: ["B", "A"],
   abbreviated: ["BC", "AD"],
@@ -30712,7 +31086,7 @@ var localize = {
   })
 };
 
-// node_modules/date-fns/locale/_lib/buildMatchFn.mjs
+// node_modules/date-fns/locale/_lib/buildMatchFn.js
 function buildMatchFn(args) {
   return (string, options = {}) => {
     const width = options.width;
@@ -30724,13 +31098,13 @@ function buildMatchFn(args) {
     const matchedString = matchResult[0];
     const parsePatterns = width && args.parsePatterns[width] || args.parsePatterns[args.defaultParseWidth];
     const key = Array.isArray(parsePatterns) ? findIndex(parsePatterns, (pattern) => pattern.test(matchedString)) : (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- I challange you to fix the type
+      // [TODO] -- I challenge you to fix the type
       findKey(parsePatterns, (pattern) => pattern.test(matchedString))
     );
     let value;
     value = args.valueCallback ? args.valueCallback(key) : key;
     value = options.valueCallback ? (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- I challange you to fix the type
+      // [TODO] -- I challenge you to fix the type
       options.valueCallback(value)
     ) : value;
     const rest = string.slice(matchedString.length);
@@ -30754,7 +31128,7 @@ function findIndex(array, predicate) {
   return void 0;
 }
 
-// node_modules/date-fns/locale/_lib/buildMatchPatternFn.mjs
+// node_modules/date-fns/locale/_lib/buildMatchPatternFn.js
 function buildMatchPatternFn(args) {
   return (string, options = {}) => {
     const matchResult = string.match(args.matchPattern);
@@ -30771,7 +31145,7 @@ function buildMatchPatternFn(args) {
   };
 }
 
-// node_modules/date-fns/locale/en-US/_lib/match.mjs
+// node_modules/date-fns/locale/en-US/_lib/match.js
 var matchOrdinalNumberPattern = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern = /\d+/i;
 var matchEraPatterns = {
@@ -30890,7 +31264,7 @@ var match = {
   })
 };
 
-// node_modules/date-fns/locale/en-US.mjs
+// node_modules/date-fns/locale/en-US.js
 var enUS = {
   code: "en-US",
   formatDistance,
@@ -30904,71 +31278,71 @@ var enUS = {
   }
 };
 
-// node_modules/date-fns/getDayOfYear.mjs
-function getDayOfYear(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/getDayOfYear.js
+function getDayOfYear(date, options) {
+  const _date = toDate2(date, options?.in);
   const diff = differenceInCalendarDays(_date, startOfYear(_date));
   const dayOfYear = diff + 1;
   return dayOfYear;
 }
 
-// node_modules/date-fns/getISOWeek.mjs
-function getISOWeek(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/getISOWeek.js
+function getISOWeek(date, options) {
+  const _date = toDate2(date, options?.in);
   const diff = +startOfISOWeek(_date) - +startOfISOWeekYear(_date);
   return Math.round(diff / millisecondsInWeek) + 1;
 }
 
-// node_modules/date-fns/getWeekYear.mjs
+// node_modules/date-fns/getWeekYear.js
 function getWeekYear(date, options) {
-  const _date = toDate2(date);
+  const _date = toDate2(date, options?.in);
   const year = _date.getFullYear();
   const defaultOptions4 = getDefaultOptions();
   const firstWeekContainsDate = options?.firstWeekContainsDate ?? options?.locale?.options?.firstWeekContainsDate ?? defaultOptions4.firstWeekContainsDate ?? defaultOptions4.locale?.options?.firstWeekContainsDate ?? 1;
-  const firstWeekOfNextYear = constructFrom(date, 0);
+  const firstWeekOfNextYear = constructFrom(options?.in || date, 0);
   firstWeekOfNextYear.setFullYear(year + 1, 0, firstWeekContainsDate);
   firstWeekOfNextYear.setHours(0, 0, 0, 0);
   const startOfNextYear = startOfWeek(firstWeekOfNextYear, options);
-  const firstWeekOfThisYear = constructFrom(date, 0);
+  const firstWeekOfThisYear = constructFrom(options?.in || date, 0);
   firstWeekOfThisYear.setFullYear(year, 0, firstWeekContainsDate);
   firstWeekOfThisYear.setHours(0, 0, 0, 0);
   const startOfThisYear = startOfWeek(firstWeekOfThisYear, options);
-  if (_date.getTime() >= startOfNextYear.getTime()) {
+  if (+_date >= +startOfNextYear) {
     return year + 1;
-  } else if (_date.getTime() >= startOfThisYear.getTime()) {
+  } else if (+_date >= +startOfThisYear) {
     return year;
   } else {
     return year - 1;
   }
 }
 
-// node_modules/date-fns/startOfWeekYear.mjs
+// node_modules/date-fns/startOfWeekYear.js
 function startOfWeekYear(date, options) {
   const defaultOptions4 = getDefaultOptions();
   const firstWeekContainsDate = options?.firstWeekContainsDate ?? options?.locale?.options?.firstWeekContainsDate ?? defaultOptions4.firstWeekContainsDate ?? defaultOptions4.locale?.options?.firstWeekContainsDate ?? 1;
   const year = getWeekYear(date, options);
-  const firstWeek = constructFrom(date, 0);
+  const firstWeek = constructFrom(options?.in || date, 0);
   firstWeek.setFullYear(year, 0, firstWeekContainsDate);
   firstWeek.setHours(0, 0, 0, 0);
   const _date = startOfWeek(firstWeek, options);
   return _date;
 }
 
-// node_modules/date-fns/getWeek.mjs
+// node_modules/date-fns/getWeek.js
 function getWeek(date, options) {
-  const _date = toDate2(date);
+  const _date = toDate2(date, options?.in);
   const diff = +startOfWeek(_date, options) - +startOfWeekYear(_date, options);
   return Math.round(diff / millisecondsInWeek) + 1;
 }
 
-// node_modules/date-fns/_lib/addLeadingZeros.mjs
+// node_modules/date-fns/_lib/addLeadingZeros.js
 function addLeadingZeros(number, targetLength) {
   const sign2 = number < 0 ? "-" : "";
   const output = Math.abs(number).toString().padStart(targetLength, "0");
   return sign2 + output;
 }
 
-// node_modules/date-fns/_lib/format/lightFormatters.mjs
+// node_modules/date-fns/_lib/format/lightFormatters.js
 var lightFormatters = {
   // Year
   y(date, token) {
@@ -31028,7 +31402,7 @@ var lightFormatters = {
   }
 };
 
-// node_modules/date-fns/_lib/format/formatters.mjs
+// node_modules/date-fns/_lib/format/formatters.js
 var dayPeriodEnum = {
   am: "am",
   pm: "pm",
@@ -31575,13 +31949,12 @@ var formatters2 = {
   },
   // Seconds timestamp
   t: function(date, token, _localize) {
-    const timestamp = Math.trunc(date.getTime() / 1e3);
+    const timestamp = Math.trunc(+date / 1e3);
     return addLeadingZeros(timestamp, token.length);
   },
   // Milliseconds timestamp
   T: function(date, token, _localize) {
-    const timestamp = date.getTime();
-    return addLeadingZeros(timestamp, token.length);
+    return addLeadingZeros(+date, token.length);
   }
 };
 function formatTimezoneShort(offset2, delimiter = "") {
@@ -31609,7 +31982,7 @@ function formatTimezone(offset2, delimiter = "") {
   return sign2 + hours + delimiter + minutes;
 }
 
-// node_modules/date-fns/_lib/format/longFormatters.mjs
+// node_modules/date-fns/_lib/format/longFormatters.js
 var dateLongFormatter = (pattern, formatLong2) => {
   switch (pattern) {
     case "P":
@@ -31666,7 +32039,7 @@ var longFormatters = {
   P: dateTimeLongFormatter
 };
 
-// node_modules/date-fns/_lib/protectedTokens.mjs
+// node_modules/date-fns/_lib/protectedTokens.js
 var dayOfYearTokenRE = /^D+$/;
 var weekYearTokenRE = /^Y+$/;
 var throwTokens = ["D", "DD", "YY", "YYYY"];
@@ -31687,7 +32060,7 @@ function message(token, format2, input) {
   return `Use \`${token.toLowerCase()}\` instead of \`${token}\` (in \`${format2}\`) for formatting ${subject} to the input \`${input}\`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md`;
 }
 
-// node_modules/date-fns/format.mjs
+// node_modules/date-fns/format.js
 var formattingTokensRegExp = /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|$)|./g;
 var longFormattingTokensRegExp = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
 var escapedStringRegExp = /^'([^]*?)'?$/;
@@ -31698,7 +32071,7 @@ function format(date, formatStr, options) {
   const locale = options?.locale ?? defaultOptions4.locale ?? enUS;
   const firstWeekContainsDate = options?.firstWeekContainsDate ?? options?.locale?.options?.firstWeekContainsDate ?? defaultOptions4.firstWeekContainsDate ?? defaultOptions4.locale?.options?.firstWeekContainsDate ?? 1;
   const weekStartsOn = options?.weekStartsOn ?? options?.locale?.options?.weekStartsOn ?? defaultOptions4.weekStartsOn ?? defaultOptions4.locale?.options?.weekStartsOn ?? 0;
-  const originalDate = toDate2(date);
+  const originalDate = toDate2(date, options?.in);
   if (!isValid(originalDate)) {
     throw new RangeError("Invalid time value");
   }
@@ -31754,39 +32127,34 @@ function cleanEscapedString(input) {
   return matched[1].replace(doubleQuoteRegExp, "'");
 }
 
-// node_modules/date-fns/getDefaultOptions.mjs
+// node_modules/date-fns/getDefaultOptions.js
 function getDefaultOptions2() {
   return Object.assign({}, getDefaultOptions());
 }
 
-// node_modules/date-fns/getISODay.mjs
-function getISODay(date) {
-  const _date = toDate2(date);
-  let day = _date.getDay();
-  if (day === 0) {
-    day = 7;
-  }
-  return day;
+// node_modules/date-fns/getISODay.js
+function getISODay(date, options) {
+  const day = toDate2(date, options?.in).getDay();
+  return day === 0 ? 7 : day;
 }
 
-// node_modules/date-fns/transpose.mjs
-function transpose(fromDate, constructor) {
-  const date = constructor instanceof Date ? constructFrom(constructor, 0) : new constructor(0);
-  date.setFullYear(
-    fromDate.getFullYear(),
-    fromDate.getMonth(),
-    fromDate.getDate()
+// node_modules/date-fns/transpose.js
+function transpose(date, constructor) {
+  const date_ = isConstructor(constructor) ? new constructor(0) : constructFrom(constructor, 0);
+  date_.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+  date_.setHours(
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+    date.getMilliseconds()
   );
-  date.setHours(
-    fromDate.getHours(),
-    fromDate.getMinutes(),
-    fromDate.getSeconds(),
-    fromDate.getMilliseconds()
-  );
-  return date;
+  return date_;
+}
+function isConstructor(constructor) {
+  return typeof constructor === "function" && constructor.prototype?.constructor === constructor;
 }
 
-// node_modules/date-fns/parse/_lib/Setter.mjs
+// node_modules/date-fns/parse/_lib/Setter.js
 var TIMEZONE_UNIT_PRIORITY = 10;
 var Setter = class {
   subPriority = 0;
@@ -31812,17 +32180,21 @@ var ValueSetter = class extends Setter {
     return this.setValue(date, flags, this.value, options);
   }
 };
-var DateToSystemTimezoneSetter = class extends Setter {
+var DateTimezoneSetter = class extends Setter {
   priority = TIMEZONE_UNIT_PRIORITY;
   subPriority = -1;
+  constructor(context, reference2) {
+    super();
+    this.context = context || ((date) => constructFrom(reference2, date));
+  }
   set(date, flags) {
     if (flags.timestampIsSet)
       return date;
-    return constructFrom(date, transpose(date, Date));
+    return constructFrom(date, transpose(date, this.context));
   }
 };
 
-// node_modules/date-fns/parse/_lib/Parser.mjs
+// node_modules/date-fns/parse/_lib/Parser.js
 var Parser = class {
   run(dateString, token, match2, options) {
     const result = this.parse(dateString, token, match2, options);
@@ -31845,7 +32217,7 @@ var Parser = class {
   }
 };
 
-// node_modules/date-fns/parse/_lib/parsers/EraParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/EraParser.js
 var EraParser = class extends Parser {
   priority = 140;
   parse(dateString, token, match2) {
@@ -31870,7 +32242,7 @@ var EraParser = class extends Parser {
   incompatibleTokens = ["R", "u", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/constants.mjs
+// node_modules/date-fns/parse/_lib/constants.js
 var numericPatterns = {
   month: /^(1[0-2]|0?\d)/,
   // 0 to 12
@@ -31918,7 +32290,7 @@ var timezonePatterns = {
   extendedOptionalSeconds: /^([+-])(\d{2}):(\d{2})(:(\d{2}))?|Z/
 };
 
-// node_modules/date-fns/parse/_lib/utils.mjs
+// node_modules/date-fns/parse/_lib/utils.js
 function mapValue(parseFnResult, mapFn) {
   if (!parseFnResult) {
     return parseFnResult;
@@ -32024,7 +32396,7 @@ function isLeapYearIndex(year) {
   return year % 400 === 0 || year % 4 === 0 && year % 100 !== 0;
 }
 
-// node_modules/date-fns/parse/_lib/parsers/YearParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/YearParser.js
 var YearParser = class extends Parser {
   priority = 130;
   incompatibleTokens = ["Y", "R", "u", "w", "I", "i", "e", "c", "t", "T"];
@@ -32068,7 +32440,7 @@ var YearParser = class extends Parser {
   }
 };
 
-// node_modules/date-fns/parse/_lib/parsers/LocalWeekYearParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/LocalWeekYearParser.js
 var LocalWeekYearParser = class extends Parser {
   priority = 130;
   parse(dateString, token, match2) {
@@ -32130,7 +32502,7 @@ var LocalWeekYearParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/ISOWeekYearParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/ISOWeekYearParser.js
 var ISOWeekYearParser = class extends Parser {
   priority = 130;
   parse(dateString, token) {
@@ -32164,7 +32536,7 @@ var ISOWeekYearParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/ExtendedYearParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/ExtendedYearParser.js
 var ExtendedYearParser = class extends Parser {
   priority = 130;
   parse(dateString, token) {
@@ -32181,7 +32553,7 @@ var ExtendedYearParser = class extends Parser {
   incompatibleTokens = ["G", "y", "Y", "R", "w", "I", "i", "e", "c", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/QuarterParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/QuarterParser.js
 var QuarterParser = class extends Parser {
   priority = 120;
   parse(dateString, token, match2) {
@@ -32244,7 +32616,7 @@ var QuarterParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/StandAloneQuarterParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/StandAloneQuarterParser.js
 var StandAloneQuarterParser = class extends Parser {
   priority = 120;
   parse(dateString, token, match2) {
@@ -32307,7 +32679,7 @@ var StandAloneQuarterParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/MonthParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/MonthParser.js
 var MonthParser = class extends Parser {
   incompatibleTokens = [
     "Y",
@@ -32370,7 +32742,7 @@ var MonthParser = class extends Parser {
   }
 };
 
-// node_modules/date-fns/parse/_lib/parsers/StandAloneMonthParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/StandAloneMonthParser.js
 var StandAloneMonthParser = class extends Parser {
   priority = 110;
   parse(dateString, token, match2) {
@@ -32433,15 +32805,15 @@ var StandAloneMonthParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/setWeek.mjs
+// node_modules/date-fns/setWeek.js
 function setWeek(date, week, options) {
-  const _date = toDate2(date);
-  const diff = getWeek(_date, options) - week;
-  _date.setDate(_date.getDate() - diff * 7);
-  return _date;
+  const date_ = toDate2(date, options?.in);
+  const diff = getWeek(date_, options) - week;
+  date_.setDate(date_.getDate() - diff * 7);
+  return toDate2(date_, options?.in);
 }
 
-// node_modules/date-fns/parse/_lib/parsers/LocalWeekParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/LocalWeekParser.js
 var LocalWeekParser = class extends Parser {
   priority = 100;
   parse(dateString, token, match2) {
@@ -32477,15 +32849,15 @@ var LocalWeekParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/setISOWeek.mjs
-function setISOWeek(date, week) {
-  const _date = toDate2(date);
-  const diff = getISOWeek(_date) - week;
+// node_modules/date-fns/setISOWeek.js
+function setISOWeek(date, week, options) {
+  const _date = toDate2(date, options?.in);
+  const diff = getISOWeek(_date, options) - week;
   _date.setDate(_date.getDate() - diff * 7);
   return _date;
 }
 
-// node_modules/date-fns/parse/_lib/parsers/ISOWeekParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/ISOWeekParser.js
 var ISOWeekParser = class extends Parser {
   priority = 100;
   parse(dateString, token, match2) {
@@ -32522,7 +32894,7 @@ var ISOWeekParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/DateParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/DateParser.js
 var DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var DAYS_IN_MONTH_LEAP_YEAR = [
   31,
@@ -32582,7 +32954,7 @@ var DateParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/DayOfYearParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/DayOfYearParser.js
 var DayOfYearParser = class extends Parser {
   priority = 90;
   subpriority = 1;
@@ -32630,20 +33002,20 @@ var DayOfYearParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/setDay.mjs
+// node_modules/date-fns/setDay.js
 function setDay(date, day, options) {
   const defaultOptions4 = getDefaultOptions();
   const weekStartsOn = options?.weekStartsOn ?? options?.locale?.options?.weekStartsOn ?? defaultOptions4.weekStartsOn ?? defaultOptions4.locale?.options?.weekStartsOn ?? 0;
-  const _date = toDate2(date);
-  const currentDay = _date.getDay();
+  const date_ = toDate2(date, options?.in);
+  const currentDay = date_.getDay();
   const remainder = day % 7;
   const dayIndex = (remainder + 7) % 7;
   const delta = 7 - weekStartsOn;
   const diff = day < 0 || day > 6 ? day - (currentDay + delta) % 7 : (dayIndex + delta) % 7 - (currentDay + delta) % 7;
-  return addDays(_date, diff);
+  return addDays(date_, diff, options);
 }
 
-// node_modules/date-fns/parse/_lib/parsers/DayParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/DayParser.js
 var DayParser = class extends Parser {
   priority = 90;
   parse(dateString, token, match2) {
@@ -32681,7 +33053,7 @@ var DayParser = class extends Parser {
   incompatibleTokens = ["D", "i", "e", "c", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/LocalDayParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/LocalDayParser.js
 var LocalDayParser = class extends Parser {
   priority = 90;
   parse(dateString, token, match2, options) {
@@ -32747,7 +33119,7 @@ var LocalDayParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/StandAloneLocalDayParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/StandAloneLocalDayParser.js
 var StandAloneLocalDayParser = class extends Parser {
   priority = 90;
   parse(dateString, token, match2, options) {
@@ -32813,15 +33185,15 @@ var StandAloneLocalDayParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/setISODay.mjs
-function setISODay(date, day) {
-  const _date = toDate2(date);
-  const currentDay = getISODay(_date);
+// node_modules/date-fns/setISODay.js
+function setISODay(date, day, options) {
+  const date_ = toDate2(date, options?.in);
+  const currentDay = getISODay(date_, options);
   const diff = day - currentDay;
-  return addDays(_date, diff);
+  return addDays(date_, diff, options);
 }
 
-// node_modules/date-fns/parse/_lib/parsers/ISODayParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/ISODayParser.js
 var ISODayParser = class extends Parser {
   priority = 90;
   parse(dateString, token, match2) {
@@ -32917,7 +33289,7 @@ var ISODayParser = class extends Parser {
   ];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/AMPMParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/AMPMParser.js
 var AMPMParser = class extends Parser {
   priority = 80;
   parse(dateString, token, match2) {
@@ -32958,7 +33330,7 @@ var AMPMParser = class extends Parser {
   incompatibleTokens = ["b", "B", "H", "k", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/AMPMMidnightParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/AMPMMidnightParser.js
 var AMPMMidnightParser = class extends Parser {
   priority = 80;
   parse(dateString, token, match2) {
@@ -32999,7 +33371,7 @@ var AMPMMidnightParser = class extends Parser {
   incompatibleTokens = ["a", "B", "H", "k", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/DayPeriodParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/DayPeriodParser.js
 var DayPeriodParser = class extends Parser {
   priority = 80;
   parse(dateString, token, match2) {
@@ -33040,7 +33412,7 @@ var DayPeriodParser = class extends Parser {
   incompatibleTokens = ["a", "b", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/Hour1to12Parser.mjs
+// node_modules/date-fns/parse/_lib/parsers/Hour1to12Parser.js
 var Hour1to12Parser = class extends Parser {
   priority = 70;
   parse(dateString, token, match2) {
@@ -33070,7 +33442,7 @@ var Hour1to12Parser = class extends Parser {
   incompatibleTokens = ["H", "K", "k", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/Hour0to23Parser.mjs
+// node_modules/date-fns/parse/_lib/parsers/Hour0to23Parser.js
 var Hour0to23Parser = class extends Parser {
   priority = 70;
   parse(dateString, token, match2) {
@@ -33093,7 +33465,7 @@ var Hour0to23Parser = class extends Parser {
   incompatibleTokens = ["a", "b", "h", "K", "k", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/Hour0To11Parser.mjs
+// node_modules/date-fns/parse/_lib/parsers/Hour0To11Parser.js
 var Hour0To11Parser = class extends Parser {
   priority = 70;
   parse(dateString, token, match2) {
@@ -33121,7 +33493,7 @@ var Hour0To11Parser = class extends Parser {
   incompatibleTokens = ["h", "H", "k", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/Hour1To24Parser.mjs
+// node_modules/date-fns/parse/_lib/parsers/Hour1To24Parser.js
 var Hour1To24Parser = class extends Parser {
   priority = 70;
   parse(dateString, token, match2) {
@@ -33145,7 +33517,7 @@ var Hour1To24Parser = class extends Parser {
   incompatibleTokens = ["a", "b", "h", "H", "K", "t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/MinuteParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/MinuteParser.js
 var MinuteParser = class extends Parser {
   priority = 60;
   parse(dateString, token, match2) {
@@ -33168,7 +33540,7 @@ var MinuteParser = class extends Parser {
   incompatibleTokens = ["t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/SecondParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/SecondParser.js
 var SecondParser = class extends Parser {
   priority = 50;
   parse(dateString, token, match2) {
@@ -33191,7 +33563,7 @@ var SecondParser = class extends Parser {
   incompatibleTokens = ["t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/FractionOfSecondParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/FractionOfSecondParser.js
 var FractionOfSecondParser = class extends Parser {
   priority = 30;
   parse(dateString, token) {
@@ -33205,7 +33577,7 @@ var FractionOfSecondParser = class extends Parser {
   incompatibleTokens = ["t", "T"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/ISOTimezoneWithZParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/ISOTimezoneWithZParser.js
 var ISOTimezoneWithZParser = class extends Parser {
   priority = 10;
   parse(dateString, token) {
@@ -33243,7 +33615,7 @@ var ISOTimezoneWithZParser = class extends Parser {
   incompatibleTokens = ["t", "T", "x"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/ISOTimezoneParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/ISOTimezoneParser.js
 var ISOTimezoneParser = class extends Parser {
   priority = 10;
   parse(dateString, token) {
@@ -33281,7 +33653,7 @@ var ISOTimezoneParser = class extends Parser {
   incompatibleTokens = ["t", "T", "X"];
 };
 
-// node_modules/date-fns/parse/_lib/parsers/TimestampSecondsParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/TimestampSecondsParser.js
 var TimestampSecondsParser = class extends Parser {
   priority = 40;
   parse(dateString) {
@@ -33293,7 +33665,7 @@ var TimestampSecondsParser = class extends Parser {
   incompatibleTokens = "*";
 };
 
-// node_modules/date-fns/parse/_lib/parsers/TimestampMillisecondsParser.mjs
+// node_modules/date-fns/parse/_lib/parsers/TimestampMillisecondsParser.js
 var TimestampMillisecondsParser = class extends Parser {
   priority = 20;
   parse(dateString) {
@@ -33305,7 +33677,7 @@ var TimestampMillisecondsParser = class extends Parser {
   incompatibleTokens = "*";
 };
 
-// node_modules/date-fns/parse/_lib/parsers.mjs
+// node_modules/date-fns/parse/_lib/parsers.js
 var parsers = {
   G: new EraParser(),
   y: new YearParser(),
@@ -33340,7 +33712,7 @@ var parsers = {
   T: new TimestampMillisecondsParser()
 };
 
-// node_modules/date-fns/parse.mjs
+// node_modules/date-fns/parse.js
 var formattingTokensRegExp2 = /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|$)|./g;
 var longFormattingTokensRegExp2 = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
 var escapedStringRegExp2 = /^'([^]*?)'?$/;
@@ -33348,23 +33720,19 @@ var doubleQuoteRegExp2 = /''/g;
 var notWhitespaceRegExp = /\S/;
 var unescapedLatinCharacterRegExp2 = /[a-zA-Z]/;
 function parse2(dateStr, formatStr, referenceDate, options) {
+  const invalidDate = () => constructFrom(options?.in || referenceDate, NaN);
   const defaultOptions4 = getDefaultOptions2();
   const locale = options?.locale ?? defaultOptions4.locale ?? enUS;
   const firstWeekContainsDate = options?.firstWeekContainsDate ?? options?.locale?.options?.firstWeekContainsDate ?? defaultOptions4.firstWeekContainsDate ?? defaultOptions4.locale?.options?.firstWeekContainsDate ?? 1;
   const weekStartsOn = options?.weekStartsOn ?? options?.locale?.options?.weekStartsOn ?? defaultOptions4.weekStartsOn ?? defaultOptions4.locale?.options?.weekStartsOn ?? 0;
-  if (formatStr === "") {
-    if (dateStr === "") {
-      return toDate2(referenceDate);
-    } else {
-      return constructFrom(referenceDate, NaN);
-    }
-  }
+  if (!formatStr)
+    return dateStr ? invalidDate() : toDate2(referenceDate, options?.in);
   const subFnOptions = {
     firstWeekContainsDate,
     weekStartsOn,
     locale
   };
-  const setters = [new DateToSystemTimezoneSetter()];
+  const setters = [new DateTimezoneSetter(options?.in, referenceDate)];
   const tokens = formatStr.match(longFormattingTokensRegExp2).map((substring) => {
     const firstCharacter = substring[0];
     if (firstCharacter in longFormatters) {
@@ -33407,7 +33775,7 @@ function parse2(dateStr, formatStr, referenceDate, options) {
         subFnOptions
       );
       if (!parseResult) {
-        return constructFrom(referenceDate, NaN);
+        return invalidDate();
       }
       setters.push(parseResult.setter);
       dateStr = parseResult.rest;
@@ -33425,24 +33793,23 @@ function parse2(dateStr, formatStr, referenceDate, options) {
       if (dateStr.indexOf(token) === 0) {
         dateStr = dateStr.slice(token.length);
       } else {
-        return constructFrom(referenceDate, NaN);
+        return invalidDate();
       }
     }
   }
   if (dateStr.length > 0 && notWhitespaceRegExp.test(dateStr)) {
-    return constructFrom(referenceDate, NaN);
+    return invalidDate();
   }
   const uniquePrioritySetters = setters.map((setter) => setter.priority).sort((a, b) => b - a).filter((priority, index2, array) => array.indexOf(priority) === index2).map(
     (priority) => setters.filter((setter) => setter.priority === priority).sort((a, b) => b.subPriority - a.subPriority)
   ).map((setterArray) => setterArray[0]);
-  let date = toDate2(referenceDate);
-  if (isNaN(date.getTime())) {
-    return constructFrom(referenceDate, NaN);
-  }
+  let date = toDate2(referenceDate, options?.in);
+  if (isNaN(+date))
+    return invalidDate();
   const flags = {};
   for (const setter of uniquePrioritySetters) {
     if (!setter.validate(date, subFnOptions)) {
-      return constructFrom(referenceDate, NaN);
+      return invalidDate();
     }
     const result = setter.set(date, flags, subFnOptions);
     if (Array.isArray(result)) {
@@ -33452,28 +33819,36 @@ function parse2(dateStr, formatStr, referenceDate, options) {
       date = result;
     }
   }
-  return constructFrom(referenceDate, date);
+  return date;
 }
 function cleanEscapedString2(input) {
   return input.match(escapedStringRegExp2)[1].replace(doubleQuoteRegExp2, "'");
 }
 
-// node_modules/date-fns/startOfHour.mjs
-function startOfHour(date) {
-  const _date = toDate2(date);
+// node_modules/date-fns/startOfHour.js
+function startOfHour(date, options) {
+  const _date = toDate2(date, options?.in);
   _date.setMinutes(0, 0, 0);
   return _date;
 }
 
-// node_modules/date-fns/startOfSecond.mjs
-function startOfSecond(date) {
-  const _date = toDate2(date);
-  _date.setMilliseconds(0);
-  return _date;
+// node_modules/date-fns/startOfMinute.js
+function startOfMinute(date, options) {
+  const date_ = toDate2(date, options?.in);
+  date_.setSeconds(0, 0);
+  return date_;
 }
 
-// node_modules/date-fns/parseISO.mjs
+// node_modules/date-fns/startOfSecond.js
+function startOfSecond(date, options) {
+  const date_ = toDate2(date, options?.in);
+  date_.setMilliseconds(0);
+  return date_;
+}
+
+// node_modules/date-fns/parseISO.js
 function parseISO(argument, options) {
+  const invalidDate = () => constructFrom(options?.in, NaN);
   const additionalDigits = options?.additionalDigits ?? 2;
   const dateStrings = splitDateString(argument);
   let date;
@@ -33481,40 +33856,37 @@ function parseISO(argument, options) {
     const parseYearResult = parseYear(dateStrings.date, additionalDigits);
     date = parseDate(parseYearResult.restDateString, parseYearResult.year);
   }
-  if (!date || isNaN(date.getTime())) {
-    return /* @__PURE__ */ new Date(NaN);
-  }
-  const timestamp = date.getTime();
+  if (!date || isNaN(+date))
+    return invalidDate();
+  const timestamp = +date;
   let time = 0;
   let offset2;
   if (dateStrings.time) {
     time = parseTime(dateStrings.time);
-    if (isNaN(time)) {
-      return /* @__PURE__ */ new Date(NaN);
-    }
+    if (isNaN(time))
+      return invalidDate();
   }
   if (dateStrings.timezone) {
     offset2 = parseTimezone(dateStrings.timezone);
-    if (isNaN(offset2)) {
-      return /* @__PURE__ */ new Date(NaN);
-    }
+    if (isNaN(offset2))
+      return invalidDate();
   } else {
-    const dirtyDate = new Date(timestamp + time);
-    const result = /* @__PURE__ */ new Date(0);
+    const tmpDate = new Date(timestamp + time);
+    const result = toDate2(0, options?.in);
     result.setFullYear(
-      dirtyDate.getUTCFullYear(),
-      dirtyDate.getUTCMonth(),
-      dirtyDate.getUTCDate()
+      tmpDate.getUTCFullYear(),
+      tmpDate.getUTCMonth(),
+      tmpDate.getUTCDate()
     );
     result.setHours(
-      dirtyDate.getUTCHours(),
-      dirtyDate.getUTCMinutes(),
-      dirtyDate.getUTCSeconds(),
-      dirtyDate.getUTCMilliseconds()
+      tmpDate.getUTCHours(),
+      tmpDate.getUTCMinutes(),
+      tmpDate.getUTCSeconds(),
+      tmpDate.getUTCMilliseconds()
     );
     return result;
   }
-  return new Date(timestamp + time + offset2);
+  return toDate2(timestamp + time + offset2, options?.in);
 }
 var patterns = {
   dateTimeDelimiter: /[T ]/,
@@ -33798,14 +34170,14 @@ Chartkick.use(auto_default);
 
 @hotwired/turbo/dist/turbo.es2017-esm.js:
   (*!
-  Turbo 8.0.5
-  Copyright © 2024 37signals LLC
+  Turbo 8.0.13
+  Copyright © 2025 37signals LLC
    *)
 
 bootstrap/dist/js/bootstrap.esm.js:
   (*!
-    * Bootstrap v5.3.3 (https://getbootstrap.com/)
-    * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+    * Bootstrap v5.3.6 (https://getbootstrap.com/)
+    * Copyright 2011-2025 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
     * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     *)
 
@@ -33819,25 +34191,25 @@ chartkick/dist/chartkick.esm.js:
 
 @kurkle/color/dist/color.esm.js:
   (*!
-   * @kurkle/color v0.3.2
+   * @kurkle/color v0.3.4
    * https://github.com/kurkle/color#readme
-   * (c) 2023 Jukka Kurkela
+   * (c) 2024 Jukka Kurkela
    * Released under the MIT License
    *)
 
-chart.js/dist/chunks/helpers.segment.js:
+chart.js/dist/chunks/helpers.dataset.js:
   (*!
-   * Chart.js v4.4.3
+   * Chart.js v4.4.9
    * https://www.chartjs.org
-   * (c) 2024 Chart.js Contributors
+   * (c) 2025 Chart.js Contributors
    * Released under the MIT License
    *)
 
 chart.js/dist/chart.js:
   (*!
-   * Chart.js v4.4.3
+   * Chart.js v4.4.9
    * https://www.chartjs.org
-   * (c) 2024 Chart.js Contributors
+   * (c) 2025 Chart.js Contributors
    * Released under the MIT License
    *)
 

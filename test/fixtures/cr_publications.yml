@@ -4,7 +4,7 @@ one:
   authors: MyString
   pub_year: 1
   title: MyString
-  doi: MyString
+  doi: '10.1039/c3cp52653d'
   awards: MyString
   xref_affi: MyString
   themes: '1'
@@ -15,7 +15,7 @@ two:
   authors: MyString
   pub_year: 1
   title: MyString
-  doi: MyString
+  doi: '10.1021/cs400683e'
   awards: MyString
   xref_affi: MyString
   themes: '1'
