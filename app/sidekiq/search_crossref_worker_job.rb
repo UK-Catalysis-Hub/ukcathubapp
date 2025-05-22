@@ -4,6 +4,6 @@ class SearchCrossrefWorkerJob
   # method that schedules the update of articles from crossref
   def perform
     CrossrefPublication.search_crossref
-    puts "started search for publications"
+    logger.info "started search for publications"
   end
 end

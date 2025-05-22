@@ -50,4 +50,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   mount XrefClient::Engine, at: "/xref_client"
+
+  ##sidekiq web interface
+  require 'sidekiq/web'
+  mount Sidekiq::Web, at: 'sidekiq'
 end

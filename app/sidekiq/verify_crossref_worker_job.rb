@@ -4,10 +4,10 @@ class VerifyCrossrefWorkerJob
   # method that schedules the update of articles from crossref
   def perform
     tmp_counter = 0
-    puts 'verify all publications against CR records'
+    logger.info 'verify all publications against CR records'
     date_from = Date.today + 1
     articles_list = Article.where("updated_at < ?", date_from)
-    puts "Articles to verify: " + articles_list.length.to_s
+    logger.info "Articles to verify: " + articles_list.length.to_s
     tmp_counter = 0
     articles_list.each do |an_article|
       tmp_counter += 1
@@ -17,16 +17,16 @@ class VerifyCrossrefWorkerJob
                      an_article.updated_at.month - DateTime.now.month +
                      an_article.updated_at.year - DateTime.now.year 
       if last_checked == 0
-        puts "not checking this"
+        logger.info "not checking this" + an_article.id.to_s
         tmp_counter = 0
       else
         CrossrefPublication.verify_article(an_article)
         an_article.updated_at = DateTime.now
         an_article.save!() # changes update date to register the last time it was checked
-        puts "Saved article " + an_article.id.to_s
+        logger.info  "Saved article " + an_article.id.to_s
       end
       if tmp_counter > 20
-        puts "checked 20 more"
+        logger.info  "checked 20 more"
         break
       end
     end
