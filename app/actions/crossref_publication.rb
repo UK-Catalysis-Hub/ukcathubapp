@@ -58,7 +58,7 @@ class CrossrefPublication
     end
     from_date = (Article.latest()[0].created_at - 30.days).strftime("%Y-%m-%d")
 
-    to_date = DateTime.now().to_s().strftime("%Y-%m-%d")
+    to_date = DateTime.now().strftime("%Y-%m-%d")
     # if award list is empty then look for affiliations?
     found_articles = XrefClient.findPubsAward(awards_list, from_date, to_date)
     #puts "*"*60
