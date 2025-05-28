@@ -1,10 +1,13 @@
-<p style="color: green"><%= notice %></p>
+<div class="container">
+  <p style="color: green"><%= notice %></p>
 
-<%= render @organisation %>
+  <%= render @organisation %>
 
-<div>
-  <%= link_to "Edit this organisation", edit_organisation_path(@organisation) %> |
-  <%= link_to "Back to organisations", organisations_path %>
-
-  <%= button_to "Destroy this organisation", @organisation, method: :delete %>
+  <div>
+    <%= link_to 'Back to list', organisations_path, :class => "btn btn-secondary btn-sm" %> 
+    <% if user_signed_in? %>
+    <%= link_to "Edit this organisation", edit_organisation_path(@organisation), :class => "btn btn-secondary btn-sm" %> 
+    <%= button_to "Destroy this organisation", @organisation, method: :delete %>
+    <% end %>
+  </div>
 </div>

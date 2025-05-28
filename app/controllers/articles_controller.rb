@@ -213,7 +213,7 @@ class ArticlesController < ApplicationController
        params.require(:article).permit(:doi, :title, :pub_year, :pub_type, :publisher, :container_title,
         :volume, :issue, :page, :pub_print_year, :pub_print_month, :pub_print_day, :pub_ol_year, :pub_ol_month,
         :pub_ol_day, :license, :referenced_by_count, :link, :url, :abstract, :status, :comment, :references_count,
-        :journal_issue)
+        :journal_issue, :graphic_abstract)
     end
     
     # get list of publications as bibliography

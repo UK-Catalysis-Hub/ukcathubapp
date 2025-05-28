@@ -1,12 +1,25 @@
 class OrganisationsController < ApplicationController
   before_action :set_organisation, only: %i[ show edit update destroy ]
-  before_action :authenticate_user!
-  
-  # GET /organisations or /organisations.json
-  def index
-    @organisations = Organisation.all
+  before_action :authenticate_user!, except: [:index, :show]
+  class OrganisationSearch < FortyFacets::FacetSearch
+    model 'Organisation' # which model to search for
+    # issue a filter cannot be also a facet, need 'alias'?
+    text  :name # filter by a generic string entered by the user
+    facet :country, name: 'Country', order: Proc.new { |country| country }
+    facet :sector, name: 'Sector', order: Proc.new { |sector| sector }
+    
+    orders 'Institution (A-Z)' => {name: :asc},
+           'Institution (Z-A)' => {name: :desc},
+           'Country (A-Z)' => {country: :asc},
+           'Country (Z-A)' => {country: :desc}
   end
 
+  # GET /organisations or /organisations.json
+  def index
+    @search = OrganisationSearch.new(params) # initializes search object from request params
+    @organisations = @search.result.paginate(:page => params[:page], :per_page => 10)
+  end
+  
   # GET /organisations/1 or /organisations/1.json
   def show
   end
@@ -59,13 +72,13 @@ class OrganisationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    # Use callbacks to share common setup or constraints between actions.s
     def set_organisation
       @organisation = Organisation.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def organisation_params
-      params.require(:organisation).permit(:name, :short_name, :identifier, :logo, :homepage, :address_id)
+      params.require(:organisation).permit(:name, :short_name, :identifier, :logo, :homepage, :address_id, :city, :country, :sector,:region)
     end
 end

@@ -2,7 +2,7 @@ class Affiliation < ApplicationRecord
   #relationships to authors and articles
   has_many :author_affiliations
   has_many :addresses
-  
+  belongs_to :organisation
   def get_addresses
     addr_list = []
     addresses.each do |affi_address|

@@ -40,7 +40,22 @@
     <%= form.label :address_id, style: "display: block" %>
     <%= form.number_field :address_id %>
   </div>
-
+  <div>
+    <%= form.label :city, style: "display: block" %>
+    <%= form.text_field :city %>
+  </div>
+  <div>
+    <%= form.label :region, style: "display: block" %>
+    <%= form.text_field :region %>
+  </div>
+  <div>
+    <%= form.label :country, style: "display: block" %>
+    <%= form.text_field :country %>
+  </div>
+    <div>
+    <%= form.label :sector, style: "display: block" %>
+    <%= form.text_field :sector %>
+  </div>
   <div>
     <%= form.submit %>
   </div>

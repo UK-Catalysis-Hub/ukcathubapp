@@ -60,6 +60,9 @@ class CrossrefPublication
 
     to_date = DateTime.now().strftime("%Y-%m-%d")
     # if award list is empty then look for affiliations?
+    puts awards_list
+    puts from_date
+    puts to_date
     found_articles = XrefClient.findPubsAward(awards_list, from_date, to_date)
     #puts "*"*60
     #puts "Articles from crossref #{found_articles.count()}"
