@@ -7,6 +7,13 @@
             <!-- Field for searching by institution -->
              <%= hidden_field_tag 'search[order]', org_search.order.definition.request_value if org_search.order %>
              <div class="row">
+               <div class="col-md-1">
+                 <b> Search: </b>
+               </div>
+               <div class="col-md-5">
+                 <% name_filter = org_search.filter(:name) %>
+                 <%= text_field_tag 'search[name]', name_filter.value, class: 'form-control', placeholder: name_filter.name %>
+               </div>
                <div class="col-md-4">
                  <!-- Set sort order -->
                    <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"> Sort by: <%= org_search.order.title if org_search.order %>
