@@ -24,6 +24,10 @@ module SectionsHelper
     Section.where("obj_name='Home'")[0]
   end
   
+  def get_organisation_section
+    Section.where("obj_name='Organisations'")[0]
+  end
+  
   def get_new_pubs_section
     new_pubs = Section.new()
     new_pubs.obj_name = "cr_publications"

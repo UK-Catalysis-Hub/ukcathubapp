@@ -1,5 +1,5 @@
 <div class='container'>
-  <%= render partial: 'layouts/index_notice', locals: {obj_data: get_affiliation_section} %>
+  <%= render partial: 'layouts/index_notice', locals: {obj_data: get_organisation_section} %>
   <p style="color: green"><%= notice %></p>
   <%= render "organisations/organisations_list", organisations: @organisations, org_search: @search %>
   <% if user_signed_in? %>

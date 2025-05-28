@@ -32,11 +32,11 @@
                                                 title: "View "+ get_author_section.name} %>
         </li>
         <% end %>
-        <% if get_affiliation_section.visible %>
+        <% if get_organisation_section.visible %>
         <li class="nav-item">
-           <%= link_to get_affiliation_section.name, {:controller => '/affiliations', :action => 'index'},
-                                                     {:class => controller_name == 'affiliations' ?'nav-link active' : 'nav-link',
-                                                      title: "View "+ get_affiliation_section.name} %>
+           <%= link_to get_affiliation_section.name, {:controller => '/organisations', :action => 'index'},
+                                                     {:class => controller_name == 'organisations' ?'nav-link active' : 'nav-link',
+                                                      title: "View "+ get_organisation_section.name} %>
         </li>
         <% end %>
         <% if get_do_section.visible %>
