@@ -1,10 +1,8 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Organisations</h1>
-
-<div id="organisations">
+<div class='container'>
+  <%= render partial: 'layouts/index_notice', locals: {obj_data: get_affiliation_section} %>
+  <p style="color: green"><%= notice %></p>
   <%= render "organisations/organisations_list", organisations: @organisations, org_search: @search %>
+  <% if user_signed_in? %>
+    <%= link_to "New organisation", new_organisation_path %>
+  <% end %>
 </div>
-<% if user_signed_in? %>
-<%= link_to "New organisation", new_organisation_path %>
-<% end %>
