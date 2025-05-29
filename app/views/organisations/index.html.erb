@@ -1,8 +1,44 @@
 <div class='container'>
   <%= render partial: 'layouts/index_notice', locals: {obj_data: get_organisation_section} %>
   <p style="color: green"><%= notice %></p>
-  <%= render "organisations/organisations_browse", organisations: @organisations, org_search: @search %>
+  
   <% if user_signed_in? %>
     <%= link_to "New organisation", new_organisation_path %>
   <% end %>
-</div>
+  <ul class="nav nav-tabs" id="browseTab" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#browse" type="button" role="tab" aria-controls="browse" aria-selected="true">Institutions</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="indicators-tab" data-bs-toggle="tab" data-bs-target="#indicators" type="button" role="tab" aria-controls="indicators" aria-selected="true">Indicators</button>
+    </li>   
+  </ul>
+  <!--tab control contents-->
+  <div class="tab-content" id="browseTabContent">
+    <div class="tab-pane fade show active" id="browse" role="tabpanel" aria-labelledby="browse-tab">
+      <div class="container">
+        <%= render "organisations/organisations_browse", organisations: @organisations, org_search: @search %>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="indicators" role="tabpanel" aria-labelledby="indicators-tab">
+      <div class= container>
+        <div class="row mb-3">
+          <div class="row">
+            <div class="col-sm-6 container">
+              <%= render partial: 'affiliations/affiliation_map', locals:{country_data: get_country_counts} %>
+            </div>
+            <div class="col-sm-6 container">
+              <h6>Top 10 Countries of Origin</h6>
+              <%= render partial: 'affiliations/affiliation_top', locals: {items: get_country_counts[0..9], count_name: "Institutions"}%>
+              <p>
+                <%= link_to 'Download Data', {:action => "ctry_affi_count", :controller => "affiliations"}, :class => "btn btn-success btn-sm" %>
+              </p>
+            </div>
+          </div>	
+        </div>
+      </div>
+    </div>
+  </div>
+   
+
+
