@@ -15,6 +15,10 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bund
 
 #keep last 5 releases on redeployment
 set :keep_releases, 5
+
+# ensure Sidekiq restarts after deployment:
+after 'deploy:publishing', 'sidekiq:restart'
+
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
@@ -37,9 +41,42 @@ set :keep_releases, 5
 # Default value for local_user is ENV['USER']
 # set :local_user, -> { `git config user.name`.chomp }
 
-# Default value for keep_releases is 5
-# set :keep_releases, 5
-
-
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+namespace :sidekiq do
+  desc 'Setup Sidekiq systemd service'
+  task :setup do
+    on roles(:app) do
+      execute <<~EOS
+        sudo bash -c 'cat > /etc/systemd/system/sidekiq.service <<EOF
+        [Unit]
+        Description=Sidekiq background worker
+        After=syslog.target network.target
+
+        [Service]
+        Type=simple
+        User=deploy
+        Group=deploy
+        WorkingDirectory=#{fetch(:deploy_to)}/current
+        ExecStart=/home/deploy/.rbenv/shims/bundle exec sidekiq -e production -C #{fetch(:deploy_to)}/current/config/sidekiq.yml
+        RestartSec=5
+        Restart=always
+
+        [Install]
+        WantedBy=multi-user.target
+        EOF'
+      EOS
+      execute 'sudo systemctl daemon-reload'
+      execute 'sudo systemctl enable sidekiq'
+      execute 'sudo systemctl start sidekiq'
+    end
+  end
+
+  desc 'Restart Sidekiq'
+  task :restart do
+    on roles(:app) do
+      execute :sudo, 'systemctl restart sidekiq'
+    end
+  end
+end
