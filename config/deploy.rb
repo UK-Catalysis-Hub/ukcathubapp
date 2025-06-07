@@ -17,6 +17,7 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bund
 set :keep_releases, 5
 
 # ensure Sidekiq restarts after deployment:
+after 'deploy:publishing', 'sidekiq:setup'
 after 'deploy:publishing', 'sidekiq:restart'
 
 # Default value for :format is :airbrussh.
