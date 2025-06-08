@@ -51,7 +51,7 @@ namespace :sidekiq do
     on roles(:app) do
       execute <<~EOS
 #        echo -e "[Unit]\\nDescription=Sidekiq Background Worker\\nAfter=syslog.target network.target\\n\\n[Service]\\nType=simple\\nUser=deploy\\nGroup=deploy\\nWorkingDirectory=#{fetch(:deploy_to)}/current\\nExecStart=/home/deploy/ukchapp/current/bin/bundle exec sidekiq -e production -C #{fetch(:deploy_to)}/current/config/sidekiq.yml\\nRestartSec=5\\nRestart=always\\n\\n[Install]\\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/sidekiq.service
-        echo -e "[Unit]\\nDescription=Sidekiq Background Worker\\nAfter=network.target\\n[Service]\\nEnvironment="RAILS_ENV=production"\\nExecStart=/home/deploy/.rbenv/shims/bundle exec sidekiq\\nRestart=always\\nUser=deploy\\nWorkingDirectory=/home/deploy/ukchapp/current\\n[Install]\\nWantedBy=multi-user.target"|sudo tee /etc/systemd/system/sidekiq.service
+        echo -e "[Unit]\\nDescription=Sidekiq Background Worker\\nAfter=syslog.target network.target\\n[Service]\\nEnvironment="RAILS_ENV=production"\\nExecStart=/home/deploy/.rbenv/shims/bundle exec sidekiq\\nRestart=always\\nUser=deploy\\nWorkingDirectory=/home/deploy/ukchapp/current\\n[Install]\\nWantedBy=multi-user.target"|sudo tee /etc/systemd/system/sidekiq.service
       EOS
       execute 'sudo systemctl daemon-reload'
       execute 'sudo systemctl enable sidekiq'
