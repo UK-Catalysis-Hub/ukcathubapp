@@ -19,7 +19,7 @@
   <div class="bd-example bd-example-tabs">
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        <%= render partial: 'articles/articles_list', locals: {articles: @articles }%>
+        <%= render partial: 'articles/articles_grid', locals: {articles: @articles }%>
       </div>
 
     </div>
@@ -29,6 +29,4 @@
   <%= link_to 'Edit', edit_theme_path(@theme) %> |
   <% end %>
   <%= link_to 'Back', themes_path, :class => "btn btn-secondary btn-sm" %>
-
-
 </div>

@@ -141,4 +141,44 @@ module ArticlesHelper
     }
     return found_id
   end
+
+  def get_authors_short_list(an_article)
+    authors_list = an_article.article_authors[0..2]
+    ret_list =""
+    for auth in authors_list
+      if auth.author.given_name != nil
+        pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
+        pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).gsub(' .',' ')
+        pr_name += auth.author.last_name
+        this_name = pr_name
+        if auth.author.isap == true
+	  this_name = link_to(pr_name, auth.author)
+        end
+        if ret_list =="" then
+	  ret_list = this_name
+        else
+          ret_list += ', '.html_safe + this_name
+        end
+      end
+    end
+    if an_article.article_authors.count > 3
+      ret_list += ', et.al'.html_safe
+    end
+    ret_list
+  end
+
+  def get_themes_list(an_article)
+    theme_links = an_article.article_themes.all
+    disp_themes = ""
+    for theme_lnk in theme_links
+      theme_name = theme_lnk.theme.short
+      theme_string = theme_lnk.theme.short
+      if disp_themes =="" then
+        disp_themes = link_to(theme_string, theme_lnk.theme)
+      else
+        disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
+      end
+    end
+    disp_themes
+  end
 end

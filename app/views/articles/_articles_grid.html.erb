@@ -1,0 +1,12 @@
+<!--Display a filtered list of articles -->
+<%= will_paginate articles, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+<div id="filtered_artilcle_list" class="container">
+  <div class="container">
+    <div class="row">
+    <% articles.each_slice(3) do |group| %>
+      <% group.each do |item| %>
+        <%= render partial: 'articles/publication_thumbnail', locals: {article: item }%>
+      <% end %>
+    <% end %>
+    </div>
+</div>
