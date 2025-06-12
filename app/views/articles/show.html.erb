@@ -6,7 +6,7 @@
   <% if @article.graphic_abstract != nil then%>
     <div class="col-md-3">
       <%    src_str = @article.graphic_abstract  %>
-      <div class="card box-shadow" style="margin-right: 10px; width: 225px; height: 200px;">
+      <div class="card box-shadow" style="margin-right: 5px; width: 225px; height: 210px;">
         <% if @article.graphic_abstract .present? %>
           <%= image_tag @article.graphic_abstract, alt: @article.title, style: "height: 200px; object-fit: contain;" %>
         <% end %>
@@ -15,61 +15,22 @@
   <% end %>
 
   <div class="col-md-9">
-  <h3> <strong>Title:</strong>   <%= @article.title.html_safe %>  </h3>
-  <p>
+    <b><%= @article.title.html_safe %></b><br/>
     <% if @article.authors.count > 0 %>
-    <b>Authors (<%= @article.authors.count %>):</b>
-    <% author_links = @article.article_authors.all
-       disp_names = ""
-       for auth in author_links
-         if auth.author.given_name != nil
-           pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
-           pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).sub(' .',' ')
-           pr_name += auth.author.last_name
-           this_name = pr_name
-           if auth.author.isap == true
-	     this_name = link_to(pr_name, auth.author)
-	   end 
-           if disp_names =="" then
-             disp_names = this_name
-           else
-             disp_names += ', '.html_safe + this_name
-           end
-         end
-       end %>
-    <%= disp_names.to_s.html_safe %>
+      <b>Authors (<%= @article.authors.count %>):</b>
+      <% disp_names = get_authors_full_list(@article) %>
+      <%= disp_names.to_s.html_safe %><br/>
     <% end %>
-  </p>
-  <p>
-    <% theme_links = @article.article_themes.all
-      disp_themes = ""
-      for theme_lnk in theme_links
-        theme_name = theme_lnk.theme.short
-        theme_string = theme_lnk.theme.short + " ("+ theme_lnk.project_year.to_s() +")"
-        if disp_themes =="" then
-          disp_themes = link_to(theme_string, theme_lnk.theme)
-        else
-          disp_themes += ', '.html_safe + link_to(theme_string, theme_lnk.theme)
-        end
-      end
-     %>
-     <% if get_theme_section.visible %>
-     <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
-     <% end %>
-  </p>
-  <p>
-    <strong>DOI:</strong> <%= @article.doi %>
-  </p>
-  <p>
-    <strong>Citations:</strong> <%= @article.referenced_by_count %>
-  </p>
-  <p>
-    <strong>Pub type:</strong>
-    <%= @article.pub_type %>
-  </p>
+    <% if get_theme_section.visible %>
+      <% disp_themes = get_themes_list(@article) %>
+      <b>Themes: </b> <%= disp_themes.to_s.html_safe %></br>
+    <% end %>
+    <strong>DOI:</strong> <%= @article.doi %><br/>
+    <strong>Citations:</strong> <%= @article.referenced_by_count %><br/>
+    <strong>Pub type:</strong><%= @article.pub_type %><br/>
   </div>
 </div>
-
+ <br/>
 <div class="accordion" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingOne">

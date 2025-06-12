@@ -167,6 +167,28 @@ module ArticlesHelper
     ret_list
   end
 
+  def get_authors_full_list(an_article)
+    authors_list = an_article.article_authors
+    ret_list =""
+    for auth in authors_list
+      if auth.author.given_name != nil
+        pr_name = auth.author.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u')
+        pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).gsub(' .',' ')
+        pr_name += auth.author.last_name
+        this_name = pr_name
+        if auth.author.isap == true
+	  this_name = link_to(pr_name, auth.author)
+        end
+        if ret_list =="" then
+	  ret_list = this_name
+        else
+          ret_list += ', '.html_safe + this_name
+        end
+      end
+    end
+    ret_list
+  end
+
   def get_themes_list(an_article)
     theme_links = an_article.article_themes.all
     disp_themes = ""
