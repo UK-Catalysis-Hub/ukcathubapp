@@ -1,6 +1,20 @@
 <!-- Show article details-->
 <div class="container">
   <p id="notice"><%= notice %></p>
+  <div class="row">
+
+  <% if @article.graphic_abstract != nil then%>
+    <div class="col-md-3">
+      <%    src_str = @article.graphic_abstract  %>
+      <div class="card box-shadow" style="margin-right: 10px; width: 225px; height: 200px;">
+        <% if @article.graphic_abstract .present? %>
+          <%= image_tag @article.graphic_abstract, alt: @article.title, style: "height: 200px; object-fit: contain;" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="col-md-9">
   <h3> <strong>Title:</strong>   <%= @article.title.html_safe %>  </h3>
   <p>
     <% if @article.authors.count > 0 %>
@@ -43,13 +57,6 @@
      <b>Themes: </b> <%= disp_themes.to_s.html_safe %>
      <% end %>
   </p>
-  <% if @article.graphic_abstract != nil then%>
-  <%    src_str = @article.graphic_abstract  %>
-  <div>
-      <%= image_tag src_str,alt: "Graphic Abstract", class:"img-fluid" %>
-  </div>
-  <% end %>
-  
   <p>
     <strong>DOI:</strong> <%= @article.doi %>
   </p>
@@ -60,6 +67,9 @@
     <strong>Pub type:</strong>
     <%= @article.pub_type %>
   </p>
+  </div>
+</div>
+
 <div class="accordion" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -197,5 +207,5 @@
   <%= link_to 'Back', articles_path, :class => "btn btn-secondary btn-sm" %>
   <% if not @next.nil? %>
     <%= link_to 'Next >>', {controller: "articles", action: "show", id: @next}, :class => "btn btn-success btn-sm float-right" %>
-  <% end %>  
+  <% end %>
 </div>
