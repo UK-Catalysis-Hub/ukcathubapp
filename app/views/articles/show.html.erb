@@ -27,10 +27,11 @@
     <% end %>
     <strong>DOI:</strong> <%= @article.doi %><br/>
     <strong>Citations:</strong> <%= @article.referenced_by_count %><br/>
-    <strong>Pub type:</strong><%= @article.pub_type %><br/>
+    <strong>Pub type:</strong> <%= @article.pub_type %><br/>
+    <strong>Pub year:</strong> <%= @article.pub_year %><br/>
   </div>
 </div>
- <br/>
+<br/>
 <div class="accordion" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingOne">

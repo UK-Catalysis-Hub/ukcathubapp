@@ -3,15 +3,18 @@
 <p id="notice"><%= notice %></p>
 
 <div id="themes_list" class="container">
+  <%= render partial: 'theme_tab_headers', locals: {themes: @themes} %> 
+</div>
+<div id="themes_list" class="container">
   <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
     <li class="nav-item">
-      <button class="nav-link active" id="phase-ii-tab" data-bs-toggle="tab" data-bs-target="#phaseii" type="button" role="tab" aria-controls="phase " aria-selected="true">Themes Phase II (2019-2023)</button>
+      <button class="nav-link active" id="phase-ii-tab" data-bs-toggle="tab" data-bs-target="#phaseii" type="button" role="tab" aria-controls="phase " aria-selected="true">Research  Themes</button>
     </li>
     <li class="nav-item">
-      <button class="nav-link" id="phase-i-tab" data-bs-toggle="tab" data-bs-target="#phasei" type="button" role="tab" aria-controls="indicators" aria-selected="true">Themes Phase I (2013-2018)</button>
+      <button class="nav-link" id="phase-i-tab" data-bs-toggle="tab" data-bs-target="#phasei" type="button" role="tab" aria-controls="indicators" aria-selected="true">Research Teams</button>
     </li>
     <li class="nav-item">
-      <button class="nav-link" id="nophase-tab" data-bs-toggle="tab" data-bs-target="#nophase" type="button" role="tab" aria-controls="indicators" aria-selected="true">Collaborations, BAG, Other</button>
+      <button class="nav-link" id="nophase-tab" data-bs-toggle="tab" data-bs-target="#nophase" type="button" role="tab" aria-controls="indicators" aria-selected="true">Other</button>
     </li>
   </ul>
   <div class="tab-content" id="myTabContent">
