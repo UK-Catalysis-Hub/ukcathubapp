@@ -1,11 +1,11 @@
-<ul class="nav nav-tabs" id="publicationsTab" role="tablist">
-  <% theme_groupings = get_theme_groupings() %>
+  <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
+    <% theme_groupings = get_theme_groupings() %>
     <% theme_groupings.each do |a_group| %>
-       <% theme_id = a_group[0]+"-tab" %>
-       <% target_id = "#" + a_group[0] %>
-       <% is_active = (a_group[1] == 1 ? "active" : "") %>
-       <li class="nav-item">
-         <button class="nav-link <%= is_active %>" id="<%=theme_id%>" data-bs-toggle="tab" data-bs-target="<%=target_id%>" type="button" role="tab" aria-controls="phase " aria-selected="true"><%= a_group[0] %></button>
-       </li>
+      <% theme_id = a_group[0].downcase+"-tab" %>
+      <% target_id = "#id_" + a_group[0].downcase() %>
+      <% is_active = (a_group[1] == 1 ? "active" : "") %>
+      <li class="nav-item">
+        <button class="nav-link <%= is_active %>" id="<%=theme_id%>" data-bs-toggle="tab" data-bs-target="<%=target_id%>" type="button" role="tab" aria-controls="phases" aria-selected="true"><%= a_group[0] %></button>
+      </li>
     <% end %>
-</ul>
+  </ul>

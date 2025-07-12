@@ -1,0 +1,52 @@
+    <% theme_groupings = get_theme_groupings() %>
+    <% theme_groupings.each do |a_group| %>
+      <% theme_group_name = a_group[0] %>
+      <% theme_group_id = a_group[1] %>
+      <% theme_group_count = a_group[2] %>
+      <% theme_tab = theme_group_name.downcase+"-tab" %>
+      <% target_id = "id_" + theme_group_name.downcase() %>
+      <% is_active = (theme_group_id == 1 ? " show active" : "") %>
+      <div class="tab-pane fade<%=is_active%>" id="<%=target_id%>" role="tabpanel" aria-labelledby="<%=theme_tab%>">
+          <div class = "row" >
+            <div class="col-sm-6">
+              <div id="theme_data" class="container">
+              <% theme_pubs = ListTheme.where("phase = "+theme_group_id.to_s).collect{|th|
+                 [th.name, th.article_count, th.id]} %>
+	          <br/><br/>
+                  <table class="table table-sm table-striped table-bordered">
+                    <thead class="thead-light">
+                      <tr>
+                        <th><%=theme_group_name%></th>
+                        <th>Publications</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% theme_pubs.each do |tpl| %>
+                      <tr>
+                        <td>
+                          <%= link_to tpl[0], "/themes/"+tpl[2].to_s %>
+                        </td>
+                        <td class="text-right">
+                          <%= tpl[1] %>
+                        </td>
+                      </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <% if theme_group_count < 2 %>
+                  Not enough items to plot
+                <% elsif theme_group_count <= 12 %>
+                  <% # replace model with view (make it faster?)
+                     themes_list = ListTheme.where("phase = "+theme_group_id.to_s).collect{|th|
+	             [th.short, th.article_count]} %>
+                  <%= pie_chart themes_list, legend: "right", donut: true, adapter: "google", height: "100%" %>    
+                <% else %>
+                  Too many items to plot
+                <% end %>
+              </div>
+            </div>
+      </div> <!--tab-pane -->
+  <% end %>
