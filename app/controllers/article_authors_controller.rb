@@ -75,8 +75,13 @@ class ArticleAuthorsController < ApplicationController
 
   private
     def return_url
-      url_for(controller: 'articles', action: 'edit', id: params["data"]["article_id"]) || article_authors_url
-    
+      if params["data"]["article_id"]
+        url_for(controller: 'articles', action: 'edit', id: params["data"]["article_id"])
+      elsif params["data"]["author_id"]
+        url_for(controller: 'authors', action: 'edit', id: params["data"]["author_id"])
+      else
+        article_authors_url
+      end
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_article_author
