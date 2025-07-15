@@ -53,15 +53,6 @@
                                                 title: "View " + get_theme_section.name} %>
         </li>
         <% end %>
-
-        <% if user_signed_in? %>
-          <li class= "nav-item" >
-            <%= link_to "New publications (#{CrPublication.where('status=0').count()})", 
-                        {:controller => '/cr_publications', :action => 'index'}, 
-                        {:class => controller_name == 'cr_publications' ?'nav-link active' : 'nav-link',
-                         title: "Publications found in crossref"} %>
-          </li>
-        <% end %>
       </ul>
       <% if user_signed_in? %>
          <div class="dropdown flex-row flex-wrap ms-md-auto">
@@ -76,9 +67,12 @@
             <li class="<%= 'active' if current_page?(sections_path) %>">  
               <%= link_to 'Sections', {:controller => '/sections', :action => 'index'}, {:class => "nav-link ", title: "View sections"} %>
             </li>
-            <li class="<%= 'active' if current_page?(organisations_path) %>">
-              <%= link_to 'Organisations', {:controller => '/organisations', :action => 'index'}, {:class => "nav-link ", title: "View organisations"} %>
-            </li>
+            <li class= "nav-item" >
+              <%= link_to "New publications (#{CrPublication.where('status=0').count()})", 
+                        {:controller => '/cr_publications', :action => 'index'}, 
+                        {:class => controller_name == 'cr_publications' ?'nav-link active' : 'nav-link',
+                         title: "Publications found in crossref"} %>
+          </li>
           </ul>
           <!-- drop down for account -->
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
