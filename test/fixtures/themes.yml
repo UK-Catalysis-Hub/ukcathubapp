@@ -7,6 +7,7 @@ one:
   lead: MyString
   phase: 1
   used: MyString
+  theme_type: "Group"
 
 two:
   id: 2
@@ -15,3 +16,4 @@ two:
   lead: MyString
   phase: 1
   used: MyString
+  theme_type: "Theme"

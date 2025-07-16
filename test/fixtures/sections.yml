@@ -48,3 +48,10 @@ affiliation_test:
   heading: AffiliationsHeading
   description: AffiliationsDescription
   visible: true
+  
+organisations_test:
+  obj_name: Organisations
+  name: Organisations
+  heading: OrganisationsHeading
+  description: OrganisationsDescription
+  visible: true

@@ -90,6 +90,6 @@ class AffiliationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def affiliation_params
-      params.require(:affiliation).permit(:institution, :department, :faculty, :school, :work_group, :country, :sector)
+      params.require(:affiliation).permit(:institution, :department, :faculty, :school, :work_group, :country, :sector, :organisation_id)
     end
 end

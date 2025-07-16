@@ -1,8 +1,6 @@
 class CrPublicationsController < ApplicationController
   include ArticlesHelper
   before_action :set_cr_publication, only: %i[ show edit update destroy ]
-  before_action :authenticate_user!
-
   # GET /cr_publications or /cr_publications.json
   def index
     @cr_publications = CrPublication.all
@@ -40,8 +38,15 @@ class CrPublicationsController < ApplicationController
   def update
     respond_to do |format|
       if @cr_publication.update(cr_publication_params)
-        if @cr_publication.status == 1
-          add_article_by_doi(p_doi=@cr_publication.doi,p_themes = @cr_publication.themes.split(','))
+        #update_cr_pub_pars(cr_publication_params)
+        if @cr_publication.status == 1 and @cr_publication.pub_year
+          #add_article_by_doi(p_doi:@cr_publication.doi,p_themes = @cr_publication.themes.split(','))
+          PublicationCreator.call({doi: @cr_publication.doi,themes: @cr_publication.themes.split(',')})
+        else
+          # reject preprints (no year)
+          @cr_publication.status = 2
+          @cr_publication.note = "It's a preprint"
+          @cr_publication.save()
         end
         format.html { redirect_to @cr_publication, notice: "Cr publication was successfully updated." }
         format.json { render :show, status: :ok, location: @cr_publication }

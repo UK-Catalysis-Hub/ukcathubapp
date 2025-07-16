@@ -4,6 +4,7 @@ class AffiliationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:one)
     @affiliation = affiliations(:one)
+    @organisation = organisations(:one)
   end
 
   test "should get index" do
@@ -18,9 +19,19 @@ class AffiliationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create affiliation" do
     assert_difference("Affiliation.count") do
-      post affiliations_url, params: { affiliation: { country: @affiliation.country, department: @affiliation.department, faculty: @affiliation.faculty, institution: @affiliation.institution, school: @affiliation.school, sector: @affiliation.sector, work_group: @affiliation.work_group } }
+      post affiliations_url, params: { affiliation: 
+                                       { country: @affiliation.country, 
+                                         department: @affiliation.department, 
+                                         faculty: @affiliation.faculty, 
+                                         institution: @affiliation.institution, 
+                                         school: @affiliation.school, 
+                                         sector: @affiliation.sector, 
+                                         work_group: @affiliation.work_group,
+                                         organisation_id: @organisation.id
+                                         }
+                                     }
     end
-
+    
     assert_redirected_to affiliation_url(Affiliation.last)
   end
 

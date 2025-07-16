@@ -1,4 +1,17 @@
-module ArticlesHelper
+class PublicationCreator < ApplicationService
+  def initialize(params)
+    @params = params
+  end
+
+  def call
+    puts "+"*90
+    puts(@params)
+    puts "+"*90
+    p_doi = @params[:doi]
+    p_themes = @params[:themes]
+    add_article_by_doi(p_doi,p_themes)
+  end
+  
   def add_article_by_doi(p_doi="",p_themes =[])
     @art = Article.find_by(doi: p_doi)
     if @art == nil
@@ -32,10 +45,12 @@ module ArticlesHelper
       Rails.logger.info "DOI Alredy in DB: #{p_doi} themes #{p_themes.to_s()}"
     end
   end
-
+  
+  
+  
   def getPubData(db_article, doi_text)
     puts "%"*90
-    puts "Getting pub data"
+    puts "Getting pub data for #{doi_text}"
     puts "%"*90
     if doi_text != ""
       # need to raise an exeption if doi is incorrect or no data is returned
@@ -63,7 +78,7 @@ module ArticlesHelper
     return data_mappings   
   end
   
-  def addPubAuthors(pub_authors,pub_auth_affis, a_pub)
+    def addPubAuthors(pub_authors,pub_auth_affis, a_pub)
     pub_authors.each do |an_author|
       temp_id = an_author["author_order"]
       an_author["doi"] =  a_pub.doi
@@ -213,4 +228,6 @@ module ArticlesHelper
     end
     disp_themes
   end
+
+  
 end

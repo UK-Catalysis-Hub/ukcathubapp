@@ -5,7 +5,7 @@ module CrPublicationsHelper
   def get_added
     CrPublication.where("status=1")
   end
-    def get_rejected
+  def get_rejected
     CrPublication.where("status=2")
   end
 end

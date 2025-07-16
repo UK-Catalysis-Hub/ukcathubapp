@@ -8,6 +8,7 @@ one:
   work_group: MyString
   country: MyString
   sector: MyString
+  organisation: 1
 
 two:
   institution: MyString
@@ -17,3 +18,4 @@ two:
   work_group: MyString
   country: MyString
   sector: MyString
+  organisation: 2
