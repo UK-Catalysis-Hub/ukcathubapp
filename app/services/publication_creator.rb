@@ -69,7 +69,10 @@ class PublicationCreator < ApplicationService
     just_article_vals.compact!()
     db_article.update(just_article_vals)
 
-    puts("Saved article wiht ID: #{db_article.id}")
+    Rails.logger.info "%"*80
+    Rails.logger.info "Saved article wiht ID: #{db_article.id}"
+    Rails.logger.info "%"*80
+
     # now add authors and affiliations
     addPubAuthors(data_mappings[1], data_mappings[2], db_article)
 
@@ -97,7 +100,7 @@ class PublicationCreator < ApplicationService
         break
       end
     end
-    if article_data["pub_year"] == nil
+    if article_data["pub_year"] == nil and not is_preprint
       is_preprint = true
       Rails.logger.info "DOI #{article_data["doi"].downcase} has no pub year, it is a preprint, do not add | #{DateTime.now.to_s}"
     end
@@ -130,11 +133,11 @@ class PublicationCreator < ApplicationService
       an_author.compact!()
       
       new_art_author.update!(an_author)
-      puts "8"*80
-      puts "New article author saved with id: " + new_art_author.id.to_s
-      puts "New article author assigned researcher id: " + new_art_author.author_id.to_s
-      puts "New article author assigned article id: " + new_art_author.article_id.to_s
-      puts "8"*80
+      Rails.logger.info "8"*80
+      Rails.logger.info "New article author saved with id: " + new_art_author.id.to_s
+      Rails.logger.info "New article author assigned researcher id: " + new_art_author.author_id.to_s
+      Rails.logger.info "New article author assigned article id: " + new_art_author.article_id.to_s
+      Rails.logger.info "8"*80
       
       # Affiliations not parsed just adding CrAffiliations for later
       pub_auth_affis.each do |affi_line|
@@ -143,9 +146,9 @@ class PublicationCreator < ApplicationService
           affi_line.compact!()
           new_cr_affi = CrAffiliation.new(affi_line)
           new_cr_affi.save
-          puts "8"*80
-          puts "Address Line: " + affi_line["name"]
-          puts "8"*80
+          Rails.logger.info "8"*80
+          Rails.logger.info "Address Line: " + affi_line["name"]
+          Rails.logger.info "8"*80
         end
       end
     end
