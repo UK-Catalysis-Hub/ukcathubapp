@@ -18,7 +18,11 @@ class AuthorsController < ApplicationController
   # GET /authors or /authors.json
   def index
     @search = AuthorsSearch.new(params)# initializes search object from request params
-    @authors = @search.result.isap.paginate(:page => params[:page], :per_page => 10)
+    if user_signed_in?
+      @authors = @search.result.paginate(:page => params[:page], :per_page => 10)
+    else
+      @authors = @search.result.isap.paginate(:page => params[:page], :per_page => 10)
+    end
   end
 
   # GET /authors/1 or /authors/1.json
