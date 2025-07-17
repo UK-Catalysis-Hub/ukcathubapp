@@ -22,21 +22,14 @@ class PublicationCreator < ApplicationService
     p_doi.downcase!()
     p_doi.strip!()
     @art = Article.find_by(doi: p_doi)
+    
     if @art == nil
       @art = Article.new(:doi => p_doi)
-      getPubData(@art, @art.doi)
-      if @art.container_title == nil
-        @art.container_title = "NA"
-      end
-      can_add_it = 0
-      if @art.pub_year != nil
-        # its a preprint do not add
-        Rails.logger.info "Can add DOI: #{p_doi} it isn't a preprint #{@art.pub_year}"
-        can_add_it = 1
-      else
-        Rails.logger.info "Can not add DOI: #{p_doi} it is a preprint"
-      end
-      if can_add_it
+      mappings = getPubData(@art, @art.doi)
+      puts mappings
+      is_preprint = check_if_preprint(mappings[0])
+      puts " is it a preprint? #{is_preprint}"
+      if not is_preprint
         @art.save()
         p_themes.each do |theme_id|
           full_theme = Theme.find(theme_id)
@@ -50,34 +43,36 @@ class PublicationCreator < ApplicationService
         end
       end  
     else
+      Rails.logger.info "+"*80
       Rails.logger.info "DOI Alredy in DB: #{p_doi} themes #{p_themes.to_s()}"
+      Rails.logger.info "+"*80
     end
   end
-  
-  
-  
+    
   def getPubData(db_article, doi_text)
-    puts "%"*90
-    puts "Getting pub data for #{doi_text}"
-    puts "%"*90
+    Rails.logger.info "%"*80
+    Rails.logger.info "Getting pub data for #{doi_text}"
+    Rails.logger.info "%"*80
+    data_mappings = nil
     if doi_text != ""
       # need to raise an exeption if doi is incorrect or no data is returned
       # need to check the doi is not in DB before saving (lower and uppercase versions)
       # need to trim dois before saving
       data_mappings = getPubDataXRef(doi_text) 
       # remove id, and timestamps from mappings before updating
+      puts data_mappings[0]
       just_article_vals = data_mappings[0]
        # mark incomplete as it is missing authors, affiliation and themes
       just_article_vals['status'] = "Incomplete"
       just_article_vals.compact!() 
-      db_article.update(just_article_vals)
-      puts ("%"*80)
-      puts("Added "+ db_article.doi)
-      puts ("%"*80)
+      #db_article.update(just_article_vals)
+      Rails.logger.info ("%"*80)
+      Rails.logger.info ("got data for article "+ db_article.doi)
+      Rails.logger.info ("%"*80)
       # now add authors and affiliations
-      addPubAuthors(data_mappings[1], data_mappings[2], db_article)
+      # addPubAuthors(data_mappings[1], data_mappings[2], db_article)
     end
-    return db_article
+    return data_mappings
   end
 
   def getPubDataXRef(doi_text)
@@ -86,7 +81,25 @@ class PublicationCreator < ApplicationService
     return data_mappings   
   end
   
-    def addPubAuthors(pub_authors,pub_auth_affis, a_pub)
+  def check_if_preprint(article_data)
+    is_preprint = false
+    preprint_strings = ["chemrxiv"]
+    this_doi = article_data["doi"].downcase
+    preprint_strings.each do |a_pp_str|
+      if a_pp_str in this_doi
+        is_preprint = true
+        puts "it is a preprint with wrong doi"
+        break
+      end
+    end
+    if article_data["pub_year"] == nil
+      is_preprint = true
+      puts "it is a preprint without pub year"
+    end
+    is_preprint
+  end
+  
+  def addPubAuthors(pub_authors,pub_auth_affis, a_pub)
     pub_authors.each do |an_author|
       temp_id = an_author["author_order"]
       an_author["doi"] =  a_pub.doi
@@ -112,11 +125,11 @@ class PublicationCreator < ApplicationService
       an_author.compact!()
       
       new_art_author.update!(an_author)
-      puts "8"*90
+      puts "8"*80
       puts "New article author saved with id: " + new_art_author.id.to_s
       puts "New article author assigned researcher id: " + new_art_author.author_id.to_s
       puts "New article author assigned article id: " + new_art_author.article_id.to_s
-      puts "8"*90
+      puts "8"*80
       
       # Affiliations not parsed just adding CrAffiliations for later
       pub_auth_affis.each do |affi_line|
@@ -125,9 +138,9 @@ class PublicationCreator < ApplicationService
           affi_line.compact!()
           new_cr_affi = CrAffiliation.new(affi_line)
           new_cr_affi.save
-          puts "8"*90
+          puts "8"*80
           puts "Address Line: " + affi_line["name"]
-          puts "8"*90
+          puts "8"*80
         end
       end
     end

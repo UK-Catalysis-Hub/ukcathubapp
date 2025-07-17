@@ -8,6 +8,7 @@ class PublicationCreatorTest < ActiveSupport::TestCase
     @doi_uppercase = @doi_existing.upcase
     @doi_spaces = " " + @doi_existing + " "
     @doi_spc_n_uc =  " " + @doi_existing + " "
+    @doi_preprint = "10.26434/chemrxiv-2024-cpjsk"
     @theme_list = [@theme.id]
   end
   
@@ -34,4 +35,11 @@ class PublicationCreatorTest < ActiveSupport::TestCase
       result = PublicationCreator.call({'doi': @doi_spc_n_uc, 'themes': @theme_list})
     end  
   end
+  
+  test "should not add preprints" do
+    assert_no_difference("Article.count()") do
+      result = PublicationCreator.call({'doi': @doi_preprint, 'themes': @theme_list})
+    end
+  end
+  
 end
