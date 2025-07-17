@@ -25,22 +25,10 @@ class PublicationCreator < ApplicationService
     
     if @art == nil
       @art = Article.new(:doi => p_doi)
-      mappings = getPubData(@art, @art.doi)
-      puts mappings
-      is_preprint = check_if_preprint(mappings[0])
-      puts " is it a preprint? #{is_preprint}"
+      data_mappings = getPubData(@art, @art.doi)
+      is_preprint = check_if_preprint(data_mappings[0])
       if not is_preprint
-        @art.save()
-        p_themes.each do |theme_id|
-          full_theme = Theme.find(theme_id)
-          article_theme = ArticleTheme.new()
-          article_theme.doi = @art.doi
-          article_theme.theme_id = theme_id
-          article_theme.project_year = @art.pub_year
-          article_theme.article_id = @art.id
-          article_theme.phase = full_theme.phase
-          article_theme.save()
-        end
+        save_new_article(@art, data_mappings, p_themes)
       end  
     else
       Rails.logger.info "+"*80
@@ -58,19 +46,10 @@ class PublicationCreator < ApplicationService
       # need to raise an exeption if doi is incorrect or no data is returned
       # need to check the doi is not in DB before saving (lower and uppercase versions)
       # need to trim dois before saving
-      data_mappings = getPubDataXRef(doi_text) 
-      # remove id, and timestamps from mappings before updating
-      puts data_mappings[0]
-      just_article_vals = data_mappings[0]
-       # mark incomplete as it is missing authors, affiliation and themes
-      just_article_vals['status'] = "Incomplete"
-      just_article_vals.compact!() 
-      #db_article.update(just_article_vals)
+      data_mappings = getPubDataXRef(doi_text)
       Rails.logger.info ("%"*80)
       Rails.logger.info ("got data for article "+ db_article.doi)
       Rails.logger.info ("%"*80)
-      # now add authors and affiliations
-      # addPubAuthors(data_mappings[1], data_mappings[2], db_article)
     end
     return data_mappings
   end
@@ -81,20 +60,46 @@ class PublicationCreator < ApplicationService
     return data_mappings   
   end
   
+  def save_new_article(db_article, data_mappings, p_themes)
+    just_article_vals = data_mappings[0]
+
+    # mark incomplete as it still needs manual verification, authors, affiliation and themes
+    just_article_vals['status'] = "Incomplete"
+    # remove id, and timestamps from mappings before updating
+    just_article_vals.compact!()
+    db_article.update(just_article_vals)
+
+    puts("Saved article wiht ID: #{db_article.id}")
+    # now add authors and affiliations
+    addPubAuthors(data_mappings[1], data_mappings[2], db_article)
+
+    # add themes
+    p_themes.each do |theme_id|
+      full_theme = Theme.find(theme_id)
+      article_theme = ArticleTheme.new()
+      article_theme.doi = db_article.doi
+      article_theme.theme_id = theme_id
+      article_theme.project_year = db_article.pub_year
+      article_theme.article_id = db_article.id
+      article_theme.phase = full_theme.phase
+      article_theme.save()
+    end
+  end
+
   def check_if_preprint(article_data)
     is_preprint = false
     preprint_strings = ["chemrxiv"]
     this_doi = article_data["doi"].downcase
     preprint_strings.each do |a_pp_str|
-      if a_pp_str in this_doi
+      if this_doi.include?(a_pp_str)
         is_preprint = true
-        puts "it is a preprint with wrong doi"
+        Rails.logger.info  "DOI #{article_data["doi"].downcase} it is a preprint, do not add | #{DateTime.now.to_s}"
         break
       end
     end
     if article_data["pub_year"] == nil
       is_preprint = true
-      puts "it is a preprint without pub year"
+      Rails.logger.info "DOI #{article_data["doi"].downcase} has no pub year, it is a preprint, do not add | #{DateTime.now.to_s}"
     end
     is_preprint
   end
