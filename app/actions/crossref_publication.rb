@@ -14,6 +14,10 @@ class CrossrefPublication
     #   Citation counts
     #   Details of authors (affiliation address, ORCID number) P
     #   container title update P
+    #   assign group/theme - automatic 73 - No Group Assigned (NGA)
+    #   add abstract
+    #   add article abstract (abstract is longer)
+    #   add link to dataset (manual or automated)
     if pub_data != nil
       citation_count_change(article, pub_data)
       change_in_authors(article, pub_data)

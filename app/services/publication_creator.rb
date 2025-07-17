@@ -4,15 +4,23 @@ class PublicationCreator < ApplicationService
   end
 
   def call
-    puts "+"*90
-    puts(@params)
-    puts "+"*90
+    Rails.logger.info "+"*80
+    Rails.logger.info "Trying to add article by doi #{@params}"
+    Rails.logger.info "+"*80
     p_doi = @params[:doi]
     p_themes = @params[:themes]
     add_article_by_doi(p_doi,p_themes)
   end
   
+  # Need to prevent:
+  #   adding preprints: "xiv" in the DOI and no year of publishing assigned.
+  #   adding ange: "ange" in the DOI, should prefer "anie" version unless not available.
+  #   adding corrections: they indicate in the the title that they are corrections. rest of title should closely match an existing publication.
+  #   adding double: check for existing publications before adding. Include checking by doi and by titl. need similarity checking.
   def add_article_by_doi(p_doi="",p_themes =[])
+    # downcase and trim first to duplicating articles
+    p_doi.downcase!()
+    p_doi.strip!()
     @art = Article.find_by(doi: p_doi)
     if @art == nil
       @art = Article.new(:doi => p_doi)
