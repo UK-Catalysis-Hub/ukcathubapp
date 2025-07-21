@@ -41,7 +41,7 @@ yarn-debug.log*
 .~*
 # ignore capistrano deploy file
 /config/deploy/*
-/code_temp/add_to_db_datasets.rb
+/code_temp/*
 *.sqbpro
 
 
