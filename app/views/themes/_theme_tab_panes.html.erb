@@ -4,7 +4,7 @@
       <% theme_group_id = a_group[1] %>
       <% theme_group_count = a_group[2] %>
       <% theme_tab = theme_group_name.downcase+"-tab" %>
-      <% target_id = "id_" + theme_group_name.downcase() %>
+      <% target_id = "id_" + theme_group_name.downcase().sub(" ", "-") %>
       <% is_active = (theme_group_id == 1 ? " show active" : "") %>
       <div class="tab-pane fade<%=is_active%>" id="<%=target_id%>" role="tabpanel" aria-labelledby="<%=theme_tab%>">
           <div class = "row" >
