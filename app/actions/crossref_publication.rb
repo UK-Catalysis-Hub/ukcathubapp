@@ -94,4 +94,5 @@ class CrossrefPublication
   # need to add all methods for parsing crossref data here
   # |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
   # V  V  V  V  V  V  V  V  V  V  V  V  V  V  V  V
+  # or call the corresponding services
 end  #Class CrossrefPublication 

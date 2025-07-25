@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Organisation aliases</h1>
+
+<div id="organisation_aliases">
+  <% @organisation_aliases.each do |organisation_alias| %>
+    <%= render organisation_alias %>
+    <p>
+      <%= link_to "Show this organisation alias", organisation_alias %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New organisation alias", new_organisation_alias_path %>

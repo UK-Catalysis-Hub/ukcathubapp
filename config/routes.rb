@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :organisation_aliases
   resources :cr_publications
   post 'search_crosreff' => 'cr_publications#search_crosreff', as: :search_crosreff
 
