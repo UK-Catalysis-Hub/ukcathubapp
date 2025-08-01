@@ -10,8 +10,9 @@ class PublicationCreatorTest < ActiveSupport::TestCase
     @doi_spc_n_uc =  " " + @doi_existing + " "
     # the firs doi has a xiv string in doi,
     # the second does not have pub_year
-    @preprint_dois = ["10.26434/chemrxiv-2024-cpjsk",
-                      "10.1101/2025.07.05.663138"]
+    @preprint_dois = ["10.1101/2025.07.05.663138",
+                      "10.26434/chemrxiv-2024-cpjsk"
+                      ]
     @ok_doi = "10.1021/acsmaterialslett.1c00766"
 
     @theme_list = [@theme.id]
