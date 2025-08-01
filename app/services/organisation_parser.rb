@@ -187,13 +187,13 @@ class OrganisationParser
        @hosted_institutions[inst] == host
       return true
     end
-   return false
+   false
   end
   
-  def get_host_paths(affi_list)
+  def get_host_paths(org_list)
     hostings = []
-    affi_list.each do |a_affi| 
-      affi_list.each do |b_affi| 
+    org_list.each do |a_affi|
+      org_list.each do |b_affi|
         if is_hosted(a_affi, b_affi)
           hostings.append([a_affi,b_affi])
         end
@@ -208,6 +208,54 @@ class OrganisationParser
         end
       end
     end
-    return hostings + host_paths
+    hostings + host_paths
+  end
+
+  def get_host_paths2(org_list)
+    host_map = {}
+    org_list.each do |a_affi|
+      org_list.each do |b_affi|
+        if is_hosted(a_affi, b_affi)
+          host_map[b_affi] ||= []
+          host_map[b_affi] << a_affi
+        end
+      end
+    end
+    host_paths = []
+    # other way to get third level hostings
+    host_map.each do |mid, hosts|
+      hosts.each do |top|
+        host_map[mid]&.each do |mid_host|
+          host_map[mid_host]&.each do |bottom|
+            host_paths << [bottom, mid_host, mid]
+          end
+        end
+      end
+    end
+    direct_hostings = host_map.flat_map { |k, v| v.map { |host| [host, k] } }
+    direct_hostings + host_paths
+  end
+
+  def get_host_paths3(org_list)
+    host_map = {}
+    org_list.each do |a_affi|
+      org_list.each do |b_affi|
+        if is_hosted(a_affi, b_affi)
+          host_map[b_affi] ||= []
+          host_map[b_affi] << a_affi
+        end
+      end
+    end
+    host_paths = []
+    # when there are third level hostings
+    host_map.each do |child, parents|
+      parents.each do |mid|
+        host_map[mid]&.each do |top|
+          host_paths << [top, mid, child]
+        end
+      end
+    end
+    direct_hostings = host_map.flat_map { |k, v| v.map { |host| [host, k] } }
+    direct_hostings + host_paths
   end
 end

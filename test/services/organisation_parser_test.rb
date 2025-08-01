@@ -34,6 +34,8 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     assert @org_p.is_hosted(list[0],list[1])
     assert @org_p.is_hosted(list[1],list[2])
     assert @org_p.get_host_paths(list) == hosted_paths
+    assert @org_p.get_host_paths2(list) == hosted_paths
+    assert @org_p.get_host_paths3(list) == hosted_paths
   end
 
 end
