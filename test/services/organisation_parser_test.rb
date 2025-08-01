@@ -26,4 +26,14 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     assert !(@org_p.is_hosted(inst_2,inst_1))
   end
 
+  test "Test if hosting paths can be retrieved" do
+    list = ["UK Catalysis Hub","Research Complex at Harwell","Rutherford Appleton Laboratory"]
+    hosted_paths = [["UK Catalysis Hub", "Research Complex at Harwell"],
+                    ["Research Complex at Harwell", "Rutherford Appleton Laboratory"],
+                    ["UK Catalysis Hub", "Research Complex at Harwell", "Rutherford Appleton Laboratory"]]
+    assert @org_p.is_hosted(list[0],list[1])
+    assert @org_p.is_hosted(list[1],list[2])
+    assert @org_p.get_host_paths(list) == hosted_paths
+  end
+
 end

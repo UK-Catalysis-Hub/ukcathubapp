@@ -162,7 +162,7 @@ class OrganisationParser
     @hosted_institutions= { 
       "UK Catalysis Hub" => "Research Complex at Harwell",
       "HarwellXPS" => "Research Complex at Harwell",
-      "Research Complex at Harwell" => "Science and Technology Facilities Council",
+      "Research Complex at Harwell" => "Rutherford Appleton Laboratory",
       "ISIS Neutron and Muon Source" => "Science and Technology Facilities Council",      
       "Institute of Materials Research and Engineering" => "Agency for Science, Technology and Research",
       "SuperSTEM Laboratory" => "SciTech Daresbury",
@@ -202,9 +202,9 @@ class OrganisationParser
     # get three level hostings
     host_paths = []
     hostings.each do |a_hosted|
-      hostings.each do |a_hosted|
+      hostings.each do |b_hosted|
         if a_hosted[0] == b_hosted[1]
-          host_paths.append( [b_hosted[0], b_hosted[1], a_hosted[1]])
+          host_paths.append([b_hosted[0], b_hosted[1], a_hosted[1]])
         end
       end
     end
