@@ -258,4 +258,50 @@ class OrganisationParser
     direct_hostings = host_map.flat_map { |k, v| v.map { |host| [host, k] } }
     direct_hostings + host_paths
   end
+
+  # If institutions can have multiple hosts, try this version to get all paths:
+  def get_host_paths4(org_list)
+    host_map = {}
+    org_list.each do |a_affi|
+      org_list.each do |b_affi|
+        if is_hosted(a_affi, b_affi)
+          host_map[b_affi] ||= []
+          host_map[b_affi] << a_affi
+        end
+      end
+    end
+    ret=[]
+    org_list.each do |a_affi|
+      ret = build_partial_paths(a_affi, host_map)
+    end
+    ret
+  end
+
+  # try to find paths recursively
+  def build_all_host_paths(entity, host_map)
+    return [[entity]] unless host_map[entity]
+    host_map[entity].flat_map do |host|
+      build_all_host_paths(host, host_map).map { |path| path + [entity] }
+    end
+  end
+  
+  def build_partial_paths(entity, host_map)
+    # Start with the base path (just the entity itself)
+    paths = [[entity]]
+
+     hosts = host_map[entity]
+     return paths unless hosts
+
+    hosts.each do |host|
+      # Recursively get all paths from this host
+      host_paths = build_partial_paths(host, host_map)
+
+      # Add the current entity to each found path
+      host_paths.each do |path|
+        paths << path + [entity]
+      end
+    end
+
+    paths
+  end
 end
