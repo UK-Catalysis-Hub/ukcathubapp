@@ -251,22 +251,38 @@ class OrganisationParser
 
   # Check the if any of the values in the list is in the given string
   def check_list(a_string, a_list)
-    return_str = ""
+    longest = a_list.select do |word|
+      a_string.match?(/\b#{Regexp.escape(word)}\b/u)
+    end.max_by(&:length)
+
+    cleaned = longest ? a_string.gsub(/\b#{Regexp.escape(longest)}\b/ui, "") : a_string
+    [longest.to_s, cleaned]
+  end
+
+  # verify if the string has some of the synomyms in the provided synonym table
+  def str_has_synonym(affi_str, synonym_dict)
+    ret_str = ""
     temp_str = ""
-    
-    a_list.each do |item|
-      # Create a regex that matches whole word only
-      regex = /\b#{Regexp.escape(item)}\b/
-      if a_string.match?(regex) && item.length > temp_str.length
-        temp_str = item
+    synonym_dict.keys().each do |a_key|
+      if affi_str.include?(a_key)
+        if a_key.length > temp_str.length
+          temp_str = a_key
+        end
       end
     end
-
     if temp_str.length > 0
-      a_string = a_string.gsub(/\b#{Regexp.escape(temp_str)}\b/, "")
-      return_str = temp_str
+      ret_str = synonym_dict[temp_str]
+      affi_str = affi_str.sub(temp_str,'')
     end
-
-    return return_str, a_string
+    return ret_str, affi_str
   end
+
+  def get_country_synonyms
+    return @country_synonyms
+  end
+  
+  def get_institution_synonyms
+    return @institution_synonyms
+  end
+
 end

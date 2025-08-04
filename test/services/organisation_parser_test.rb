@@ -49,10 +49,17 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     b_list = ['words', 'these', 'list']
     r_a = @org_p.check_list(a_string, a_list)
     r_b = @org_p.check_list(a_string, b_list)
-    puts "1st: #{r_a}"
     assert r_a[0] == "" and r_a[1] == "words in this string"
-
-    puts "2nd: #{r_b}"
     assert r_b[0] == "words" and r_b[1] == " in this string"
+  end
+
+  test "Test checking if the string has a synonym" do
+    a_string = "Oxford, UK"
+    b_string = "Oxford, UL"
+    ctry_sn = @org_p.get_country_synonyms
+    r_a = @org_p.str_has_synonym(a_string, @org_p.get_country_synonyms)
+    assert r_a[0] == "United Kingdom" and r_a[1] == "Oxford,"
+    r_b = @org_p.str_has_synonym(b_string, @org_p.get_country_synonyms)
+    assert r_b[0] == "" and r_b[1] == "Oxford, UL"
   end
 end
