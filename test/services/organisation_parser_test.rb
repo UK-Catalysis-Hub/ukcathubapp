@@ -57,9 +57,9 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     a_string = "Oxford, UK"
     b_string = "Oxford, UL"
     ctry_sn = @org_p.get_country_synonyms
-    r_a = @org_p.str_has_synonym(a_string, @org_p.get_country_synonyms)
+    r_a = @org_p.str_has_synonym2(a_string, @org_p.get_country_synonyms)
     assert r_a[0] == "United Kingdom" and r_a[1] == "Oxford,"
-    r_b = @org_p.str_has_synonym(b_string, @org_p.get_country_synonyms)
+    r_b = @org_p.str_has_synonym2(b_string, @org_p.get_country_synonyms)
     assert r_b[0] == "" and r_b[1] == "Oxford, UL"
   end
 end

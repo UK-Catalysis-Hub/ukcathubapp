@@ -277,6 +277,18 @@ class OrganisationParser
     return ret_str, affi_str
   end
 
+  def str_has_synonym2(affi_str, synonym_dict)
+    affi_str = affi_str.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
+    temp_str = synonym_dict.keys
+      .map { |k| k.encode('UTF-8', invalid: :replace, undef: :replace, replace: '') }
+      .select { |k| affi_str.include?(k) }
+      .max_by(&:length)
+
+    ret_str = temp_str ? synonym_dict[temp_str] : ""
+    affi_str = temp_str ? affi_str.sub(temp_str, '') : affi_str
+    [ret_str, affi_str]
+  end
+
   def get_country_synonyms
     return @country_synonyms
   end
