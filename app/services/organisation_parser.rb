@@ -261,23 +261,6 @@ class OrganisationParser
 
   # verify if the string has some of the synomyms in the provided synonym table
   def str_has_synonym(affi_str, synonym_dict)
-    ret_str = ""
-    temp_str = ""
-    synonym_dict.keys().each do |a_key|
-      if affi_str.include?(a_key)
-        if a_key.length > temp_str.length
-          temp_str = a_key
-        end
-      end
-    end
-    if temp_str.length > 0
-      ret_str = synonym_dict[temp_str]
-      affi_str = affi_str.sub(temp_str,'')
-    end
-    return ret_str, affi_str
-  end
-
-  def str_has_synonym2(affi_str, synonym_dict)
     affi_str = affi_str.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
     temp_str = synonym_dict.keys
       .map { |k| k.encode('UTF-8', invalid: :replace, undef: :replace, replace: '') }
