@@ -248,4 +248,42 @@ class OrganisationParser
     longest_path
   end
 
+
+  # Check the if any of the values in the list is in the given string
+  def check_list(a_string, a_list)
+    return_str = ""
+    temp_str = ""
+    a_list.each do |an_item|
+      if an_item in a_string
+        if an_item.length > temp_str.length
+          temp_str = an_item
+        end
+      end
+    end
+    if temp_str.length > 0
+      a_string = a_string.sub(temp_str,"")
+      return_str = temp_str
+    end
+    [return_str, a_string]
+  end
+
+  def check_list2(a_string, a_list)
+    return_str = ""
+    temp_str = ""
+    
+    a_list.each do |item|
+      # Create a regex that matches whole word only
+      regex = /\b#{Regexp.escape(item)}\b/
+      if a_string.match?(regex) && item.length > temp_str.length
+        temp_str = item
+      end
+    end
+
+    if temp_str.length > 0
+      a_string = a_string.gsub(/\b#{Regexp.escape(temp_str)}\b/, "")
+      return_str = temp_str
+    end
+
+    return return_str, a_string
+  end
 end

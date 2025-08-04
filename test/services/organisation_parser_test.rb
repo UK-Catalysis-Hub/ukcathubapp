@@ -36,11 +36,20 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     assert @org_p.get_host_paths(list) == hosted_paths
   end
 
-  test "Get the longest path in the paths list" do
+  test "Test getting the longest path in the paths list" do
     hosted_paths = [["UK Catalysis Hub", "Research Complex at Harwell"],
                     ["Research Complex at Harwell", "Rutherford Appleton Laboratory"],
                     ["UK Catalysis Hub", "Research Complex at Harwell", "Rutherford Appleton Laboratory"]]
     assert @org_p.get_longest_path(hosted_paths) == hosted_paths[2]
   end
 
+  test "Test checking if list has a value from list" do
+    a_string = "words in this string"
+    a_list = ['word', 'these', 'list']
+    b_list = ['words', 'these', 'list']
+    puts @org_p.check_list(a_string, a_list).inspect
+    puts @org_p.check_list(a_string, b_list).inspect
+    puts @org_p.check_list2(a_string, a_list).inspect
+    puts @org_p.check_list2(a_string, b_list).inspect
+  end
 end
