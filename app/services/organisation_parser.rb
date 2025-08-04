@@ -190,77 +190,8 @@ class OrganisationParser
    false
   end
   
-  def get_host_paths(org_list)
-    hostings = []
-    org_list.each do |a_affi|
-      org_list.each do |b_affi|
-        if is_hosted(a_affi, b_affi)
-          hostings.append([a_affi,b_affi])
-        end
-      end
-    end 
-    # get three level hostings
-    host_paths = []
-    hostings.each do |a_hosted|
-      hostings.each do |b_hosted|
-        if a_hosted[0] == b_hosted[1]
-          host_paths.append([b_hosted[0], b_hosted[1], a_hosted[1]])
-        end
-      end
-    end
-    hostings + host_paths
-  end
-
-  def get_host_paths2(org_list)
-    host_map = {}
-    org_list.each do |a_affi|
-      org_list.each do |b_affi|
-        if is_hosted(a_affi, b_affi)
-          host_map[b_affi] ||= []
-          host_map[b_affi] << a_affi
-        end
-      end
-    end
-    host_paths = []
-    # other way to get third level hostings
-    host_map.each do |mid, hosts|
-      hosts.each do |top|
-        host_map[mid]&.each do |mid_host|
-          host_map[mid_host]&.each do |bottom|
-            host_paths << [bottom, mid_host, mid]
-          end
-        end
-      end
-    end
-    direct_hostings = host_map.flat_map { |k, v| v.map { |host| [host, k] } }
-    direct_hostings + host_paths
-  end
-
-  def get_host_paths3(org_list)
-    host_map = {}
-    org_list.each do |a_affi|
-      org_list.each do |b_affi|
-        if is_hosted(a_affi, b_affi)
-          host_map[b_affi] ||= []
-          host_map[b_affi] << a_affi
-        end
-      end
-    end
-    host_paths = []
-    # when there are third level hostings
-    host_map.each do |child, parents|
-      parents.each do |mid|
-        host_map[mid]&.each do |top|
-          host_paths << [top, mid, child]
-        end
-      end
-    end
-    direct_hostings = host_map.flat_map { |k, v| v.map { |host| [host, k] } }
-    direct_hostings + host_paths
-  end
-
   # If institutions can have multiple hosts, try this version to get all paths:
-  def get_host_paths4(org_list)
+  def get_host_paths(org_list)
     host_map = {}
     org_list.each do |a_affi|
       org_list.each do |b_affi|
@@ -286,19 +217,11 @@ class OrganisationParser
   end
 
   # try to find paths recursively
-  def build_all_host_paths(entity, host_map)
-    return [[entity]] unless host_map[entity]
-    host_map[entity].flat_map do |host|
-      build_all_host_paths(host, host_map).map { |path| path + [entity] }
-    end
-  end
-  
   def build_partial_paths(entity, host_map)
     # Start with the base path (just the entity itself)
     paths = [[entity]]
-
-     hosts = host_map[entity]
-     return paths unless hosts
+      hosts = host_map[entity]
+      return paths unless hosts
 
     hosts.each do |host|
       # Recursively get all paths from this host
