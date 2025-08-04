@@ -235,4 +235,17 @@ class OrganisationParser
 
     paths
   end
+
+  def get_longest_path(paths_list)
+    longest_path = []
+    paths_list.each do |a_path| 
+      if longest_path == []
+        longest_path = a_path
+      elsif longest_path.length < a_path.length
+        longest_path = a_path
+      end
+    end
+    longest_path
+  end
+
 end
