@@ -62,4 +62,13 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     r_b = @org_p.str_has_synonym(b_string, @org_p.get_country_synonyms)
     assert r_b[0] == "" and r_b[1] == "Oxford, UL"
   end
+
+  test "Test removing extra punctuation in string" do
+    a_string = "Oxford , "
+    assert @org_p.remove_extra_commas(a_string) == "Oxford"
+    a_string = " , , ; ; Hello , world!. , ; "
+    assert @org_p.remove_extra_commas(a_string) == "Hello world"
+  end
+
+
 end

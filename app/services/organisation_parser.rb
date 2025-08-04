@@ -272,6 +272,16 @@ class OrganisationParser
     [ret_str, affi_str]
   end
 
+  def remove_extra_commas(str)
+    str.gsub(/, ,|; ;/, '')
+       .gsub(/ \,/, ',')
+       .gsub(/ \;/, ';')
+       .strip
+       .then { |s| s[-1]&.match?(/\w/) ? s : s[0...-1] }
+       .then { |s| s.size <= 1 ? '' : s[s.index(s[/\w/])..].strip }
+   str.gsub(/[[:punct:]]+\s*|\s+[[:punct:]]+/, ' ').strip.squeeze(' ')
+  end
+
   def get_country_synonyms
     return @country_synonyms
   end
