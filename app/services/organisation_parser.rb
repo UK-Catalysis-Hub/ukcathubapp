@@ -270,11 +270,19 @@ class OrganisationParser
         end
       end
     end
-    ret=[]
+    all_paths=[]
     org_list.each do |a_affi|
-      ret = build_partial_paths(a_affi, host_map)
+      all_paths += build_partial_paths(a_affi, host_map)
     end
-    ret
+    # remove single paths
+    ret = []
+    all_paths.each do |a_path|
+      if a_path.length > 1
+        ret.append(a_path)
+      end
+    end
+    # convert to set and back to array to eliminate duplicates
+    ret.to_set.to_a
   end
 
   # try to find paths recursively
