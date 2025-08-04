@@ -253,23 +253,6 @@ class OrganisationParser
   def check_list(a_string, a_list)
     return_str = ""
     temp_str = ""
-    a_list.each do |an_item|
-      if an_item in a_string
-        if an_item.length > temp_str.length
-          temp_str = an_item
-        end
-      end
-    end
-    if temp_str.length > 0
-      a_string = a_string.sub(temp_str,"")
-      return_str = temp_str
-    end
-    [return_str, a_string]
-  end
-
-  def check_list2(a_string, a_list)
-    return_str = ""
-    temp_str = ""
     
     a_list.each do |item|
       # Create a regex that matches whole word only

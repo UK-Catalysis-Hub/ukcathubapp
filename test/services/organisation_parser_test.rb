@@ -47,9 +47,12 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     a_string = "words in this string"
     a_list = ['word', 'these', 'list']
     b_list = ['words', 'these', 'list']
-    puts @org_p.check_list(a_string, a_list).inspect
-    puts @org_p.check_list(a_string, b_list).inspect
-    puts @org_p.check_list2(a_string, a_list).inspect
-    puts @org_p.check_list2(a_string, b_list).inspect
+    r_a = @org_p.check_list(a_string, a_list)
+    r_b = @org_p.check_list(a_string, b_list)
+    puts "1st: #{r_a}"
+    assert r_a[0] == "" and r_a[1] == "words in this string"
+
+    puts "2nd: #{r_b}"
+    assert r_b[0] == "words" and r_b[1] == " in this string"
   end
 end
