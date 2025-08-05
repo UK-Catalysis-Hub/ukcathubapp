@@ -107,10 +107,10 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, UK"
     expected = ["United Kingdom",
                 "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX,"]
-    assert @org_p.parse_countries2(a_dir_str) == expected
+    assert @org_p.parse_countries(a_dir_str) == expected
     b_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, US"
     expected_b = ["United States of America",
                   "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX,"]
-    assert @org_p.parse_countries2(b_dir_str)  == expected_b
+    assert @org_p.parse_countries(b_dir_str)  == expected_b
   end
 end
