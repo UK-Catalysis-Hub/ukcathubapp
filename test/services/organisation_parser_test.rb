@@ -80,9 +80,9 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     a_res = @org_p.get_institutions_in_str(a_dir_str,
                                            @org_p.get_institution_synonyms,
                                            organisations_list)
-    assert [["Rutherford Appleton Laboratory",
-             "Research Complex at Harwell",
-             "UK Catalysis Hub"], "Harwell, UK"] == a_res
+    assert ["Rutherford Appleton Laboratory",
+            "Research Complex at Harwell",
+            "UK Catalysis Hub", "Harwell, UK"] == a_res
     organisations_list += ["STFC"]
     b_dir_str = "UK Catalysis Hub, Research Complex at Harwell,\
                  Rutherford Appleton Laboratory, STFC, Harwell, OX11 1XX, UK"
@@ -90,10 +90,10 @@ class OrganisatioParserTest < ActiveSupport::TestCase
                                            @org_p.get_institution_synonyms,
                                            organisations_list)
     # test fourth level nesting
-    assert [["Science and Technology Facilities Council",
-             "Rutherford Appleton Laboratory",
-             "Research Complex at Harwell",
-             "UK Catalysis Hub"], "Harwell, OX11 1XX, UK"] == b_res
+    assert ["Science and Technology Facilities Council",
+            "Rutherford Appleton Laboratory",
+            "Research Complex at Harwell",
+            "UK Catalysis Hub", "Harwell, OX11 1XX, UK"] == b_res
   end
 
   test "Checking for country exceptions" do
@@ -103,7 +103,7 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     assert  !@org_p.has_country_exception(b_dir_str)
   end
   
-  test "getting country out of string" do
+  test "parsing country in string" do
     a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, UK"
     expected = ["United Kingdom",
                 "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX,"]
@@ -112,5 +112,17 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     expected_b = ["United States of America",
                   "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX,"]
     assert @org_p.parse_countries(b_dir_str)  == expected_b
+  end
+
+  test "parsing organisation in string" do
+    a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, UK"
+    result_a = @org_p.parse_institutions(a_dir_str)
+    expected = ["UK Catalysis Hub", "Research Complex at Harwell, OX11 1XX, UK"]
+    assert result_a == expected
+    b_dir_str = "UK Catalysis Hub, Research Complex at Harwell, Rutherford Appleton Laboratory, OX11 1XX, UK"
+    result_b = @org_p.parse_institutions(b_dir_str) 
+    expected = ["UK Catalysis Hub", "Research Complex at Harwell, Rutherford Appleton Laboratory, OX11 1XX, UK"]
+    assert result_b == expected
+      
   end
 end

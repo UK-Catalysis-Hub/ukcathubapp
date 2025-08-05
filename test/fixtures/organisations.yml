@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: "org one"
+  name: "UK Catalysis Hub"
   short_name: MyString
   identifier: MyString
   logo: MyString
@@ -9,7 +9,23 @@ one:
   address_id: 1
 
 two:
-  name: "org two"
+  name: "Research Complex at Harwell"
+  short_name: MyString
+  identifier: MyString
+  logo: MyString
+  homepage: MyString
+  address_id: 1
+
+three:
+  name: "Rutherford Appleton Laboratory"
+  short_name: MyString
+  identifier: MyString
+  logo: MyString
+  homepage: MyString
+  address_id: 1
+
+four:
+  name: "Cardiff University"
   short_name: MyString
   identifier: MyString
   logo: MyString

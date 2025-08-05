@@ -297,18 +297,17 @@ class OrganisationParser
   def get_institutions_in_str(str, synonym_dict, institution_list)
     # Try matching with synonyms
     institution, remainder = str_has_synonym(str, synonym_dict)
-
     # If no synonym match, try the institution list
     if institution.to_s.empty?
       institution, remainder = check_list(str, institution_list)
     end
-
+    
     # Recursive step
     if institution.to_s.empty?
-      [[], remove_extra_commas(remainder.strip)]
+      [remove_extra_commas(remainder.strip)]
     else
-      matched, new_reminder =  get_institutions_in_str(remainder.strip, synonym_dict, institution_list)
-      [[institution] + matched, new_reminder]
+      new_reminder =  get_institutions_in_str(remainder.strip, synonym_dict, institution_list)
+      [institution] + new_reminder
     end
   end
 
@@ -363,4 +362,14 @@ class OrganisationParser
     end
   end
 
+  def parse_institutions(affiliation_str)
+    institutions_list = get_institutions_in_str(affiliation_str, @institution_synonyms, @organisation_list)
+    host_paths = get_host_paths(institutions_list)
+    longest_path = get_longest_path(host_paths)
+    non_inst_items = longest_path[1..] + (institutions_list.to_set - longest_path.to_set).to_a
+    
+    non_parsed = non_inst_items.join(", ")
+    a_institution = longest_path[0]
+    [a_institution, non_parsed]
+  end 
 end
