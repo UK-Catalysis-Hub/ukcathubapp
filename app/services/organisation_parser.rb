@@ -340,12 +340,29 @@ class OrganisationParser
     [parsed_country, updated_reminder.strip]
   end
   
+  def handle_country_exception2(cr_string)
+    a_country_exception, reminder_e = check_list(cr_string, @country_exceptions)
+    return ['', cr_string] if a_country_exception.nil?
+
+    # Reinsert exception in the original location
+    exception_at = cr_string.index(a_country_exception)
+    parsed_country, parsed_reminder = parse_countries(reminder_e)
+
+    if exception_at && exception_at < parsed_reminder.length
+      updated_reminder = parsed_reminder[0...exception_at] + a_country_exception + parsed_reminder[exception_at..]
+    else
+      updated_reminder = parsed_reminder + " " + a_country_exception
+    end
+
+    [parsed_country, updated_reminder.strip]
+  end
+
   def parse_countries(a_str)
     reminder_c = reminder_s = a_country_name = a_country_synonym = a_country_exception = reminder_e = ""
     
     # first check for country exceptions in string 
     if has_country_exception(a_str)
-      a_country_exception, reminder_e = handle_country_exception(a_str)
+      a_country_exception, reminder_e = handle_country_exception2(a_str)
       return [a_country_exception, reminder_e] unless a_country_exception.empty?
     end
     
@@ -370,6 +387,29 @@ class OrganisationParser
     else
       # return the synonym string
       return a_country_synonym, reminder_s
+    end
+  end
+
+  def parse_countries2(a_str)
+    # Handle country exceptions
+    if has_country_exception(a_str)
+      exception_name, cleaned_str = handle_country_exception2(a_str)
+      return [exception_name, cleaned_str] unless exception_name.empty?
+    end
+
+    # Check synonym vs country name
+    synonym_name, reminder_s = str_has_synonym(a_str, @country_synonyms)
+    country_name, reminder_c = check_list(a_str, @countries_list)
+    province_name, reminder_p = str_has_synonym(a_str, @country_provinces)
+
+    if province_name != ''
+      return [province_name, reminder_p]
+    elsif country_name != ''
+      return [country_name, reminder_c]
+    elsif synonym_name != ''
+      return [synonym_name, reminder_s]
+    else
+      return ['', a_str]
     end
   end
 end

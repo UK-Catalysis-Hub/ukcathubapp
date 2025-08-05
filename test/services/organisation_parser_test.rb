@@ -97,18 +97,20 @@ class OrganisatioParserTest < ActiveSupport::TestCase
   end
 
   test "Checking for country exceptions" do
-    b_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, UK"
-    assert  @org_p.has_country_exception(b_dir_str)
+    a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, UK"
+    assert  @org_p.has_country_exception(a_dir_str)
+    b_dir_str = "Research Complex at Harwell, OX11 1XX, United Kingdom"
+    assert  !@org_p.has_country_exception(b_dir_str)
   end
   
   test "getting country out of string" do
     a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, UK"
     expected = ["United Kingdom",
                 "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX,"]
-    assert @org_p.parse_countries(a_dir_str) == expected
-    a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, US"
-    expected_a = ["United States of America",
+    assert @org_p.parse_countries2(a_dir_str) == expected
+    b_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, US"
+    expected_b = ["United States of America",
                   "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX,"]
-    assert @org_p.parse_countries(a_dir_str)  == expected_a
+    assert @org_p.parse_countries2(b_dir_str)  == expected_b
   end
 end
