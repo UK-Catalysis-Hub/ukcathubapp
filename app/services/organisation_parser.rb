@@ -10,7 +10,7 @@ class OrganisationParser
   end
   def refresh_lists
     Rails.logger.info "Refreshing lists"
-    @institutions_list = Affiliation.group(:institution).pluck(:institution)
+    @organisation_list = Organisation.group(:name).pluck(:name)
     @countries_list = Affiliation.group(:country).pluck(:country)
     @schools_list = Affiliation.group(:school).pluck(:school)
     @departments_list = Affiliation.group(:department).pluck(:department)
@@ -115,7 +115,7 @@ class OrganisationParser
       'Réseau sur le Stockage Electrochimique de l’Energie (RS2E)' => 'Réseau sur le Stockage Électrochimique de l’Énergie (RS2E)',
       'STFC' => 'Science and Technology Facilities Council',
       'Science &amp; Technology Facilities Council' => 'Science and Technology Facilities Council',
-      "SciTech": "SciTech Daresbury",
+      "SciTech" => "SciTech Daresbury",
       'Sorbonne Universités' => 'Sorbonne Université',
       'SuperSTEM' => 'SuperSTEM Laboratory',
       'SynCat@Beijing, Synfuels China Technology Co. Ltd.' => 'SynCat@Beijing Synfuels China Company Limited',
@@ -279,15 +279,36 @@ class OrganisationParser
        .strip
        .then { |s| s[-1]&.match?(/\w/) ? s : s[0...-1] }
        .then { |s| s.size <= 1 ? '' : s[s.index(s[/\w/])..].strip }
-   str.gsub(/[[:punct:]]+\s*|\s+[[:punct:]]+/, ' ').strip.squeeze(' ')
+   #str.gsub(/[[:punct:]]+\s*|\s+[[:punct:]]+/, ' ').strip.squeeze(' ')
   end
 
   def get_country_synonyms
     return @country_synonyms
   end
-  
+
   def get_institution_synonyms
     return @institution_synonyms
   end
 
+  def get_organisations
+    return @organisation_list
+  end
+  
+  def get_institutions_in_str(str, synonym_dict, institution_list)
+    # Try matching with synonyms
+    institution, remainder = str_has_synonym(str, synonym_dict)
+
+    # If no synonym match, try the institution list
+    if institution.to_s.empty?
+      institution, remainder = check_list(str, institution_list)
+    end
+
+    # Recursive step
+    if institution.to_s.empty?
+      [[], remove_extra_commas(remainder.strip)]
+    else
+      matched, new_reminder =  get_institutions_in_str(remainder.strip, synonym_dict, institution_list)
+      [[institution] + matched, new_reminder]
+    end
+  end
 end

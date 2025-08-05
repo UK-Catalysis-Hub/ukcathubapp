@@ -65,10 +65,18 @@ class OrganisatioParserTest < ActiveSupport::TestCase
 
   test "Test removing extra punctuation in string" do
     a_string = "Oxford , "
+    puts @org_p.remove_extra_commas(a_string)
     assert @org_p.remove_extra_commas(a_string) == "Oxford"
-    a_string = " , , ; ; Hello , world!. , ; "
-    assert @org_p.remove_extra_commas(a_string) == "Hello world"
+    b_string = " , , ; ; Hello , world , ; "
+    puts @org_p.remove_extra_commas(b_string)
+    assert @org_p.remove_extra_commas(b_string) == "Hello, world,"
   end
 
-
+  test "Test getting institutions in string" do
+    a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, Rutherford Appleton Laboratory, Harwell, UK"
+    organisations_list = @org_p.get_organisations + 
+      ["UK Catalysis Hub","Research Complex at Harwell","Rutherford Appleton Laboratory"]
+    assert [["Rutherford Appleton Laboratory", "Research Complex at Harwell", "UK Catalysis Hub"], "Harwell, UK"] ==
+      @org_p.get_institutions_in_str(a_dir_str, @org_p.get_institution_synonyms, organisations_list)   
+  end
 end
