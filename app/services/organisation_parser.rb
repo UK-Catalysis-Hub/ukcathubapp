@@ -313,7 +313,7 @@ class OrganisationParser
   end
 
   # verify if the string contains country exceptions
-  def check_country_exception(a_str)
+  def has_country_exception(a_str)
     has_exceptions = false
     @country_exceptions.each do |an_exception|
       if a_str.include?(an_exception)
@@ -323,5 +323,53 @@ class OrganisationParser
     has_exceptions
   end
 
+  def handle_country_exception(cr_string)
+    a_country_exception, reminder_e = check_list(cr_string, @country_exceptions)
+    return ['', cr_string] if a_country_exception.nil?
 
+    # Reinsert exception in the original location
+    exception_at = cr_string.index(a_country_exception)
+    parsed_country, parsed_reminder = parse_countries(reminder_e)
+
+    if exception_at && exception_at < parsed_reminder.length
+      updated_reminder = parsed_reminder[0...exception_at] + a_country_exception + parsed_reminder[exception_at..]
+    else
+      updated_reminder = parsed_reminder + " " + a_country_exception
+    end
+
+    [parsed_country, updated_reminder.strip]
+  end
+  
+  def parse_countries(a_str)
+    reminder_c = reminder_s = a_country_name = a_country_synonym = a_country_exception = reminder_e = ""
+    
+    # first check for country exceptions in string 
+    if has_country_exception(a_str)
+      a_country_exception, reminder_e = handle_country_exception(a_str)
+      return [a_country_exception, reminder_e] unless a_country_exception.empty?
+    end
+    
+    # lookup on synonyms and countries lists
+    # if both country and synonym are found, prefer country
+    # unless the synonym is UK country(N. Ireland and Wales are in the UK)
+    a_country_synonym, reminder_s = str_has_synonym(a_str, @country_synonyms)
+    
+    a_country_name, reminder_c = check_list(a_str, @countries_list)
+        
+    a_country_province, reminder_p = str_has_synonym(a_str, @country_provinces)
+        
+    if a_country_name == "" and a_country_synonym == ""
+      # if nothing is found return an empty list
+      return '', a_str
+    elsif a_country_province != ""
+      # if country found return country 
+      return a_country_province, reminder_p
+    elsif a_country_name != ""
+      # if country found return country 
+      return a_country_name, reminder_c
+    else
+      # return the synonym string
+      return a_country_synonym, reminder_s
+    end
+  end
 end
