@@ -311,4 +311,17 @@ class OrganisationParser
       [[institution] + matched, new_reminder]
     end
   end
+
+  # verify if the string contains country exceptions
+  def check_country_exception(a_str)
+    has_exceptions = false
+    @country_exceptions.each do |an_exception|
+      if a_str.include?(an_exception)
+        has_exceptions =  true
+      end
+    end
+    has_exceptions
+  end
+
+
 end
