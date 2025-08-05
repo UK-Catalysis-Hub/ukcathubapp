@@ -102,9 +102,13 @@ class OrganisatioParserTest < ActiveSupport::TestCase
   end
   
   test "getting country out of string" do
-    b_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, UK"
+    a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, UK"
     expected = ["United Kingdom",
                 "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX,"]
-    assert @org_p.parse_countries(b_dir_str) == expected
+    assert @org_p.parse_countries(a_dir_str) == expected
+    a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, US"
+    expected_a = ["United States of America",
+                  "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX,"]
+    assert @org_p.parse_countries(a_dir_str)  == expected_a
   end
 end
