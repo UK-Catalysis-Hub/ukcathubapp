@@ -399,26 +399,6 @@ class OrganisationParser
 
   # return a list of unit tuples and the unparsed rest of the string
   def parse_org_units(affiliation_str)
-    parsing=[]
-    # unit, position, value, rest
-    parsing.append(["department"] + [check_list(affiliation_str, @departments_list)[0]])
-    parsing.append(["school"]+ [check_list(affiliation_str, @schools_list)[0]])
-    parsing.append(["work_group"] + [check_list(affiliation_str, @groups_list)[0]])
-    parsing.append(["faculty"] +  [check_list(affiliation_str, @faculties_list)[0]])
-    return_list = []
-    remainder = affiliation_str
-    puts parsing.inspect
-    parsing.each do |a_result|
-      if !a_result[1].nil? and
-         !a_result[1].empty?() 
-        return_list.append(a_result)
-        remainder.sub!(a_result[1],"")
-      end
-    end
-    [return_list, remove_extra_commas(remainder)]
-  end
-  
-  def parse_org_units2(affiliation_str)
     units = {
       "department"  => @departments_list,
       "school"      => @schools_list,
@@ -434,5 +414,14 @@ class OrganisationParser
       remainder.sub!(match, '') # remove match from affiliation string
     end
     [found_units, remove_extra_commas(remainder.strip)]
+  end
+
+  def remove_returns(affi_string)
+    clean_str = affi_string.gsub("\r", " ")
+    clean_str = clean_str.gsub!("\n", " ")
+    clean_str = clean_str.gsub!("\u2005", " ")
+    clean_str = clean_str.gsub!("\u202f", " ")
+    clean_str = clean_str.squish
+    clean_str
   end
 end

@@ -149,11 +149,19 @@ class OrganisatioParserTest < ActiveSupport::TestCase
                  ["work_group", "Cardiff Catalysis Institute"]],
                 "Cardiff, Wales, UK"]
     assert @org_p.parse_org_units(splitting_this.clone) == expected
-    assert @org_p.parse_org_units2(splitting_this) == expected
+  end
+
+  test "remove returns from string" do
+    test_string = "This\u202fis a string \n with \r  different returns,   and\u2005extra   spaces"
+    expected = "This is a string with different returns, and extra spaces"
+    puts test_string.inspect
+    a_result = @org_p.remove_returns(test_string)
+    puts a_result
+    assert a_result == expected
   end
 
   test "fail parsing more than one inst in string" do
-    puts "unhandled cases?"
+    puts "unhandled/messy cases?"
     a_dir_str = "UK Catalysis Hub, Cardiff University"
     puts @org_p.parse_institutions(a_dir_str).inspect
     c_dir_str = "UK Catalysis Hub"
