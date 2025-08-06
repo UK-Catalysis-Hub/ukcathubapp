@@ -117,12 +117,17 @@ class OrganisatioParserTest < ActiveSupport::TestCase
   test "parsing organisation in string" do
     a_dir_str = "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX, UK"
     result_a = @org_p.parse_institutions(a_dir_str)
-    expected = ["UK Catalysis Hub", "Research Complex at Harwell, OX11 1XX, UK"]
-    assert result_a == expected
+    expected_a = ["UK Catalysis Hub", "Research Complex at Harwell, OX11 1XX, UK"]
+    assert result_a == expected_a
     b_dir_str = "UK Catalysis Hub, Research Complex at Harwell, Rutherford Appleton Laboratory, OX11 1XX, UK"
     result_b = @org_p.parse_institutions(b_dir_str) 
     expected = ["UK Catalysis Hub", "Research Complex at Harwell, Rutherford Appleton Laboratory, OX11 1XX, UK"]
     assert result_b == expected
-      
+    c_dir_str = "UK Catalysis Hub, RCaH, RAL, OX11 1XX, UK"
+    result_c = @org_p.parse_institutions(c_dir_str)
+    assert result_c == expected
+    c_dir_str = "UK Catalysis Hub, RCaH, OX11 1XX, UK"
+    result_c = @org_p.parse_institutions(c_dir_str)
+    assert result_c == expected_a
   end
 end

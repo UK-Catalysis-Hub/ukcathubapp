@@ -110,6 +110,8 @@ class OrganisationParser
       'Queens University Belfast' => "Queen's University Belfast",
       'Queen’s University Belfast' => "Queen's University Belfast",
       'Queen’s University of Belfast' => "Queen's University Belfast",
+      'RAL' => 'Rutherford Appleton Laboratory',
+      '(RAL)' => 'Rutherford Appleton Laboratory',
       'RCaH' => 'Research Complex at Harwell',
       'Research Complex at Harwell (RCaH)' => 'Research Complex at Harwell',
       'Réseau sur le Stockage Electrochimique de l’Energie (RS2E)' => 'Réseau sur le Stockage Électrochimique de l’Énergie (RS2E)',
@@ -293,6 +295,10 @@ class OrganisationParser
   def get_organisations
     return @organisation_list
   end
+
+  def get_organisation_synonyms
+    return @institution_synonyms
+  end
   
   def get_institutions_in_str(str, synonym_dict, institution_list)
     # Try matching with synonyms
@@ -363,7 +369,8 @@ class OrganisationParser
   end
 
   def parse_institutions(affiliation_str)
-    institutions_list = get_institutions_in_str(affiliation_str, @institution_synonyms, @organisation_list)
+    affi_clean = replace_institution_synonyms(affiliation_str)
+    institutions_list = get_institutions_in_str(affi_clean, @institution_synonyms, @organisation_list)
     host_paths = get_host_paths(institutions_list)
     longest_path = get_longest_path(host_paths)
     non_inst_items = longest_path[1..] + (institutions_list.to_set - longest_path.to_set).to_a
@@ -372,4 +379,16 @@ class OrganisationParser
     a_institution = longest_path[0]
     [a_institution, non_parsed]
   end 
+
+  # Before parsing, institution, replace synonyms
+  # and return string to parse corrected
+  def replace_institution_synonyms(affiliation_str)
+    strcpy = affiliation_str
+    @institution_synonyms.each do |synonym, original|
+      if strcpy.include?(synonym)
+        strcpy.sub!(synonym, original)
+      end
+    end
+    strcpy
+  end
 end
