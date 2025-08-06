@@ -176,8 +176,15 @@ class OrganisatioParserTest < ActiveSupport::TestCase
                 :department=>"", :faculty=>"",
                 :work_group=>"", :country=>"United Kingdom",
                 :address=>"Main Building, Park Place, Cardiff CF10 3AT"}
-
+    second_string = 'UK Catalysis Hub, Research Complex at Harwell, STFC Rutherford Appleton Laboratory, Didcot, Oxfordshire OX11 0FA, United Kingdom'
+    
     assert_equal expected, @org_p.split_single(first_string)
+    expected = {:institution=>"UK Catalysis Hub",
+                :school=>"", :department=>"", :faculty=>"",
+                :work_group=>"", :country=>"United Kingdom", 
+                :address=>"Research Complex at Harwell, Rutherford Appleton Laboratory, Science and Technology Facilities Council, Didcot, Oxfordshire OX11 0FA"}
+    assert_equal expected, @org_p.split_single(second_string)
+    
   end
 
   test "fail parsing more than one inst in string" do
