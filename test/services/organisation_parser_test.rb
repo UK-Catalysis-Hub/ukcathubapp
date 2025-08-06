@@ -154,8 +154,16 @@ class OrganisatioParserTest < ActiveSupport::TestCase
   test "remove returns from string" do
     test_string = "This\u202fis a string \n with \r  different returns,   and\u2005extra   spaces"
     expected = "This is a string with different returns, and extra spaces"
-    puts test_string.inspect
     a_result = @org_p.remove_returns(test_string)
+    assert a_result == expected
+    edge_case = " \n\r\u2005Start  clean"
+    expected = "Start clean"
+    a_result = @org_p.remove_returns(edge_case)
+    puts a_result
+    assert a_result == expected
+    edge_case = "Tom &amp; Jerry"
+    expected = "Tom & Jerry"
+    a_result = @org_p.remove_returns(edge_case)
     puts a_result
     assert a_result == expected
   end

@@ -416,12 +416,20 @@ class OrganisationParser
     [found_units, remove_extra_commas(remainder.strip)]
   end
 
-  def remove_returns(affi_string)
+  def remove_returns1(affi_string)
     clean_str = affi_string.gsub("\r", " ")
     clean_str = clean_str.gsub!("\n", " ")
     clean_str = clean_str.gsub!("\u2005", " ")
     clean_str = clean_str.gsub!("\u202f", " ")
     clean_str = clean_str.squish
     clean_str
+  end
+
+  def remove_returns(affi_string)
+    cleaned = affi_string
+      .gsub(/[\r\n\u2005\u202f\t\v]/, " ")  # Replace all annoying spacers
+      .squish                               # Collapse multiple spaces and trim
+    # Decode HTML entities
+    CGI.unescapeHTML(cleaned)
   end
 end
