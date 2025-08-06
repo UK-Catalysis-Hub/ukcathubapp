@@ -139,7 +139,19 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     result_f = @org_p.parse_institutions(f_dir_str)
     assert result_f == expected_f
   end
-  
+
+  test "parse organisational units" do
+    a_dir_str = "Cardiff Catalysis Institute, School of Chemistry, Cardiff University, Cardiff, Wales, UK"
+    inst_str, splitting_this = @org_p.parse_institutions(a_dir_str)
+    assert "Cardiff University" == inst_str
+    assert "Cardiff Catalysis Institute, School of Chemistry Cardiff, Wales, UK" == splitting_this
+    expected = [[["school", "School of Chemistry"],
+                 ["work_group", "Cardiff Catalysis Institute"]],
+                "Cardiff, Wales, UK"]
+    assert @org_p.parse_org_units(splitting_this.clone) == expected
+    assert @org_p.parse_org_units2(splitting_this) == expected
+  end
+
   test "fail parsing more than one inst in string" do
     puts "unhandled cases?"
     a_dir_str = "UK Catalysis Hub, Cardiff University"
@@ -147,4 +159,5 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     c_dir_str = "UK Catalysis Hub"
     puts @org_p.parse_institutions(c_dir_str).inspect
   end
+
 end

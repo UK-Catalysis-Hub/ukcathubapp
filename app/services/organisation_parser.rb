@@ -15,6 +15,7 @@ class OrganisationParser
     @schools_list = Affiliation.group(:school).pluck(:school)
     @departments_list = Affiliation.group(:department).pluck(:department)
     @faculties_list = Affiliation.group(:faculty).pluck(:faculty)
+    @groups_list = Affiliation.group(:work_group).pluck(:work_group)
     @cities_list = Organisation.group(:city).pluck(:city)
     @country_synonyms = {
       "UK" => "United Kingdom",
@@ -395,5 +396,43 @@ class OrganisationParser
     end
     strcpy
   end
+
+  # return a list of unit tuples and the unparsed rest of the string
+  def parse_org_units(affiliation_str)
+    parsing=[]
+    # unit, position, value, rest
+    parsing.append(["department"] + [check_list(affiliation_str, @departments_list)[0]])
+    parsing.append(["school"]+ [check_list(affiliation_str, @schools_list)[0]])
+    parsing.append(["work_group"] + [check_list(affiliation_str, @groups_list)[0]])
+    parsing.append(["faculty"] +  [check_list(affiliation_str, @faculties_list)[0]])
+    return_list = []
+    remainder = affiliation_str
+    puts parsing.inspect
+    parsing.each do |a_result|
+      if !a_result[1].nil? and
+         !a_result[1].empty?() 
+        return_list.append(a_result)
+        remainder.sub!(a_result[1],"")
+      end
+    end
+    [return_list, remove_extra_commas(remainder)]
+  end
   
+  def parse_org_units2(affiliation_str)
+    units = {
+      "department"  => @departments_list,
+      "school"      => @schools_list,
+      "work_group"  => @groups_list,
+      "faculty"     => @faculties_list
+    }
+    found_units = []
+    remainder = affiliation_str.dup
+    units.each do |unit_type, unit_list|
+      match = check_list(affiliation_str, unit_list)[0]
+      next unless match && !match.empty?
+      found_units << [unit_type, match]
+      remainder.sub!(match, '') # remove match from affiliation string
+    end
+    [found_units, remove_extra_commas(remainder.strip)]
+  end
 end

@@ -1,21 +1,32 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  institution: MyString
-  department: MyString
-  faculty: MyString
-  school: MyString
-  work_group: MyString
-  country: MyString
-  sector: MyString
+  institution: "Cardiff University"
+  department: ""
+  faculty: "College of Physical Sciences and Engineering"
+  school: "School of Chemistry"
+  work_group: "Cardiff Catalysis Institute"
+  country: "United Kingdom"
+  sector: "Academia"
   organisation: 1
 
 two:
-  institution: MyString
-  department: MyString
-  faculty: MyString
-  school: MyString
-  work_group: MyString
-  country: MyString
-  sector: MyString
-  organisation: 2
+  institution: "Cardiff University"
+  department: ""
+  faculty: "College of Physical Sciences and Engineering"
+  school: "School of Chemistry"
+  work_group: ""
+  country: "United Kingdom"
+  sector: "Academia"
+  organisation: 1
+
+three:
+  institution: "Cardiff University"
+  department: ""
+  faculty: "College of Physical Sciences and Engineering"
+  school: "School of Computer Science and Informatics"
+  work_group: ""
+  country: "United Kingdom"
+  sector: "Academia"
+  organisation: 1
+
