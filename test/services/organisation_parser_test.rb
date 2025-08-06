@@ -143,7 +143,7 @@ class OrganisatioParserTest < ActiveSupport::TestCase
   test "parse organisational units" do
     a_dir_str = "Cardiff Catalysis Institute, School of Chemistry, Cardiff University, Cardiff, Wales, UK"
     inst_str, splitting_this = @org_p.parse_institutions(a_dir_str)
-    assert "Cardiff University" == inst_str
+    assert_equal inst_str, "Cardiff University"
     assert "Cardiff Catalysis Institute, School of Chemistry Cardiff, Wales, UK" == splitting_this
     expected = [[["school", "School of Chemistry"],
                  ["work_group", "Cardiff Catalysis Institute"]],
@@ -154,18 +154,30 @@ class OrganisatioParserTest < ActiveSupport::TestCase
   test "remove returns from string" do
     test_string = "This\u202fis a string \n with \r  different returns,   and\u2005extra   spaces"
     expected = "This is a string with different returns, and extra spaces"
-    a_result = @org_p.remove_returns(test_string)
-    assert a_result == expected
+    a_result = @org_p.clean_address_string(test_string)
+    assert_equal expected, a_result
     edge_case = " \n\r\u2005Start  clean"
     expected = "Start clean"
-    a_result = @org_p.remove_returns(edge_case)
-    puts a_result
-    assert a_result == expected
-    edge_case = "Tom &amp; Jerry"
+    a_result = @org_p.clean_address_string(edge_case)
+    assert_equal expected, a_result
+    edge_case = "\t\rTom &amp; Jerry"
     expected = "Tom & Jerry"
-    a_result = @org_p.remove_returns(edge_case)
-    puts a_result
-    assert a_result == expected
+    a_result = @org_p.clean_address_string(edge_case)
+    assert_equal expected, a_result
+    test_string = "O''Reilly lives &amp; works at&nbsp;123\u2005Main\rSt.\n"
+    expected = "O'Reilly lives & works at 123 Main St."
+    assert_equal expected, @org_p.clean_address_string(test_string)
+  end
+
+  test "testing single line affiliations" do
+    first_string = 'School of Chemistry, Cardiff University, Main Building, Park Place, Cardiff CF10 3AT, United Kingdom'
+    expected = {:institution=>"Cardiff University",
+                :school=>"School of Chemistry",
+                :department=>"", :faculty=>"",
+                :work_group=>"", :country=>"United Kingdom",
+                :address=>"Main Building, Park Place, Cardiff CF10 3AT"}
+
+    assert_equal expected, @org_p.split_single(first_string)
   end
 
   test "fail parsing more than one inst in string" do

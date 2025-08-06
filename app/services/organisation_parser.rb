@@ -416,20 +416,60 @@ class OrganisationParser
     [found_units, remove_extra_commas(remainder.strip)]
   end
 
-  def remove_returns1(affi_string)
-    clean_str = affi_string.gsub("\r", " ")
-    clean_str = clean_str.gsub!("\n", " ")
-    clean_str = clean_str.gsub!("\u2005", " ")
-    clean_str = clean_str.gsub!("\u202f", " ")
-    clean_str = clean_str.squish
-    clean_str
+  def clean_address_string(affi_string)
+    cleaned = affi_string
+      .gsub(/[\r\n\u2005\u202f\t\v]/, " ")  # Remove control characters
+      .gsub(/''/, "'")                      # Fix SQL apostrophes
+      .gsub(/[‘’]/, "'")                    # Normalize curly apostrophes
+      .gsub(/[“”]/, '"')                    # Normalize curly quotes
+      .gsub("&nbsp;", " ")                  # this one is not cleaned by CGI
+      .squish                               # Clean up whitespace
+    cleaned = CGI.unescapeHTML(cleaned)
+    CGI.unescapeHTML(cleaned)
   end
 
-  def remove_returns(affi_string)
-    cleaned = affi_string
-      .gsub(/[\r\n\u2005\u202f\t\v]/, " ")  # Replace all annoying spacers
-      .squish                               # Collapse multiple spaces and trim
-    # Decode HTML entities
-    CGI.unescapeHTML(cleaned)
+  # split single line affiliation strings
+  def split_single(affiliation_str)
+    # affiliation parts missing city and province
+    inst_str = dept_str = faculty_str = group_str = ctry_str = school_str = ""
+    splitting_this = clean_address_string(affiliation_str)
+
+    # get institution using institution and institution synonyms list
+    inst_str, splitting_this = parse_institutions(splitting_this)
+
+    # get organitation units as
+    # [list of units, remainder]
+    list_of_units, remainder = parse_org_units(splitting_this)
+    list_of_units.each do |a_unit, a_value|
+      case a_unit
+        when 'department'
+          dept_str = a_value
+        when 'school'
+          school_str = a_value
+        when 'work_group'
+          group_str = a_value
+        when 'faculty'
+          faculty_str = a_value
+      end
+    end
+    splitting_this = remainder
+    # lookup using Country Synonyms table
+    # need to remove country exceptions first
+    # should also handle region/state and city here
+    ctry_str, splitting_this = self.parse_countries(splitting_this)
+##        ctry_str, splitting_this = self.str_has_synonym(splitting_this, self.country_synonyms)
+##        #  lookup using Countries list
+##        if ctry_str == "":
+##            ctry_str, splitting_this = self.check_list(splitting_this, self.countries_list)
+
+    splitting_this = self.remove_extra_commas(splitting_this)
+
+    return_parsed = {'institution': inst_str, 'school': school_str,
+                     'department': dept_str, 'faculty': faculty_str,
+                     'work_group': group_str, 'country': ctry_str,
+                     'address':  splitting_this}
+    # use this to eliminate empties
+    # return_parsed = {k:v for k,v in return_parsed.items() if v != ''}
+    return return_parsed
   end
 end
