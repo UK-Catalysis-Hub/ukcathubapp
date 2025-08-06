@@ -126,8 +126,25 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     c_dir_str = "UK Catalysis Hub, RCaH, RAL, OX11 1XX, UK"
     result_c = @org_p.parse_institutions(c_dir_str)
     assert result_c == expected
-    c_dir_str = "UK Catalysis Hub, RCaH, OX11 1XX, UK"
-    result_c = @org_p.parse_institutions(c_dir_str)
-    assert result_c == expected_a
+    d_dir_str = "UK Catalysis Hub, RCaH, STFC OX11 1XX, UK"
+    result_d = @org_p.parse_institutions(d_dir_str)
+    expected_d = ["UK Catalysis Hub", "Research Complex at Harwell, Science and Technology Facilities Council OX11 1XX, UK"]
+    assert result_d == expected_d
+    e_dir_str = "UK Catalysis Hub, Harwell, OX11 1XX, UK"
+    expected_e = ["UK Catalysis Hub", "Harwell, OX11 1XX, UK"]
+    result_e = @org_p.parse_institutions(e_dir_str)
+    assert result_e == expected_e
+    f_dir_str = "UK Catalysis Hub"
+    expected_f = ["UK Catalysis Hub", ""]
+    result_f = @org_p.parse_institutions(f_dir_str)
+    assert result_f == expected_f
+  end
+  
+  test "fail parsing more than one inst in string" do
+    puts "unhandled cases?"
+    a_dir_str = "UK Catalysis Hub, Cardiff University"
+    puts @org_p.parse_institutions(a_dir_str).inspect
+    c_dir_str = "UK Catalysis Hub"
+    puts @org_p.parse_institutions(c_dir_str).inspect
   end
 end

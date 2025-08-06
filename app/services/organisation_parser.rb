@@ -310,7 +310,8 @@ class OrganisationParser
     
     # Recursive step
     if institution.to_s.empty?
-      [remove_extra_commas(remainder.strip)]
+      non_inst = remove_extra_commas(remainder.strip)
+      [non_inst]
     else
       new_reminder =  get_institutions_in_str(remainder.strip, synonym_dict, institution_list)
       [institution] + new_reminder
@@ -372,12 +373,15 @@ class OrganisationParser
     affi_clean = replace_institution_synonyms(affiliation_str)
     institutions_list = get_institutions_in_str(affi_clean, @institution_synonyms, @organisation_list)
     host_paths = get_host_paths(institutions_list)
-    longest_path = get_longest_path(host_paths)
-    non_inst_items = longest_path[1..] + (institutions_list.to_set - longest_path.to_set).to_a
-    
-    non_parsed = non_inst_items.join(", ")
-    a_institution = longest_path[0]
-    [a_institution, non_parsed]
+    if host_paths != []
+      longest_path = get_longest_path(host_paths)
+      non_inst_items = longest_path[1..] + (institutions_list.to_set - longest_path.to_set).to_a
+      non_parsed = non_inst_items.join(", ") unless non_inst_items == []
+      a_institution = longest_path[0]
+      [a_institution, non_parsed]
+    else
+      institutions_list
+    end
   end 
 
   # Before parsing, institution, replace synonyms
@@ -391,4 +395,5 @@ class OrganisationParser
     end
     strcpy
   end
+  
 end
