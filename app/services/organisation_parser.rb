@@ -254,12 +254,24 @@ class OrganisationParser
 
   # Check the if any of the values in the list is in the given string
   def check_list(a_string, a_list)
-    longest = a_list.select do |word|
-      a_string.match?(/\b#{Regexp.escape(word)}\b/u)
-    end.max_by(&:length)
+    return ["", ""] if a_string.nil? || a_list.nil?
 
-    cleaned = longest ? a_string.gsub(/\b#{Regexp.escape(longest)}\b/ui, "") : a_string
-    [longest.to_s, cleaned]
+    # Find all words from the list that match the string
+    matching_words = a_list.select do |word|
+      a_string.match?(/\b#{Regexp.escape(word)}\b/u)
+    end
+
+    # Choose the longest matching word
+    longest_match = matching_words.max_by(&:length)
+
+    # Remove the longest match from the original string
+    if !longest_match.nil? and !longest_match.empty?
+      cleaned_string = a_string.gsub(/\b#{Regexp.escape(longest_match)}\b/ui, "")
+    else
+       longest_match = ""
+       cleaned_string = a_string
+    end
+    [longest_match, cleaned_string]
   end
 
   # verify if the string has some of the synomyms in the provided synonym table
@@ -302,20 +314,20 @@ class OrganisationParser
   end
   
   def get_institutions_in_str(str, synonym_dict, institution_list)
-    # Try matching with synonyms
     institution, remainder = str_has_synonym(str, synonym_dict)
-    # If no synonym match, try the institution list
+
     if institution.to_s.empty?
       institution, remainder = check_list(str, institution_list)
     end
-    
-    # Recursive step
+
     if institution.to_s.empty?
       non_inst = remove_extra_commas(remainder.strip)
-      [non_inst]
+      return ["", non_inst]
     else
-      new_reminder =  get_institutions_in_str(remainder.strip, synonym_dict, institution_list)
-      [institution] + new_reminder
+      result = get_institutions_in_str(remainder.strip, synonym_dict, institution_list)
+      # If result starts with "", remove it
+      result.shift if result.first == ""
+      return [institution] + result
     end
   end
 
@@ -383,7 +395,7 @@ class OrganisationParser
     else
       institutions_list
     end
-  end 
+  end
 
   # Before parsing, institution, replace synonyms
   # and return string to parse corrected
@@ -413,7 +425,8 @@ class OrganisationParser
       found_units << [unit_type, match]
       remainder.sub!(match, '') # remove match from affiliation string
     end
-    [found_units, remove_extra_commas(remainder.strip)]
+
+    [found_units, (remainder.nil? || remainder.empty?)? "" : remove_extra_commas(remainder.strip)]
   end
 
   def clean_address_string(affi_string)
@@ -436,7 +449,6 @@ class OrganisationParser
 
     # get institution using institution and institution synonyms list
     inst_str, splitting_this = parse_institutions(splitting_this)
-
     # get organitation units as
     # [list of units, remainder]
     list_of_units, remainder = parse_org_units(splitting_this)

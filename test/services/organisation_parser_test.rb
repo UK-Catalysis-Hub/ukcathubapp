@@ -49,7 +49,8 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     b_list = ['words', 'these', 'list']
     r_a = @org_p.check_list(a_string, a_list)
     r_b = @org_p.check_list(a_string, b_list)
-    assert r_a[0] == "" and r_a[1] == "words in this string"
+    assert_equal "", r_a[0]
+    assert_equal "words in this string", r_a[1]
     assert r_b[0] == "words" and r_b[1] == " in this string"
   end
 
@@ -80,9 +81,9 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     a_res = @org_p.get_institutions_in_str(a_dir_str,
                                            @org_p.get_institution_synonyms,
                                            organisations_list)
-    assert ["Rutherford Appleton Laboratory",
+    assert_equal ["Rutherford Appleton Laboratory",
             "Research Complex at Harwell",
-            "UK Catalysis Hub", "Harwell, UK"] == a_res
+            "UK Catalysis Hub", "Harwell, UK"], a_res
     organisations_list += ["STFC"]
     b_dir_str = "UK Catalysis Hub, Research Complex at Harwell,\
                  Rutherford Appleton Laboratory, STFC, Harwell, OX11 1XX, UK"
@@ -94,6 +95,12 @@ class OrganisatioParserTest < ActiveSupport::TestCase
             "Rutherford Appleton Laboratory",
             "Research Complex at Harwell",
             "UK Catalysis Hub", "Harwell, OX11 1XX, UK"] == b_res
+    # test no inst in str:
+    c_dir_str = "School of Chemistry"
+    c_res = @org_p.get_institutions_in_str(c_dir_str,
+                                           @org_p.get_institution_synonyms,
+                                           organisations_list)
+    assert_equal ["", "School of Chemistry"],  c_res
   end
 
   test "Checking for country exceptions" do
@@ -148,7 +155,7 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     expected = [[["school", "School of Chemistry"],
                  ["work_group", "Cardiff Catalysis Institute"]],
                 "Cardiff, Wales, UK"]
-    assert @org_p.parse_org_units(splitting_this.clone) == expected
+    assert_equal expected, @org_p.parse_org_units(splitting_this.clone)
   end
 
   test "remove returns from string" do
@@ -184,7 +191,11 @@ class OrganisatioParserTest < ActiveSupport::TestCase
                 :work_group=>"", :country=>"United Kingdom", 
                 :address=>"Research Complex at Harwell, Rutherford Appleton Laboratory, Science and Technology Facilities Council, Didcot, Oxfordshire OX11 0FA"}
     assert_equal expected, @org_p.split_single(second_string)
-    
+    third_str = "School of Chemistry"
+    expected = {:institution=>"", :school=>"School of Chemistry",
+                :department=>"", :faculty=>"", :work_group=>"",
+                :country=>"", :address=>""}
+    assert_equal expected, @org_p.split_single(third_str)
   end
 
   test "fail parsing more than one inst in string" do
@@ -193,6 +204,8 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     puts @org_p.parse_institutions(a_dir_str).inspect
     c_dir_str = "UK Catalysis Hub"
     puts @org_p.parse_institutions(c_dir_str).inspect
+    d_dir_str = "School of Chemistry"
+    puts @org_p.parse_institutions(d_dir_str).inspect
   end
 
 end
