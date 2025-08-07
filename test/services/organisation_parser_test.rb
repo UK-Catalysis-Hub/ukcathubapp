@@ -225,7 +225,7 @@ class OrganisatioParserTest < ActiveSupport::TestCase
          :department=>"", :faculty=>"", :work_group=>"",
          :country=>"United Kingdom",
          :address=>"Main Building, Park Place, Cardiff CF10 3AT"}, [1,2,3]]]
-    result_first = @org_p.parse_and_map_multiline2(affiliation_lines)
+    result_first = @org_p.parse_and_map_multiline(affiliation_lines)
     assert_equal first_expected, result_first
     second_lines = [
          [1,'UK Catalysis Hub'], [2,'Research Complex at Harwell'],
@@ -235,7 +235,7 @@ class OrganisatioParserTest < ActiveSupport::TestCase
         {:institution=>"UK Catalysis Hub", :school=>"", :department=>"",
          :faculty=>"", :work_group=>"", :country=>"United Kingdom", 
          :address=>"Research Complex at Harwell, Rutherford Appleton Laboratory, Science and Technology Facilities Council, Didcot, Oxfordshire OX11 0FA"}, [1, 2, 3, 4]]]
-    second_result = @org_p.parse_and_map_multiline2(second_lines)
+    second_result = @org_p.parse_and_map_multiline(second_lines)
     assert_equal second_expected, second_result
   end
 

@@ -491,7 +491,7 @@ class OrganisationParser
   end
 
   # this will parse cr_affis, calling split_single to help
-  def parse_and_map_multiline2(affi_list)
+  def parse_and_map_multiline(affi_list)
     return_parsed = []
     cr_ids =[]
     parsed_affi = { }
