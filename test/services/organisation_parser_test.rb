@@ -198,6 +198,24 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     assert_equal expected, @org_p.split_single(third_str)
   end
 
+  test "map and parse singles affi in line" do
+    first_string = 'School of Chemistry, Cardiff University, Main Building, Park Place, Cardiff CF10 3AT, United Kingdom'
+    second_string = 'UK Catalysis Hub, Research Complex at Harwell, STFC Rutherford Appleton Laboratory, Didcot, Oxfordshire OX11 0FA, United Kingdom'
+    first_expected = [
+        {:institution=>"Cardiff University", :school=>"School of Chemistry",
+         :department=>"", :faculty=>"", :work_group=>"",
+         :country=>"United Kingdom",
+         :address=>"Main Building, Park Place, Cardiff CF10 3AT"}, [1]]
+    second_expected = [
+        {:institution=>"UK Catalysis Hub", :school=>"", :department=>"",
+         :faculty=>"", :work_group=>"", :country=>"United Kingdom",
+         :address=>"Research Complex at Harwell, Rutherford Appleton Laboratory, Science and Technology Facilities Council, Didcot, Oxfordshire OX11 0FA"}, [2]]
+    first_result = @org_p.parse_and_map_single([1, first_string])
+    second_result = @org_p.parse_and_map_single([2, second_string])
+    assert_equal first_expected, first_result
+    assert_equal second_expected, second_result
+  end
+
   test "fail parsing more than one inst in string" do
     puts "unhandled/messy cases?"
     a_dir_str = "UK Catalysis Hub, Cardiff University"

@@ -484,4 +484,51 @@ class OrganisationParser
     # return_parsed = {k:v for k,v in return_parsed.items() if v != ''}
     return return_parsed
   end
+
+  def parse_and_map_single(single_affi)
+    sl_elements = self.split_single(single_affi[1])
+    [sl_elements, [single_affi[0]]]
+  end
+
+  # this will parse cr_affis, calling split_single to help
+  def parse_and_map_multiline(affi_list)
+    return_parsed = []
+    cr_ids =[]
+    parsed_affi = { }
+    affi_list.each do |a_line|
+      sl_elements = split_single(a_line[1])
+      puts("Parsed:  #{a_line.inspect} as:\n\t #{sl_elements.inspect}")
+      # add the id to the list of parsed lines
+      cr_ids.append(a_line[0])
+      if parsed_affi == {}
+        parsed_affi = sl_elements
+      else
+        sl_elements_no_blanks = sl_elements.compact_blank()
+        sl_keys = sl_elements_no_blanks.keys
+        sl_keys.each do |a_key|
+          if parsed_affi[a_key] == ''
+            parsed_affi[a_key] = sl_elements_no_blanks[a_key]
+          elsif parsed_affi[a_key] != '' and a_key == 'address'
+            parsed_affi[a_key] += ", " + sl_elements_no_blanks[a_key]
+          elsif parsed_affi[a_key] != '' and a_key == 'institution'
+            if self.is_hosted(parsed_affi[a_key], sl_elements_no_blanks[a_key])
+              parsed_affi["address"] += ", " + sl_elements_no_blanks[a_key]
+            else
+              cr_ids.pop()
+              return_parsed.append([parsed_affi, cr_ids])
+              cr_ids = [a_line[0]]
+              parsed_affi = sl_elements
+            end
+          else
+            # Anything left, add it to the address (at the front)
+            parsed_affi["address"] = sl_elements_no_blanks[a_key] + ", " + parsed_affi["address"]
+            #print("Built:", parsed_affi)
+          end
+        end
+      end
+    end
+    return_parsed.append([parsed_affi, cr_ids])
+    return_parsed
+  end
+
 end
