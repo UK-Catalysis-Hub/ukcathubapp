@@ -202,10 +202,7 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     puts "unhandled/messy cases?"
     a_dir_str = "UK Catalysis Hub, Cardiff University"
     puts @org_p.parse_institutions(a_dir_str).inspect
-    c_dir_str = "UK Catalysis Hub"
-    puts @org_p.parse_institutions(c_dir_str).inspect
-    d_dir_str = "School of Chemistry"
-    puts @org_p.parse_institutions(d_dir_str).inspect
+    puts @org_p.split_single(a_dir_str).inspect
   end
 
 end
