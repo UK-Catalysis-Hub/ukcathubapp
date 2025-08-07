@@ -216,6 +216,29 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     assert_equal second_expected, second_result
   end
 
+  test "parse multiline" do
+    affiliation_lines = [
+         [1, 'School of Chemistry'],[2, 'Cardiff University'],
+         [3, 'Main Building, Park Place, Cardiff CF10 3AT, United Kingdom']]
+    first_expected = [[
+        {:institution=>"Cardiff University", :school=>"School of Chemistry",
+         :department=>"", :faculty=>"", :work_group=>"",
+         :country=>"United Kingdom",
+         :address=>"Main Building, Park Place, Cardiff CF10 3AT"}, [1,2,3]]]
+    result_first = @org_p.parse_and_map_multiline2(affiliation_lines)
+    assert_equal first_expected, result_first
+    second_lines = [
+         [1,'UK Catalysis Hub'], [2,'Research Complex at Harwell'],
+         [3, 'STFC Rutherford Appleton Laboratory'],
+         [4,'Didcot, Oxfordshire OX11 0FA, United Kingdom']]
+    second_expected = [[
+        {:institution=>"UK Catalysis Hub", :school=>"", :department=>"",
+         :faculty=>"", :work_group=>"", :country=>"United Kingdom", 
+         :address=>"Research Complex at Harwell, Rutherford Appleton Laboratory, Science and Technology Facilities Council, Didcot, Oxfordshire OX11 0FA"}, [1, 2, 3, 4]]]
+    second_result = @org_p.parse_and_map_multiline2(second_lines)
+    assert_equal second_expected, second_result
+  end
+
   test "fail parsing more than one inst in string" do
     puts "unhandled/messy cases?"
     a_dir_str = "UK Catalysis Hub, Cardiff University"
