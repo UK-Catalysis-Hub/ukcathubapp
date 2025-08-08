@@ -183,13 +183,13 @@ class OrganisatioParserTest < ActiveSupport::TestCase
                 :department=>"", :faculty=>"",
                 :work_group=>"", :country=>"United Kingdom",
                 :address=>"Main Building, Park Place, Cardiff CF10 3AT"}
-    second_string = 'UK Catalysis Hub, Research Complex at Harwell, STFC Rutherford Appleton Laboratory, Didcot, Oxfordshire OX11 0FA, United Kingdom'
+    second_string = 'UK Catalysis Hub, Research Complex at Harwell, Rutherford Appleton Laboratory, Didcot, Oxfordshire OX11 0FA, United Kingdom'
     
     assert_equal expected, @org_p.split_single(first_string)
     expected = {:institution=>"UK Catalysis Hub",
                 :school=>"", :department=>"", :faculty=>"",
                 :work_group=>"", :country=>"United Kingdom", 
-                :address=>"Research Complex at Harwell, Rutherford Appleton Laboratory, Science and Technology Facilities Council, Didcot, Oxfordshire OX11 0FA"}
+                :address=>"Research Complex at Harwell, Rutherford Appleton Laboratory, Didcot, Oxfordshire OX11 0FA"}
     assert_equal expected, @org_p.split_single(second_string)
     third_str = "School of Chemistry"
     expected = {:institution=>"", :school=>"School of Chemistry",
@@ -229,14 +229,18 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     assert_equal first_expected, result_first
     second_lines = [
          [1,'UK Catalysis Hub'], [2,'Research Complex at Harwell'],
-         [3, 'STFC Rutherford Appleton Laboratory'],
+         [3, 'Rutherford Appleton Laboratory'],
          [4,'Didcot, Oxfordshire OX11 0FA, United Kingdom']]
     second_expected = [[
         {:institution=>"UK Catalysis Hub", :school=>"", :department=>"",
          :faculty=>"", :work_group=>"", :country=>"United Kingdom", 
-         :address=>"Research Complex at Harwell, Rutherford Appleton Laboratory, Science and Technology Facilities Council, Didcot, Oxfordshire OX11 0FA"}, [1, 2, 3, 4]]]
+         :address=>"Research Complex at Harwell, Rutherford Appleton Laboratory, Didcot, Oxfordshire OX11 0FA"}, [1, 2, 3, 4]]]
     second_result = @org_p.parse_and_map_multiline(second_lines)
     assert_equal second_expected, second_result
+    third_lines = [
+         [15, 'School of Chemistry, Cardiff University, Main Building, Park Place, Cardiff CF10 3AT, United Kingdom'],
+         [25, 'UK Catalysis Hub, Research Complex at Harwell, STFC Rutherford Appleton Laboratory, Didcot, Oxfordshire OX11 0FA, United Kingdom']]
+    puts @org_p.parse_and_map_multiline(third_lines).inspect
   end
 
   test "fail parsing more than one inst in string" do

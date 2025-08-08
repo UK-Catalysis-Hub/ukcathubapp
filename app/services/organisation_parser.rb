@@ -166,10 +166,20 @@ class OrganisationParser
       "UK Catalysis Hub" => "Research Complex at Harwell",
       "HarwellXPS" => "Research Complex at Harwell",
       "Research Complex at Harwell" => "Rutherford Appleton Laboratory",
-      "ISIS Neutron and Muon Source" => "Science and Technology Facilities Council",      
+      "Rutherford Appleton Laboratory" => "Science and Technology Facilities Council",
+      "ISIS Neutron and Muon Source" => "Science and Technology Facilities Council",
       "Institute of Materials Research and Engineering" => "Agency for Science, Technology and Research",
       "SuperSTEM Laboratory" => "SciTech Daresbury",
       "SciTech Daresbury" => "Science and Technology Facilities Council"
+   }
+
+    @inst_host_map= { 
+      "Research Complex at Harwell"=>["UK Catalysis Hub","HarwellXPS"],
+      "Rutherford Appleton Laboratory"=>["Research Complex at Harwell","ISIS Neutron and Muon Source"],
+      "Science and Technology Facilities Council"=> ["Rutherford Appleton Laboratory", "Daresbury Laboratory"],
+      "Agency for Science, Technology and Research" => ["Institute of Materials Research and Engineering"],
+      "SciTech Daresbury" => ["SuperSTEM Laboratory"],
+      "Daresbury Laboratory" => ["SciTech Daresbury"]
    }
 
    @country_exceptions = [
@@ -236,6 +246,40 @@ class OrganisationParser
       end
     end
 
+    paths
+  end
+
+  def has_hosting_path?(start_host, target_hosted, visited = Set.new)
+    return false if !@inst_host_map.keys.include?(start_host)
+    return false if visited.include?(start_host)
+    visited.add(start_host)
+
+    return true if @inst_host_map[start_host].include?(target_hosted)
+
+    @inst_host_map[start_host].each do |intermediate|
+      return true if has_hosting_path?(intermediate, target_hosted, visited)
+    end
+
+    false
+  end
+
+  def build_partial_paths2(org, host_map, visited = [])
+    return [] if visited.include?(org)
+    visited << org
+    paths = []
+
+    if host_map[org]
+      host_map[org].each do |host|
+        sub_paths = build_partial_paths(host, host_map, visited.dup)
+        if sub_paths.empty?
+          paths << [host, org]
+        else
+          sub_paths.each do |sub_path|
+            paths << sub_path + [org]
+          end
+        end
+      end
+    end
     paths
   end
 
@@ -494,37 +538,55 @@ class OrganisationParser
   def parse_and_map_multiline(affi_list)
     return_parsed = []
     cr_ids =[]
+    tmp_hosted = []
     parsed_affi = { }
     affi_list.each do |a_line|
       sl_elements = split_single(a_line[1])
       #puts("Parsed:  #{a_line.inspect} as:\n\t #{sl_elements.inspect}")
       # add the id to the list of parsed lines
+      puts "* Parsing: #{a_line[0]}"
       cr_ids.append(a_line[0])
       if parsed_affi == {}
         parsed_affi = sl_elements
       else
         sl_elements_no_blanks = sl_elements.compact_blank()
+        puts "* Parsed non blanks #{sl_elements_no_blanks.inspect}"
         sl_elements_no_blanks.each do |key, value|
           case key
-          when 'address'
-            parsed_affi['address'] = [value, parsed_affi['address']].compact_blank.join(', ')
-          when 'institution'
-            if parsed_affi['institution'].present?
-              if self.is_hosted(parsed_affi['institution'], value)
-                parsed_affi['address'] = [parsed_affi['address'], value].compact_blank.join(', ')
+          when :address
+            puts "adding the address #{value}, tmp_hosted #{tmp_hosted.inspect}"
+            parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ')
+          when :institution
+            if parsed_affi[:institution].present?
+              puts "* Assigned institution #{parsed_affi[:institution].inspect}"
+              #if is_hosted(parsed_affi[:institution], value) or 
+              if has_hosting_path?(parsed_affi[:institution], value) or
+                 has_hosting_path?(value, parsed_affi[:institution])
+                puts "This is hosted test k: #{key} v: #{value} in #{parsed_affi[:institution]}"
+                puts "These host_paths #{get_host_paths([parsed_affi[:institution], value])}"
+                puts "is added to #{parsed_affi[:address]}"
+                tmp_hosted.append(value)
+                parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ')
               else
+                puts "This fails is hosted test k: #{key} v: #{value} in #{parsed_affi[:institution]}"
+                if !tmp_hosted.empty?
+                  #parsed_affi[:address] = (tmp_hosted + parsed_affi[:address]).compact_blank.join(', ')
+                  tmp_hosted = []
+                end
+                cr_ids.pop
                 return_parsed << [parsed_affi, cr_ids]
                 cr_ids = [a_line[0]]
                 parsed_affi = sl_elements_no_blanks
-                next
               end
             else
-              parsed_affi['institution'] = value
+              puts "* This is the main institution #{value}"
+              parsed_affi[:institution] = value
             end
           else
             if parsed_affi[key].blank?
               parsed_affi[key] = value
             else
+              puts "* This #{key} with val: #{value} as address"
               parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ')
             end
           end
