@@ -555,7 +555,7 @@ class OrganisationParser
           case key
           when :address
             puts "adding the address #{value}, tmp_hosted #{tmp_hosted.inspect}"
-            parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ')
+            parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ') if parsed_affi[:address] != value
           when :institution
             if parsed_affi[:institution].present?
               puts "* Assigned institution #{parsed_affi[:institution].inspect}"
@@ -576,6 +576,7 @@ class OrganisationParser
                 cr_ids.pop
                 return_parsed << [parsed_affi, cr_ids]
                 cr_ids = [a_line[0]]
+                puts "= will parse #{sl_elements_no_blanks}"
                 parsed_affi = sl_elements_no_blanks
               end
             else
@@ -587,7 +588,7 @@ class OrganisationParser
               parsed_affi[key] = value
             else
               puts "* This #{key} with val: #{value} as address"
-              parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ')
+              parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ') unless parsed_affi[key] == value
             end
           end
         end
