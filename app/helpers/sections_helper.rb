@@ -8,10 +8,6 @@ module SectionsHelper
     Section.where("obj_name='Authors'")[0]
   end
 
-  def get_affiliation_section
-    Section.where("obj_name='Affiliations'")[0]
-  end
-
   def get_theme_section
     Section.where("obj_name='Themes'")[0]
   end

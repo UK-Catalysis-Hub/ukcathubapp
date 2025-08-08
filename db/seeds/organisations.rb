@@ -2853,3 +2853,917 @@ organisation.affiliations.create!({"institution"=>"Åbo Akademi University", "de
 organisation = Organisation.create!({"name"=>"École Polytechnique Fédérale de Lausanne", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Switzerland", "city"=>nil, "sector"=>"Academia", "region"=>nil})
 organisation.affiliations.create!({"institution"=>"École Polytechnique Fédérale de Lausanne", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Theory and Simulation of Materials (THEOS)", "country"=>"Switzerland", "sector"=>"Academia"})
 
+organisation = Organisation.create!({"name"=>"UK Catalysis Hub", "short_name"=>"UKCH", "identifier"=>nil, "logo"=>"https://www.rc-harwell.ac.uk/sites/default/files/2023-02/UK%20Catalysis%20Hub%20logo.png", "homepage"=>"https://ukcatalysishub.co.uk/", "address_id"=>570, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Research Facility", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"UK Catalysis Hub", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+organisation.affiliations.create!({"institution"=>"UK Catalysis Hub", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+organisation.affiliations.create!({"institution"=>"UK Catalysis Hub", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"ASML", "short_name"=>"", "identifier"=>"", "logo"=>"", "homepage"=>"", "address_id"=>nil, "country"=>"The Netherlands", "city"=>"Veldhoven", "sector"=>"Industry", "region"=>"North Brabant"})
+organisation.affiliations.create!({"institution"=>"ASML", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"The Netherlands", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Aarhus University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Denmark", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Aarhus University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Denmark", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Aarhus University", "department"=>"Department of Physics and Astronomy", "faculty"=>"", "school"=>"", "work_group"=>"Interdisciplinary Nanoscience Center (iNANO)", "country"=>"Denmark", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Aarhus University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Center for Materials Crystallography", "country"=>"Denmark", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Aarhus University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Interdisciplinary Nanoscience Center (iNANO)", "country"=>"Denmark", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Academy of Scientific and Innovative Research (AcSIR)", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Academy of Scientific and Innovative Research (AcSIR)", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"India", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Advanced Photon Source Argonne National Laboratory", "short_name"=>"APS", "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Advanced Photon Source Argonne National Laboratory", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Agency for Science, Technology and Research", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Singapore", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Agency for Science, Technology and Research", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute of Materials Research and Engineering (IMRE)", "country"=>"Singapore", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Agency for Science, Technology and Research", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Singapore", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Agency for Science, Technology and Research", "department"=>"", "faculty"=>"", "school"=>"College of Chemistry", "work_group"=>"", "country"=>"Singapore", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Aston University", "short_name"=>nil, "identifier"=>nil, "logo"=>"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/AU_Birmingham_logo_Purple_RGB.png/250px-AU_Birmingham_logo_Purple_RGB.png", "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Birmingham", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Aston University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"European Bioenergy Research Institute", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Aston University", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"AstraZeneca", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"London", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"AstraZeneca", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Global Environment", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Beijing Forestry University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Beijing Forestry University", "department"=>"", "faculty"=>"", "school"=>"College of Environmental Science and Engineering", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Beijing University of Chemical Technology", "short_name"=>"", "identifier"=>"", "logo"=>"", "homepage"=>"", "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Beijing University of Chemical Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"State Key Laboratory of Chemical Engineering", "country"=>"Peoples Republic of China", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Bio Nano Consulting Ltd", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"London", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Bio Nano Consulting Ltd", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Bio-Prodict", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"The Netherlands", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Bio-Prodict", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"The Netherlands", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Boreskov Institute of Catalysis SB RAS", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Russia", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Boreskov Institute of Catalysis SB RAS", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Russia", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Brookhaven National Laboratory", "short_name"=>"BNL", "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Brookhaven National Laboratory", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"CSIR-Indian Institute of Chemical Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"CSIR-Indian Institute of Chemical Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Catalysis & Fine Chemicals Division", "country"=>"India", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"CSIR-National Chemical Laboratory", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"CSIR-National Chemical Laboratory", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Catalysis and Inorganic Chemistry Division", "country"=>"India", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"CSIRO Manufacturing", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Australia", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"CSIRO Manufacturing", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Australia", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Cardiff University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Cardiff", "sector"=>"Academia", "region"=>"Wales"})
+organisation.affiliations.create!({"institution"=>"Cardiff University", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"Cardiff Catalysis Institute", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Cardiff University", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"EPSRC Centre for Doctoral Training in Catalysis", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Cardiff University", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Cardiff University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Cardiff University", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"Catalysis Institute", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Cardiff University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Cardiff Catalysis Institute", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Carnegie Mellon University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Carnegie Mellon University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Institute for Green Science", "country"=>"United States of America", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Catalytic Innovations", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Catalytic Innovations", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Central Laser Facility", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Research Facility", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Central Laser Facility", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Chennai Institute of Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Chennai Institute of Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Center for Nanoscience and Technology", "country"=>"India", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Chiang Mai University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Thailand", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Chiang Mai University", "department"=>"Department of Chemistry", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"Centre of Excellence in Materials Science and Technology", "country"=>"Thailand", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Chiang Mai University", "department"=>"Department of Chemistry", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"", "country"=>"Thailand", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Chulalongkorn University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Thailand", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Chulalongkorn University", "department"=>"Department of Biochemistry", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"Structural and Computational Biology Research Unit", "country"=>"Thailand", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Coelho Software", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Australia", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Coelho Software", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Australia", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Corbion Biochem B.V.", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"The Netherlands", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Corbion Biochem B.V.", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"The Netherlands", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Cranfield University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Milton Keynes", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Cranfield University", "department"=>"", "faculty"=>"", "school"=>"School of Water, Energy and Environment", "work_group"=>"Energy and Power Theme", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Daegu Gyeongbuk Institute of Science & Technology (DGIST)", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"South Korea", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Daegu Gyeongbuk Institute of Science & Technology (DGIST)", "department"=>"Department of Physics and Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"South Korea", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Dalian Institute of Chemical Physics", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Dalian Institute of Chemical Physics", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"State Key Laboratory of Catalysis\n", "country"=>"Peoples Republic of China", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Defence Science Technology Laboratory ", "short_name"=>"DSTL", "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Salisbury", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Defence Science Technology Laboratory ", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Deutsches Elektronen‐Synchrotron DESY", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Deutsches Elektronen‐Synchrotron DESY", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Germany", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Diamond Light Source Ltd.", "short_name"=>"DLS", "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Research Facility", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Diamond Light Source Ltd.", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"electron Physical Science Imaging Centre (ePSIC)", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+organisation.affiliations.create!({"institution"=>"Diamond Light Source Ltd.", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Beamline I22", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+organisation.affiliations.create!({"institution"=>"Diamond Light Source Ltd.", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Dinex Ecocat Oy DET Finland", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Finland", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Dinex Ecocat Oy DET Finland", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Catalyst Development", "country"=>"Finland", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Durham University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Durham", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Durham University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Durham University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Duy Tan University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Vietnam", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Duy Tan University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute of research and development", "country"=>"Vietnam", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"ETH Zürich", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Switzerland", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"ETH Zürich", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Laboratory of Organic Chemistry", "country"=>"Switzerland", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"ETH Zürich", "department"=>"Department of Mechanical and Process Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Switzerland", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"East China University of Science and Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"East China University of Science and Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"State Key Laboratory of Chemical Engineering", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"East China University of Science and Technology", "department"=>"", "faculty"=>"", "school"=>"School of Chemical Engineering", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"East China University of Science and Technology", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Ecole Polytechnique Fédérale de Lausanne", "short_name"=>"EPFL", "identifier"=>nil, "logo"=>"https://www.epfl.ch/wp-content/themes/wp-theme-2018/assets/svg/epfl-logo.svg", "homepage"=>"https://www.epfl.ch/en/", "address_id"=>nil, "country"=>"Switzerland", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Ecole Polytechnique Fédérale de Lausanne", "department"=>"", "faculty"=>"", "school"=>"Institut des Sciences et Ingénierie Chimiques,", "work_group"=>"Laboratory of molecular simulation (LSMO)", "country"=>"Switzerland", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Ecole Polytechnique Federale de Lausanne", "department"=>"", "faculty"=>"", "school"=>"Institut des Sciences et Ingénierie Chimiques,", "work_group"=>"Laboratory of molecular simulation (LSMO)", "country"=>"Switzerland", "sector"=>"1"})
+
+organisation = Organisation.create!({"name"=>"Egyptian Petroleum Research Institute", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Egypt", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Egyptian Petroleum Research Institute", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Egypt", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Eindhoven University of Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"The Netherlands", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Eindhoven University of Technology", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"Chemical Process Intensification", "country"=>"The Netherlands", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"European Synchrotron Radiation Facility", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"European Synchrotron Radiation Facility", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"CEA/DRT/LITEN/DTNM/SEN/L2N", "country"=>"France", "sector"=>"Research Facility"})
+organisation.affiliations.create!({"institution"=>"European Synchrotron Radiation Facility", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"XMaS The UK Materials Science Facility at the ESRF", "country"=>"France", "sector"=>"Research Facility"})
+organisation.affiliations.create!({"institution"=>"European Synchrotron Radiation Facility", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"BM28/XMaS CRG", "country"=>"France", "sector"=>"Research Facility"})
+organisation.affiliations.create!({"institution"=>"European Synchrotron Radiation Facility", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"France", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Finden Ltd", "short_name"=>"Finden", "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Finden Ltd", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Flemish Institute for Technological Research (VITO)", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Belgium", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Flemish Institute for Technological Research (VITO)", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Belgium", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Forschungszentrum Jülich", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Forschungszentrum Jülich", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Jülich-Aachen Research Alliance (JARA-FIT) and Peter Grünberg Institute (PGI-6)", "country"=>"Germany", "sector"=>"Research Facility"})
+organisation.affiliations.create!({"institution"=>"Forschungszentrum Jülich", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Jülich Centre for Neutron Science (JCNS-1) and Institute for Complex Systems (ICS-1)", "country"=>"Germany", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Friedrich-Alexander-Universität", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Friedrich-Alexander-Universität", "department"=>"Department of Chemical and Biological Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Germany", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Friedrich-Alexander-Universität", "department"=>"Department of Materials Science and Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Fritz-Haber-Institut der Max-Planck Gesellschaft", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Fritz-Haber-Institut der Max-Planck Gesellschaft", "department"=>"Department of Inorganic Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Fudan University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Fudan University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Fujian Institute of Research on the Structure of Matter", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Fujian Institute of Research on the Structure of Matter", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"State Key Laboratory of Structural Chemistry", "country"=>"Peoples Republic of China", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Fujian Provincial Key Laboratory of Theoretical and Computational Chemistry", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Fujian Provincial Key Laboratory of Theoretical and Computational Chemistry", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Fujian Science & Technology Innovation Laboratory for Optoelectronic Information of China", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Fujian Science & Technology Innovation Laboratory for Optoelectronic Information of China", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"GSK", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"London", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"GSK", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Analytical Sciences and Development", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Gemmate Technologies s.r.l.", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Gemmate Technologies s.r.l.", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Georgia Institute of Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Georgia Institute of Technology", "department"=>"Department of Chemical and Biomolecular Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Georgia Institute of Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Ghent University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Belgium", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Ghent University", "department"=>"Department of Chemistry and Center for Sustainable Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Belgium", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Guangdong University of Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Guangdong University of Technology", "department"=>"", "faculty"=>"", "school"=>"School of Chemical Engineering and Light Industry", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Ha'il University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Saudi Arabia", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Ha'il University", "department"=>"Chemistry Department", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"", "country"=>"Saudi Arabia", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Haldor Topsøe A/S", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Denmark", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Haldor Topsøe A/S", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Denmark", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Hamburg University of Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Hamburg University of Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute of Chemical Reaction EngineeringHamburg", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Harbin Institute of Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Harbin Institute of Technology", "department"=>"", "faculty"=>"", "school"=>"School of Chemical Engineering and Technology", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"HarwellXPS", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Research Facility", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"HarwellXPS", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Heriot-Watt University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Edimburgh", "sector"=>"Academia", "region"=>"Scotland"})
+organisation.affiliations.create!({"institution"=>"Heriot-Watt University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute of Chemical Sciences", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Heriot-Watt University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Research Centre for Carbon Solutions (RCCS)", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Heriot-Watt University", "department"=>"", "faculty"=>"", "school"=>"School of Engineering ", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Heriot-Watt University", "department"=>"", "faculty"=>"", "school"=>"School of Engineering ", "work_group"=>"Institute of Chemical Sciences", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Honeywell International Incorporated", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Honeywell International Incorporated", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Hubei University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Hubei University", "department"=>"", "faculty"=>"", "school"=>"College of Life Sciences", "work_group"=>"Hubei Collaborative Innovation Center for Green Transformation of Bio-resources", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"IMDEA Energy Institute", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"IMDEA Energy Institute", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"ISIS Neutron and Muon Source", "short_name"=>"ISIS", "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Research Facility", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"ISIS Neutron and Muon Source", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Imperial College London", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"London", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Imperial College London", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Imperial College London", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Imperial College London", "department"=>"Department of Materials", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Indian Association for the Cultivation of Science", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Indian Association for the Cultivation of Science", "department"=>"", "faculty"=>"", "school"=>"School of Materials Science", "work_group"=>"", "country"=>"India", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Indian Institute of Technology Delhi", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Indian Institute of Technology Delhi", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"India", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Indian Institute of Technology Madras", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Indian Institute of Technology Madras", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"National Centre for Catalysis Research", "country"=>"India", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Institució Catalana de Recerca i Estudis Avançats (ICREA)", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Institució Catalana de Recerca i Estudis Avançats (ICREA)", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Institut Laue-Langevin", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>"Grenoble", "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Institut Laue-Langevin", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"France", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Institute of Coal Chemistry", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Institute of Coal Chemistry", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"State Key Laboratory of Coal Conversion", "country"=>"Peoples Republic of China", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Institute of Materials Research and Engineering", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Singapore", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Institute of Materials Research and Engineering", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Singapore", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Institute of Metal Research", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Institute of Metal Research", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Shenyang National Laboratory for Materials Science", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Instituto de Carboquímica (CSIC)", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Instituto de Carboquímica (CSIC)", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Instituto de Ciencia de Materiales de Madrid C.S.I.C.", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Instituto de Ciencia de Materiales de Madrid C.S.I.C.", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"International Iberian Nanotechnology Laboratory (INL)", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Portugal", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"International Iberian Nanotechnology Laboratory (INL)", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Portugal", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Istituto Italiano di Tecnologia", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Istituto Italiano di Tecnologia", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Electron Microscopy Facility", "country"=>"Italy", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Istituto di Fotonica e Nanotecnologie, Consiglio Nazionale delle Ricerche", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Istituto di Fotonica e Nanotecnologie, Consiglio Nazionale delle Ricerche", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Istituto per l'Energetica e le Interfasi CNR-IENI and INSTM", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Istituto per l'Energetica e le Interfasi CNR-IENI and INSTM", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Japan Advanced Institute of Science and Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Japan", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Japan Advanced Institute of Science and Technology", "department"=>"", "faculty"=>"", "school"=>"School of Materials Science", "work_group"=>"", "country"=>"Japan", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Jawaharlal Nehru Centre for Advanced Scientific Research", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Jawaharlal Nehru Centre for Advanced Scientific Research", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"New Chemistry Unit", "country"=>"India", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Jawaharlal Nehru Centre for Advanced Scientific Research", "department"=>"", "faculty"=>"", "school"=>"School of Advanced Materials", "work_group"=>"", "country"=>"India", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Jawaharlal Nehru Centre for Advanced Scientific Research", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Theoretical Sciences Unit", "country"=>"India", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Jawaharlal Nehru Centre for Advanced Scientific Research", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Chemistry and Physics of Materials Unit", "country"=>"India", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Johnson Matthey PLC", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Reading", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Johnson Matthey PLC", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Industry"})
+organisation.affiliations.create!({"institution"=>"Johnson Matthey PLC", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Process Technologies", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Johnson Matthey Technology Centre", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Reading", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Johnson Matthey Technology Centre", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"KU Leuven", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Belgium", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"KU Leuven", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Belgium", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Karlsruhe Institute of Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Karlsruhe Institute of Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute of Catalysis Research and Technology (IKFT)", "country"=>"Germany", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Karlsruhe Institute of Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute for Chemical Technology and Polymer Chemistry (ITCP)", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Keysight Technologies, Inc.", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Keysight Technologies, Inc.", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Semiconductor Measurement Solutions", "country"=>"United States of America", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"King Abdulaziz University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Saudi Arabia", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"King Abdulaziz University", "department"=>"Department of Chemical and Materials Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Saudi Arabia", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"King Abdulaziz University", "department"=>"Chemistry Department", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Saudi Arabia", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"King Saud University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Saudi Arabia", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"King Saud University", "department"=>"Chemistry Department", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Saudi Arabia", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"King's College London", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"London", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"King's College London", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute of Psychiatry, Psychology & Neuroscience", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"King's College London", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"King's College London", "department"=>"Physics Department", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Kurukshetra University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Kurukshetra University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"India", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Kwame Nkrumah University of Science and Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Ghana", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Kwame Nkrumah University of Science and Technology", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Ghana", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Kwame Nkrumah University of Science and Technology", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Ghana", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Kyoto University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Japan", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Kyoto University", "department"=>"", "faculty"=>"", "school"=>"School of Materials Science", "work_group"=>"Elements Strategy Initiative for Catalysts & Batteries Kyoto", "country"=>"Japan", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Kyoto University", "department"=>"Department of Molecular Engineering", "faculty"=>"", "school"=>"Graduate School of Engineering", "work_group"=>"", "country"=>"Japan", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Lancaster University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Lancaster", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Lancaster University", "department"=>"Department of Engineering", "faculty"=>"", "school"=>"School of Chemical Engineering", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Lancaster University", "department"=>"", "faculty"=>"", "school"=>"School of Engineering", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Lehigh University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Lehigh University", "department"=>"Department of Materials Science and Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Loughborough University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Loughborough", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Loughborough University", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Loughborough University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Loughborough University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Mahidol University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Thailand", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Mahidol University", "department"=>"Department of Chemistry and Center of Excellence for Innovation in Chemistry", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"Center for Catalysis", "country"=>"Thailand", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Manchester Metropolitan University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Manchester", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Manchester Metropolitan University", "department"=>"", "faculty"=>"Faculty of Science and Engineering", "school"=>"", "work_group"=>"Division of Chemistry and Environmental Science", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Manchester Metropolitan University", "department"=>"", "faculty"=>"Faculty of Science & Engineering", "school"=>"", "work_group"=>"Division of Chemistry & Environmental Science", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Max-Planck-Institut für Chemische Energiekonversion", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Max-Planck-Institut für Chemische Energiekonversion", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Germany", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Max-Planck-Institut für Kohlenforschung", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Max-Planck-Institut für Kohlenforschung", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Germany", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"McMaster University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Canada", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"McMaster University", "department"=>"Department of Materials Science and Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Canada", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Minia University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Egypt", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Minia University", "department"=>"Chemistry Department", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Egypt", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Minia University", "department"=>"Chemistry Department", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"", "country"=>"Egypt", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Mohammed VI Polytechnic University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Morocco", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Mohammed VI Polytechnic University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Materials Science and Nano-Engineering", "country"=>"Morocco", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Monash University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Australia", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Monash University", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"Australia", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Murdoch University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Australia", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Murdoch University", "department"=>"", "faculty"=>"", "school"=>"College of Science, Health, Engineering and Education", "work_group"=>"", "country"=>"Australia", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Nanjing Forestry University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Nanjing Forestry University", "department"=>"", "faculty"=>"", "school"=>"College of Chemical Engineering", "work_group"=>"Jiangsu Key Lab for the Chemistry and Utilization of Agricultural and Forest Biomass", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Nanjing Tech University", "short_name"=>"", "identifier"=>"", "logo"=>"", "homepage"=>"", "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Nanjing Tech University", "department"=>"", "faculty"=>"", "school"=>"College of Chemical Engineering", "work_group"=>"State Key Laboratory of Materials‐Oriented Chemical Engineering", "country"=>"Peoples Republic of China", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Nanyang Technological University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Singapore", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Nanyang Technological University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Division of Chemistry & Biological Chemistry", "country"=>"Singapore", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Nanyang Technological University", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry, Chemical Engineering and Biotechnology", "work_group"=>"", "country"=>"Singapore", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"National Synchrotron Radiation Research Center", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Taiwan", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"National Synchrotron Radiation Research Center", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Taiwan", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"National University of Singapore", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Singapore", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"National University of Singapore", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Singapore", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"National University of Singapore", "department"=>"Department of Materials Science and Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Singapore", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Nelson Mandela University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"South Africa", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Nelson Mandela University", "department"=>"Physics Department", "faculty"=>"", "school"=>"", "work_group"=>"Centre for High Resolution Transmission Electron Microscopy", "country"=>"South Africa", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Newcastle University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Newcastle upon Tyne", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Newcastle University", "department"=>"", "faculty"=>"", "school"=>"School of Engineering", "work_group"=>"National EPSRC XPS Users’ Service (NEXUS)", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Newcastle University", "department"=>"", "faculty"=>"", "school"=>"School of Engineering", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Newcastle University", "department"=>"", "faculty"=>"", "school"=>"School of Engineering ", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Oak Ridge National Laboratory", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Oak Ridge National Laboratory", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Fuels, Engines and Emissions Research Center", "country"=>"United States of America", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Oklahoma State University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Oklahoma State University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Oxford Instruments Plasma Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Bristol", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Oxford Instruments Plasma Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Pacific Northwest National Laboratory", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Pacific Northwest National Laboratory", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute for Integrated Catalysis", "country"=>"United States of America", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Paul Scherrer Institute", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Switzerland", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Paul Scherrer Institute", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Switzerland", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Peking University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Peking University", "department"=>"", "faculty"=>"", "school"=>"College of Chemistry and Molecular Engineering", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Philipps-University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Philipps-University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Phoreon", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Belgium", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Phoreon", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Belgium", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Politecnico di Milano", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Politecnico di Milano", "department"=>"Dipartimento di Fisica", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Politecnico di Milano", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Queen Mary University of London", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"London", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Queen Mary University of London", "department"=>"", "faculty"=>"", "school"=>"School of Biological and Chemical Sciences", "work_group"=>"Materials Research Institute", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen Mary University of London", "department"=>"", "faculty"=>"", "school"=>"School of Engineering ", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Queen's University Belfast", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Belfast", "sector"=>"Academia", "region"=>"Northern Ireland"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"School of Biological Sciences", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry and Chemical Engineering", "work_group"=>"Centre for the Theory and Application of Catalysis (CenTACat)", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry and Chemical Engineering", "work_group"=>"The QUILL Centre", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"School of Mathematics and Physics", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"School of Mechanical and Aerospace Engineering", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"School of Mathematics and Physics", "work_group"=>"Centre for Nanostructured Media", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Ionic Liquids Laboratories", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Queen's University Belfast", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry and Chemical Engineering", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"RMIT University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Australia", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"RMIT University", "department"=>"", "faculty"=>"", "school"=>"School of Science", "work_group"=>"Centre for Advanced Materials and Industrial Chemistry (CAMIC)", "country"=>"Australia", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"RWTH Aachen University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"RWTH Aachen University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institut für Anorganische Chemie", "country"=>"Germany", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"RWTH Aachen University", "department"=>"Fachgruppe Chemie", "faculty"=>"", "school"=>"", "work_group"=>"Jülich-Aachen Research Alliance (JARA-FIT) and Peter Grünberg Institute 6", "country"=>"Germany", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"RWTH Aachen University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institut für Technische und Makromolekulare Chemie (ITMC)", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Research Complex at Harwell", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Research Facility", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Research Complex at Harwell", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Rey Juan Carlos University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Rey Juan Carlos University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Chemical and Environmental Engineering Group", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Rosalind Franklin Institute", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Research Facility", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Rosalind Franklin Institute", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"SVKM’s NMIMS University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"India", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"SVKM’s NMIMS University", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"Mukesh Patel School of Technology Management and Engineering", "work_group"=>"", "country"=>"India", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Sasol Technology UK Ltd.", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"South Africa", "city"=>"Johanesburgh", "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Sasol Technology UK Ltd.", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Science and Technology Facilities Council", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Research Facility", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Science and Technology Facilities Council", "department"=>"Scientific Computing Department", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+organisation.affiliations.create!({"institution"=>"Science and Technology Facilities Council", "department"=>"Scientific Computing Department", "faculty"=>"", "school"=>"", "work_group"=>"Scientific Machine Learning (SciML)", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"Shahid Rajaee Teacher Training University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Iran", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Shahid Rajaee Teacher Training University", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Iran", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Shanghai Institute of Ceramics", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Shanghai Institute of Ceramics", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"State Key Laboratory of High Performance Ceramics and Superfine Microstructure", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Shanghai Research Institute of Petrochemical Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Shanghai Research Institute of Petrochemical Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"SINOPEC", "country"=>"Peoples Republic of China", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Silpakorn University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Thailand", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Silpakorn University", "department"=>"Department of Chemistry", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"", "country"=>"Thailand", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Sohag University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Egypt", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Sohag University", "department"=>"Chemistry Department", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"", "country"=>"Egypt", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Sohag University", "department"=>"Department of Chemistry", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"", "country"=>"Egypt", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Soochow University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Soochow University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Soochow Institute for Energy and Materials InnovationS (SIEMIS)", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Soochow University", "department"=>"Chemical Engineering and Materials Science", "faculty"=>"", "school"=>"College of Chemistry", "work_group"=>"Key Laboratory of Organic Synthesis of Jiangsu Province", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Sorbonne Université", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Sorbonne Université", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"France", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Southern University of Science and Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Southern University of Science and Technology", "department"=>"Department of Materials Science and Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Sun Yat-sen University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Sun Yat-sen University", "department"=>"", "faculty"=>"", "school"=>"School of Environmental Science and Engineering", "work_group"=>"Guangdong Provincial Key Laboratory of Environmental Pollution Control and Remediation Technology", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Sun Yat-sen University", "department"=>"", "faculty"=>"", "school"=>"School of Materials Science and Engineering", "work_group"=>"Key Lab Polymer Composite & Functional Materials", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Swansea University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Swansea", "sector"=>"Academia", "region"=>"Wales"})
+organisation.affiliations.create!({"institution"=>"Swansea University", "department"=>"", "faculty"=>"", "school"=>"Medical School", "work_group"=>"EPSRC UK National Mass Spectrometry Facility (NMSF)", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Swiss Light Source", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Switzerland", "city"=>nil, "sector"=>"Research Facility", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Swiss Light Source", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Switzerland", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"SynCat@Beijing Synfuels China Company Limited", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"SynCat@Beijing Synfuels China Company Limited", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"SynCat@DIFFER", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"The Netherlands", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"SynCat@DIFFER", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"The Netherlands", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Syngenta, Jealott's Hill International Research Centre", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Reading", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Syngenta, Jealott's Hill International Research Centre", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Technical University Munich", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Technical University Munich", "department"=>"", "faculty"=>"Faculty of Chemistry", "school"=>"", "work_group"=>"Catalysis Research Center", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Technical University of Denmark", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Denmark", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Technical University of Denmark", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Denmark", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Technical University of Denmark", "department"=>"DTU Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Denmark", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Technical University of Denmark", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Denmark", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Technische Universität Berlin", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Technische Universität Berlin", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institut für Chemie", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"The Barcelona Institute of Science and Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"The Barcelona Institute of Science and Technology", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute for Bioengineering of Catalonia", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"The Faraday Institution Quad", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Harwell", "sector"=>"Research Facility", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"The Faraday Institution Quad", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Research Facility"})
+
+organisation = Organisation.create!({"name"=>"The Open University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Milton Keynes", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"The Open University", "department"=>"Department of Life, Health and Chemical Sciences", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"The Pennsylvania State University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"The Pennsylvania State University", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"The University of Edinburgh", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Edimburgh", "sector"=>"Academia", "region"=>"Scotland"})
+organisation.affiliations.create!({"institution"=>"The University of Edinburgh", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"EaStCHEM", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Edinburgh", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"The University of Manchester", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Manchester", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"", "faculty"=>"Faculty of Science and Engineering", "school"=>"School of Chemical Engineering and Analytical Science", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"", "faculty"=>"Faculty of Science and Engineering", "school"=>"School of Chemistry", "work_group"=>"Manchester Institute of Biotechnology", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"", "faculty"=>"Faculty of Science and Engineering", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"", "faculty"=>"Faculty of Science and Engineering", "school"=>"School of Materials", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemical Engineering and Analytical Science", "faculty"=>"", "school"=>"School of Engineering ", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemical Engineering and Analytical Science", "faculty"=>"", "school"=>"", "work_group"=>"Manchester Institute of Biotechnology", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemical Engineering and Analytical Science", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"School of Natural Science", "work_group"=>"Manchester Institute of Biotechnology", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Materials", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemical Engineering & Analytical Science", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemical Engineering and Analytical Science", "faculty"=>"", "school"=>"School of Engineering", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"School of Engineering", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"", "faculty"=>"", "school"=>"School of Chemical Engineering", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"School of Engineering ", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Physics and Astronomy", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Materials", "faculty"=>"", "school"=>"School of Natural Science", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"The University of Manchester", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"Manchester Institute of Biotechnology", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Tianjin University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Tianjin University", "department"=>"", "faculty"=>"", "school"=>"School of Chemical Engineering and Technology", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Tianjin University", "department"=>"", "faculty"=>"", "school"=>"School of Environmental Science and Engineering", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Trinity College Dublin", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Ireland", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Trinity College Dublin", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Ireland", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Trinity College Dublin", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry and CRANN", "work_group"=>"", "country"=>"Ireland", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"UBE Industries 1978-5", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Japan", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"UBE Industries 1978-5", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Japan", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"UMR 5249 CNRS/CEA-DRF-BIG/Université Grenoble-Alpes", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"UMR 5249 CNRS/CEA-DRF-BIG/Université Grenoble-Alpes", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Laboratoire de Chimie et Biologie des Métaux", "country"=>"France", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"UOP LLC, A Honeywell Company", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Industry", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"UOP LLC, A Honeywell Company", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Ulm University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Ulm University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute of Theoretical Chemistry", "country"=>"Germany", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Ulm University", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute of Surface Chemistry & Catalysis", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad Complutense de Madrid", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad Complutense de Madrid", "department"=>"Department of Inorganic Chemistry", "faculty"=>"Faculty of Chemistry", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad Nacional de Cordoba", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Argentina", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad Nacional de Cordoba", "department"=>"", "faculty"=>"Facultad de Matemática, Astronomía y Física", "school"=>"", "work_group"=>"Instituto de Física Enrique Gaviola (IFEG-CONICET)", "country"=>"Argentina", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad Nacional de San Luis", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Argentina", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad Nacional de San Luis", "department"=>"", "faculty"=>"Facultad de Química, Bioquímica y Farmacia", "school"=>"", "work_group"=>"", "country"=>"Argentina", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad Nacional del Litoral", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Argentina", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad Nacional del Litoral", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Instituto de Química Aplicada del Litoral, IQAL (UNL-CONICET), PRELINE (FIQ-UNL)", "country"=>"Argentina", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad Rey Juan Carlos", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad Rey Juan Carlos", "department"=>"Department of Energy, Chemical, and Mechanical Technology", "faculty"=>"", "school"=>"ESCET", "work_group"=>"", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad de Cádiz", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad de Cádiz", "department"=>"Departamento de Ciencia de los Materiales e Ingeniería Metalúrgica y Química Inorgánica", "faculty"=>"Facultad de Ciencia", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad de La Laguna", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad de La Laguna", "department"=>"Departamento de Química e Instituto de Materiales y Nanotecnología", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad de Málaga", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad de Málaga", "department"=>"Departamento de Química", "faculty"=>"Facultad de Ciencia", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad de Oviedo", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad de Oviedo", "department"=>"Departamento de Química Orgánica e Inorgánica", "faculty"=>"Facultad de Química", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidad de Sevilla", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidad de Sevilla", "department"=>"Departamento de Química", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidade Estadual de Campinas", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Brazil", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidade Estadual de Campinas", "department"=>"Departamento de Componentes Semicondutores", "faculty"=>"Faculdade de Engenharia Elétrica e de Computação", "school"=>"", "work_group"=>"Instrumentos e Fotônica", "country"=>"Brazil", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidade Federal Fluminense", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Brazil", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidade Federal Fluminense", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Instituto de Química", "country"=>"Brazil", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidade Federal de São Carlos", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Brazil", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidade Federal de São Carlos", "department"=>"Departamento de Química", "faculty"=>"", "school"=>"", "work_group"=>"Centro de Ciências Exatas e de Tecnologia", "country"=>"Brazil", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidade Federal do Paraná (UFPR)", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Brazil", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidade Federal do Paraná (UFPR)", "department"=>"Departamento de Química", "faculty"=>"", "school"=>"", "work_group"=>"Laboratório de Bioinorgânica e Catálise", "country"=>"Brazil", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidade de Lisboa", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Portugal", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidade de Lisboa", "department"=>"Departamento de Engenharia Química\n", "faculty"=>"", "school"=>"", "work_group"=>"Centro de Química Estrutural", "country"=>"Portugal", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universidade de Santiago de Compostela", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universidade de Santiago de Compostela", "department"=>"Departamento de Química Orgánica", "faculty"=>"", "school"=>"", "work_group"=>"Centro Singular de Investigación en Química Biolóxica e Materiais Moleculares (CIQUS)", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universitat Politècnica de València-Consejo Superior de Investigaciones Científicas (UPV-CSIC)", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universitat Politècnica de València-Consejo Superior de Investigaciones Científicas (UPV-CSIC)", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"ITQ Instituto de Tecnología Química", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universitat de Barcelona", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universitat de Barcelona", "department"=>"Departament de Ciència de Materials i Química Física", "faculty"=>"", "school"=>"", "work_group"=>"Institut de Química Teòrica i Computacional (IQTCUB)", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University Brunei Darussalam", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Brunei", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University Brunei Darussalam", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Centre of Advanced Material and Energy Science", "country"=>"Brunei", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University College Cork", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Ireland", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University College Cork", "department"=>"Department of Chemistry and Tyndall National Institute", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Ireland", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University College Dublin", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Ireland", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University College Dublin", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"Ireland", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University College London", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"London", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"Electrochemical Innovation Lab", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Kathleen Lonsdale Materials Chemistry", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Materials Chemistry", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"Department of Physics and Astronomy", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Electrochemical Innovation Lab", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Materials Chemistry Centre", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"Chemistry Department", "faculty"=>"", "school"=>"", "work_group"=>"Christopher Ingold Laboratories", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"School of Science", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University College London", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Aberdeen", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Aberdeen", "sector"=>"Academia", "region"=>"Scotland"})
+organisation.affiliations.create!({"institution"=>"University of Aberdeen", "department"=>"Chemistry Department", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Aberdeen", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Aberdeen", "department"=>"", "faculty"=>"", "school"=>"School of Engineering", "work_group"=>"Surface Chemistry and Catalysis Group", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Aberdeen", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Amsterdam", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"The Netherlands", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Amsterdam", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"van’t Hoff Institute for Molecular Sciences", "country"=>"The Netherlands", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Amsterdam", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Van 't Hoff Institute for Molecular Sciences", "country"=>"The Netherlands", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Antwerpen", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Belgium", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Antwerpen", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Belgium", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Bath", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Bath", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Bath", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Centre for Sustainable Chemical Technologies", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bath", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bath", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"Centre for Photonics and Photonic Materials", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bath", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"Microscopy and Analysis Suite", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bath", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Centre for Sustainable and Circular Technologies", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bath", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bath", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bath", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Centre for Sustainable and Circular Technologies", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bath", "department"=>"Chemistry Department", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Birmingham", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Birmingham", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Birmingham", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Birmingham", "department"=>"", "faculty"=>"", "school"=>"School of Physics and Astronomy", "work_group"=>"Nanoscale Physics Research Laboratory", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Birmingham", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Birmingham Centre for Strategic Elements & Critical Materials", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Birmingham", "department"=>"", "faculty"=>"", "school"=>"School of Chemical Engineering", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Bristol", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Bristol", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Bristol", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Advanced Composites Centre for Innovation and Science", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bristol", "department"=>"", "faculty"=>"", "school"=>"School of Biochemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bristol", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"Centre for Computational Chemistry", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bristol", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bristol", "department"=>"", "faculty"=>"", "school"=>"School of Oral and Dental Sciences", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bristol", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"BrisSynBio Synthetic Biology Research Centre", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Bristol", "department"=>"", "faculty"=>"", "school"=>"School of Cellular and Molecular Medicine", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Bucharest", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Romania", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Bucharest", "department"=>"Department of Organic Chemistry", "faculty"=>"Faculty of Chemistry", "school"=>"", "work_group"=>"Biochemistry and Catalysis", "country"=>"Romania", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of California, Berkeley", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of California, Berkeley", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Lawrence Berkeley National Laboratory", "country"=>"United States of America", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Cambridge", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Cambridge", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Cambridge", "department"=>"Department of Chemical Engineering and Biotechnology", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Cambridge", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Cambridge", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Cape Town", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"South Africa", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Cape Town", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"Catalysis Institute", "country"=>"South Africa", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Cape Town", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"Catalysis Institute and c*change (DST-NRF Centre of Excellence in Catalysis)", "country"=>"South Africa", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Cincinnati", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Cincinnati", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of East Anglia", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Norwich", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of East Anglia", "department"=>"", "faculty"=>"Faculty of Science", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Essex", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Essex", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Essex", "department"=>"", "faculty"=>"", "school"=>"School of Life Sciences", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Ferrara", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Ferrara", "department"=>"Department of Chemical Pharmaceutical and Agricultural Sciences", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Ferrara", "department"=>"Department of Physics and Earth Sciences", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Glasgow", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Glasgow", "sector"=>"Academia", "region"=>"Scotland"})
+organisation.affiliations.create!({"institution"=>"University of Glasgow", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Glasgow", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Glasgow", "department"=>"", "faculty"=>"", "school"=>"School of Physics and Astronomy", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Groningen", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"The Netherlands", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Groningen", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"Engineering and Technology Institute Groningen (ENTEG)", "country"=>"The Netherlands", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Haifa", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Israel", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Haifa", "department"=>"Department of Statistics", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Israel", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Illinois at Urbana−Champaign", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Illinois at Urbana−Champaign", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Jember", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Indonesia", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Jember", "department"=>"Chemistry Department", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Indonesia", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Jyväskylä", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Finland", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Jyväskylä", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Nanoscience Center", "country"=>"Finland", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Leeds", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Leeds", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Leeds", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"Institute of Process Research & Development", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Leeds", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Leicester", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Leicester", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Leicester", "department"=>"Department of Molecular and Cell Biology", "faculty"=>"", "school"=>"", "work_group"=>"Leicester Institute of Structural and Chemical Biology", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Lincoln", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Lincoln", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Lincoln", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Liverpool", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Liverpool", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Liverpool", "department"=>"Chemistry Department", "faculty"=>"", "school"=>"", "work_group"=>"Stephenson Institute for Renewable Energy", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Liverpool", "department"=>"Chemistry Department", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Liverpool", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Liverpool", "department"=>"Department of Electrical Engineering and Electronics", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Liverpool", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Liverpool", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Stephenson Institute for Renewable Energy", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Liverpool", "department"=>"", "faculty"=>"", "school"=>"School of Engineering ", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Malaya", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Malaysia", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Malaya", "department"=>"Department of Chemistry", "faculty"=>"Faculty of Science", "school"=>"", "work_group"=>"", "country"=>"Malaysia", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Messina", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Messina", "department"=>"Departments ChiBioFarAm, ERIC aisbl, and CASPE/INSTM", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Milan", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Università degli Studi di Milano", "department"=>"Dipartimento di Chimica", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Milan", "department"=>"Department of Pharmaceutical Sciences", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Nottingham", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Nottingham", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Nottingham", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Oslo", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Norway", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Oslo", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"INGAP Centre for Research Based Innovation", "country"=>"Norway", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Otago", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"New Zealand", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Otago", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"MacDiarmid Institute for Advanced Materials and Nanotechnology", "country"=>"New Zealand", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Otago", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"New Zealand", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Oxford", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Oxford", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Oxford", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Chemical Research Laboratory", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Oxford", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Inorganic Chemistry Laboratory", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Oxford", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Oxford", "department"=>"Department of Physics", "faculty"=>"", "school"=>"", "work_group"=>"Clarendon Laboratory", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Oxford", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Chemistry Research Laboratory", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Oxford", "department"=>"Department of Materials", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Oxford", "department"=>"Department of Biochemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Oxford", "department"=>"Department of Engineering Science", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Porto", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Portugal", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Porto", "department"=>"Department of Chemical Sciences", "faculty"=>"Faculty of Pharmacy", "school"=>"", "work_group"=>"", "country"=>"Portugal", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Portsmouth", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Portsmouth", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Portsmouth", "department"=>"", "faculty"=>"", "school"=>"School of Pharmacy and Biomedical Sciences", "work_group"=>"Institute of Biomedical and Biomolecular Sciences", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Reading", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Reading", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Reading", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Reading", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry, Food and Pharmacy", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Salford", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Salford", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Salford", "department"=>"", "faculty"=>"", "school"=>"School of Science, Engineering and Environment", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Salford", "department"=>"", "faculty"=>"", "school"=>"School of Science", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Sheffield", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Sheffield", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Sheffield", "department"=>"Department of Chemical and Biological Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Sheffield", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of South Wales", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Cardiff", "sector"=>"Academia", "region"=>"Wales"})
+organisation.affiliations.create!({"institution"=>"University of South Wales", "department"=>"", "faculty"=>"", "school"=>"School of Applied Sciences", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Southampton", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Southampton", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Southampton", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"Electronic Materials Research Department", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Southampton", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Southampton", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Southampton", "department"=>"", "faculty"=>"Faculty of Engineering and Physical Sciences", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Southampton", "department"=>"", "faculty"=>"Faculty of Physical Sciences and Engineering", "school"=>"School of Physics and Astronomy", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Southampton", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Southampton", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of St. Andrews", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"St. Andrews", "sector"=>"Academia", "region"=>"Scotland"})
+organisation.affiliations.create!({"institution"=>"University of St. Andrews", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"EaStCHEM", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of St. Andrews", "department"=>"", "faculty"=>"", "school"=>"School of Chemistry", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of St. Andrews", "department"=>"", "faculty"=>"", "school"=>"School of Physics and Astronomy", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Strathclyde", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Glasgow", "sector"=>"Academia", "region"=>"Scotland"})
+organisation.affiliations.create!({"institution"=>"University of Strathclyde", "department"=>"Department of Pure & Applied Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Turin", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Turin", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Università di Torino", "department"=>"Dipartimento di Chimica", "faculty"=>"", "school"=>"", "work_group"=>"NIS Centre of Excellence", "country"=>"Italy", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Utah", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United States of America", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Utah", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United States of America", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Valladolid", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Valladolid", "department"=>"Department of Chemical Engineering", "faculty"=>"", "school"=>"", "work_group"=>"BioEcoUVa Bioeconomy Institute and Environmental Technology", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Waikato", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"New Zealand", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Waikato", "department"=>"", "faculty"=>"", "school"=>"School of Science", "work_group"=>"", "country"=>"New Zealand", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Warwick", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Warwick", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of Warwick", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Warwick", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Centre for Doctoral Training in Diamond Science and Technology", "country"=>"United Kingdom", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"University of Warwick", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Warwick Manufacturing Group", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of York", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"York", "sector"=>"Academia", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"University of York", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"York Structural Biology Laboratory", "country"=>"United Kingdom", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of Zurich", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Switzerland", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of Zurich", "department"=>"Department of Biochemistry", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Switzerland", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"University of the Basque Country (UPV/EHU)", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Spain", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"University of the Basque Country (UPV/EHU)", "department"=>"Department of Chemical and Environmental Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Spain", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Università Ca' Foscari di Venezia", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Università Ca' Foscari di Venezia", "department"=>"Dipartimento di Scienze Molecolari e Nanosistemi", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Università del Piemonte Orientale", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Università del Piemonte Orientale", "department"=>"Department of Science and Technological Innovation", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Università di Bologna", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Università di Bologna", "department"=>"Dipartimento di Chimica Industriale “Toso Montanari”", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Università di Bologna", "department"=>"Dipartimento di Chimica Industriale e dei Materiali", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Università di Padova", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Italy", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Università di Padova", "department"=>"Dipartimento di Scienze Chimiche", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"Italy", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Università di Padova", "department"=>"Department of Chemistry", "faculty"=>"", "school"=>"", "work_group"=>"Institute of Condensed Matter Chemistry and Technologies for Energy (ICMATE), National Research Council (CNR)", "country"=>"Italy", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Università di Padova", "department"=>"Department of Chemical Sciences", "faculty"=>"", "school"=>"", "work_group"=>"Institute of Condensed Matter Chemistry and Technologies for Energy (ICMATE), National Research Council (CNR)", "country"=>"Italy", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Universität Rostock", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Germany", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Universität Rostock", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Leibniz Institute for Catalysis", "country"=>"Germany", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Universität Rostock", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Leibniz-Institut für Katalyse e.V", "country"=>"Germany", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Université Côte d'Azur", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Université Côte d'Azur", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"CNRS, Institut de Chimie de Nice", "country"=>"France", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Université Lyon", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Université Lyon", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"CNRS Institut de Recherches sur la Catalyse et l’Environnement de Lyon", "country"=>"France", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Université Paris-Saclay", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Université Paris-Saclay", "department"=>"", "faculty"=>"", "school"=>"Ecole Polytechnique", "work_group"=>"CNRS LCM", "country"=>"France", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Université Pierre et Marie Curie", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Université Pierre et Marie Curie", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"France", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Université de Strasbourg", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Université de Strasbourg", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institute for Advanced Study (USIAS)", "country"=>"France", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Université de Strasbourg", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Institut de Chimie", "country"=>"France", "sector"=>"Academia"})
+organisation.affiliations.create!({"institution"=>"Université de Strasbourg", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Laboratoire de Chimie de Coordination", "country"=>"France", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Université de Toulouse", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Université de Toulouse", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"CNRS and , INSA, UPS UMR 5215, LPCNO", "country"=>"France", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Université de Tours", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Université de Tours", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"Laboratoire PCM2E", "country"=>"France", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Utrecht University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"The Netherlands", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Utrecht University", "department"=>"Debye Institute for Nanomaterials Science", "faculty"=>"", "school"=>"", "work_group"=>"Inorganic Chemistry and Catalysis", "country"=>"The Netherlands", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Wrocław University of Science and Technology", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Poland", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Wrocław University of Science and Technology", "department"=>"", "faculty"=>"Faculty of Chemistry", "school"=>"", "work_group"=>"Advanced Materials Engineering and Modelling Group", "country"=>"Poland", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Xiamen University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Xiamen University", "department"=>"Department of Chemical and Biochemical Engineering", "faculty"=>"", "school"=>"College of Chemistry and Chemical Engineering", "work_group"=>"National Engineering Laboratory for Green Chemical Productions of Alcohols-Ethers-Esters", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Yonsei University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"South Korea", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Yonsei University", "department"=>"Department of Chemical and Biomolecular Engineering", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"South Korea", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Yorkshire Process Technology Ltd.", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"United Kingdom", "city"=>"Bradford", "sector"=>"Industry", "region"=>"England"})
+organisation.affiliations.create!({"institution"=>"Yorkshire Process Technology Ltd.", "department"=>"", "faculty"=>"", "school"=>"", "work_group"=>"", "country"=>"United Kingdom", "sector"=>"Industry"})
+
+organisation = Organisation.create!({"name"=>"Zhengzhou University", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"Peoples Republic of China", "city"=>nil, "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Zhengzhou University", "department"=>"", "faculty"=>"", "school"=>"School of Chemical Engineering", "work_group"=>"", "country"=>"Peoples Republic of China", "sector"=>"Academia"})
+
+organisation = Organisation.create!({"name"=>"Université de Montpellier", "short_name"=>nil, "identifier"=>nil, "logo"=>nil, "homepage"=>nil, "address_id"=>nil, "country"=>"France", "city"=>"Montpellier", "sector"=>"Academia", "region"=>nil})
+organisation.affiliations.create!({"institution"=>"Université de Montpellier", "department"=>nil, "faculty"=>nil, "school"=>nil, "work_group"=>nil, "country"=>"France", "sector"=>"Academia"})
+
