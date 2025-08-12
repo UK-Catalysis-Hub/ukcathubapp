@@ -20,12 +20,12 @@ load Rails.root.join('db', 'seeds', 'organisations.rb')
 puts "Seeding crossref mappings..."
 load Rails.root.join('db', 'seeds', 'xref_mappings.rb')
 
-Address.create(add_01:"School of Chemistry",
-      add_02:"Cardiff University",
-      add_03:"Main Building, Park Pl",
-      add_04:"CF10 3AT",
-      city:"Cardiff",
-      province:"Wales",
+Address.create(add_01:"Phisical Sciences Data Infrastructure",
+      add_02:"Scientific Computing Department, Rutherford Appleton Laboratory",
+      add_03:"Science and Technology Facilities Council",
+      add_04:"OX11 0QX",
+      city:"Didcot",
+      province:"England",
       country:"United Kingdom",
       affiliation_id:0)
 
