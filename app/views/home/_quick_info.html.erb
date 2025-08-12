@@ -31,7 +31,7 @@
     <div class="container"><!-- info box -->
       <div class="row bg-success  rounded border-success">
         <div class="col-sm-6">
-          <h1><%= Organisation.count() %></h1>
+          <h1><%= Organisation.active_org.count() %></h1>
         </div>
         <div class="col-sm my-1">
           <%= image_tag('institution.svg', height: '48', width: '48', class: "rounded float-end d-block") %>

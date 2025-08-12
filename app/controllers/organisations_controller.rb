@@ -5,6 +5,8 @@ class OrganisationsController < ApplicationController
     model 'Organisation' # which model to search for
     # issue a filter cannot be also a facet, need 'alias'?
     text  :name # filter by a generic string entered by the user
+    scope :active_org, name: "active"
+    
     facet :country, name: 'Country', order: Proc.new { |country| country }
     facet :sector, name: 'Sector', order: Proc.new { |sector| sector }
     
@@ -16,8 +18,8 @@ class OrganisationsController < ApplicationController
 
   # GET /organisations or /organisations.json
   def index
-    @search = OrganisationSearch.new(params) # initializes search object from request params
-    @organisations = @search.result.paginate(:page => params[:page], :per_page => 10)
+    @search = OrganisationSearch.new(params).filter(:active_org).add(1) # initializes search object from request params
+    @organisations = @search.result.active_org.paginate(:page => params[:page], :per_page => 10)
   end
   
   # GET /organisations/1 or /organisations/1.json
