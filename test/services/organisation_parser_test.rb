@@ -240,14 +240,27 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     third_lines = [
          [15, 'School of Chemistry, Cardiff University, Main Building, Park Place, Cardiff CF10 3AT, United Kingdom'],
          [25, 'UK Catalysis Hub, Research Complex at Harwell, STFC Rutherford Appleton Laboratory, Didcot, Oxfordshire OX11 0FA, United Kingdom']]
-    puts @org_p.parse_and_map_multiline(third_lines).inspect
+    #puts @org_p.parse_and_map_multiline(third_lines).inspect
   end
 
-  test "fail parsing more than one inst in string" do
-    puts "unhandled/messy cases?"
+  test "testing for one liners" do
+    affiliation_lines = [
+         [1, 'School of Chemistry'],[2, 'Cardiff University'],
+         [3, 'Main Building, Park Place, Cardiff CF10 3AT, United Kingdom']]
+    affiliation_lines.each do |cr_affi_id, affi_ln|
+      assert_equal false, @org_p.is_one_liner(affi_ln), "This should not be a one liner #{affi_ln}"
+    end
+    first_string = 'School of Chemistry, Cardiff University, Main Building, Park Place, Cardiff CF10 3AT, United Kingdom'
+    second_string = 'UK Catalysis Hub, Research Complex at Harwell, STFC Rutherford Appleton Laboratory, Didcot, Oxfordshire OX11 0FA, United Kingdom'
+    assert_equal true, @org_p.is_one_liner(first_string), "This should be a one liner #{first_string}"
+  end
+
+  test "Unhandled and Messy cases" do
+    puts "fail parsing more than one inst in string, not seen yet"
     a_dir_str = "UK Catalysis Hub, Cardiff University"
     puts @org_p.parse_institutions(a_dir_str).inspect
     puts @org_p.split_single(a_dir_str).inspect
   end
+  
 
 end

@@ -512,13 +512,13 @@ class OrganisationParser
     # lookup using Country Synonyms table
     # need to remove country exceptions first
     # should also handle region/state and city here
-    ctry_str, splitting_this = self.parse_countries(splitting_this)
-##        ctry_str, splitting_this = self.str_has_synonym(splitting_this, self.country_synonyms)
+    ctry_str, splitting_this = parse_countries(splitting_this)
+##        ctry_str, splitting_this = str_has_synonym(splitting_this, country_synonyms)
 ##        #  lookup using Countries list
 ##        if ctry_str == "":
-##            ctry_str, splitting_this = self.check_list(splitting_this, self.countries_list)
+##            ctry_str, splitting_this = check_list(splitting_this, countries_list)
 
-    splitting_this = self.remove_extra_commas(splitting_this)
+    splitting_this = remove_extra_commas(splitting_this)
 
     return_parsed = {'institution': inst_str, 'school': school_str,
                      'department': dept_str, 'faculty': faculty_str,
@@ -530,8 +530,20 @@ class OrganisationParser
   end
 
   def parse_and_map_single(single_affi)
-    sl_elements = self.split_single(single_affi[1])
+    sl_elements = split_single(single_affi[1])
     [sl_elements, [single_affi[0]]]
+  end
+
+  # should have at least an organisation, plus another field
+  def is_one_liner (str_affi)
+    is_single_line_affi = false
+    affi_parsed = split_single(str_affi)
+    affi_parsed = affi_parsed.compact_blank() 
+    puts(affi_parsed)
+    if affi_parsed.length > 1 and affi_parsed.keys().include?(:institution) 
+      is_single_line_affi = true if affi_parsed.length > 1
+    end
+    is_single_line_affi
   end
 
   # this will parse cr_affis, calling split_single to help
@@ -544,17 +556,17 @@ class OrganisationParser
       sl_elements = split_single(a_line[1])
       #puts("Parsed:  #{a_line.inspect} as:\n\t #{sl_elements.inspect}")
       # add the id to the list of parsed lines
-      puts "* Parsing: #{a_line[0]}"
+      #puts "* Parsing: #{a_line[0]}"
       cr_ids.append(a_line[0])
       if parsed_affi == {}
         parsed_affi = sl_elements
       else
         sl_elements_no_blanks = sl_elements.compact_blank()
-        puts "* Parsed non blanks #{sl_elements_no_blanks.inspect}"
+        #puts "* Parsed non blanks #{sl_elements_no_blanks.inspect}"
         sl_elements_no_blanks.each do |key, value|
           case key
           when :address
-            puts "adding the address #{value}, tmp_hosted #{tmp_hosted.inspect}"
+            #puts "adding the address #{value}, tmp_hosted #{tmp_hosted.inspect}"
             parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ') if parsed_affi[:address] != value
           when :institution
             if parsed_affi[:institution].present?
@@ -562,13 +574,13 @@ class OrganisationParser
               #if is_hosted(parsed_affi[:institution], value) or 
               if has_hosting_path?(parsed_affi[:institution], value) or
                  has_hosting_path?(value, parsed_affi[:institution])
-                puts "This is hosted test k: #{key} v: #{value} in #{parsed_affi[:institution]}"
-                puts "These host_paths #{get_host_paths([parsed_affi[:institution], value])}"
-                puts "is added to #{parsed_affi[:address]}"
+                #puts "This is hosted test k: #{key} v: #{value} in #{parsed_affi[:institution]}"
+                #puts "These host_paths #{get_host_paths([parsed_affi[:institution], value])}"
+                #puts "is added to #{parsed_affi[:address]}"
                 tmp_hosted.append(value)
                 parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ')
               else
-                puts "This fails is hosted test k: #{key} v: #{value} in #{parsed_affi[:institution]}"
+                #puts "This fails is hosted test k: #{key} v: #{value} in #{parsed_affi[:institution]}"
                 if !tmp_hosted.empty?
                   #parsed_affi[:address] = (tmp_hosted + parsed_affi[:address]).compact_blank.join(', ')
                   tmp_hosted = []
@@ -576,18 +588,18 @@ class OrganisationParser
                 cr_ids.pop
                 return_parsed << [parsed_affi, cr_ids]
                 cr_ids = [a_line[0]]
-                puts "= will parse #{sl_elements_no_blanks}"
+                #puts "= will parse #{sl_elements_no_blanks}"
                 parsed_affi = sl_elements_no_blanks
               end
             else
-              puts "* This is the main institution #{value}"
+              #puts "* This is the main institution #{value}"
               parsed_affi[:institution] = value
             end
           else
             if parsed_affi[key].blank?
               parsed_affi[key] = value
             else
-              puts "* This #{key} with val: #{value} as address"
+              #puts "* This #{key} with val: #{value} as address"
               parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ') unless parsed_affi[key] == value
             end
           end
