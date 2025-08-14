@@ -30,3 +30,13 @@ three:
   sector: "Academia"
   organisation: 1
 
+four:
+  institution: "Ludwig‐Maximilians‐Universität München"
+  department: nil
+  faculty: "Faculty of Physics"
+  school: nil
+  work_group: nil
+  country: "Germany"
+  sector: "Academia"
+  organisation: 1
+

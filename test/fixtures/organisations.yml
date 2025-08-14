@@ -31,3 +31,14 @@ four:
   logo: MyString
   homepage: MyString
   address_id: 1
+
+five:
+  name: "Ludwig‐Maximilians‐Universität München"
+  short_name: MyString
+  identifier: MyString
+  logo: MyString
+  homepage: MyString
+  address_id: 1
+  country: "Germany"
+  city: "Munich"
+

@@ -255,6 +255,11 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     assert_equal true, @org_p.is_one_liner(first_string), "This should be a one liner #{first_string}"
   end
 
+  test "checking real cases:" do
+    affiliation_lines = [[1, 'Faculty of Physics Ludwig‐Maximilians‐Universität München  80539 München Germany']]
+    puts @org_p.parse_and_map_single(affiliation_lines[0]).inspect
+  end
+
   test "Unhandled and Messy cases" do
     puts "fail parsing more than one inst in string, not seen yet"
     a_dir_str = "UK Catalysis Hub, Cardiff University"

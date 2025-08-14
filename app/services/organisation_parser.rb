@@ -10,13 +10,13 @@ class OrganisationParser
   end
   def refresh_lists
     Rails.logger.info "Refreshing lists"
-    @organisation_list = Organisation.group(:name).pluck(:name)
-    @countries_list = Affiliation.group(:country).pluck(:country)
-    @schools_list = Affiliation.group(:school).pluck(:school)
-    @departments_list = Affiliation.group(:department).pluck(:department)
-    @faculties_list = Affiliation.group(:faculty).pluck(:faculty)
-    @groups_list = Affiliation.group(:work_group).pluck(:work_group)
-    @cities_list = Organisation.group(:city).pluck(:city)
+    @organisation_list = Organisation.group(:name).pluck(:name).compact()
+    @countries_list = Affiliation.group(:country).pluck(:country).compact()
+    @schools_list = Affiliation.group(:school).pluck(:school).compact()
+    @departments_list = Affiliation.group(:department).pluck(:department).compact()
+    @faculties_list = Affiliation.group(:faculty).pluck(:faculty).compact()
+    @groups_list = Affiliation.group(:work_group).pluck(:work_group).compact()
+    @cities_list = Organisation.group(:city).pluck(:city).compact()
     @country_synonyms = {
       "UK" => "United Kingdom",
       "(UK)" => "United Kingdom",
@@ -98,6 +98,7 @@ class OrganisationParser
       'King Abdullah University of Science and Technology (KAUST)' => 'King Abdullah University of Science and Technology',
       'Kings College London' => "King's College London",
       'King’s College London' => "King's College London",
+      'Ludwig‐Maximilians‐Universität München'=>'Ludwig-Maximilians Universität München',
       'Max Planck Institute for Solid State Research' => 'Max-Planck Institute for Solid State Research',
       'NSG-Pilkington' => 'NSG Group',
       'NTU' => 'Nanyang Technological University',
@@ -529,11 +530,6 @@ class OrganisationParser
     return return_parsed
   end
 
-  def parse_and_map_single(single_affi)
-    sl_elements = split_single(single_affi[1])
-    [sl_elements, [single_affi[0]]]
-  end
-
   # should have at least an organisation, plus another field
   def is_one_liner (str_affi)
     is_single_line_affi = false
@@ -544,6 +540,11 @@ class OrganisationParser
       is_single_line_affi = true if affi_parsed.length > 1
     end
     is_single_line_affi
+  end
+
+  def parse_and_map_single(single_affi)
+    sl_elements = split_single(single_affi[1])
+    [sl_elements, [single_affi[0]]]
   end
 
   # this will parse cr_affis, calling split_single to help
