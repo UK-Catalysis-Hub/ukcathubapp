@@ -100,6 +100,7 @@ class OrganisationParser
       'King’s College London' => "King's College London",
       'Ludwig‐Maximilians‐Universität München'=>'Ludwig-Maximilians Universität München',
       'Max Planck Institute for Solid State Research' => 'Max-Planck Institute for Solid State Research',
+      'National Institute for Materials Science (NIMS)'=>'National Institute for Materials Science',
       'NSG-Pilkington' => 'NSG Group',
       'NTU' => 'Nanyang Technological University',
       'New York University Abu Dhabi (NYUAD)' => 'New York University Abu Dhabi',
@@ -160,6 +161,8 @@ class OrganisationParser
       'Università degli Studi di Padova' => 'Università di Padova',
       'Université Claude Bernard – Lyon 1' => 'Université Claude Bernard Lyon 1',
       'Université Rennes' => 'Université de Rennes',
+      "UNSW" => "University of New South Wales",
+      "University of New South Wales (UNSW)" => "University of New South Wales",
       'Campus UAB' =>'Universitat Autònoma de Barcelona',
       'Wrocław University of Technology' => 'Wrocław University of Science and Technology'
     }
