@@ -2262,7 +2262,7 @@ function readScrollBehavior(value, defaultValue) {
     return defaultValue;
   }
 }
-var Idiomorph = function() {
+var Idiomorph = (function() {
   const noOp = () => {
   };
   const defaults2 = {
@@ -2346,7 +2346,7 @@ var Idiomorph = function() {
     }
     return results;
   }
-  const morphChildren2 = /* @__PURE__ */ function() {
+  const morphChildren2 = /* @__PURE__ */ (function() {
     function morphChildren3(ctx, oldParent, newParent, insertionPoint = null, endPoint = null) {
       if (oldParent instanceof HTMLTemplateElement && newParent instanceof HTMLTemplateElement) {
         oldParent = oldParent.content;
@@ -2415,7 +2415,7 @@ var Idiomorph = function() {
         return newClonedChild;
       }
     }
-    const findBestMatch = /* @__PURE__ */ function() {
+    const findBestMatch = /* @__PURE__ */ (function() {
       function findBestMatch2(ctx, node, startPoint, endPoint) {
         let softMatch = null;
         let nextSibling = node.nextSibling;
@@ -2470,7 +2470,7 @@ var Idiomorph = function() {
         (!oldElt.id || oldElt.id === newElt.id);
       }
       return findBestMatch2;
-    }();
+    })();
     function removeNode(ctx, node) {
       if (ctx.idMap.has(node)) {
         moveBefore(ctx.pantry, node, null);
@@ -2525,8 +2525,8 @@ var Idiomorph = function() {
       }
     }
     return morphChildren3;
-  }();
-  const morphNode = /* @__PURE__ */ function() {
+  })();
+  const morphNode = /* @__PURE__ */ (function() {
     function morphNode2(oldNode, newContent, ctx) {
       if (ctx.ignoreActive && oldNode === document.activeElement) {
         return null;
@@ -2658,7 +2658,7 @@ var Idiomorph = function() {
       return !!ctx.ignoreActiveValue && possibleActiveElement === document.activeElement && possibleActiveElement !== document.body;
     }
     return morphNode2;
-  }();
+  })();
   function withHeadBlocking(ctx, oldNode, newNode, callback2) {
     if (ctx.head.block) {
       const oldHead = oldNode.querySelector("head");
@@ -2747,7 +2747,7 @@ var Idiomorph = function() {
     });
     return promises;
   }
-  const createMorphContext = /* @__PURE__ */ function() {
+  const createMorphContext = /* @__PURE__ */ (function() {
     function createMorphContext2(oldNode, newContent, config2) {
       const { persistentIds, idMap } = createIdMaps(oldNode, newContent);
       const mergedConfig = mergeDefaults(config2);
@@ -2845,8 +2845,8 @@ var Idiomorph = function() {
       return persistentIds;
     }
     return createMorphContext2;
-  }();
-  const { normalizeElement, normalizeParent } = /* @__PURE__ */ function() {
+  })();
+  const { normalizeElement, normalizeParent } = /* @__PURE__ */ (function() {
     const generatedByIdiomorph = /* @__PURE__ */ new WeakSet();
     function normalizeElement2(content) {
       if (content instanceof Document) {
@@ -2938,12 +2938,12 @@ var Idiomorph = function() {
       }
     }
     return { normalizeElement: normalizeElement2, normalizeParent: normalizeParent2 };
-  }();
+  })();
   return {
     morph,
     defaults: defaults2
   };
-}();
+})();
 function morphElements(currentElement, newElement, { callbacks: callbacks2, ...options } = {}) {
   Idiomorph.morph(currentElement, newElement, {
     ...options,
@@ -15698,7 +15698,7 @@ Chart.prototype.__render = function __render() {
 Chart.prototype.__config = function __config() {
   return Chartkick.config;
 };
-var LineChart = /* @__PURE__ */ function(Chart4) {
+var LineChart = /* @__PURE__ */ (function(Chart4) {
   function LineChart2() {
     Chart4.apply(this, arguments);
   }
@@ -15712,8 +15712,8 @@ var LineChart = /* @__PURE__ */ function(Chart4) {
     return "LineChart";
   };
   return LineChart2;
-}(Chart);
-var PieChart = /* @__PURE__ */ function(Chart4) {
+})(Chart);
+var PieChart = /* @__PURE__ */ (function(Chart4) {
   function PieChart2() {
     Chart4.apply(this, arguments);
   }
@@ -15727,8 +15727,8 @@ var PieChart = /* @__PURE__ */ function(Chart4) {
     return "PieChart";
   };
   return PieChart2;
-}(Chart);
-var ColumnChart = /* @__PURE__ */ function(Chart4) {
+})(Chart);
+var ColumnChart = /* @__PURE__ */ (function(Chart4) {
   function ColumnChart2() {
     Chart4.apply(this, arguments);
   }
@@ -15742,8 +15742,8 @@ var ColumnChart = /* @__PURE__ */ function(Chart4) {
     return "ColumnChart";
   };
   return ColumnChart2;
-}(Chart);
-var BarChart = /* @__PURE__ */ function(Chart4) {
+})(Chart);
+var BarChart = /* @__PURE__ */ (function(Chart4) {
   function BarChart2() {
     Chart4.apply(this, arguments);
   }
@@ -15757,8 +15757,8 @@ var BarChart = /* @__PURE__ */ function(Chart4) {
     return "BarChart";
   };
   return BarChart2;
-}(Chart);
-var AreaChart = /* @__PURE__ */ function(Chart4) {
+})(Chart);
+var AreaChart = /* @__PURE__ */ (function(Chart4) {
   function AreaChart2() {
     Chart4.apply(this, arguments);
   }
@@ -15772,8 +15772,8 @@ var AreaChart = /* @__PURE__ */ function(Chart4) {
     return "AreaChart";
   };
   return AreaChart2;
-}(Chart);
-var GeoChart = /* @__PURE__ */ function(Chart4) {
+})(Chart);
+var GeoChart = /* @__PURE__ */ (function(Chart4) {
   function GeoChart2() {
     Chart4.apply(this, arguments);
   }
@@ -15787,8 +15787,8 @@ var GeoChart = /* @__PURE__ */ function(Chart4) {
     return "GeoChart";
   };
   return GeoChart2;
-}(Chart);
-var ScatterChart = /* @__PURE__ */ function(Chart4) {
+})(Chart);
+var ScatterChart = /* @__PURE__ */ (function(Chart4) {
   function ScatterChart2() {
     Chart4.apply(this, arguments);
   }
@@ -15802,8 +15802,8 @@ var ScatterChart = /* @__PURE__ */ function(Chart4) {
     return "ScatterChart";
   };
   return ScatterChart2;
-}(Chart);
-var BubbleChart = /* @__PURE__ */ function(Chart4) {
+})(Chart);
+var BubbleChart = /* @__PURE__ */ (function(Chart4) {
   function BubbleChart2() {
     Chart4.apply(this, arguments);
   }
@@ -15817,8 +15817,8 @@ var BubbleChart = /* @__PURE__ */ function(Chart4) {
     return "BubbleChart";
   };
   return BubbleChart2;
-}(Chart);
-var Timeline = /* @__PURE__ */ function(Chart4) {
+})(Chart);
+var Timeline = /* @__PURE__ */ (function(Chart4) {
   function Timeline2() {
     Chart4.apply(this, arguments);
   }
@@ -15837,7 +15837,7 @@ var Timeline = /* @__PURE__ */ function(Chart4) {
     return "Timeline";
   };
   return Timeline2;
-}(Chart);
+})(Chart);
 Chartkick.LineChart = LineChart;
 Chartkick.PieChart = PieChart;
 Chartkick.ColumnChart = ColumnChart;
@@ -16842,14 +16842,14 @@ function _arrayUnique(items) {
   }
   return Array.from(set2);
 }
-var requestAnimFrame = function() {
+var requestAnimFrame = (function() {
   if (typeof window === "undefined") {
     return function(callback2) {
       return callback2();
     };
   }
   return window.requestAnimationFrame;
-}();
+})();
 function throttled(fn2, thisArg) {
   let argsToUse = [];
   let ticking = false;
@@ -18406,7 +18406,7 @@ function retinaScale(chart, forceRatio, forceStyle) {
   }
   return false;
 }
-var supportsEventListenerOptions = function() {
+var supportsEventListenerOptions = (function() {
   let passiveSupported = false;
   try {
     const options = {
@@ -18422,7 +18422,7 @@ var supportsEventListenerOptions = function() {
   } catch (e) {
   }
   return passiveSupported;
-}();
+})();
 function readUsedSize(element, property) {
   const value = getStyle(element, property);
   const matches = value && value.match(/^(\d+)(\.\d+)?px$/);

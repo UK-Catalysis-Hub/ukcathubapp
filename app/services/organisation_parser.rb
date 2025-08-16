@@ -146,7 +146,7 @@ class OrganisationParser
       'Univ. Pablo de Olavide' => 'Universidad Pablo de Olavide',
       'Univ. of Manchester' => 'The University of Manchester',
       'Universidade Federal de Pernambuco'=> 'Federal University of Pernambuco',
-      'Universidade de São Paulo'=>'University of São Paulo',e
+      'Universidade de São Paulo'=>'University of São Paulo',
       'Universitat Politecnica de Catalunya' => 'Universitat Politècnica de Catalunya',
       'University College of London' => 'University College London',
       'University of Aston' => 'Aston University',
