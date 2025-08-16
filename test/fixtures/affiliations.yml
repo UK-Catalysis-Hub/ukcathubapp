@@ -49,3 +49,13 @@ four:
   country: "United Kingdom"
   sector: "Academia"
   organisation: 1
+
+five:
+  institution: "Another Affiliation"
+  department: "Chemistry"
+  faculty: "Faculty of Sciences"
+  school: nil
+  work_group: nil
+  country: "Germany"
+  sector: "Academia"
+  organisation: 1

@@ -461,6 +461,18 @@ class OrganisationParser
     strcpy
   end
 
+  def remove_partial_units(returning)
+    # pairs = [["department", "Chemistry"], ["school", "School of Chemistry"]]
+    unit_pairs = returning
+    value_elements = unit_pairs.map {|_,second| second}
+    filtered_pairs = unit_pairs.reject do |_,second|
+      value_elements.any?{|other| other!= second && other.include?(second)}
+    end
+    filtered_pairs
+  end
+
+
+
   # return a list of unit tuples and the unparsed rest of the string
   def parse_org_units(affiliation_str)
     units = {
@@ -475,7 +487,13 @@ class OrganisationParser
       match = check_list(affiliation_str, unit_list)[0]
       next unless match && !match.empty?
       found_units << [unit_type, match]
-      remainder.sub!(match, '') # remove match from affiliation string
+      #remainder.sub!(match, '') # remove match from affiliation string
+    end
+    # check that the units are actual matches and not partials
+    # can cause errrors in parsing
+    found_units = remove_partial_units(found_units)
+    found_units.each do |_, take_out|
+      remainder.sub!(take_out, "")
     end
 
     [found_units, (remainder.nil? || remainder.empty?)? "" : remove_extra_commas(remainder.strip)]
@@ -542,7 +560,6 @@ class OrganisationParser
     is_single_line_affi = false
     affi_parsed = split_single(str_affi)
     affi_parsed = affi_parsed.compact_blank() 
-    puts(affi_parsed)
     if affi_parsed.length > 1 and affi_parsed.keys().include?(:institution) 
       is_single_line_affi = true if affi_parsed.length > 1
     end
@@ -578,7 +595,6 @@ class OrganisationParser
             parsed_affi[:address] = [parsed_affi[:address], value].compact_blank.join(', ') if parsed_affi[:address] != value
           when :institution
             if parsed_affi[:institution].present?
-              puts "* Assigned institution #{parsed_affi[:institution].inspect}"
               #if is_hosted(parsed_affi[:institution], value) or 
               if has_hosting_path?(parsed_affi[:institution], value) or
                  has_hosting_path?(value, parsed_affi[:institution])

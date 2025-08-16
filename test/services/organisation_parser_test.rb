@@ -257,10 +257,11 @@ class OrganisatioParserTest < ActiveSupport::TestCase
   end
 
   test "checking real cases:" do
-    affiliation_lines = [[1, 'Faculty of Physics Ludwig‐Maximilians‐Universität München  80539 München Germany'],[114,'The Blackett Laboratory, Department of Physics Imperial College London London SW7 2AZ UK'],[119, 'Insitute of Materials Research and Engineering, A*STAR (Agency for Science, Technology and Research) Singapore 138634 Singapore']]
+    affiliation_lines = [[1, 'Faculty of Physics Ludwig‐Maximilians‐Universität München  80539 München Germany'],[114,'The Blackett Laboratory, Department of Physics Imperial College London London SW7 2AZ UK'],[119, 'Insitute of Materials Research and Engineering, A*STAR (Agency for Science, Technology and Research) Singapore 138634 Singapore'],[220,'School of Chemistry, Institute of Science Suranaree University of Technology  111 University Avenue, Muang Nakhon Ratchasima 30000 Thailand']]
     puts @org_p.parse_and_map_single(affiliation_lines[0]).inspect
     puts @org_p.parse_and_map_single(affiliation_lines[1]).inspect
     puts @org_p.parse_and_map_single(affiliation_lines[2]).inspect
+    puts @org_p.parse_and_map_single(affiliation_lines[3]).inspect
   end
 
   test "Unhandled and Messy cases" do

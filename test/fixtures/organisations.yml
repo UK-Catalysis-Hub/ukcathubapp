@@ -41,7 +41,7 @@ five:
   address_id: 1
   country: "Germany"
   city: "Munich"
-  
+
 six:
   name: "Imperial College London"
   short_name: MyString
@@ -50,5 +50,15 @@ six:
   homepage: MyString
   address_id: 1
   country: "United Kingdom"
-  city: "Munich"
+  city: "London"
+
+seven:
+  name: 'Suranaree University of Technology'
+  short_name: MyString
+  identifier: MyString
+  logo: MyString
+  homepage: MyString
+  address_id: 1
+  country: "Thailand"
+  city: "Bangkok"
 
