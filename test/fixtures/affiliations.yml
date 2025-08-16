@@ -40,3 +40,12 @@ four:
   sector: "Academia"
   organisation: 1
 
+four:
+  institution: "Imperial College London"
+  department: "Department of Physics"
+  faculty: nil
+  school: nil
+  work_group: "The Blackett Laboratory"
+  country: "United Kingdom"
+  sector: "Academia"
+  organisation: 1

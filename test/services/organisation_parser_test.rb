@@ -91,10 +91,11 @@ class OrganisatioParserTest < ActiveSupport::TestCase
                                            @org_p.get_institution_synonyms,
                                            organisations_list)
     # test fourth level nesting
-    assert ["Science and Technology Facilities Council",
+    expected_b = ["Science and Technology Facilities Council",
             "Rutherford Appleton Laboratory",
             "Research Complex at Harwell",
-            "UK Catalysis Hub", "Harwell, OX11 1XX, UK"] == b_res
+            "UK Catalysis Hub", "Harwell, OX11 1XX, UK"]
+    assert_equal expected_b, b_res, "there is a problem here"
     # test no inst in str:
     c_dir_str = "School of Chemistry"
     c_res = @org_p.get_institutions_in_str(c_dir_str,
@@ -135,8 +136,8 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     assert result_c == expected
     d_dir_str = "UK Catalysis Hub, RCaH, STFC OX11 1XX, UK"
     result_d = @org_p.parse_institutions(d_dir_str)
-    expected_d = ["UK Catalysis Hub", "Research Complex at Harwell, Science and Technology Facilities Council OX11 1XX, UK"]
-    assert result_d == expected_d
+    expected_d = ["UK Catalysis Hub", "Research Complex at Harwell, Science and Technology Facilities Council, OX11 1XX, UK"]
+    assert_equal expected_d, result_d
     e_dir_str = "UK Catalysis Hub, Harwell, OX11 1XX, UK"
     expected_e = ["UK Catalysis Hub", "Harwell, OX11 1XX, UK"]
     result_e = @org_p.parse_institutions(e_dir_str)
@@ -256,8 +257,10 @@ class OrganisatioParserTest < ActiveSupport::TestCase
   end
 
   test "checking real cases:" do
-    affiliation_lines = [[1, 'Faculty of Physics Ludwig‐Maximilians‐Universität München  80539 München Germany']]
+    affiliation_lines = [[1, 'Faculty of Physics Ludwig‐Maximilians‐Universität München  80539 München Germany'],[114,'The Blackett Laboratory, Department of Physics Imperial College London London SW7 2AZ UK'],[119, 'Insitute of Materials Research and Engineering, A*STAR (Agency for Science, Technology and Research) Singapore 138634 Singapore']]
     puts @org_p.parse_and_map_single(affiliation_lines[0]).inspect
+    puts @org_p.parse_and_map_single(affiliation_lines[1]).inspect
+    puts @org_p.parse_and_map_single(affiliation_lines[2]).inspect
   end
 
   test "Unhandled and Messy cases" do

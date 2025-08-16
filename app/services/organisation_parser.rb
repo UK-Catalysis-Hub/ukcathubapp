@@ -27,6 +27,7 @@ class OrganisationParser
       "P.R.C." => "Peoples Republic of China",
       "P.R.China" => "Peoples Republic of China",
       "P.R. China" => "Peoples Republic of China",
+      "P. R. China" => "Peoples Republic of China",
       "China" => "Peoples Republic of China",
       "People's Republic of China" => "Peoples Republic of China",
       "People’s Republic of China" => "Peoples Republic of China",
@@ -41,8 +42,8 @@ class OrganisationParser
       "Republic of Korea"=> "South Korea"
     }
     @institution_synonyms = {
-      'A*STAR' => 'Agency for Science, Technology and Research',
       'A*STAR Agency for Science, Technology and Research' => 'Agency for Science, Technology and Research',
+      'A*STAR (Agency for Science, Technology and Research)' => 'Agency for Science, Technology and Research',
       'AWE' => 'Atomic Weapons Establishment Plc',
       'AWE Public Limited Company' => 'Atomic Weapons Establishment Plc',
       'AWE plc' => 'Atomic Weapons Establishment Plc',
@@ -85,7 +86,6 @@ class OrganisationParser
       'ISIS Pulsed Neutron and Muon Facility' => 'ISIS Neutron and Muon Source',
       'ISIS Pulsed Neutron and Muon Source' => 'ISIS Neutron and Muon Source',
       'Imperial College, London' => 'Imperial College London',
-      'Imperial College' => 'Imperial College London',
       'Institut Laue Langevin' => 'Institut Laue-Langevin',
       'Institute of Materials Research and Engineering (IMRE)' => 'Institute of Materials Research and Engineering',
       'Instituto de Ciencia de Materiales de Madrid, C.S.I.C.' => 'Instituto de Ciencia de Materiales de Madrid C.S.I.C.',
@@ -99,6 +99,7 @@ class OrganisationParser
       'Kings College London' => "King's College London",
       'King’s College London' => "King's College London",
       'Ludwig‐Maximilians‐Universität München'=>'Ludwig-Maximilians Universität München',
+      'Ludwig-Maximilians-Universität München'=>'Ludwig-Maximilians Universität München',
       'Max Planck Institute for Solid State Research' => 'Max-Planck Institute for Solid State Research',
       'National Institute for Materials Science (NIMS)'=>'National Institute for Materials Science',
       'NSG-Pilkington' => 'NSG Group',
@@ -116,6 +117,7 @@ class OrganisationParser
       'RAL' => 'Rutherford Appleton Laboratory',
       '(RAL)' => 'Rutherford Appleton Laboratory',
       'RCaH' => 'Research Complex at Harwell',
+      'Rajamangala University of Technology ISAN (Khon Kaen Campus)'=>'Rajamangala University of Technology Isan',
       'Research Complex at Harwell (RCaH)' => 'Research Complex at Harwell',
       'Réseau sur le Stockage Electrochimique de l’Energie (RS2E)' => 'Réseau sur le Stockage Électrochimique de l’Énergie (RS2E)',
       'STFC' => 'Science and Technology Facilities Council',
@@ -363,9 +365,10 @@ class OrganisationParser
   
   def get_institutions_in_str(str, synonym_dict, institution_list)
     institution, remainder = str_has_synonym(str, synonym_dict)
-
+    #puts "inst: #{institution}"
+    #puts "rem: #{remainder}"
     if institution.to_s.empty?
-      institution, remainder = check_list(str, institution_list)
+       institution, remainder = check_list(str, institution_list)
     end
 
     if institution.to_s.empty?
@@ -374,6 +377,7 @@ class OrganisationParser
     else
       result = get_institutions_in_str(remainder.strip, synonym_dict, institution_list)
       # If result starts with "", remove it
+      #puts "result #{result}"
       result.shift if result.first == ""
       return [institution] + result
     end
@@ -431,8 +435,8 @@ class OrganisationParser
   end
 
   def parse_institutions(affiliation_str)
-    affi_clean = replace_institution_synonyms(affiliation_str)
-    institutions_list = get_institutions_in_str(affi_clean, @institution_synonyms, @organisation_list)
+    #affi_clean = replace_institution_synonyms(affiliation_str)???
+    institutions_list = get_institutions_in_str(affiliation_str, @institution_synonyms, @organisation_list)
     host_paths = get_host_paths(institutions_list)
     if host_paths != []
       longest_path = get_longest_path(host_paths)
