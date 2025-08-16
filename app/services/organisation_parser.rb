@@ -513,6 +513,17 @@ class OrganisationParser
     CGI.unescapeHTML(cleaned)
   end
 
+  def clean_address_and_leads(the_string)
+    leading_leftovers = ["and "]
+    the_string = clean_address_string(the_string)
+    leading_leftovers.each do |leftover|
+      if the_string.starts_with?(leftover)
+        the_string.sub!(leftover, "")
+      end
+    end
+    the_string
+  end
+
   # split single line affiliation strings
   def split_single(affiliation_str)
     # affiliation parts missing city and province
@@ -547,6 +558,7 @@ class OrganisationParser
 ##            ctry_str, splitting_this = check_list(splitting_this, countries_list)
 
     splitting_this = remove_extra_commas(splitting_this)
+    splitting_this = clean_address_and_leads(splitting_this)
 
     return_parsed = {'institution': inst_str, 'school': school_str,
                      'department': dept_str, 'faculty': faculty_str,
