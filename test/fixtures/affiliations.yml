@@ -59,3 +59,13 @@ five:
   country: "Germany"
   sector: "Academia"
   organisation: 1
+  
+six:
+  institution: "Cardiff University"
+  department: nil
+  faculty: nil
+  school: nil
+  work_group: nil
+  country: "United Kingdom"
+  sector: "Academia"
+  organisation: 1
