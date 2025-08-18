@@ -6,6 +6,8 @@ one:
   identifier: MyString
   logo: MyString
   homepage: MyString
+  country: United Kingdom
+  sector: Research Facility
   address_id: 1
 
 two:
@@ -14,6 +16,8 @@ two:
   identifier: MyString
   logo: MyString
   homepage: MyString
+  country: United Kingdom
+  sector: Research Facility
   address_id: 1
 
 three:
@@ -21,6 +25,8 @@ three:
   short_name: MyString
   identifier: MyString
   logo: MyString
+  country: "United Kingdom"
+  sector: Research Facility
   homepage: MyString
   address_id: 1
 
@@ -30,6 +36,8 @@ four:
   identifier: MyString
   logo: MyString
   homepage: MyString
+  country: "United Kingdom"
+  sector: "Academia"
   address_id: 1
 
 five:
@@ -39,6 +47,7 @@ five:
   logo: MyString
   homepage: MyString
   address_id: 1
+  sector: "Academia"
   country: "Germany"
   city: "Munich"
 
@@ -50,6 +59,7 @@ six:
   homepage: MyString
   address_id: 1
   country: "United Kingdom"
+  sector: "Academia"
   city: "London"
 
 seven:
@@ -60,5 +70,6 @@ seven:
   homepage: MyString
   address_id: 1
   country: "Thailand"
+  sector: "Academia"
   city: "Bangkok"
 

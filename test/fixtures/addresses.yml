@@ -18,4 +18,5 @@ two:
   city: MyString
   province: MyString
   country: MyString
-  affiliation_id: 1
+  affiliation_id: 2
+
