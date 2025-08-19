@@ -101,6 +101,7 @@ class OrganisationParser
       'Ludwig‐Maximilians‐Universität München'=>'Ludwig-Maximilians Universität München',
       'Ludwig-Maximilians-Universität München'=>'Ludwig-Maximilians Universität München',
       'Ludwig‐Maximilians‐University Munich'=>'Ludwig-Maximilians Universität München',
+      'Ludwig‐Maximilians‐Universität'=>'Ludwig-Maximilians Universität München',
       'Max Planck Institute for Solid State Research' => 'Max-Planck Institute for Solid State Research',
       'National Institute for Materials Science (NIMS)'=>'National Institute for Materials Science',
       'NSG-Pilkington' => 'NSG Group',
