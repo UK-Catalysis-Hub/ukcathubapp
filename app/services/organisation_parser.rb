@@ -100,6 +100,7 @@ class OrganisationParser
       'King’s College London' => "King's College London",
       'Ludwig‐Maximilians‐Universität München'=>'Ludwig-Maximilians Universität München',
       'Ludwig-Maximilians-Universität München'=>'Ludwig-Maximilians Universität München',
+      'Ludwig‐Maximilians‐University Munich'=>'Ludwig-Maximilians Universität München',
       'Max Planck Institute for Solid State Research' => 'Max-Planck Institute for Solid State Research',
       'National Institute for Materials Science (NIMS)'=>'National Institute for Materials Science',
       'NSG-Pilkington' => 'NSG Group',
@@ -327,7 +328,7 @@ class OrganisationParser
   end
 
   # verify if the string has some of the synomyms in the provided synonym table
-  def str_has_synonym(affi_str, synonym_dict)
+  def str_has_synonym_old(affi_str, synonym_dict)
     affi_str = affi_str.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
     temp_str = synonym_dict.keys
       .map { |k| k.encode('UTF-8', invalid: :replace, undef: :replace, replace: '') }
@@ -336,6 +337,34 @@ class OrganisationParser
 
     ret_str = temp_str ? synonym_dict[temp_str] : ""
     affi_str = temp_str ? affi_str.sub(temp_str, '') : affi_str
+    [ret_str, affi_str]
+  end
+
+  # verify if the string has some of the synomyms in the provided synonym table
+  def str_has_synonym(affi_str, synonym_dict)
+    # this removes invalid UTF-8)
+    affi_str = affi_str.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
+
+    # Sort synonyms by length descending
+    sorted_keys = synonym_dict.keys
+      .map { |k| k.encode('UTF-8', invalid: :replace, undef: :replace, replace: '') }
+      .sort_by { |k| -k.length }
+
+    # this uses a regular expression to find a match and removes trailing commas and spaces
+    matched_key = sorted_keys.find do |k|
+      affi_str.match?(/\b#{Regexp.escape(k)}\b[, ]*?/i)
+    end
+
+    # this returns the value for the matched key or blank if no matched key
+    ret_str = matched_key ? synonym_dict[matched_key] : ""
+
+    # remove the matched key and clean the remainder of the affi string
+    if matched_key
+      # Remove synonym and trailing punctuation/space
+      affi_str.gsub!(/\b#{Regexp.escape(matched_key)}\b[, ]*?/i, '')
+      affi_str.strip!
+    end
+    #returns the matched value (or "") and the resulting affi string
     [ret_str, affi_str]
   end
 

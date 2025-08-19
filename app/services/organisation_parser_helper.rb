@@ -249,6 +249,24 @@ class OrganisatioParserHelper
     parsed_singles
   end
 
+  # verification of cr_one liners: parsed vs assigned
+  def verify_one_liner(author_cr_affis, an_author)
+    puts author_cr_affis.inspect
+    puts "try to parse #{author_cr_affis[0].id},#{author_cr_affis[0].name}"
+    parsed_single = @cr_org_parser.parse_and_map_single([author_cr_affis[0].id,author_cr_affis[0].name])
+    puts "#### #{parsed_single.inspect} #####"
+    # check if assigned matches parsed
+    assigned_affi = AuthorAffiliation.find(author_cr_affis[0].author_affiliation_id)
+    puts "The AutAffi in DB is:\n\t #{assigned_affi.inspect}"
+    built_affi = make_author_affi(parsed_single[0], an_author.id)
+    puts "The Affi built from parsed values \n\t #{built_affi.inspect}"
+    they_match = compare_affis(assigned_affi, built_affi)
+    if not they_match
+      puts "there are differences between parsed and stored affi"
+      affi_corrector_process(built_affi, assigned_affi, parsed_single[0])
+    end
+  end
+
   def verify_assinged()
     all_aut_pubs = ArticleAuthor.all
     all_aut_pubs.each do |an_author|
@@ -256,7 +274,7 @@ class OrganisatioParserHelper
       puts ("Author #{an_author.id} #{an_author.given_name} #{an_author.last_name}")
       puts "has #{author_cr_affis.length()} CR affiliation"
       if author_cr_affis.length() == 1
-      # check this only one line
+        # check this only one line
         puts author_cr_affis.inspect
         puts "try to parse #{author_cr_affis[0].id},#{author_cr_affis[0].name}"
         parsed_single = @cr_org_parser.parse_and_map_single([author_cr_affis[0].id,author_cr_affis[0].name])
@@ -264,15 +282,7 @@ class OrganisatioParserHelper
         if author_cr_affis[0].author_affiliation_id != nil
           puts "Assigned #{author_cr_affis[0].author_affiliation_id}"
           # check if assigned matches parsed
-          assigned_affi = AuthorAffiliation.find(author_cr_affis[0].author_affiliation_id)
-          puts "The AutAffi in DB is:\n\t #{assigned_affi.inspect}"
-          built_affi = make_author_affi(parsed_single[0], an_author.id)
-          puts "The Affi built from parsed values \n\t #{built_affi.inspect}"
-          they_match = compare_affis(assigned_affi, built_affi)
-          if not they_match
-            puts "there are differences between parsed and stored affi"
-            affi_corrector_process(built_affi, assigned_affi, parsed_single[0])          
-          end
+          verify_one_liner(author_cr_affis, an_author)
         end
       end
       #author_cr_affis.each do |a_cr_affi|       
