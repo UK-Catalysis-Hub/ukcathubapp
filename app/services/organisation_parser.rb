@@ -160,6 +160,7 @@ class OrganisationParser
       'University of Durham' => 'Durham University',
       'University of Edinburgh' => 'The University of Edinburgh',
       'University of Manchester' => 'The University of Manchester',
+      "University of New South Wales (UNSW)" => "University of New South Wales",
       'University of Padova' => 'Università di Padova',
       'University of Padua' => 'Università di Padova',
       'University of St Andrews' => 'University of St. Andrews',
@@ -354,7 +355,8 @@ class OrganisationParser
 
     # this uses a regular expression to find a match and removes trailing commas and spaces
     matched_key = sorted_keys.find do |k|
-      affi_str.match?(/\b#{Regexp.escape(k)}\b[, ]*?/i)
+      #affi_str.match?(/\b#{Regexp.escape(k)}\b[, ]*?/i)
+      affi_str.match?(Regexp.new(Regexp.escape(k)))
     end
 
     # this returns the value for the matched key or blank if no matched key
@@ -363,7 +365,8 @@ class OrganisationParser
     # remove the matched key and clean the remainder of the affi string
     if matched_key
       # Remove synonym and trailing punctuation/space
-      affi_str.gsub!(/\b#{Regexp.escape(matched_key)}\b[, ]*?/i, '')
+      #affi_str.gsub!(/\b#{Regexp.escape(matched_key)}\b[, ]*?/i, '')
+      affi_str.gsub!(Regexp.new(Regexp.escape(matched_key) + '[, ]*?'), '')
       affi_str.strip!
     end
     #returns the matched value (or "") and the resulting affi string

@@ -69,3 +69,14 @@ six:
   country: "United Kingdom"
   sector: "Academia"
   organisation: 1
+  
+seven: 
+  institution: "University of New South Wales"
+  department: nil
+  faculty: nil
+  school: nil
+  work_group: nil
+  country: "Australia"
+  sector: "Academia"
+  organisation: 1
+
