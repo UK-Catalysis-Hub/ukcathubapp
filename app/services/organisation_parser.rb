@@ -195,7 +195,8 @@ class OrganisationParser
    @country_exceptions = [
      "Denmark Hill", "UK Catalysis Hub", "UK CRG",
      "Sasol Technology U.K.", "Sasol Technology UK",
-     "N. Ireland", 'Indian', 'Northern Ireland', "Australian"]
+     "N. Ireland", 'Indian', 'Northern Ireland', "Australian",
+     "University of New South Wales"]
         
    @country_provinces  = { "England" => "United Kingdom",
      "Scotland" => "United Kingdom",

@@ -120,6 +120,11 @@ class OrganisatioParserTest < ActiveSupport::TestCase
     expected_b = ["United States of America",
                   "UK Catalysis Hub, Research Complex at Harwell, OX11 1XX,"]
     assert @org_p.parse_countries(b_dir_str)  == expected_b
+
+    c_dir_str = "School of Materials Science and Engineering University of New South Wales (UNSW)  Sydney NSW 2052 Australia"
+    expected_c = ["Australia",
+                  "School of Materials Science and Engineering University of New South Wales (UNSW)  Sydney NSW 2052 "]
+    assert_equal expected_c, @org_p.parse_countries(c_dir_str)
   end
 
   test "parsing organisation in string" do
