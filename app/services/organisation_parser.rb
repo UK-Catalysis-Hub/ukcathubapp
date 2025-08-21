@@ -162,6 +162,7 @@ class OrganisationParser
       'SynCat@Beijing, Synfuels China Technology Co. Ltd.' => 'SynCat@Beijing Synfuels China Company Limited',
       'Synfuels China Compnay Limited' => 'SynCat@Beijing Synfuels China Company Limited',
       'Technical University Berlin' => 'Technische Universität Berlin',
+      'Technical University Munich' => 'Technical University of Munich',
       'Technion' => 'Technion - Israel Institute of Technology',
       'Technion Israel Institute of Technology' => 'Technion - Israel Institute of Technology',
       'Technion-Israel Institute of Technology' => 'Technion - Israel Institute of Technology',
@@ -218,7 +219,6 @@ class OrganisationParser
       'Université Paris-Sud'=>'Université Paris Sud',
       'Wroclaw University of Science and Technology'=>'Wrocław University of Science and Technology',
       "UNSW" => "University of New South Wales",
-      "University of New South Wales (UNSW)" => "University of New South Wales",
       'Campus UAB' =>'Universitat Autònoma de Barcelona',
       'Wrocław University of Technology' => 'Wrocław University of Science and Technology'
     }
@@ -433,19 +433,27 @@ class OrganisationParser
   end
 
   def get_country_synonyms
-    return @country_synonyms
+    @country_synonyms
+  end
+
+  def get_countries_list
+    @countries_list
+  end
+
+  def get_country_provinces
+    @country_provinces
   end
 
   def get_institution_synonyms
-    return @institution_synonyms
+    @institution_synonyms
   end
 
   def get_organisations
-    return @organisation_list
+    @organisation_list
   end
 
   def get_organisation_synonyms
-    return @institution_synonyms
+    @institution_synonyms
   end
   
   def get_institutions_in_str(str, synonym_dict, institution_list)
