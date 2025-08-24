@@ -1,4 +1,4 @@
-class OrganisatioParserHelper
+class OrganisationParserHelper
   def get_parser()
     @cr_org_parser = OrganisationParser.new()
     @cr_org_parser.refresh_lists()
