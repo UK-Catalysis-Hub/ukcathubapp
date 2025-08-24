@@ -290,88 +290,87 @@ class OrganisatioParserHelper
     end
   end
 
-def assign_missing
-  unasigned_cr_affi = CrAffiliation.where({:author_affiliation_id=>nil}).order(:article_author_id)
-  current_art_auth = 0
-  acc_affis = []
-  unasigned_cr_affi.each do |a_cr_affi|
-    if acc_affis == []
-      puts "started getting cr affis for #{a_cr_affi.article_author_id}"
-      current_art_auth = a_cr_affi.article_author_id
-      acc_affis << a_cr_affi
-    elsif current_art_auth == a_cr_affi.article_author_id 
-      puts "just adding a cr affi"
-      acc_affis << a_cr_affi
-    else
-      # need to parse and assign these:
-      puts "Will try to parse and assing these #{acc_affis.inspect}"
-      puts "There are #{acc_affis.count} affiliations for #{current_art_auth}"
-      # need to update current_art_auth
-      current_art_auth = a_cr_affi.article_author_id
-      # need to restart acc_affis
-      acc_affis = [a_cr_affi]
+  def assign_missing
+    unasigned_cr_affi = CrAffiliation.where({:author_affiliation_id=>nil}).order(:article_author_id)
+    current_art_auth = 0
+    acc_affis = []
+    unasigned_cr_affi.each do |a_cr_affi|
+      if acc_affis == []
+        puts "started getting cr affis for #{a_cr_affi.article_author_id}"
+        current_art_auth = a_cr_affi.article_author_id
+        acc_affis << a_cr_affi
+      elsif current_art_auth == a_cr_affi.article_author_id 
+         puts "just adding a cr affi"
+        acc_affis << a_cr_affi
+      else
+        # need to parse and assign these:
+        puts "Will try to parse and assing these #{acc_affis.inspect}"
+        puts "There are #{acc_affis.count} affiliations for #{current_art_auth}"
+        # need to update current_art_auth
+        current_art_auth = a_cr_affi.article_author_id
+        # need to restart acc_affis
+        acc_affis = [a_cr_affi]
+        break
+      end
+    end
+    puts "this is the reminder#{acc_affis.inspect}"
+  end
 
-      break
+  def assign_to_one_liners(cr_affis)
+    cr_affis.each do |a_cr_affi|
+      parsed_single = @cr_org_parser.parse_and_map_single([a_cr_affi.id, a_cr_affi.name])
+      # See if there are affiliation matches
+      puts " #{parsed_single.inspect}"
+      # one liners should always have an institution.
+      #   If not:
+      #     - they are not one liners
+      #     - there is a new synonym
+      #     - there is a new organisation
+      if parsed_single[0][:institution] == ""
+        parsed_single = [get_blank_parsed]
+        parsed_single[0][:address] = a_cr_affi.name
+        parsef_single = manual_parse(parsed_single[0])
+      end
+      matching_affi = get_close_affiliation_id(parsed_single[0])
+      if not matching_affi.empty?
+        built_affi = make_author_affi(parsed_single[0], a_cr_affi.article_author_id)
+        # if institution is new add it to DB organisations
+        puts "** Will add this #{built_affi.inspect} and update CR_affi #{a_cr_affi.id}"
+        assign_new_affi(built_affi, a_cr_affi)
+      else
+        puts ("A matching affiliation exists:\n\t #{matching_affi.inspect}")
+        db_affi_id = matching_affi[0].id
+      end
     end
   end
-  puts "this is the reminder#{acc_affis.inspect}"
-end
 
-def assign_to_one_liners(cr_affis)
-  cr_affis.each do |a_cr_affi|
-    parsed_single = @cr_org_parser.parse_and_map_single([a_cr_affi.id, a_cr_affi.name])
-    # See if there are affiliation matches
-    puts " #{parsed_single.inspect}"
-    # one liners should always have an institution.
-    #   If not:
-    #     - they are not one liners
-    #     - there is a new synonym
-    #     - there is a new organisation
-    if parsed_single[0][:institution] == ""
-      parsed_single = [get_blank_parsed]
-      parsed_single[0][:address] = a_cr_affi.name
-      parsef_single = manual_parse(parsed_single[0])
-    end
-    matching_affi = get_close_affiliation_id(parsed_single[0])
-    if not matching_affi.empty?
-      built_affi = make_author_affi(parsed_single[0], a_cr_affi.article_author_id)
-      # if institution is new add it to DB organisations
-      puts "** Will add this #{built_affi.inspect} and update CR_affi #{a_cr_affi.id}"
-      assign_new_affi(built_affi, a_cr_affi)
-    else
-      puts ("A matching affiliation exists:\n\t #{matching_affi.inspect}")
-      db_affi_id = matching_affi[0].id
-    end
-  end
-end
+  def assign_missing2
+    grouped_cr_affis = CrAffiliation.where(author_affiliation_id: nil)
+                            .order(:article_author_id)
+                            .group_by(&:article_author_id)
 
-def assign_missing2
-  grouped_cr_affis = CrAffiliation.where(author_affiliation_id: nil)
-                          .order(:article_author_id)
-                          .group_by(&:article_author_id)
-
-  grouped_cr_affis.each do |article_author_id, cr_affis|
-    puts "Processing #{cr_affis.count} affiliations for author #{article_author_id}"
-    # Here you'd parse and assign orders
-    if all_one_liners(cr_affis)
-      puts "can process all as one liners"
-      # build each affi, see if there are matches,
-      #  if yes, add author_affi, update cr_affi
-      assign_to_one_liners(cr_affis)
-      # if not: ask if further parsing, parse, add affi, add author_affi, update cr_affi
-      #break 
-    elsif some_one_liners(cr_affis)
-      puts "cannot process all as one liners"
-      puts "need manual parsing"
-      # try parse and ask if add as it is or parse manual.
-      #assign_to_one_liners(cr_affis)
-      break
-    else
-      puts "cannot process all as one liners"
-      break
+    grouped_cr_affis.each do |article_author_id, cr_affis|
+      puts "Processing #{cr_affis.count} affiliations for author #{article_author_id}"
+      # Here you'd parse and assign orders
+      if all_one_liners(cr_affis)
+        puts "can process all as one liners"
+        # build each affi, see if there are matches,
+        #  if yes, add author_affi, update cr_affi
+        assign_to_one_liners(cr_affis)
+        # if not: ask if further parsing, parse, add affi, add author_affi, update cr_affi
+        #break 
+      elsif some_one_liners(cr_affis)
+        puts "cannot process all as one liners"
+        puts "need manual parsing"
+        # try parse and ask if add as it is or parse manual.
+        #assign_to_one_liners(cr_affis)
+        break
+      else
+        puts "cannot process all as one liners"
+        break
+      end
     end
   end
-end
 
 # Add organisations
 # Add affiliations
