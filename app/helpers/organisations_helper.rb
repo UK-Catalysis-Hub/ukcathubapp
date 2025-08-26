@@ -18,13 +18,12 @@ module OrganisationsHelper
     end
     organisation_country_count
   end
+
   def get_organisation_uk_count
-    inst_stats = Organisation.select('region, count(id) as inst_count')
-    .group('region').order('count(id) desc').where("country = 'United Kingdom'")
-    organisation_uk_count = []
-    inst_stats.each do |insts|
-      organisation_uk_count.append([insts.region, insts.inst_count])
-    end
+    inst_stats = Organisation.where(id: Affiliation.joins(:author_affiliations).select(:organisation_id)).where("country = 'United Kingdom'").group(:region).count
+
+    organisation_uk_count = inst_stats.map { |region, count| [region, count] }
+
     organisation_uk_count
   end
 end

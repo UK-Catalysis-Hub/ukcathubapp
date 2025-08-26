@@ -25,7 +25,7 @@
         <div class="row mb-3">
           <div class="row">
             <div class="col-sm-6 container">
-              <%= render partial: 'affiliations/affiliation_map', locals:{country_data: get_country_counts} %>
+              <%= render partial: 'affiliations/affiliation_map', locals:{country_data: get_country_counts, uk_data: get_organisation_uk_count} %>
             </div>
             <div class="col-sm-6 container">
               <h6>Top 10 Countries of Origin</h6>

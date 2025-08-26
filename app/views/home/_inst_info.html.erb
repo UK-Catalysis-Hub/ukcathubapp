@@ -9,11 +9,11 @@
         <div class="card-body p-0">
           <div class="row">
             <div class="col-sm-6 container">
-              <%= render partial: 'organisations/organisation_map', locals:{country_data: get_organisation_country_count, uk_data: get_organisation_uk_count} %>
+              <%= render partial: 'affiliations/affiliation_map', locals:{country_data: get_country_counts, uk_data: get_organisation_uk_count} %>
             </div>
             <div class="col-sm-6 container">
               <h6>Top 10 Countries of Origin</h6>
-              <%= render partial: 'organisations/organisation_top', locals: {items: get_organisation_country_count[0..9], count_name: "Institutions"}%>
+              <%= render partial: 'affiliations/affiliation_top', locals: {items: get_country_counts[0..9], count_name: "Institutions"}%>
               <p>
                 <%= link_to 'Download Data', {:action => "ctry_affi_count", :controller => "affiliations"}, :class => "btn btn-success btn-sm" %>
                 <%= link_to 'View Institutions', organisations_path, :class => "btn btn-success btn-sm" %>
