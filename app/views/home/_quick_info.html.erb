@@ -3,7 +3,7 @@
 <div class="row my-1"><!-- Qucik info row -->
   <div class="col-sm col-6">
     <div class="container"><!-- info box -->
-      <div class="row bg-primary  rounded border-primary">
+      <div class="row bg-primary  rounded">
         <div class="col-sm-6">
           <h1><%= number_with_delimiter(Article.active.count()) %></h1>
         </div>
@@ -16,7 +16,7 @@
   </div>  <!-- info box -->
   <div class="col-sm col-6">
     <div class="container"><!-- info box -->
-      <div class="row bg-danger  rounded border-danger my-0">
+      <div class="row bg-danger  rounded">
         <div class="col-sm-6">
           <h1><%= number_with_delimiter(Author.active.length()) %></h1>
         </div>
@@ -29,28 +29,28 @@
   </div>
   <div class="col-sm col-6">
     <div class="container"><!-- info box -->
-      <div class="row bg-success  rounded border-success">
+      <div class="row bg-warning  rounded ">
         <div class="col-sm-6">
           <h1><%= Organisation.active_org.count() %></h1>
         </div>
         <div class="col-sm my-1">
           <%= image_tag('institution.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
         </div>
-        <%= link_to 'Institutions', organisations_path, :class => "btn btn-success btn-sm btn-block text-dark" %>
+        <%= link_to 'Institutions', organisations_path, :class => "btn btn-warning btn-sm btn-block text-dark" %>
       </div>
     </div> <!-- info box -->
   </div>
   <% if do_data.visible %>
   <div class="col-sm col-6">
     <div class="container"><!-- info box -->
-      <div class="row bg-warning  rounded border-warning ">
+      <div class="row bg-success  rounded ">
         <div class="col-sm-6">
           <h1><%= number_with_delimiter(Dataset.count()) %></h1>
         </div>
         <div class="col-sm my-1">
           <%= image_tag('database.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
         </div>
-        <%= link_to 'Data Objects', datasets_path, :class => "btn btn-warning btn-sm btn-block text-dark" %>
+        <%= link_to 'Data Objects', datasets_path, :class => "btn btn-success btn-sm btn-block text-dark" %>
       </div>
     </div> <!-- info box -->
   </div>
