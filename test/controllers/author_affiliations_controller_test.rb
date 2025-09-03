@@ -2,11 +2,11 @@ require "test_helper"
 
 class AuthorAffiliationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @author_affiliation = author_affiliations(:one)
+    sign_in users(:userone)
+    @author_affiliation = author_affiliations(:autaffione)
     # ids should not be empty "for belongs" to relationships
-    @author_affiliation.article_author_id = article_authors(:one).id
-    @author_affiliation.affiliation_id = affiliations(:one).id
+    @author_affiliation.article_author_id = article_authors(:artautone).id
+    @author_affiliation.affiliation_id = affiliations(:affione).id
   end
 
   test "should get index" do

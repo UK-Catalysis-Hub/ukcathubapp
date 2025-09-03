@@ -2,8 +2,8 @@ require "test_helper"
 
 class AuthorsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @author = authors(:one)
+    sign_in users(:userone)
+    @author = authors(:authone)
   end
 
   test "should get index" do

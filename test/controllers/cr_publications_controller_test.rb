@@ -2,8 +2,8 @@ require "test_helper"
 
 class CrPublicationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @cr_publication = cr_publications(:one)
+    sign_in users(:userone)
+    @cr_publication = cr_publications(:crpone)
   end
 
   test "should get index" do

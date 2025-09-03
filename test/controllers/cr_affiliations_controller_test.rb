@@ -2,8 +2,8 @@ require "test_helper"
 
 class CrAffiliationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @cr_affiliation = cr_affiliations(:one)
+    sign_in users(:userone)
+    @cr_affiliation = cr_affiliations(:craone)
   end
 
   test "should get index" do
