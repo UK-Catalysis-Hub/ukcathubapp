@@ -247,7 +247,7 @@ class OrganisationParser
    }
 
     @inst_host_map= {
-      "Harwell Science and Innovation Campus"=>["Rutherford Appleton Laboratory"], 
+      "Harwell Science and Innovation Campus"=>["Rutherford Appleton Laboratory"],
       "Research Complex at Harwell"=>["UK Catalysis Hub","HarwellXPS"],
       "Rutherford Appleton Laboratory"=>["Research Complex at Harwell","ISIS Neutron and Muon Source"],
       "Science and Technology Facilities Council"=> ["Rutherford Appleton Laboratory", "Daresbury Laboratory"],

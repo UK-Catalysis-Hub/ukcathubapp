@@ -28,6 +28,7 @@
   </div>
   <div class="tab-pane fade" id="uk-tab-pane" role="tabpanel" aria-labelledby="uk-tab" tabindex="0">
     <!-- UK Map -->
+    <% uk_data = get_uk_count %>
     <%= geo_chart uk_data, library: {region: 'GB', resolution: 'provinces', colorAxis: {colors: ['#36da45','#044904']}}   %>
   </div>
 </div>
