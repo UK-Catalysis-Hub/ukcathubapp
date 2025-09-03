@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_25_131630) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -170,8 +173,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_25_131630) do
 
   create_table "cr_affiliations", force: :cascade do |t|
     t.string "name"
-    t.string "article_author_id"
-    t.string "author_affiliation_id"
+    t.integer "article_author_id"
+    t.integer "author_affiliation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -286,23 +289,37 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_25_131630) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
 
   create_view "inst_ctry_stats", sql_definition: <<-SQL
-    		SELECT country, count() as inst_count, SUM(res_count) as res_count, sum(pub_count)  AS pub_count 
-			FROM (SELECT country, affi_name, COUNT(*) as res_count, sum(pub_count)  AS pub_count
-				FROM (SELECT author_id, country, short_name AS affi_name, COUNT(*) AS pub_count
-					FROM "authors" 
-					INNER JOIN article_authors ON article_authors.author_id = authors.id 
-					INNER JOIN author_affiliations ON author_affiliations.article_author_id = article_authors.id 
-					GROUP BY author_id, short_name, country)
-				GROUP BY country, affi_name)
-			GROUP BY country
+      SELECT v_ctry_inst.country,
+      count(*) AS inst_count,
+      sum(v_ctry_inst.res_count) AS res_count,
+      sum(v_ctry_inst.pub_count) AS pub_count
+     FROM ( SELECT v_author_inst.country,
+              v_author_inst.affi_name,
+              count(*) AS res_count,
+              sum(v_author_inst.pub_count) AS pub_count
+             FROM ( SELECT article_authors.author_id,
+                      author_affiliations.country,
+                      author_affiliations.short_name AS affi_name,
+                      count(*) AS pub_count
+                     FROM ((authors
+                       JOIN article_authors ON ((article_authors.author_id = authors.id)))
+                       JOIN author_affiliations ON ((author_affiliations.article_author_id = article_authors.id)))
+                    GROUP BY article_authors.author_id, author_affiliations.short_name, author_affiliations.country) v_author_inst
+            GROUP BY v_author_inst.country, v_author_inst.affi_name) v_ctry_inst
+    GROUP BY v_ctry_inst.country;
   SQL
   create_view "list_themes", sql_definition: <<-SQL
-      SELECT themes.id, themes.phase, themes.name, themes.short, themes.lead, count() AS article_count
-    FROM article_themes
-    INNER JOIN themes on article_themes.theme_id = themes.id
-    INNER JOIN articles on article_themes.article_id = articles.id
-    WHERE articles.status == 'Added'
-    GROUP BY themes.phase, themes.name
-    ORDER BY themes.id
+      SELECT themes.id,
+      themes.phase,
+      themes.name,
+      themes.short,
+      themes.lead,
+      count(*) AS article_count
+     FROM ((article_themes
+       JOIN themes ON ((article_themes.theme_id = themes.id)))
+       JOIN articles ON ((article_themes.article_id = articles.id)))
+    WHERE ((articles.status)::text = 'Added'::text)
+    GROUP BY themes.id, themes.phase, themes.name
+    ORDER BY themes.id;
   SQL
 end
