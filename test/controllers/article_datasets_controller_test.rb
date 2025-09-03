@@ -2,11 +2,11 @@ require "test_helper"
 
 class ArticleDatasetsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @article_dataset = article_datasets(:one)
+    sign_in users(:userone)
+    @article_dataset = article_datasets(:adsone)
     # ids should not be empty "for belongs" to relationships
-    @article_dataset.dataset_id = datasets(:one).id
-    @article_dataset.article_id = articles(:one).id
+    @article_dataset.dataset_id = datasets(:dsone).id
+    @article_dataset.article_id = articles(:artone).id
   end
 
   test "should get index" do

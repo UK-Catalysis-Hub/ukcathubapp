@@ -2,8 +2,8 @@ require "test_helper"
 
 class AppConfigsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @app_config = app_configs(:one)
+    sign_in users(:userone)
+    @app_config = app_configs(:appcfgone)
   end
 
   test "should get edit" do

@@ -2,9 +2,9 @@ require "test_helper"
 
 class AffiliationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @affiliation = affiliations(:one)
-    @organisation = organisations(:one)
+    sign_in users(:userone)
+    @affiliation = affiliations(:affione)
+    @organisation = organisations(:orgone)
   end
 
   test "should get index" do
