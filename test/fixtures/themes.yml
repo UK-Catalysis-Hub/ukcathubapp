@@ -1,7 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  id: 1
+themeone:
   short: ThemeOne
   name: One
   lead: MyString
@@ -9,8 +8,7 @@ one:
   used: MyString
   theme_type: "Group"
 
-two:
-  id: 2
+themetwo:
   short: ThemeTwo
   name: Two
   lead: MyString

@@ -1,15 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  organisation_id: 1
+orgalione:
+  organisation_id: orgone
   name: MyString
   alias_type: MyString
   valid_from: 2025-07-25 14:16:30
   valid_to: 2025-07-25 14:16:30
   laguage_code: MyString
 
-two:
-  organisation_id: 1
+orgalitwo:
+  organisation_id: orgtwo
   name: MyString
   alias_type: MyString
   valid_from: 2025-07-25 14:16:30

@@ -2,8 +2,8 @@ require "test_helper"
 
 class PublicationCreatorTest < ActiveSupport::TestCase
   setup do
-    @article = articles(:one)
-    @theme = themes(:one)
+    @article = articles(:artone)
+    @theme = themes(:themeone)
     @doi_existing = @article.doi
     @doi_uppercase = @doi_existing.upcase
     @doi_spaces = " " + @doi_existing + " "

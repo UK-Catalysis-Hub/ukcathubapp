@@ -1,6 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+affione:
   institution: "Cardiff University"
   department: ""
   faculty: "College of Physical Sciences and Engineering"
@@ -8,9 +8,9 @@ one:
   work_group: "Cardiff Catalysis Institute"
   country: "United Kingdom"
   sector: "Academia"
-  organisation: 1
+  organisation: orgfour
 
-two:
+affitwo:
   institution: "Cardiff University"
   department: ""
   faculty: "College of Physical Sciences and Engineering"
@@ -18,9 +18,9 @@ two:
   work_group: ""
   country: "United Kingdom"
   sector: "Academia"
-  organisation: 1
+  organisation: orgfour
 
-three:
+affithree:
   institution: "Cardiff University"
   department: ""
   faculty: "College of Physical Sciences and Engineering"
@@ -28,9 +28,9 @@ three:
   work_group: ""
   country: "United Kingdom"
   sector: "Academia"
-  organisation: 1
+  organisation: orgfour
 
-four:
+affifour:
   institution: "Ludwig‐Maximilians‐Universität München"
   department: nil
   faculty: "Faculty of Physics"
@@ -38,9 +38,9 @@ four:
   work_group: nil
   country: "Germany"
   sector: "Academia"
-  organisation: 1
+  organisation: orgfive
 
-four:
+affifive:
   institution: "Imperial College London"
   department: "Department of Physics"
   faculty: nil
@@ -48,9 +48,9 @@ four:
   work_group: "The Blackett Laboratory"
   country: "United Kingdom"
   sector: "Academia"
-  organisation: 1
+  organisation: orgsix
 
-five:
+affisix:
   institution: "Another Affiliation"
   department: "Chemistry"
   faculty: "Faculty of Sciences"
@@ -58,9 +58,9 @@ five:
   work_group: nil
   country: "Germany"
   sector: "Academia"
-  organisation: 1
+  organisation: orgfour
   
-six:
+saffiseven:
   institution: "Cardiff University"
   department: nil
   faculty: nil
@@ -68,9 +68,9 @@ six:
   work_group: nil
   country: "United Kingdom"
   sector: "Academia"
-  organisation: 1
+  organisation: orgfour
   
-seven: 
+affieigth: 
   institution: "University of New South Wales"
   department: nil
   faculty: nil
@@ -78,5 +78,5 @@ seven:
   work_group: nil
   country: "Australia"
   sector: "Academia"
-  organisation: 1
+  organisation: orgeight
 

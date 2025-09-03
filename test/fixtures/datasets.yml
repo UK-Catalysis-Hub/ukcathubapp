@@ -1,6 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+dsone:
   complete: MyString
   description: MyString
   doi: MyString
@@ -11,7 +11,7 @@ one:
   ds_type: MyString
   repository: MyString
 
-two:
+dstwo:
   complete: MyString
   description: MyString
   doi: MyString

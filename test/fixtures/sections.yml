@@ -1,6 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+sectone:
   obj_name: one
   name: Themes
   heading: ThemesHeading

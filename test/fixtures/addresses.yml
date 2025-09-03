@@ -1,6 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+oneaddress:
   add_01: MyString
   add_02: MyString
   add_03: MyString
@@ -8,9 +8,9 @@ one:
   city: MyString
   province: MyString
   country: MyString
-  affiliation_id: 1
+  affiliation_id: affione
 
-two:
+twoaddress:
   add_01: MyString
   add_02: MyString
   add_03: MyString
@@ -18,5 +18,5 @@ two:
   city: MyString
   province: MyString
   country: MyString
-  affiliation_id: 2
+  affiliation_id: affifour
 

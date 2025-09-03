@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  article_author_id: 1
+  article_author_id: artautone
   name: MyString
   short_name: MyString
   add_01: MyString
@@ -12,10 +12,10 @@ one:
   city: MyString
   province: MyString
   country: MyString
-  affiliation_id: 1
+  affiliation_id: affione
 
 two:
-  article_author_id: 1
+  article_author_id: artauttwo
   name: MyString
   short_name: MyString
   add_01: MyString
@@ -26,4 +26,4 @@ two:
   city: MyString
   province: MyString
   country: MyString
-  affiliation_id: 1
+  affiliation_id: affitwo

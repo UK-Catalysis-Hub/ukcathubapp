@@ -1,19 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  id: 1
   doi: MyString
   phase: 1
   collaboration: MyString
-  theme_id: 1
-  article_id: 1
+  theme_id: themeone
+  article_id: artone
   project_year: 1
 
 two:
-  id: 2
   doi: MyString
   phase: 1
   collaboration: MyString
-  theme_id: 1
-  article_id: 1
+  theme_id: themetwo
+  article_id: artone
   project_year: 1

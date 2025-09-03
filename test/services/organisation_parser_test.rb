@@ -2,19 +2,6 @@ require "test_helper"
 
 class OrganisatioParserTest < ActiveSupport::TestCase
   setup do
-    @article = articles(:one)
-    @theme = themes(:one)
-    @doi_existing = @article.doi
-    @doi_uppercase = @doi_existing.upcase
-    @doi_spaces = " " + @doi_existing + " "
-    @doi_spc_n_uc =  " " + @doi_existing + " "
-    # the firs doi has a xiv string in doi,
-    # the second does not have pub_year
-    @preprint_dois = ["10.1101/2025.07.05.663138",
-                      "10.26434/chemrxiv-2024-cpjsk"
-                      ]
-    @ok_doi = "10.1021/acsmaterialslett.1c00766"
-    @theme_list = [@theme.id]
     @org_p = OrganisationParser.new()
     @org_p.refresh_lists()
   end
@@ -290,13 +277,12 @@ class OrganisatioParserTest < ActiveSupport::TestCase
 #    puts "#{@org_p.parse_and_map_single([1,c_dir_str]).inspect}"
 #
 #  end
-
+#
 #  test "Unhandled and Messy cases" do
 #    puts "fail parsing more than one inst in string, not seen yet"
 #    a_dir_str = "UK Catalysis Hub, Cardiff University"
 #    puts @org_p.parse_institutions(a_dir_str).inspect
 #    puts @org_p.split_single(a_dir_str).inspect
 #  end
-  
-
+#
 end

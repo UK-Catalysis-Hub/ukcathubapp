@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+adsone:
   doi: MyString
-  article_id: 1
-  dataset_id: 1
+  article_id: artone
+  dataset_id: dsone
 
-two:
+adstwo:
   doi: MyString
-  article_id: 1
-  dataset_id: 1
+  article_id: artone
+  dataset_id: dsone

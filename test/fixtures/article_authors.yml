@@ -1,25 +1,25 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+artautone:
   doi: '10.1039/c3cp52653d'
-  author_id: 1
+  author_id: authone
   author_count: MyString
   author_order: 1
   status: MyString
   author_seq: MyString
-  article_id: 1
+  article_id: artone
   orcid: MyString
   last_name: MyString
   given_name: MyString
 
-two:
+artauttwo:
   doi: '10.1039/c3cp52653d'
-  author_id: 2
+  author_id: authtwo
   author_count: MyString
   author_order: 2
   status: MyString
   author_seq: MyString
-  article_id: 1
+  article_id: artone
   orcid: MyString
   last_name: MyString
   given_name: MyString

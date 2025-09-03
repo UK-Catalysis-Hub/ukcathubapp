@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+craone:
   name: MyString
-  article_author_id: MyString
-  author_affiliation_id: MyString
+  article_author_id: artauthone
+  author_affiliation_id: authaffione
 
-two:
+cratwo:
   name: MyString
-  article_author_id: MyString
-  author_affiliation_id: MyString
+  article_author_id: artauthtwo
+  author_affiliation_id: authaffitwo

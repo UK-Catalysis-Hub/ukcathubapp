@@ -1,7 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  id: 1
+artone:
   doi: '10.1039/c3cp52653d'
   title: ArticleOne
   pub_year: 1
@@ -27,8 +26,7 @@ one:
   references_count: 1
   journal_issue: MyString
 
-two:
-  id: 2
+arttwo:
   doi: '10.1021/cs400683e'
   title: ArticleTwo
   pub_year: 1

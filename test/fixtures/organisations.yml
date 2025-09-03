@@ -1,6 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+orgone:
   name: "UK Catalysis Hub"
   short_name: MyString
   identifier: MyString
@@ -8,9 +8,9 @@ one:
   homepage: MyString
   country: United Kingdom
   sector: Research Facility
-  address_id: 1
+  address_id: oneaddress
 
-two:
+orgtwo:
   name: "Research Complex at Harwell"
   short_name: MyString
   identifier: MyString
@@ -18,9 +18,9 @@ two:
   homepage: MyString
   country: United Kingdom
   sector: Research Facility
-  address_id: 1
+  address_id: oneaddress
 
-three:
+orgthree:
   name: "Rutherford Appleton Laboratory"
   short_name: MyString
   identifier: MyString
@@ -28,9 +28,9 @@ three:
   country: "United Kingdom"
   sector: Research Facility
   homepage: MyString
-  address_id: 1
+  address_id: oneaddress
 
-four:
+orgfour:
   name: "Cardiff University"
   short_name: MyString
   identifier: MyString
@@ -38,38 +38,48 @@ four:
   homepage: MyString
   country: "United Kingdom"
   sector: "Academia"
-  address_id: 1
+  address_id: oneaddress
 
-five:
+orgfive:
   name: "Ludwig‐Maximilians‐Universität München"
   short_name: MyString
   identifier: MyString
   logo: MyString
   homepage: MyString
-  address_id: 1
+  address_id: oneaddress
   sector: "Academia"
   country: "Germany"
   city: "Munich"
 
-six:
+orgsix:
   name: "Imperial College London"
   short_name: MyString
   identifier: MyString
   logo: MyString
   homepage: MyString
-  address_id: 1
+  address_id: oneaddress
   country: "United Kingdom"
   sector: "Academia"
   city: "London"
 
-seven:
+orgseven:
   name: 'Suranaree University of Technology'
   short_name: MyString
   identifier: MyString
   logo: MyString
   homepage: MyString
-  address_id: 1
+  address_id: oneaddress
   country: "Thailand"
   sector: "Academia"
   city: "Bangkok"
 
+orgeight:
+  name: 'University of New South Wales'
+  short_name: MyString
+  identifier: MyString
+  logo: MyString
+  homepage: MyString
+  address_id: oneaddress
+  country: "Australia"
+  sector: "Academia"
+  city: "Melbourne"
