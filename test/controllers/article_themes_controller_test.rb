@@ -2,11 +2,11 @@ require "test_helper"
 
 class ArticleThemesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @article_theme = article_themes(:one)
+    sign_in users(:userone)
+    @article_theme = article_themes(:atone)
     # ids should not be empty "for belongs" to relationships
-    @article_theme.theme_id = themes(:one).id
-    @article_theme.article_id = articles(:one).id
+    @article_theme.theme_id = themes(:themeone).id
+    @article_theme.article_id = articles(:artone).id
   end
 
   test "should get index" do
