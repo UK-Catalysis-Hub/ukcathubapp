@@ -210,7 +210,7 @@
              <h6 style= "margin:auto">Publications by theme</h6>
            </div>
            <div class="card-body p-0">
-             <%= pie_chart Theme.joins(:articles).group(:short).order(:id).count(), donut: true,  legend: "right" %>
+             <%= pie_chart Theme.joins(:articles).group(:short,:id).order(:id).count(), donut: true,  legend: "right" %>
            </div>
          </div>
        </div>
@@ -337,6 +337,7 @@
          j_pub_stats = {}
          j_pub_data = {}
          j_sum = 0
+         
          Article.journals_count.reorder(j_count: :asc).each {|ajc|
            j_sum += ajc.j_count
            idx = ((ajc.j_count-1)/5).to_i

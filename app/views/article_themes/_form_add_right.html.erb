@@ -8,8 +8,16 @@
        used_themes_ids.append(art_theme.theme_id)
        select_year = art_theme.project_year
      }
-     used_themes_str = "id not in (" + used_themes_ids.join(', ') + ")"
-     themes_list = Theme.where(used_themes_str)
+     themes_list = nil
+     ids = used_themes_ids
+     if ids.any?
+       themes_list = Theme.where.not(id: ids)
+     else
+       themes_list = Theme.all  # or whatever fallback makes sense
+     end
+     
+     #used_themes_str = "NOT (id = ANY(ARRAY[#{used_themes_ids.join(', ')}])" # "NOT id in ARRAY[" + used_themes_ids.join(', ') + "]"
+     #themes_list = Theme.where(used_themes_str)
      %>
   <table>
     <thead class="thead-light">

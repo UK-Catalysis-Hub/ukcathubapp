@@ -2,8 +2,8 @@ require "test_helper"
 
 class OrganisationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @organisation = organisations(:one)
+    sign_in users(:userone)
+    @organisation = organisations(:orgone)
   end
 
   test "should get index" do
