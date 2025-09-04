@@ -2,8 +2,8 @@ require "test_helper"
 
 class SectionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @section = sections(:one)
+    sign_in users(:userone)
+    @section = sections(:sectone)
   end
 
   test "should get index" do
