@@ -25,10 +25,10 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
 # show is failing
-#  test "should show article" do
-#    get article_url(@article)
-#    assert_response :success
-#  end
+  test "should show article" do
+    get article_url(@article)
+    assert_response :success
+  end
 
   test "should get edit" do
     get edit_article_url(@article)

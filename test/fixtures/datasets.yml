@@ -1,8 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 dsone:
-  complete: MyString
-  description: MyString
+  complete: "first dataset"
+  description: "lore ipsum"
   doi: MyString
   enddate: 2024-03-21 15:59:35
   location: MyString

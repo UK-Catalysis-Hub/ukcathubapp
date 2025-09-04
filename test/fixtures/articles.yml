@@ -3,7 +3,7 @@
 artone:
   doi: '10.1039/c3cp52653d'
   title: "Article One for display"
-  pub_year: 1
+  pub_year: 2002
   pub_type: "Journal Article"
   publisher: "A Publisher"
   container_title: "A Journal"
@@ -29,17 +29,17 @@ artone:
 arttwo:
   doi: '10.1021/cs400683e'
   title: ArticleTwo
-  pub_year: 1
+  pub_year: 2005
   pub_type: MyString
   publisher: MyString
   container_title: MyString
   volume: MyString
   issue: MyString
   page: MyString
-  pub_print_year: 1
+  pub_print_year: 2005
   pub_print_month: 1
   pub_print_day: 1
-  pub_ol_year: 1
+  pub_ol_year: 2005
   pub_ol_month: 1
   pub_ol_day: 1
   license: MyString
@@ -47,7 +47,7 @@ arttwo:
   link: MyString
   url: MyString
   abstract: MyText
-  status: MyString
+  status: "Added"
   comment: MyString
   references_count: 1
   journal_issue: MyString

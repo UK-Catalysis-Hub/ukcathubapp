@@ -19,7 +19,7 @@ artauttwo:
   author_order: 2
   status: MyString
   author_seq: MyString
-  article_id: artone
+  article_id: arttwo
   orcid: MyString
   last_name: MyString
   given_name: MyString

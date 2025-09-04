@@ -2,8 +2,8 @@ require "test_helper"
 
 class ThemesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @theme = themes(:one)
+    sign_in users(:userone)
+    @theme = themes(:themeone)
   end
 
   test "should get index" do

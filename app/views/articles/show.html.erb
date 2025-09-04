@@ -146,16 +146,9 @@
   <% end %>
 </div>
 <br/>
-  <% @next = Article.find_by('id > ?', @article.id)
-     art_id = @article.id
-     @prev = nil
-     while @prev.nil?
-       art_id = art_id -1
-       @prev = Article.find_by('id = ?', art_id)
-       if art_id < 1
-         break
-       end
-     end
+  <%
+     @next = Article.find_by('id > ?', @article.id)
+     @prev = Article.where(["id < ?", @article.id]).order('id').last
   %>
   <% if user_signed_in? %>
     <%= link_to 'Edit', edit_article_path(@article), :class => "btn btn-primary btn-sm" %>

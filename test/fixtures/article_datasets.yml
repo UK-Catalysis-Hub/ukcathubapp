@@ -7,5 +7,5 @@ adsone:
 
 adstwo:
   doi: MyString
-  article_id: artone
-  dataset_id: dsone
+  article_id: arttwo
+  dataset_id: dstwo
