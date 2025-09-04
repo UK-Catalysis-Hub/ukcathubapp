@@ -22,4 +22,17 @@ class Author < ApplicationRecord
     full_n = (self.given_name == nil ? self.last_name : self.last_name + ", " +self.given_name) 
     return full_n
   end
+
+  def get_similar
+    if last_name.include?('-')
+      plain_ln = last_name.gsub('-',' ')
+    end
+    like_name = last_name.gsub(/[^a-zA-Z]/, '%')
+    authors_list = Author.where(orcid: orcid, last_name: last_name)
+                         .or(Author.where(given_name: given_name, last_name: last_name))
+                         .or(Author.where(last_name: last_name))
+                         .or(Author.where(last_name: plain_ln))
+                         .or(Author.where('last_name ILIKE ?', '%' + like_name + '%'))
+    authors_list
+  end
 end

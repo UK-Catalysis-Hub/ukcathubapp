@@ -407,25 +407,12 @@ class ArticlesController < ApplicationController
         plain_ln = new_author.last_name.gsub('-',' ')
       end
       # get a strig with only letters with no punctuations
-      like_name = "XXXX%"
-      if (new_author.last_name =~ /[^a-zA-Z\s:]/) != nil
-        non_alpha_found = true
-        like_name = new_author.last_name.gsub(" ","%")
-        while non_alpha_found
-          c_idx = (like_name =~ /[^a-zA-Z\s:]/)
-          if c_idx != nil
-            like_name[c_idx] = " "
-          else
-            non_alpha_found = false
-          end
-        end
-        like_name.gsub!(' ','%')
-      end
+      like_name = new_author.last_name.gsub(/[^a-zA-Z]/, '%')
       authors_list = Author.where(orcid: new_author.orcid, last_name: new_author.last_name)
         .or(Author.where(given_name: new_author.given_name, last_name: new_author.last_name))
         .or(Author.where(last_name: new_author.last_name))
         .or(Author.where(last_name: plain_ln))
-        .or(Author.where("last_name LIKE ?", "%" + like_name + "%"))
+        .or(Author.where("last_name ILIKE ?", "%" + like_name + "%"))
 
       found_id = 0
       # If orcid matches or exact name match, no further verification needed

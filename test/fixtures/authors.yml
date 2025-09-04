@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 authone:
-  last_name: "Some"
-  given_name: "Person"
+  last_name: "Perez"
+  given_name: "Emilio"
   orcid: MyString
   isap: false
 
 authtwo:
-  last_name: "Anoter"
-  given_name: "Subject"
+  last_name: "Emilia"
+  given_name: "Perez"
   orcid: MyString
   isap: false
