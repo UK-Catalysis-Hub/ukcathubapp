@@ -2,8 +2,8 @@ require "test_helper"
 
 class DatasetsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one)
-    @dataset = datasets(:one)
+    sign_in users(:userone)
+    @dataset = datasets(:dsone)
   end
 
   test "should get index" do
