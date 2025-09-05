@@ -1,7 +1,7 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.19.1"
 
-set :application, "ukchapp"
+set :application, "ukchapp" # will change to psdi data portal app
 set :repo_url, "https://github.com/UK-Catalysis-Hub/ukcathubapp.git"
 
 # Default branch is :master
