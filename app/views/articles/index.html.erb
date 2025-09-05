@@ -193,7 +193,7 @@
    
    <div class="tab-pane fade" id="indicators" role="tabpanel" aria-labelledby="indicators-tab">
      <div class="row mb-3">
-       <div class="col-sm-6 col-lg-7">
+       <div class="col">
          <div class="card">
            <div class="card-header bg-light">
              <h6 style= "margin:auto">Recent publications</h6>
@@ -203,18 +203,6 @@
            </div>
          </div>
        </div>
-       <% if get_theme_section.visible %>
-       <div class="col-sm-6 col-lg-5">
-         <div class="card">
-           <div class="card-header">
-             <h6 style= "margin:auto">Publications by theme</h6>
-           </div>
-           <div class="card-body p-0">
-             <%= pie_chart Theme.joins(:articles).group(:short,:id).order(:id).count(), donut: true,  legend: "right" %>
-           </div>
-         </div>
-       </div>
-       <% end %>
      </div>
      
      <div class="row mb-3">
@@ -275,44 +263,10 @@
        <div class="col-sm-6">
          <div class="card">
            <div class="card-header">
-             <h6 style= "margin:auto">Publications by year</h6>
-           </div>
-           <div class="card-body p-0">
-             <% arts_by_year = Article.where(:status => "Added").group(:pub_year).count %>
-             <%= column_chart arts_by_year %>
-           </div>
-         </div>
-       </div><!--col-sm-4-->
-
-       <div class="col-sm-6 themed-grid-col">
-         <div class="card">
-           <div class="card-header">
-             <h6 style= "margin:auto">Publications accumulated </h6>
-           </div>
-           <div class="card-body p-0">
-             <% year_series = {}
-             arts_by_year = Article.where(:status => "Added").group(:pub_year).count
-             year_series[0] = arts_by_year
-             sum = 0
-             year_series[1] = arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } %>
-             <%= column_chart(year_series[1], library: { :series => { 1 => { type: "line"} } } )%>
-             
-           </div>
-         </div>
-       </div>
-     </div> <!--row mb3 -->
-     <div class="row mb-3">
-       <div class="col-sm-6">
-         <div class="card">
-           <div class="card-header">
-             <h6 style= "margin:auto">Publications accumulated vs. per year (line) </h6>
+             <h6 style= "margin:auto">Publications accumulated vs. per year </h6>
            </div>
            <div class="card-body ">
-             <% year_series = []
-             arts_by_year = Article.where(:status => "Added").group(:pub_year).count
-             year_series[0] = {name:"Annual", data: arts_by_year}
-             sum = 0
-             year_series[1] = {name:"Accum.", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } } %>
+             <% year_series = get_pubs_yearly_counts %>
              <%= column_chart(year_series, :legend=> "bottom", title:"Publications Annual vs Accumulating")%>
            </div> <!-- card-body -->
            </div> <!-- card -->
@@ -324,10 +278,8 @@
              <h6 style= "margin:auto">Publications accumulated avg. vs. per year (bar)</h6>
            </div>
            <div class="card-body ">
-             <% min_year = Article.minimum(:pub_year)%>
-             <% year_series[1][:data].each {|dtp| (dtp[1] = dtp[1]/(dtp[0]-min_year+1))} %>
-             <% year_series[1][:name] = "Acc. Avg." %>
-             <%= column_chart(year_series, library: { :series => { 1 => { type: "line"}}, :legend=> "bottom", title:"Pubs Annual vs Acc. Average" })%>
+             <% year_series = get_pubs_yearly_averages %>
+             <%= column_chart(year_series, library: { :series => { 1 => { type: "line"}}, :legend=> "bottom", adapter: "google", title:"Pubs Annual vs Acc. Average" })%>
            </div>
          </div>
        </div><!--col-sm-6-->

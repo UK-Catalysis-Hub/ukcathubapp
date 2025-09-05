@@ -199,4 +199,13 @@ module ArticlesHelper
     year_series[1] = {name:"Accumulating", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } }
     year_series
   end
+
+  def get_pubs_yearly_averages
+    year_series = get_pubs_yearly_counts
+    min_year = Article.minimum(:pub_year)
+    year_series[1][:data].each {|dtp| (dtp[1] = dtp[1]/(dtp[0]-min_year+1))}
+    year_series[1][:name] = "Acc. Avg."
+    year_series
+  end
+
 end
