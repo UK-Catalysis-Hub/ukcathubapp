@@ -204,7 +204,30 @@
          </div>
        </div>
      </div>
-     
+     <div class="row mb-3">
+       <div class="col-sm-6">
+         <div class="card">
+           <div class="card-header">
+             <h6 style= "margin:auto">Publications accumulated vs. yearly</h6>
+           </div>
+           <div class="card-body ">
+             <% year_series = get_pubs_yearly_counts %>
+             <%= column_chart(year_series, :legend=> "bottom")%>
+           </div> <!-- card-body -->
+           </div> <!-- card -->
+       </div><!--col-sm-6-->
+       <div class="col-sm-6 themed-grid-col">
+         <div class="card">
+           <div class="card-header">
+             <h6 style= "margin:auto">Publications accumulated avg. vs. yearly</h6>
+           </div>
+           <div class="card-body ">
+             <% year_series = get_pubs_yearly_averages %>
+             <%= column_chart(year_series,  :legend=> "bottom")%>
+           </div>
+         </div>
+       </div><!--col-sm-6-->
+     </div><!--row mb3 -->   
      <div class="row mb-3">
        <div class="col-sm-12">
          <div class="card">
@@ -218,32 +241,44 @@
                    <table class="table table-sm table-striped table-bordered">
                      <thead class="thead-light">
                        <tr>
-                         <th colspan="2">Summary</th>
+                         <th style="text-align: center; vertical-align: middle;" colspan="2">Summary</th>
                        </tr>
                      </thead>
                      <tbody>
                        <tr>
-                         <td> Citations </td>
-                         <td class="text-right">
+                         <td><b>Citations:</b></td>
+                         <td style="text-align: right; vertical-align: middle;">
                            <%= number_with_delimiter(Article.most_cited.sum(:referenced_by_count)) %>
                          </td>
                        </tr>
                        <tr>
-                         <td> Average: </td>
-                         <td class="text-right">
+                         <td><b>Average:</b></td>
+                         <td style="text-align: right; vertical-align: middle;">
                            <%= (Article.most_cited.sum(:referenced_by_count)/(0.0+Article.count)).round(2) %>
                          </td>
                        </tr>
                        <tr>
-                         <td> Maximum:  </td>
-                         <td class="text-right">
-                           <%= Article.most_cited.length() > 0 ? Article.maximum(:referenced_by_count) : 0 %>
+                         <td><b>Maximum:</b></td>
+                         <td style="text-align: right; vertical-align: middle;">
+                           <%= number_with_delimiter(Article.most_cited.length() > 0 ? Article.maximum(:referenced_by_count) : 0 )%>
                          </td>
                        </tr>
                        <tr>
-                         <td> Minimum:  </td>
-                         <td class="text-right">
+                         <td><b>Minimum:</b></td>
+                         <td style="text-align: right; vertical-align: middle;">
                            <%= Article.most_cited.length() > 0 ? Article.minimum(:referenced_by_count) : 0 %>
+                         </td>
+                       </tr>
+                       <tr>
+                         <td><b>h-Index:</b></td>
+                         <td style="text-align: right; vertical-align: middle;">
+                           <%= get_h_index %>
+                         </td>
+                       </tr>
+                       <tr>
+                         <td><b>i10 Index:</b></td>
+                         <td style="text-align: right; vertical-align: middle;">
+                           <%= get_i10_index %>
                          </td>
                        </tr>
                      </tbody>
@@ -259,60 +294,12 @@
          </div>
        </div>
      </div> <!--row mb3 -->
-     <div class="row mb-3">
-       <div class="col-sm-6">
-         <div class="card">
-           <div class="card-header">
-             <h6 style= "margin:auto">Publications accumulated vs. per year </h6>
-           </div>
-           <div class="card-body ">
-             <% year_series = get_pubs_yearly_counts %>
-             <%= column_chart(year_series, :legend=> "bottom", title:"Publications Annual vs Accumulating")%>
-           </div> <!-- card-body -->
-           </div> <!-- card -->
-       </div><!--col-sm-6-->
-
-       <div class="col-sm-6 themed-grid-col">
-         <div class="card">
-           <div class="card-header">
-             <h6 style= "margin:auto">Publications accumulated avg. vs. per year (bar)</h6>
-           </div>
-           <div class="card-body ">
-             <% year_series = get_pubs_yearly_averages %>
-             <%= column_chart(year_series, library: { :series => { 1 => { type: "line"}}, :legend=> "bottom", adapter: "google", title:"Pubs Annual vs Acc. Average" })%>
-           </div>
-         </div>
-       </div><!--col-sm-6-->
-     </div><!--row mb3 -->   
-     
-     <%  group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
-         j_pub_stats = {}
-         j_pub_data = {}
-         j_sum = 0
-         
-         Article.journals_count.reorder(j_count: :asc).each {|ajc|
-           j_sum += ajc.j_count
-           idx = ((ajc.j_count-1)/5).to_i
-           idx > 3 ? idx = 4 : idx
-           j_pub_stats.include?(idx) ? j_pub_stats[idx] += 1 : j_pub_stats[idx] = 1
-         }
-         j_pub_data = {}
-         j_pub_stats.each { |aps|
-           j_pub_data[group_labels[aps[0]]] = aps[1]
-         }
-         p_pub_stats = {}
-         p_pub_data = {}
-         p_sum = 0
-         Article.publisher_count.reorder(p_count: :asc).each {|apc|
-           p_sum += apc.p_count
-           idx = ((apc.p_count-1)/5).to_i
-           idx > 3 ? idx = 4 : idx
-           p_pub_stats.include?(idx) ? p_pub_stats[idx] += 1 : p_pub_stats[idx] = 1
-         }
-         p_pub_data = {}
-         p_pub_stats.each { |pps|
-           p_pub_data[group_labels[pps[0]]] = pps[1]
-         }
+     <%
+       journal_stats = get_journal_stats
+       j_pub_stats = journal_stats[0]
+       j_sum = journal_stats[1]
+       j_pub_data = journal_stats[2]
+       group_labels = journal_stats[3]
      %>
      <div class="row px-1 my-3">
        <div class="col-sm-12 ">
@@ -387,7 +374,7 @@
                      <thead class="thead-light">
                        <tr>
                          <th>Groups</th>
-                         <th>Articles</th>
+                         <th>Journals</th>
                        </tr>
                      </thead>
                      <tbody>
@@ -416,6 +403,13 @@
          </div>
        </div>
      </div>
+     <%
+       pub_stats = get_publisher_stats
+       p_pub_stats = pub_stats[0]
+       p_sum = pub_stats[1]
+       p_pub_data = pub_stats[2]
+       group_labels = pub_stats[3]
+     %>
      <div class="row px-1 my-3">
        <div class="col-sm-12 ">
          <div class="card">
@@ -489,7 +483,7 @@
                      <thead class="thead-light">
                        <tr>
                          <th>Groups</th>
-                         <th>Publications</th>
+                         <th>Publishers</th>
                        </tr>
                      </thead>
                      <tbody>

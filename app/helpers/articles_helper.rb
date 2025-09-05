@@ -208,4 +208,54 @@ module ArticlesHelper
     year_series
   end
 
+  def get_publisher_stats
+    group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
+    p_pub_stats = {}
+    p_pub_data = {}
+    p_sum = 0
+    Article.publisher_count.reorder(p_count: :asc).each {|apc|
+      p_sum += apc.p_count
+      idx = ((apc.p_count-1)/5).to_i
+      idx > 3 ? idx = 4 : idx
+      p_pub_stats.include?(idx) ? p_pub_stats[idx] += 1 : p_pub_stats[idx] = 1
+    }
+    p_pub_data = {}
+    p_pub_stats.each { |pps|
+      p_pub_data[group_labels[pps[0]]] = pps[1]
+    }
+    [p_pub_stats, p_sum, p_pub_data, group_labels]
+  end
+
+  def get_journal_stats
+    group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
+    j_pub_stats = {}
+    j_pub_data = {}
+    j_sum = 0
+    Article.journals_count.reorder(j_count: :asc).each {|ajc|
+      j_sum += ajc.j_count
+      idx = ((ajc.j_count-1)/5).to_i
+      idx > 3 ? idx = 4 : idx
+      j_pub_stats.include?(idx) ? j_pub_stats[idx] += 1 : j_pub_stats[idx] = 1
+    }
+    j_pub_data = {}
+    j_pub_stats.each { |aps|
+      j_pub_data[group_labels[aps[0]]] = aps[1]
+    }
+    [j_pub_stats,j_sum, j_pub_data, group_labels]
+  end
+  def get_h_index
+    h_index = 0
+    just_refs = Article.select(:referenced_by_count).order(:referenced_by_count=>:desc)
+    just_refs.each_with_index do |item, index| 
+      if item.referenced_by_count < index
+        h_index =  index
+        break
+      end
+    end
+    h_index
+  end
+
+  def get_i10_index
+    Article.where("referenced_by_count >= 10").count
+  end
 end
