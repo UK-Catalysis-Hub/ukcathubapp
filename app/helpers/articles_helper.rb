@@ -190,4 +190,13 @@ module ArticlesHelper
     end
     disp_themes
   end
+
+  def get_pubs_yearly_counts
+    year_series = []
+    arts_by_year = Article.where(:status => "Added").group(:pub_year).order(:pub_year).count
+    year_series[0] = {name:"Annual", data: arts_by_year}
+    sum = 0
+    year_series[1] = {name:"Accumulating", data: arts_by_year.each.collect{ |aby| [aby[0], sum+=aby[1]] } }
+    year_series
+  end
 end
