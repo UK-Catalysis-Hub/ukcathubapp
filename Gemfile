@@ -68,6 +68,7 @@ group :development do
   gem "capistrano-rails", "~> 1.6", require: false
   gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4' 
+  gem 'capistrano-postgresql', '~> 6.2'  # Optional, for automated DB setup
 end
 
 group :test do
