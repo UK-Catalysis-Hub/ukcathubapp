@@ -20,8 +20,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
     t.bigint "record_id"
     t.bigint "blob_id"
     t.timestamptz "created_at"
-    t.index ["blob_id"], name: "idx_24701_index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "idx_24701_index_active_storage_attachments_uniqueness", unique: true
+    t.index ["blob_id"], name: "idx_26194_index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "idx_26194_index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
@@ -33,13 +33,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
     t.bigint "byte_size"
     t.text "checksum"
     t.timestamptz "created_at"
-    t.index ["key"], name: "idx_24694_index_active_storage_blobs_on_key", unique: true
+    t.index ["key"], name: "idx_26187_index_active_storage_blobs_on_key", unique: true
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id"
     t.text "variation_digest"
-    t.index ["blob_id", "variation_digest"], name: "idx_24708_index_active_storage_variant_records_uniqueness", unique: true
+    t.index ["blob_id", "variation_digest"], name: "idx_26201_index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "addresses", force: :cascade do |t|
@@ -268,8 +268,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
     t.timestamptz "confirmation_sent_at"
     t.text "unconfirmed_email"
     t.text "username"
-    t.index ["email"], name: "idx_24664_index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "idx_24664_index_users_on_reset_password_token", unique: true
+    t.index ["email"], name: "idx_26157_index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "idx_26157_index_users_on_reset_password_token", unique: true
   end
 
   create_table "xref_client_mappings", force: :cascade do |t|
@@ -307,5 +307,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
                     GROUP BY article_authors.author_id, author_affiliations.short_name, author_affiliations.country) v_author_inst
             GROUP BY v_author_inst.country, v_author_inst.affi_name) v_ctry_inst
     GROUP BY v_ctry_inst.country;
+  SQL
+  create_view "list_themes", sql_definition: <<-SQL
+      SELECT themes.id,
+      themes.phase,
+      themes.name,
+      themes.short,
+      themes.lead,
+      count(*) AS article_count
+     FROM ((article_themes
+       JOIN themes ON ((article_themes.theme_id = themes.id)))
+       JOIN articles ON ((article_themes.article_id = articles.id)))
+    WHERE (articles.status = 'Added'::text)
+    GROUP BY themes.id, themes.phase, themes.name
+    ORDER BY themes.id;
   SQL
 end
