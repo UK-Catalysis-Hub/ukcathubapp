@@ -83,6 +83,7 @@ Rails.application.routes.draw do
     end
     # add more mappings as you need them
   get 'stats/summary', to: 'api/v1/stats#summary'
+  get 'dashboard', to: 'api/v1/dashboard#overview'
   end
   
 end
