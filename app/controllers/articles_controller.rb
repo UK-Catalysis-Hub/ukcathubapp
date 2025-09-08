@@ -45,7 +45,7 @@ class ArticlesController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.json { render json: { data: serialize_article(@article) } }  # <-- send themes too
+      format.json { render json: { data: serialize_article(@article, include_abstract: true) } }
     end
   end
 
@@ -432,8 +432,8 @@ class ArticlesController < ApplicationController
       found_id
     end
 
-    def serialize_article(article)
-      {
+    def serialize_article(article, include_abstract: false)
+      payload = {
         id:              article.id,
         doi:             article.doi,
         title:           article.title,
@@ -446,10 +446,19 @@ class ArticlesController < ApplicationController
         page:            article.page,
         url:             article.url,
         link:            article.link,
-        # NEW: themes list + ids
         themes:    article.themes.map { |t| { id: t.id, name: t.name, short: t.short, phase: t.phase } },
         theme_ids: article.themes.map(&:id)
       }
+
+      if include_abstract
+        raw = article.abstract.to_s
+        # Optional: plain-text version (strips JATS/HTML if present)
+        text = ActionView::Base.full_sanitizer.sanitize(raw).to_s.squish
+        payload[:abstract] = raw
+        payload[:abstract_text] = text
+      end
+
+      payload
     end
 
     def print_author(new_author)
