@@ -170,8 +170,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_25_131630) do
 
   create_table "cr_affiliations", force: :cascade do |t|
     t.string "name"
-    t.string "article_author_id"
-    t.string "author_affiliation_id"
+    t.integer "article_author_id"
+    t.integer "author_affiliation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
