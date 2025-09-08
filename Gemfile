@@ -102,3 +102,5 @@ gem "sidekiq-cron"
 # In your Gemfile
 gem 'dotenv-rails', groups: [:development, :test]
 
+
+gem "kamal", "~> 2.7"
