@@ -43,5 +43,5 @@ yarn-debug.log*
 /config/deploy/*
 /code_temp/*
 *.sqbpro
-.env
 
+.env

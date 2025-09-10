@@ -55,4 +55,35 @@ Rails.application.routes.draw do
   ##sidekiq web interface
   require 'sidekiq/web'
   mount Sidekiq::Web, at: 'sidekiq'
+
+  scope '/api/v1', defaults: { format: :json } do
+    resources :articles, controller: 'articles', only: [:index, :show, :create, :update, :destroy] do
+      collection do
+        get :facets   # /api/v1/articles/facets
+      end
+    end
+    resources :authors, controller: 'authors', only: [:index, :show] do
+      collection { get :indicators }   # => /api/v1/authors/indicators
+      member     { get :articles }     # => /api/v1/authors/:id/articles
+    end
+    resources :affiliations, controller: 'affiliations', only: [:index, :show]
+    resources :organisations, only: [:index, :show] do
+      collection { get :facets }
+    end
+    resources :themes, only: [:index, :show] do
+      collection { get :phases; get :summary; get :overview }
+      member     { get :articles }
+    end
+    resources :datasets, controller: 'datasets', only: [:index, :show] do
+      collection do
+        get :facets
+        get :indicators
+        get :top_researchers   # <-- NEW
+      end
+    end
+    # add more mappings as you need them
+  get 'stats/summary', to: 'api/v1/stats#summary'
+  get 'dashboard', to: 'api/v1/dashboard#overview'
+  end
+  
 end
