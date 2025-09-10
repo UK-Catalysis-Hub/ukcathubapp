@@ -1,17 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 themeone:
-  short: ThemeOne
-  name: One
-  lead: MyString
+  short: "One"
+  name: "Theme One"
+  lead: "A theme leader"
   phase: 1
   used: MyString
   theme_type: "Group"
 
 themetwo:
-  short: ThemeTwo
-  name: Two
-  lead: MyString
-  phase: 1
+  short: "Two"
+  name: "Theme Two"
+  lead: "Another Theme leader"
+  phase: 2
   used: MyString
   theme_type: "Theme"
