@@ -119,7 +119,8 @@ class ThemesController < ApplicationController
           doi:             a.doi,
           pub_year:        a.pub_year,
           container_title: a.container_title,
-          publisher:       a.publisher
+          publisher:       a.publisher,
+          graphic_abstract: a.graphic_abstract
         }
       },
       meta: {
