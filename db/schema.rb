@@ -172,11 +172,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
   end
 
   create_table "cr_affiliations", force: :cascade do |t|
-    t.text "name"
-    t.text "article_author_id"
-    t.text "author_affiliation_id"
-    t.timestamptz "created_at"
-    t.timestamptz "updated_at"
+    t.string "name"
+    t.integer "article_author_id"
+    t.integer "author_affiliation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "cr_publications", force: :cascade do |t|
