@@ -68,6 +68,7 @@ module Api
 
         # ---- Top data publishing researchers --------------------------------
         rows = Author
+                 .isap
                  .joins(article_authors: { article: :article_datasets })
                  .joins("INNER JOIN datasets ON datasets.id = article_datasets.dataset_id")
                  .select("authors.id AS author_id, COUNT(DISTINCT article_datasets.dataset_id) AS dataobjects_count")
