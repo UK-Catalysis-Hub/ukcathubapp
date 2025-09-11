@@ -2,57 +2,65 @@
 
 <div class="row my-1"><!-- Qucik info row -->
   <div class="col-sm col-6">
-    <div class="container"><!-- info box -->
-      <div class="row bg-primary  rounded">
-        <div class="col-sm-6">
-          <h1><%= number_with_delimiter(Article.active.count()) %></h1>
+    <a href="/articles" class="btn btn-primary btn-block text-center " style="width: 100%;" >
+      <div class="container"><!-- info box -->
+        <div class="row rounded ">
+          <div class="col-sm-6">
+            <h1><%= number_with_delimiter(Article.active.length()) %></h1>
+          </div>
+          <div class="col-sm my-1">
+            <%= image_tag('books2.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
+          </div>
         </div>
-        <div class="col-sm my-1">
-          <%= image_tag('books2.svg', height: '48', width: '48', class: "rounded float-end d-block ") %>
-        </div>
-        <%= link_to 'Publications', articles_path, :class => "btn btn-primary btn-sm btn-block text-dark" %>
-      </div>
-    </div>
-  </div>  <!-- info box -->
-  <div class="col-sm col-6">
-    <div class="container"><!-- info box -->
-      <div class="row bg-danger  rounded">
-        <div class="col-sm-6">
-          <h1><%= number_with_delimiter(Author.active.length()) %></h1>
-        </div>
-        <div class="col-sm my-1">
-          <%= image_tag('users.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
-        </div>
-        <%= link_to 'Authors', authors_path, :class => "btn btn-danger btn-sm btn-block text-dark" %>
-      </div>
-    </div> <!-- info box -->
+        <b>Publications</b>
+      </div> <!-- info box -->
+    </a>
   </div>
   <div class="col-sm col-6">
+    <a href="/authors" class="btn btn-danger btn-block text-center " style="width: 100%;" >
+      <div class="container"><!-- info box -->
+        <div class="row rounded ">
+          <div class="col-sm-6">
+            <h1><%= number_with_delimiter(Author.active.length()) %></h1>
+          </div>
+          <div class="col-sm my-1">
+            <%= image_tag('users.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
+          </div>
+        </div>
+        <b>Researchers</b>
+      </div> <!-- info box -->
+    </a>
+  </div>
+  <div class="col-sm col-6">
+    <a href="/organisations" class="btn btn-warning btn-block text-center text-light" style="width: 100%;" >
     <div class="container"><!-- info box -->
-      <div class="row bg-warning  rounded ">
+      <div class="row rounded ">
         <div class="col-sm-6">
-          <h1><%= Organisation.active_org.count() %></h1>
+          <h1><%= number_with_delimiter(Organisation.active_org.count()) %></h1>
         </div>
         <div class="col-sm my-1">
           <%= image_tag('institution.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
         </div>
-        <%= link_to 'Institutions', organisations_path, :class => "btn btn-warning btn-sm btn-block text-dark" %>
       </div>
+      <b>Institutions</b>
     </div> <!-- info box -->
+   </a>
   </div>
   <% if do_data.visible %>
   <div class="col-sm col-6">
+    <a href="/datasets" class="btn btn-success btn-block text-center"  style="width: 100%;">
     <div class="container"><!-- info box -->
-      <div class="row bg-success  rounded ">
+      <div class="row rounded ">
         <div class="col-sm-6">
           <h1><%= number_with_delimiter(Dataset.count()) %></h1>
         </div>
         <div class="col-sm my-1">
           <%= image_tag('database.svg', height: '48', width: '48', class: "rounded float-end d-block") %>
         </div>
-        <%= link_to 'Data Objects', datasets_path, :class => "btn btn-success btn-sm btn-block text-dark" %>
       </div>
+      <b>Data Objects</b>
     </div> <!-- info box -->
+   </a>
   </div>
   <% end %>
 </div>
