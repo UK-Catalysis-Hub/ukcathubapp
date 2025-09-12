@@ -17,4 +17,12 @@ module AffiliationsHelper
     end
     country_data
   end
+
+  def get_uk_count
+    inst_stats = inst_stats = Organisation.where(id: Affiliation.joins(:author_affiliations).select(:organisation_id)).where("country = 'United Kingdom'").group(:region).count
+
+    organisation_uk_count = inst_stats.map { |region, count| [region, count] }
+
+    organisation_uk_count
+  end
 end

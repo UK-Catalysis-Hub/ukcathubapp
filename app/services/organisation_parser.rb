@@ -191,6 +191,7 @@ class OrganisationParser
       'Univ. Grenoble-Alpes'=>'Université Grenoble Alpes',
       'Univ. Lille' =>'Université Lille',
       'Univ Limoges' =>'Université de Limoges',
+      "Univ. Montpellier"=> "Université de Montpellier",
       'Univ. Pablo de Olavide' => 'Universidad Pablo de Olavide',
       'Univ. of Manchester' => 'The University of Manchester',
       'Universidade Federal de Pernambuco'=> 'Federal University of Pernambuco',
@@ -238,13 +239,15 @@ class OrganisationParser
       "HarwellXPS" => "Research Complex at Harwell",
       "Research Complex at Harwell" => "Rutherford Appleton Laboratory",
       "Rutherford Appleton Laboratory" => "Science and Technology Facilities Council",
+      "Rutherford Appleton Laboratory" => "Harwell Science and Innovation Campus",
       "ISIS Neutron and Muon Source" => "Science and Technology Facilities Council",
       "Institute of Materials Research and Engineering" => "Agency for Science, Technology and Research",
       "SuperSTEM Laboratory" => "SciTech Daresbury",
       "SciTech Daresbury" => "Science and Technology Facilities Council"
    }
 
-    @inst_host_map= { 
+    @inst_host_map= {
+      "Harwell Science and Innovation Campus"=>["Rutherford Appleton Laboratory"],
       "Research Complex at Harwell"=>["UK Catalysis Hub","HarwellXPS"],
       "Rutherford Appleton Laboratory"=>["Research Complex at Harwell","ISIS Neutron and Muon Source"],
       "Science and Technology Facilities Council"=> ["Rutherford Appleton Laboratory", "Daresbury Laboratory"],
