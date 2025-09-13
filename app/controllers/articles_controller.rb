@@ -443,6 +443,7 @@ class ArticlesController < ApplicationController
         page:            article.page,
         url:             article.url,
         link:            article.link,
+        graphic_abstract: article.graphic_abstract,
         themes:    article.themes.map { |t| { id: t.id, name: t.name, short: t.short, phase: t.phase } },
         theme_ids: article.themes.map(&:id)
       }
