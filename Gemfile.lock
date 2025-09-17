@@ -280,7 +280,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.4.1)
+    rexml (3.4.2)
     rubyzip (3.0.2)
     scenic (1.9.0)
       activerecord (>= 4.0.0)
