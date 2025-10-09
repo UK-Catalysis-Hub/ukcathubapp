@@ -447,6 +447,7 @@ class ArticlesController < ApplicationController
         url:             article.url,
         link:            article.link,
         graphic_abstract: article.graphic_abstract,
+        updated_at:      article.updated_at,
         themes:    article.themes.map { |t| { id: t.id, name: t.name, short: t.short, phase: t.phase } },
         theme_ids: article.themes.map(&:id),
         authors:   article.authors.map{ |a| {id: a.id, name: a.given_name, last_name: a.last_name, orcid: a.orcid}}
