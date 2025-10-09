@@ -20,7 +20,7 @@ class ArticlesController < ApplicationController
   # GET /articles or /articles.json
   def index
     @search   = ArticleSearch.new(params)
-    scope     = @search.result.active.includes(:themes)   # <-- add includes(:themes)
+    scope     = @search.result.active.includes(:authors).includes(:themes)   # <-- add includes(:themes)
     @articles = scope.paginate(page: params[:page], per_page: 10)
 
     respond_to do |format|
@@ -448,7 +448,8 @@ class ArticlesController < ApplicationController
         link:            article.link,
         graphic_abstract: article.graphic_abstract,
         themes:    article.themes.map { |t| { id: t.id, name: t.name, short: t.short, phase: t.phase } },
-        theme_ids: article.themes.map(&:id)
+        theme_ids: article.themes.map(&:id),
+        authors:   article.authors.map{ |a| {id: a.id, name: a.given_name, last_name: a.last_name, orcid: a.orcid}}
       }
 
       if include_abstract
