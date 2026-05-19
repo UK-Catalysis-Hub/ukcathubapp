@@ -91,8 +91,6 @@ gem "forty_facets", "~> 0.2.1"
 
 gem "serrano", "~> 1.4"
 
-
-
 gem "will_paginate", "~> 4.0"
 
 gem "will_paginate-bootstrap-style", "~> 0.3.0"
@@ -103,5 +101,4 @@ gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git', :branch 
 gem "sidekiq"
 
 gem "sidekiq-cron"
-
 
