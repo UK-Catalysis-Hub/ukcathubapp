@@ -44,4 +44,7 @@ yarn-debug.log*
 /code_temp/*
 *.sqbpro
 
+# ignore the data files
+/db_data
+
 .env
