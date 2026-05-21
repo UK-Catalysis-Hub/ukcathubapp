@@ -48,3 +48,5 @@ yarn-debug.log*
 /db_data
 
 .env
+
+docker-compose.override.yml
