@@ -96,7 +96,7 @@
               <div class="filter-title">
                 <%= filter.name %>
                 <span class="small text-muted">
-                  <%= "(#{filter.facet.length})" %>
+                  <%= "(#{0 ? !filter : filter.facet.length})" %>
                 </span>
               </div>
               <div class="filter-values">

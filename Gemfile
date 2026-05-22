@@ -75,7 +75,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 
 
 gem "chartkick", "~> 5.0"
@@ -91,8 +91,6 @@ gem "forty_facets", "~> 0.2.1"
 
 gem "serrano", "~> 1.4"
 
-
-
 gem "will_paginate", "~> 4.0"
 
 gem "will_paginate-bootstrap-style", "~> 0.3.0"
@@ -100,6 +98,7 @@ gem "will_paginate-bootstrap-style", "~> 0.3.0"
 # XRef gem for mapping crossref data to XDI
 gem 'xref_client', :git => 'https://github.com/scman1/xref_client.git', :branch => 'add_searches'
 
-gem "sidekiq", "~> 7.2"
+gem "sidekiq"
+
 gem "sidekiq-cron"
 
