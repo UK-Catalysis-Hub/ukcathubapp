@@ -190,6 +190,7 @@ module ArticlesHelper
     end
     disp_themes
   end
+<<<<<<< HEAD
 
   def get_pubs_yearly_counts
     year_series = []
@@ -249,6 +250,15 @@ module ArticlesHelper
     just_refs.each_with_index do |item, index| 
       if item.referenced_by_count < index
         h_index =  index
+=======
+  
+  def get_h_index
+    h_index = 0
+    just_refs = Article.select(:referenced_by_count).order(:referenced_by_count=>:desc)
+    just_refs.each_with_index do |item, index|
+      if item.referenced_by_count < index
+        h_index = index-1
+>>>>>>> origin/rewrite
         break
       end
     end
@@ -256,6 +266,11 @@ module ArticlesHelper
   end
 
   def get_i10_index
+<<<<<<< HEAD
     Article.where("referenced_by_count >= 10").count
   end
+=======
+    Article.where("referenced_by_count>=10").count 
+  end  
+>>>>>>> origin/rewrite
 end

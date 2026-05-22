@@ -239,25 +239,36 @@
                <div class="col-sm-4">
                  <div id="citation_summary" class="container">          
                    <table class="table table-sm table-striped table-bordered">
-                     <thead class="thead-light">
+                     <thead class="thead-light" style="text-align: right; vertical-align: middle;">
                        <tr>
                          <th style="text-align: center; vertical-align: middle;" colspan="2">Summary</th>
                        </tr>
                      </thead>
                      <tbody>
                        <tr>
+<<<<<<< HEAD
                          <td><b>Citations:</b></td>
                          <td style="text-align: right; vertical-align: middle;">
+=======
+                         <td><b> Citations </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;">
+>>>>>>> origin/rewrite
                            <%= number_with_delimiter(Article.most_cited.sum(:referenced_by_count)) %>
                          </td>
                        </tr>
                        <tr>
+<<<<<<< HEAD
                          <td><b>Average:</b></td>
                          <td style="text-align: right; vertical-align: middle;">
+=======
+                         <td><b> Average: </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;">
+>>>>>>> origin/rewrite
                            <%= (Article.most_cited.sum(:referenced_by_count)/(0.0+Article.count)).round(2) %>
                          </td>
                        </tr>
                        <tr>
+<<<<<<< HEAD
                          <td><b>Maximum:</b></td>
                          <td style="text-align: right; vertical-align: middle;">
                            <%= number_with_delimiter(Article.most_cited.length() > 0 ? Article.maximum(:referenced_by_count) : 0 )%>
@@ -267,6 +278,23 @@
                          <td><b>Minimum:</b></td>
                          <td style="text-align: right; vertical-align: middle;">
                            <%= Article.most_cited.length() > 0 ? Article.minimum(:referenced_by_count) : 0 %>
+=======
+                         <td><b> Maximum:  </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;">
+                           <%= number_with_delimiter(Article.most_cited.length() > 0 ? Article.maximum(:referenced_by_count) : 0) %>
+                         </td>
+                       </tr>
+                       <tr>
+                         <td><b> h Index:  </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;">
+                           <%= get_h_index %>
+                         </td>
+                       </tr>
+                       <tr>
+                         <td><b> i10 Index: </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;"">
+                           <%= get_i10_index %>
+>>>>>>> origin/rewrite
                          </td>
                        </tr>
                        <tr>
