@@ -12,7 +12,7 @@ see: [UK Catalysis Hub Core Theme](https://ukcatalysishub.co.uk/core/).
 ### Funding
 The original project started by UK Catalysis Hub that supported and funded the 
 development of this resource through EPSRC grants:  EP/R026939/1, EP/R026815/1, 
-EP/R026645/1, EP/R027129/1, and EP/M013219/1(biocatalysis)).
+EP/R026645/1, EP/R027129/1, and EP/M013219/1(biocatalysis).
 
 Additional the collaboration in the Phycal Sciences Data Infrastructure (PSDI project)  
 has also provided funding through EPSRC grants: EP/X032701/1, EP/X032663/1, and EP/W032252/1
@@ -28,19 +28,13 @@ quick look at the possiblities for cataloguing data and publications.
 * Ruby version: 3.2.2
 * Rails version: 7.1.3.2
 
-
 ### Latest changes
 
-At this point the app can be deployed in VM/Cloud using docker.
-
-* Docker deployment
-* Capistrano deployment
-
-for more details see [work in progress](workinprogress.md)
+At this point the app can be deployed in VM/Cloud using docker or capistrano.
+For more details see [work in progress](workinprogress.md)
 
 ## Current Online Version
 The current version of the CDI can be accessed from **[http://cdi.ukcatalysishub.org](http://cdi.ukcatalysishub.org)**.
 
 [<img src="https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png">](http://188.166.149.246/)
-
 
