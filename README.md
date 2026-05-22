@@ -28,8 +28,19 @@ quick look at the possiblities for cataloguing data and publications.
 * Ruby version: 3.2.2
 * Rails version: 7.1.3.2
 
+
+### Latest changes
+
+At this point the app can be deployed in VM/Cloud using docker.
+
+* Docker deployment
+* Capistrano deployment
+
+for more details see [work in progress](workinprogress.md)
+
 ## Current Online Version
 The current version of the CDI can be accessed from **[http://cdi.ukcatalysishub.org](http://cdi.ukcatalysishub.org)**.
 
 [<img src="https://github.com/scman1/ukcathubapp/blob/master/previews/proto_app2020b.png">](http://188.166.149.246/)
+
 
