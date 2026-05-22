@@ -19,7 +19,7 @@ Rails.application.configure do
   #  host: ENV.fetch("APP_HOST", "localhost")
   #}
   config.action_controller.default_url_options = {
-    host: ENV.fetch("APP_HOST", "localhost")
+    host: ENV.fetch("APP_HOST", "localhost"),
     protocol: ENV.fetch("APP_PROTOCOL", "http")
   }
 
