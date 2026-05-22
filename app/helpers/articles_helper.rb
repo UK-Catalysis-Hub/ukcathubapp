@@ -112,7 +112,30 @@ module ArticlesHelper
   
   def get_researcher_match(new_author)
     # Before save get best author match
-    authors_list = new_author.get_similar()
+    plain_ln = "XXXXX%"
+    if new_author.last_name.include?('-')
+      plain_ln = new_author.last_name.gsub('-',' ')
+    end
+    # get a strig with only letters with no punctuations
+    like_name = "XXXX%"
+    if (new_author.last_name =~ /[^a-zA-Z\s:]/) != nil
+      non_alpha_found = true
+      like_name = new_author.last_name.gsub(" ","%")
+      while non_alpha_found
+        c_idx = (like_name =~ /[^a-zA-Z\s:]/)
+        if c_idx != nil
+          like_name[c_idx] = " "
+        else
+          non_alpha_found = false
+        end
+      end
+      like_name.gsub!(' ','%')
+    end
+    authors_list = Author.where(orcid: new_author.orcid, last_name: new_author.last_name)
+      .or(Author.where(given_name: new_author.given_name, last_name: new_author.last_name))
+      .or(Author.where(last_name: new_author.last_name))
+      .or(Author.where(last_name: plain_ln))
+      .or(Author.where("last_name LIKE ?", "%" + like_name + "%"))
     found_id = 0
     # If orcid matches or exact name match, no further verification needed
     authors_list.each { |researcher|
@@ -190,8 +213,7 @@ module ArticlesHelper
     end
     disp_themes
   end
-<<<<<<< HEAD
-
+  
   def get_pubs_yearly_counts
     year_series = []
     arts_by_year = Article.where(:status => "Added").group(:pub_year).order(:pub_year).count
@@ -208,7 +230,7 @@ module ArticlesHelper
     year_series[1][:name] = "Acc. Avg."
     year_series
   end
-
+  
   def get_publisher_stats
     group_labels = ["1-5","6-10", "11-15", "16-20", "more than 20"]
     p_pub_stats = {}
@@ -244,13 +266,6 @@ module ArticlesHelper
     }
     [j_pub_stats,j_sum, j_pub_data, group_labels]
   end
-  def get_h_index
-    h_index = 0
-    just_refs = Article.select(:referenced_by_count).order(:referenced_by_count=>:desc)
-    just_refs.each_with_index do |item, index| 
-      if item.referenced_by_count < index
-        h_index =  index
-=======
   
   def get_h_index
     h_index = 0
@@ -258,7 +273,6 @@ module ArticlesHelper
     just_refs.each_with_index do |item, index|
       if item.referenced_by_count < index
         h_index = index-1
->>>>>>> origin/rewrite
         break
       end
     end
@@ -266,11 +280,6 @@ module ArticlesHelper
   end
 
   def get_i10_index
-<<<<<<< HEAD
-    Article.where("referenced_by_count >= 10").count
-  end
-=======
     Article.where("referenced_by_count>=10").count 
   end  
->>>>>>> origin/rewrite
 end

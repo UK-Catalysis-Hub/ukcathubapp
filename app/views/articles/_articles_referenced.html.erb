@@ -21,8 +21,8 @@
             %>
             <%= link_to(a_title.html_safe, article) %>
           </td>
-          <td>
-            <%= article.referenced_by_count %>
+          <td class="text-right" style="text-align: right; vertical-align: middle;" >
+            <%= number_with_delimiter(article.referenced_by_count) %>
           </td>
         </tr>
       <% end %>
