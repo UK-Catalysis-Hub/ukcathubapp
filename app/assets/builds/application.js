@@ -427,9 +427,9 @@ var init_subscription_guarantor = __esm({
 var Subscriptions;
 var init_subscriptions = __esm({
   "node_modules/@rails/actioncable/src/subscriptions.js"() {
+    init_logger();
     init_subscription();
     init_subscription_guarantor();
-    init_logger();
     Subscriptions = class {
       constructor(consumer2) {
         this.consumer = consumer2;
@@ -582,15 +582,15 @@ function getConfig(name) {
 }
 var init_src = __esm({
   "node_modules/@rails/actioncable/src/index.js"() {
+    init_adapters();
     init_connection();
     init_connection_monitor();
     init_consumer();
     init_internal();
-    init_subscription();
-    init_subscriptions();
-    init_subscription_guarantor();
-    init_adapters();
     init_logger();
+    init_subscription();
+    init_subscription_guarantor();
+    init_subscriptions();
   }
 });
 
@@ -610,7 +610,6 @@ __export(turbo_es2017_esm_exports, {
   StreamElement: () => StreamElement,
   StreamSourceElement: () => StreamSourceElement,
   cache: () => cache,
-  clearCache: () => clearCache,
   config: () => config,
   connectStreamSource: () => connectStreamSource,
   disconnectStreamSource: () => disconnectStreamSource,
@@ -622,7 +621,7 @@ __export(turbo_es2017_esm_exports, {
   morphChildren: () => morphChildren,
   morphElements: () => morphElements,
   morphTurboFrameElements: () => morphTurboFrameElements,
-  navigator: () => navigator$1,
+  navigator: () => sessionNavigator,
   registerAdapter: () => registerAdapter,
   renderStreamMessage: () => renderStreamMessage,
   session: () => session,
@@ -632,62 +631,6 @@ __export(turbo_es2017_esm_exports, {
   start: () => start,
   visit: () => visit
 });
-(function(prototype) {
-  if (typeof prototype.requestSubmit == "function") return;
-  prototype.requestSubmit = function(submitter2) {
-    if (submitter2) {
-      validateSubmitter(submitter2, this);
-      submitter2.click();
-    } else {
-      submitter2 = document.createElement("input");
-      submitter2.type = "submit";
-      submitter2.hidden = true;
-      this.appendChild(submitter2);
-      submitter2.click();
-      this.removeChild(submitter2);
-    }
-  };
-  function validateSubmitter(submitter2, form) {
-    submitter2 instanceof HTMLElement || raise(TypeError, "parameter 1 is not of type 'HTMLElement'");
-    submitter2.type == "submit" || raise(TypeError, "The specified element is not a submit button");
-    submitter2.form == form || raise(DOMException, "The specified element is not owned by this form element", "NotFoundError");
-  }
-  function raise(errorConstructor, message2, name) {
-    throw new errorConstructor("Failed to execute 'requestSubmit' on 'HTMLFormElement': " + message2 + ".", name);
-  }
-})(HTMLFormElement.prototype);
-var submittersByForm = /* @__PURE__ */ new WeakMap();
-function findSubmitterFromClickTarget(target) {
-  const element = target instanceof Element ? target : target instanceof Node ? target.parentElement : null;
-  const candidate = element ? element.closest("input, button") : null;
-  return candidate?.type == "submit" ? candidate : null;
-}
-function clickCaptured(event) {
-  const submitter2 = findSubmitterFromClickTarget(event.target);
-  if (submitter2 && submitter2.form) {
-    submittersByForm.set(submitter2.form, submitter2);
-  }
-}
-(function() {
-  if ("submitter" in Event.prototype) return;
-  let prototype = window.Event.prototype;
-  if ("SubmitEvent" in window) {
-    const prototypeOfSubmitEvent = window.SubmitEvent.prototype;
-    if (/Apple Computer/.test(navigator.vendor) && !("submitter" in prototypeOfSubmitEvent)) {
-      prototype = prototypeOfSubmitEvent;
-    } else {
-      return;
-    }
-  }
-  addEventListener("click", clickCaptured, true);
-  Object.defineProperty(prototype, "submitter", {
-    get() {
-      if (this.type == "submit" && this.target instanceof HTMLFormElement) {
-        return submittersByForm.get(this.target);
-      }
-    }
-  });
-})();
 var FrameLoadingStyle = {
   eager: "eager",
   lazy: "lazy"
@@ -960,9 +903,6 @@ function nextAnimationFrame() {
 function nextEventLoopTick() {
   return new Promise((resolve2) => setTimeout(() => resolve2(), 0));
 }
-function nextMicrotask() {
-  return Promise.resolve();
-}
 function parseHTMLDocument(html = "") {
   return new DOMParser().parseFromString(html, "text/html");
 }
@@ -987,7 +927,7 @@ function uuid() {
     } else if (i == 19) {
       return (Math.floor(Math.random() * 4) + 8).toString(16);
     } else {
-      return Math.floor(Math.random() * 15).toString(16);
+      return Math.floor(Math.random() * 16).toString(16);
     }
   }).join("");
 }
@@ -1102,12 +1042,11 @@ function doesNotTargetIFrame(name) {
 function findLinkFromClickTarget(target) {
   const link = findClosestRecursively(target, "a[href], a[xlink\\:href]");
   if (!link) return null;
+  if (link.href.startsWith("#")) return null;
   if (link.hasAttribute("download")) return null;
-  if (link.hasAttribute("target") && link.target !== "_self") return null;
+  const linkTarget = link.getAttribute("target");
+  if (linkTarget && linkTarget !== "_self") return null;
   return link;
-}
-function getLocationForLink(link) {
-  return expandURL(link.getAttribute("href") || "");
 }
 function debounce(fn2, delay) {
   let timeoutId = null;
@@ -1177,6 +1116,9 @@ function isPrefixedBy(baseURL, url) {
 }
 function locationIsVisitable(location2, rootLocation) {
   return isPrefixedBy(location2, rootLocation) && !config.drive.unvisitableExtensions.has(getExtension(location2));
+}
+function getLocationForLink(link) {
+  return expandURL(link.getAttribute("href") || "");
 }
 function getRequestURL(url) {
   const anchor = getAnchor(url);
@@ -1516,29 +1458,92 @@ function importStreamElements(fragment) {
   }
   return fragment;
 }
-var PREFETCH_DELAY = 100;
-var PrefetchCache = class {
-  #prefetchTimeout = null;
-  #prefetched = null;
-  get(url) {
-    if (this.#prefetched && this.#prefetched.url === url && this.#prefetched.expire > Date.now()) {
-      return this.#prefetched.request;
+var identity = (key) => key;
+var LRUCache = class {
+  keys = [];
+  entries = {};
+  #toCacheKey;
+  constructor(size, toCacheKey2 = identity) {
+    this.size = size;
+    this.#toCacheKey = toCacheKey2;
+  }
+  has(key) {
+    return this.#toCacheKey(key) in this.entries;
+  }
+  get(key) {
+    if (this.has(key)) {
+      const entry = this.read(key);
+      this.touch(key);
+      return entry;
     }
   }
-  setLater(url, request, ttl) {
-    this.clear();
-    this.#prefetchTimeout = setTimeout(() => {
-      request.perform();
-      this.set(url, request, ttl);
-      this.#prefetchTimeout = null;
-    }, PREFETCH_DELAY);
-  }
-  set(url, request, ttl) {
-    this.#prefetched = { url, request, expire: new Date((/* @__PURE__ */ new Date()).getTime() + ttl) };
+  put(key, entry) {
+    this.write(key, entry);
+    this.touch(key);
+    return entry;
   }
   clear() {
+    for (const key of Object.keys(this.entries)) {
+      this.evict(key);
+    }
+  }
+  // Private
+  read(key) {
+    return this.entries[this.#toCacheKey(key)];
+  }
+  write(key, entry) {
+    this.entries[this.#toCacheKey(key)] = entry;
+  }
+  touch(key) {
+    key = this.#toCacheKey(key);
+    const index2 = this.keys.indexOf(key);
+    if (index2 > -1) this.keys.splice(index2, 1);
+    this.keys.unshift(key);
+    this.trim();
+  }
+  trim() {
+    for (const key of this.keys.splice(this.size)) {
+      this.evict(key);
+    }
+  }
+  evict(key) {
+    delete this.entries[key];
+  }
+};
+var PREFETCH_DELAY = 100;
+var PrefetchCache = class extends LRUCache {
+  #prefetchTimeout = null;
+  #maxAges = {};
+  constructor(size = 1, prefetchDelay = PREFETCH_DELAY) {
+    super(size, toCacheKey);
+    this.prefetchDelay = prefetchDelay;
+  }
+  putLater(url, request, ttl) {
+    this.#prefetchTimeout = setTimeout(() => {
+      request.perform();
+      this.put(url, request, ttl);
+      this.#prefetchTimeout = null;
+    }, this.prefetchDelay);
+  }
+  put(url, request, ttl = cacheTtl) {
+    super.put(url, request);
+    this.#maxAges[toCacheKey(url)] = new Date((/* @__PURE__ */ new Date()).getTime() + ttl);
+  }
+  clear() {
+    super.clear();
     if (this.#prefetchTimeout) clearTimeout(this.#prefetchTimeout);
-    this.#prefetched = null;
+  }
+  evict(key) {
+    super.evict(key);
+    delete this.#maxAges[key];
+  }
+  has(key) {
+    if (super.has(key)) {
+      const maxAge = this.#maxAges[toCacheKey(key)];
+      return maxAge && maxAge > Date.now();
+    } else {
+      return false;
+    }
   }
 };
 var cacheTtl = 10 * 1e3;
@@ -2314,9 +2319,6 @@ var Idiomorph = (function() {
   }
   function morphOuterHTML(ctx, oldNode, newNode) {
     const oldParent = normalizeParent(oldNode);
-    let childNodes = Array.from(oldParent.childNodes);
-    const index2 = childNodes.indexOf(oldNode);
-    const rightMargin = childNodes.length - (index2 + 1);
     morphChildren2(
       ctx,
       oldParent,
@@ -2327,8 +2329,7 @@ var Idiomorph = (function() {
       oldNode.nextSibling
       // end point for iteration
     );
-    childNodes = Array.from(oldParent.childNodes);
-    return childNodes.slice(index2, childNodes.length - rightMargin);
+    return Array.from(oldParent.childNodes);
   }
   function saveAndRestoreFocus(ctx, fn2) {
     if (!ctx.config.restoreFocus) return fn2();
@@ -2341,8 +2342,8 @@ var Idiomorph = (function() {
     }
     const { id: activeElementId, selectionStart, selectionEnd } = activeElement;
     const results = fn2();
-    if (activeElementId && activeElementId !== document.activeElement?.id) {
-      activeElement = ctx.target.querySelector(`#${activeElementId}`);
+    if (activeElementId && activeElementId !== document.activeElement?.getAttribute("id")) {
+      activeElement = ctx.target.querySelector(`[id="${activeElementId}"]`);
       activeElement?.focus();
     }
     if (activeElement && !activeElement.selectionEnd && selectionEnd) {
@@ -2374,16 +2375,22 @@ var Idiomorph = (function() {
             continue;
           }
         }
-        if (newChild instanceof Element && ctx.persistentIds.has(newChild.id)) {
-          const movedChild = moveBeforeById(
-            oldParent,
-            newChild.id,
-            insertionPoint,
-            ctx
+        if (newChild instanceof Element) {
+          const newChildId = (
+            /** @type {String} */
+            newChild.getAttribute("id")
           );
-          morphNode(movedChild, newChild, ctx);
-          insertionPoint = movedChild.nextSibling;
-          continue;
+          if (ctx.persistentIds.has(newChildId)) {
+            const movedChild = moveBeforeById(
+              oldParent,
+              newChildId,
+              insertionPoint,
+              ctx
+            );
+            morphNode(movedChild, newChild, ctx);
+            insertionPoint = movedChild.nextSibling;
+            continue;
+          }
         }
         const insertedNode = createNode(
           oldParent,
@@ -2443,7 +2450,7 @@ var Idiomorph = (function() {
               softMatch = void 0;
             }
           }
-          if (cursor.contains(document.activeElement)) break;
+          if (ctx.activeElementAndParents.includes(cursor)) break;
           cursor = cursor.nextSibling;
         }
         return softMatch || null;
@@ -2471,7 +2478,8 @@ var Idiomorph = (function() {
         return oldElt.nodeType === newElt.nodeType && oldElt.tagName === newElt.tagName && // If oldElt has an `id` with possible state and it doesn't match newElt.id then avoid morphing.
         // We'll still match an anonymous node with an IDed newElt, though, because if it got this far,
         // its not persistent, and new nodes can't have any hidden state.
-        (!oldElt.id || oldElt.id === newElt.id);
+        // We can't use .id because of form input shadowing, and we can't count on .getAttribute's presence because it could be a document-fragment
+        (!oldElt.getAttribute?.("id") || oldElt.getAttribute?.("id") === newElt.getAttribute?.("id"));
       }
       return findBestMatch2;
     })();
@@ -2499,14 +2507,19 @@ var Idiomorph = (function() {
     function moveBeforeById(parentNode, id, after, ctx) {
       const target = (
         /** @type {Element} - will always be found */
-        ctx.target.querySelector(`#${id}`) || ctx.pantry.querySelector(`#${id}`)
+        // ctx.target.id unsafe because of form input shadowing
+        // ctx.target could be a document fragment which doesn't have `getAttribute`
+        ctx.target.getAttribute?.("id") === id && ctx.target || ctx.target.querySelector(`[id="${id}"]`) || ctx.pantry.querySelector(`[id="${id}"]`)
       );
       removeElementFromAncestorsIdMaps(target, ctx);
       moveBefore(parentNode, target, after);
       return target;
     }
     function removeElementFromAncestorsIdMaps(element, ctx) {
-      const id = element.id;
+      const id = (
+        /** @type {String} */
+        element.getAttribute("id")
+      );
       while (element = element.parentNode) {
         let idSet = ctx.idMap.get(element);
         if (idSet) {
@@ -2770,6 +2783,7 @@ var Idiomorph = (function() {
         idMap,
         persistentIds,
         pantry: createPantry(),
+        activeElementAndParents: createActiveElementAndParents(oldNode),
         callbacks: mergedConfig.callbacks,
         head: mergedConfig.head
       };
@@ -2791,16 +2805,32 @@ var Idiomorph = (function() {
       document.body.insertAdjacentElement("afterend", pantry);
       return pantry;
     }
+    function createActiveElementAndParents(oldNode) {
+      let activeElementAndParents = [];
+      let elt = document.activeElement;
+      if (elt?.tagName !== "BODY" && oldNode.contains(elt)) {
+        while (elt) {
+          activeElementAndParents.push(elt);
+          if (elt === oldNode) break;
+          elt = elt.parentElement;
+        }
+      }
+      return activeElementAndParents;
+    }
     function findIdElements(root) {
       let elements2 = Array.from(root.querySelectorAll("[id]"));
-      if (root.id) {
+      if (root.getAttribute?.("id")) {
         elements2.push(root);
       }
       return elements2;
     }
     function populateIdMapWithTree(idMap, persistentIds, root, elements2) {
       for (const elt of elements2) {
-        if (persistentIds.has(elt.id)) {
+        const id = (
+          /** @type {String} */
+          elt.getAttribute("id")
+        );
+        if (persistentIds.has(id)) {
           let current = elt;
           while (current) {
             let idSet = idMap.get(current);
@@ -2808,7 +2838,7 @@ var Idiomorph = (function() {
               idSet = /* @__PURE__ */ new Set();
               idMap.set(current, idSet);
             }
-            idSet.add(elt.id);
+            idSet.add(id);
             if (current === root) break;
             current = current.parentElement;
           }
@@ -2874,7 +2904,10 @@ var Idiomorph = (function() {
         );
       } else if (newContent instanceof Node) {
         if (newContent.parentNode) {
-          return createDuckTypedParent(newContent);
+          return (
+            /** @type {any} */
+            new SlicedParentNode(newContent)
+          );
         } else {
           const dummyParent = document.createElement("div");
           dummyParent.append(newContent);
@@ -2888,27 +2921,68 @@ var Idiomorph = (function() {
         return dummyParent;
       }
     }
-    function createDuckTypedParent(newContent) {
-      return (
-        /** @type {Element} */
-        /** @type {unknown} */
-        {
-          childNodes: [newContent],
-          /** @ts-ignore - cover your eyes for a minute, tsc */
-          querySelectorAll: (s) => {
-            const elements2 = newContent.querySelectorAll(s);
-            return newContent.matches(s) ? [newContent, ...elements2] : elements2;
-          },
-          /** @ts-ignore */
-          insertBefore: (n, r) => newContent.parentNode.insertBefore(n, r),
-          /** @ts-ignore */
-          moveBefore: (n, r) => newContent.parentNode.moveBefore(n, r),
-          // for later use with populateIdMapWithTree to halt upwards iteration
-          get __idiomorphRoot() {
-            return newContent;
-          }
+    class SlicedParentNode {
+      /** @param {Node} node */
+      constructor(node) {
+        this.originalNode = node;
+        this.realParentNode = /** @type {Element} */
+        node.parentNode;
+        this.previousSibling = node.previousSibling;
+        this.nextSibling = node.nextSibling;
+      }
+      /** @returns {Node[]} */
+      get childNodes() {
+        const nodes = [];
+        let cursor = this.previousSibling ? this.previousSibling.nextSibling : this.realParentNode.firstChild;
+        while (cursor && cursor != this.nextSibling) {
+          nodes.push(cursor);
+          cursor = cursor.nextSibling;
         }
-      );
+        return nodes;
+      }
+      /**
+       * @param {string} selector
+       * @returns {Element[]}
+       */
+      querySelectorAll(selector) {
+        return this.childNodes.reduce(
+          (results, node) => {
+            if (node instanceof Element) {
+              if (node.matches(selector)) results.push(node);
+              const nodeList = node.querySelectorAll(selector);
+              for (let i = 0; i < nodeList.length; i++) {
+                results.push(nodeList[i]);
+              }
+            }
+            return results;
+          },
+          /** @type {Element[]} */
+          []
+        );
+      }
+      /**
+       * @param {Node} node
+       * @param {Node} referenceNode
+       * @returns {Node}
+       */
+      insertBefore(node, referenceNode) {
+        return this.realParentNode.insertBefore(node, referenceNode);
+      }
+      /**
+       * @param {Node} node
+       * @param {Node} referenceNode
+       * @returns {Node}
+       */
+      moveBefore(node, referenceNode) {
+        return this.realParentNode.moveBefore(node, referenceNode);
+      }
+      /**
+       * for later use with populateIdMapWithTree to halt upwards iteration
+       * @returns {Node}
+       */
+      get __idiomorphRoot() {
+        return this.originalNode;
+      }
     }
     function parseContent(newContent) {
       let parser = new DOMParser();
@@ -2961,10 +3035,10 @@ function morphChildren(currentElement, newElement, options = {}) {
   });
 }
 function shouldRefreshFrameWithMorphing(currentFrame, newFrame) {
-  return currentFrame instanceof FrameElement && // newFrame cannot yet be an instance of FrameElement because custom
-  // elements don't get initialized until they're attached to the DOM, so
-  // test its Element#nodeName instead
-  newFrame instanceof Element && newFrame.nodeName === "TURBO-FRAME" && currentFrame.shouldReloadWithMorph && currentFrame.id === newFrame.id && (!newFrame.getAttribute("src") || urlsAreEqual(currentFrame.src, newFrame.getAttribute("src"))) && !currentFrame.closest("[data-turbo-permanent]");
+  return currentFrame instanceof FrameElement && currentFrame.shouldReloadWithMorph && (!newFrame || areFramesCompatibleForRefreshing(currentFrame, newFrame)) && !currentFrame.closest("[data-turbo-permanent]");
+}
+function areFramesCompatibleForRefreshing(currentFrame, newFrame) {
+  return newFrame instanceof Element && newFrame.nodeName === "TURBO-FRAME" && currentFrame.id === newFrame.id && (!newFrame.getAttribute("src") || urlsAreEqual(currentFrame.src, newFrame.getAttribute("src")));
 }
 function closestFrameReloadableWithMorphing(node) {
   return node.parentElement.closest("turbo-frame[src][refresh=morph]");
@@ -3248,10 +3322,16 @@ var PageSnapshot = class _PageSnapshot extends Snapshot {
     for (const clonedPasswordInput of clonedElement.querySelectorAll('input[type="password"]')) {
       clonedPasswordInput.value = "";
     }
+    for (const clonedNoscriptElement of clonedElement.querySelectorAll("noscript")) {
+      clonedNoscriptElement.remove();
+    }
     return new _PageSnapshot(this.documentElement, clonedElement, this.headSnapshot);
   }
   get lang() {
     return this.documentElement.getAttribute("lang");
+  }
+  get dir() {
+    return this.documentElement.getAttribute("dir");
   }
   get headElement() {
     return this.headSnapshot.element;
@@ -3276,11 +3356,11 @@ var PageSnapshot = class _PageSnapshot extends Snapshot {
     const viewTransitionEnabled = this.getSetting("view-transition") === "true" || this.headSnapshot.getMetaValue("view-transition") === "same-origin";
     return viewTransitionEnabled && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
-  get shouldMorphPage() {
-    return this.getSetting("refresh-method") === "morph";
+  get refreshMethod() {
+    return this.getSetting("refresh-method");
   }
-  get shouldPreserveScrollPosition() {
-    return this.getSetting("refresh-scroll") === "preserve";
+  get refreshScroll() {
+    return this.getSetting("refresh-scroll");
   }
   // Private
   getSetting(name) {
@@ -3313,7 +3393,8 @@ var defaultOptions = {
   willRender: true,
   updateHistory: true,
   shouldCacheSnapshot: true,
-  acceptsStreamResponse: false
+  acceptsStreamResponse: false,
+  refresh: {}
 };
 var TimingMetric = {
   visitStart: "visitStart",
@@ -3366,7 +3447,8 @@ var Visit = class {
       updateHistory,
       shouldCacheSnapshot,
       acceptsStreamResponse,
-      direction
+      direction,
+      refresh
     } = {
       ...defaultOptions,
       ...options
@@ -3377,7 +3459,6 @@ var Visit = class {
     this.snapshot = snapshot;
     this.snapshotHTML = snapshotHTML;
     this.response = response;
-    this.isSamePage = this.delegate.locationWithActionIsSamePage(this.location, this.action);
     this.isPageRefresh = this.view.isPageRefresh(this);
     this.visitCachedSnapshot = visitCachedSnapshot;
     this.willRender = willRender;
@@ -3386,6 +3467,7 @@ var Visit = class {
     this.shouldCacheSnapshot = shouldCacheSnapshot;
     this.acceptsStreamResponse = acceptsStreamResponse;
     this.direction = direction || Direction[action];
+    this.refresh = refresh;
   }
   get adapter() {
     return this.delegate.adapter;
@@ -3398,9 +3480,6 @@ var Visit = class {
   }
   get restorationData() {
     return this.history.getRestorationDataForIdentifier(this.restorationIdentifier);
-  }
-  get silent() {
-    return this.isSamePage;
   }
   start() {
     if (this.state == VisitState.initialized) {
@@ -3520,7 +3599,7 @@ var Visit = class {
       const isPreview = this.shouldIssueRequest();
       this.render(async () => {
         this.cacheSnapshot();
-        if (this.isSamePage || this.isPageRefresh) {
+        if (this.isPageRefresh) {
           this.adapter.visitRendered(this);
         } else {
           if (this.view.renderPromise) await this.view.renderPromise;
@@ -3542,16 +3621,6 @@ var Visit = class {
         willRender: false
       });
       this.followedRedirect = true;
-    }
-  }
-  goToSamePageAnchor() {
-    if (this.isSamePage) {
-      this.render(async () => {
-        this.cacheSnapshot();
-        this.performScroll();
-        this.changeHistory();
-        this.adapter.visitRendered(this);
-      });
     }
   }
   // Fetch request delegate
@@ -3607,9 +3676,6 @@ var Visit = class {
       } else {
         this.scrollToAnchor() || this.view.scrollToTop();
       }
-      if (this.isSamePage) {
-        this.delegate.visitScrolledToSamePageLocation(this.view.lastRenderedLocation, this.location);
-      }
       this.scrolled = true;
     }
   }
@@ -3639,9 +3705,7 @@ var Visit = class {
     return typeof this.response == "object";
   }
   shouldIssueRequest() {
-    if (this.isSamePage) {
-      return false;
-    } else if (this.action == "restore") {
+    if (this.action == "restore") {
       return !this.hasCachedSnapshot();
     } else {
       return this.willRender;
@@ -3694,7 +3758,6 @@ var BrowserAdapter = class {
     this.redirectedToLocation = null;
     visit2.loadCachedSnapshot();
     visit2.issueRequest();
-    visit2.goToSamePageAnchor();
   }
   visitRequestStarted(visit2) {
     this.progressBar.setValue(0);
@@ -3789,7 +3852,6 @@ var BrowserAdapter = class {
 };
 var CacheObserver = class {
   selector = "[data-turbo-temporary]";
-  deprecatedSelector = "[data-turbo-cache=false]";
   started = false;
   start() {
     if (!this.started) {
@@ -3809,16 +3871,7 @@ var CacheObserver = class {
     }
   };
   get temporaryElements() {
-    return [...document.querySelectorAll(this.selector), ...this.temporaryElementsWithDeprecation];
-  }
-  get temporaryElementsWithDeprecation() {
-    const elements2 = document.querySelectorAll(this.deprecatedSelector);
-    if (elements2.length) {
-      console.warn(
-        `The ${this.deprecatedSelector} selector is deprecated and will be removed in a future version. Use ${this.selector} instead.`
-      );
-    }
-    return [...elements2];
+    return [...document.querySelectorAll(this.selector)];
   }
 };
 var FrameRedirector = class {
@@ -3886,7 +3939,6 @@ var History = class {
   restorationIdentifier = uuid();
   restorationData = {};
   started = false;
-  pageLoaded = false;
   currentIndex = 0;
   constructor(delegate) {
     this.delegate = delegate;
@@ -3894,7 +3946,6 @@ var History = class {
   start() {
     if (!this.started) {
       addEventListener("popstate", this.onPopState, false);
-      addEventListener("load", this.onPageLoad, false);
       this.currentIndex = history.state?.turbo?.restorationIndex || 0;
       this.started = true;
       this.replace(new URL(window.location.href));
@@ -3903,7 +3954,6 @@ var History = class {
   stop() {
     if (this.started) {
       removeEventListener("popstate", this.onPopState, false);
-      removeEventListener("load", this.onPageLoad, false);
       this.started = false;
     }
   }
@@ -3947,29 +3997,19 @@ var History = class {
   }
   // Event handlers
   onPopState = (event) => {
-    if (this.shouldHandlePopState()) {
-      const { turbo } = event.state || {};
-      if (turbo) {
-        this.location = new URL(window.location.href);
-        const { restorationIdentifier, restorationIndex } = turbo;
-        this.restorationIdentifier = restorationIdentifier;
-        const direction = restorationIndex > this.currentIndex ? "forward" : "back";
-        this.delegate.historyPoppedToLocationWithRestorationIdentifierAndDirection(this.location, restorationIdentifier, direction);
-        this.currentIndex = restorationIndex;
-      }
+    const { turbo } = event.state || {};
+    this.location = new URL(window.location.href);
+    if (turbo) {
+      const { restorationIdentifier, restorationIndex } = turbo;
+      this.restorationIdentifier = restorationIdentifier;
+      const direction = restorationIndex > this.currentIndex ? "forward" : "back";
+      this.delegate.historyPoppedToLocationWithRestorationIdentifierAndDirection(this.location, restorationIdentifier, direction);
+      this.currentIndex = restorationIndex;
+    } else {
+      this.currentIndex++;
+      this.delegate.historyPoppedWithEmptyState(this.location);
     }
   };
-  onPageLoad = async (_event) => {
-    await nextMicrotask();
-    this.pageLoaded = true;
-  };
-  // Private
-  shouldHandlePopState() {
-    return this.pageIsLoaded();
-  }
-  pageIsLoaded() {
-    return this.pageLoaded || document.readyState == "complete";
-  }
 };
 var LinkPrefetchObserver = class {
   started = false;
@@ -4028,7 +4068,7 @@ var LinkPrefetchObserver = class {
           target
         );
         fetchRequest.fetchOptions.priority = "low";
-        prefetchCache.setLater(location2.toString(), fetchRequest, this.#cacheTtl);
+        prefetchCache.putLater(location2, fetchRequest, this.#cacheTtl);
       }
     }
   };
@@ -4041,7 +4081,7 @@ var LinkPrefetchObserver = class {
   };
   #tryToUsePrefetchedRequest = (event) => {
     if (event.target.tagName !== "FORM" && event.detail.fetchOptions.method === "GET") {
-      const cached = prefetchCache.get(event.detail.url.toString());
+      const cached = prefetchCache.get(event.detail.url);
       if (cached) {
         event.detail.fetchRequest = cached;
       }
@@ -4190,7 +4230,7 @@ var Navigator = class {
       } else {
         await this.view.renderPage(snapshot, false, true, this.currentVisit);
       }
-      if (!snapshot.shouldPreserveScrollPosition) {
+      if (snapshot.refreshScroll !== "preserve") {
         this.view.scrollToTop();
       }
       this.view.clearSnapshotCache();
@@ -4219,14 +4259,10 @@ var Navigator = class {
     this.delegate.visitCompleted(visit2);
     delete this.currentVisit;
   }
+  // Same-page links are no longer handled with a Visit.
+  // This method is still needed for Turbo Native adapters.
   locationWithActionIsSamePage(location2, action) {
-    const anchor = getAnchor(location2);
-    const currentAnchor = getAnchor(this.view.lastRenderedLocation);
-    const isRestorationToTop = action === "restore" && typeof anchor === "undefined";
-    return action !== "replace" && getRequestURL(location2) === getRequestURL(this.view.lastRenderedLocation) && (isRestorationToTop || anchor != null && anchor !== currentAnchor);
-  }
-  visitScrolledToSamePageLocation(oldURL, newURL) {
-    this.delegate.visitScrolledToSamePageLocation(oldURL, newURL);
+    return false;
   }
   // Visits
   get location() {
@@ -4545,11 +4581,16 @@ var PageRenderer = class extends Renderer {
   }
   #setLanguage() {
     const { documentElement } = this.currentSnapshot;
-    const { lang } = this.newSnapshot;
+    const { dir, lang } = this.newSnapshot;
     if (lang) {
       documentElement.setAttribute("lang", lang);
     } else {
       documentElement.removeAttribute("lang");
+    }
+    if (dir) {
+      documentElement.setAttribute("dir", dir);
+    } else {
+      documentElement.removeAttribute("dir");
     }
   }
   async mergeHead() {
@@ -4630,7 +4671,13 @@ var PageRenderer = class extends Renderer {
   }
   activateNewBody() {
     document.adoptNode(this.newElement);
+    this.removeNoscriptElements();
     this.activateNewBodyScriptElements();
+  }
+  removeNoscriptElements() {
+    for (const noscriptElement of this.newElement.querySelectorAll("noscript")) {
+      noscriptElement.remove();
+    }
   }
   activateNewBodyScriptElements() {
     for (const inertScriptElement of this.newBodyScriptElements) {
@@ -4690,48 +4737,12 @@ var MorphingPageRenderer = class extends PageRenderer {
     return false;
   }
 };
-var SnapshotCache = class {
-  keys = [];
-  snapshots = {};
+var SnapshotCache = class extends LRUCache {
   constructor(size) {
-    this.size = size;
+    super(size, toCacheKey);
   }
-  has(location2) {
-    return toCacheKey(location2) in this.snapshots;
-  }
-  get(location2) {
-    if (this.has(location2)) {
-      const snapshot = this.read(location2);
-      this.touch(location2);
-      return snapshot;
-    }
-  }
-  put(location2, snapshot) {
-    this.write(location2, snapshot);
-    this.touch(location2);
-    return snapshot;
-  }
-  clear() {
-    this.snapshots = {};
-  }
-  // Private
-  read(location2) {
-    return this.snapshots[toCacheKey(location2)];
-  }
-  write(location2, snapshot) {
-    this.snapshots[toCacheKey(location2)] = snapshot;
-  }
-  touch(location2) {
-    const key = toCacheKey(location2);
-    const index2 = this.keys.indexOf(key);
-    if (index2 > -1) this.keys.splice(index2, 1);
-    this.keys.unshift(key);
-    this.trim();
-  }
-  trim() {
-    for (const key of this.keys.splice(this.size)) {
-      delete this.snapshots[key];
-    }
+  get snapshots() {
+    return this.entries;
   }
 };
 var PageView = class extends View {
@@ -4742,7 +4753,7 @@ var PageView = class extends View {
     return this.snapshot.prefersViewTransitions && newSnapshot.prefersViewTransitions;
   }
   renderPage(snapshot, isPreview = false, willRender = true, visit2) {
-    const shouldMorphPage = this.isPageRefresh(visit2) && this.snapshot.shouldMorphPage;
+    const shouldMorphPage = this.isPageRefresh(visit2) && (visit2?.refresh?.method || this.snapshot.refreshMethod) === "morph";
     const rendererClass = shouldMorphPage ? MorphingPageRenderer : PageRenderer;
     const renderer = new rendererClass(this.snapshot, snapshot, isPreview, willRender);
     if (!renderer.shouldRender) {
@@ -4777,7 +4788,7 @@ var PageView = class extends View {
     return !visit2 || this.lastRenderedLocation.pathname === visit2.location.pathname && visit2.action === "replace";
   }
   shouldPreserveScrollPosition(visit2) {
-    return this.isPageRefresh(visit2) && this.snapshot.shouldPreserveScrollPosition;
+    return this.isPageRefresh(visit2) && (visit2?.refresh?.scroll || this.snapshot.refreshScroll) === "preserve";
   }
   get snapshot() {
     return PageSnapshot.fromElement(this.element);
@@ -4934,11 +4945,13 @@ var Session = class {
       this.navigator.proposeVisit(expandURL(location2), options);
     }
   }
-  refresh(url, requestId) {
+  refresh(url, options = {}) {
+    options = typeof options === "string" ? { requestId: options } : options;
+    const { method, requestId, scroll } = options;
     const isRecentRequest = requestId && this.recentRequests.has(requestId);
     const isCurrentUrl = url === document.baseURI;
     if (!isRecentRequest && !this.navigator.currentVisit && isCurrentUrl) {
-      this.visit(url, { action: "replace", shouldCacheSnapshot: false });
+      this.visit(url, { action: "replace", shouldCacheSnapshot: false, refresh: { method, scroll } });
     }
   }
   connectStreamSource(source) {
@@ -5017,6 +5030,11 @@ var Session = class {
       });
     }
   }
+  historyPoppedWithEmptyState(location2) {
+    this.history.replace(location2);
+    this.view.lastRenderedLocation = location2;
+    this.view.cacheSnapshot();
+  }
   // Scroll observer delegate
   scrollPositionChanged(position) {
     this.history.updateRestorationData({ scrollPosition: position });
@@ -5042,7 +5060,7 @@ var Session = class {
   }
   // Navigator delegate
   allowsVisitingLocationWithAction(location2, action) {
-    return this.locationWithActionIsSamePage(location2, action) || this.applicationAllowsVisitingLocation(location2);
+    return this.applicationAllowsVisitingLocation(location2);
   }
   visitProposedToLocation(location2, options) {
     extendURLWithDeprecatedProperties(location2);
@@ -5055,20 +5073,12 @@ var Session = class {
       this.view.markVisitDirection(visit2.direction);
     }
     extendURLWithDeprecatedProperties(visit2.location);
-    if (!visit2.silent) {
-      this.notifyApplicationAfterVisitingLocation(visit2.location, visit2.action);
-    }
+    this.notifyApplicationAfterVisitingLocation(visit2.location, visit2.action);
   }
   visitCompleted(visit2) {
     this.view.unmarkVisitDirection();
     clearBusyState(document.documentElement);
     this.notifyApplicationAfterPageLoad(visit2.getTimingMetrics());
-  }
-  locationWithActionIsSamePage(location2, action) {
-    return this.navigator.locationWithActionIsSamePage(location2, action);
-  }
-  visitScrolledToSamePageLocation(oldURL, newURL) {
-    this.notifyApplicationAfterVisitingSamePageLocation(oldURL, newURL);
   }
   // Form submit observer delegate
   willSubmitForm(form, submitter2) {
@@ -5095,9 +5105,7 @@ var Session = class {
   }
   // Page view delegate
   viewWillCacheSnapshot() {
-    if (!this.navigator.currentVisit?.silent) {
-      this.notifyApplicationBeforeCachingSnapshot();
-    }
+    this.notifyApplicationBeforeCachingSnapshot();
   }
   allowsImmediateRender({ element }, options) {
     const event = this.notifyApplicationBeforeRender(element, options);
@@ -5169,14 +5177,6 @@ var Session = class {
       detail: { url: this.location.href, timing }
     });
   }
-  notifyApplicationAfterVisitingSamePageLocation(oldURL, newURL) {
-    dispatchEvent(
-      new HashChangeEvent("hashchange", {
-        oldURL: oldURL.toString(),
-        newURL: newURL.toString()
-      })
-    );
-  }
   notifyApplicationAfterFrameLoad(frame) {
     return dispatch("turbo:frame-load", { target: frame });
   }
@@ -5236,7 +5236,7 @@ var deprecatedLocationPropertyDescriptors = {
   }
 };
 var session = new Session(recentRequests);
-var { cache, navigator: navigator$1 } = session;
+var { cache, navigator: sessionNavigator } = session;
 function start() {
   session.start();
 }
@@ -5254,12 +5254,6 @@ function disconnectStreamSource(source) {
 }
 function renderStreamMessage(message2) {
   session.renderStreamMessage(message2);
-}
-function clearCache() {
-  console.warn(
-    "Please replace `Turbo.clearCache()` with `Turbo.cache.clear()`. The top-level function is deprecated and will be removed in a future version of Turbo.`"
-  );
-  session.clearCache();
 }
 function setProgressBarDelay(delay) {
   console.warn(
@@ -5287,21 +5281,20 @@ function morphTurboFrameElements(currentFrame, newFrame) {
 }
 var Turbo = /* @__PURE__ */ Object.freeze({
   __proto__: null,
-  navigator: navigator$1,
-  session,
-  cache,
   PageRenderer,
   PageSnapshot,
   FrameRenderer,
   fetch: fetchWithTurboHeaders,
   config,
+  session,
+  cache,
+  navigator: sessionNavigator,
   start,
   registerAdapter,
   visit,
   connectStreamSource,
   disconnectStreamSource,
   renderStreamMessage,
-  clearCache,
   setProgressBarDelay,
   setConfirmMethod,
   setFormMode,
@@ -5352,15 +5345,23 @@ var FrameController = class {
       this.formLinkClickObserver.stop();
       this.linkInterceptor.stop();
       this.formSubmitObserver.stop();
+      if (!this.element.hasAttribute("recurse")) {
+        this.#currentFetchRequest?.cancel();
+      }
     }
   }
   disabledChanged() {
-    if (this.loadingStyle == FrameLoadingStyle.eager) {
+    if (this.disabled) {
+      this.#currentFetchRequest?.cancel();
+    } else if (this.loadingStyle == FrameLoadingStyle.eager) {
       this.#loadSourceURL();
     }
   }
   sourceURLChanged() {
     if (this.#isIgnoringChangesTo("src")) return;
+    if (!this.sourceURL) {
+      this.#currentFetchRequest?.cancel();
+    }
     if (this.element.isConnected) {
       this.complete = false;
     }
@@ -5442,12 +5443,13 @@ var FrameController = class {
     }
     this.formSubmission = new FormSubmission(this, element, submitter2);
     const { fetchRequest } = this.formSubmission;
-    this.prepareRequest(fetchRequest);
+    const frame = this.#findFrameElement(element, submitter2);
+    this.prepareRequest(fetchRequest, frame);
     this.formSubmission.start();
   }
   // Fetch request delegate
-  prepareRequest(request) {
-    request.headers["Turbo-Frame"] = this.id;
+  prepareRequest(request, frame = this) {
+    request.headers["Turbo-Frame"] = frame.id;
     if (this.currentNavigationElement?.hasAttribute("data-turbo-stream")) {
       request.acceptResponseType(StreamMessage.contentType);
     }
@@ -5637,7 +5639,8 @@ var FrameController = class {
   }
   #findFrameElement(element, submitter2) {
     const id = getAttribute("data-turbo-frame", submitter2, element) || this.element.getAttribute("target");
-    return getFrameElementById(id) ?? this.element;
+    const target = this.#getFrameElementById(id);
+    return target instanceof FrameElement ? target : this.element;
   }
   async extractForeignFrameElement(container) {
     let element;
@@ -5671,9 +5674,11 @@ var FrameController = class {
       return false;
     }
     if (id) {
-      const frameElement = getFrameElementById(id);
+      const frameElement = this.#getFrameElementById(id);
       if (frameElement) {
         return !frameElement.disabled;
+      } else if (id == "_parent") {
+        return false;
       }
     }
     if (!session.elementIsNavigatable(element)) {
@@ -5688,8 +5693,11 @@ var FrameController = class {
   get id() {
     return this.element.id;
   }
+  get disabled() {
+    return this.element.disabled;
+  }
   get enabled() {
-    return !this.element.disabled;
+    return !this.disabled;
   }
   get sourceURL() {
     if (this.element.src) {
@@ -5738,15 +5746,15 @@ var FrameController = class {
     callback2();
     delete this.currentNavigationElement;
   }
-};
-function getFrameElementById(id) {
-  if (id != null) {
-    const element = document.getElementById(id);
-    if (element instanceof FrameElement) {
-      return element;
+  #getFrameElementById(id) {
+    if (id != null) {
+      const element = id === "_parent" ? this.element.parentElement.closest("turbo-frame") : document.getElementById(id);
+      if (element instanceof FrameElement) {
+        return element;
+      }
     }
   }
-}
+};
 function activateElement(element, currentURL) {
   if (element) {
     const src = element.getAttribute("src");
@@ -5765,6 +5773,7 @@ function activateElement(element, currentURL) {
 }
 var StreamActions = {
   after() {
+    this.removeDuplicateTargetSiblings();
     this.targetElements.forEach((e) => e.parentElement?.insertBefore(this.templateContent, e.nextSibling));
   },
   append() {
@@ -5772,6 +5781,7 @@ var StreamActions = {
     this.targetElements.forEach((e) => e.append(this.templateContent));
   },
   before() {
+    this.removeDuplicateTargetSiblings();
     this.targetElements.forEach((e) => e.parentElement?.insertBefore(this.templateContent, e));
   },
   prepend() {
@@ -5803,7 +5813,10 @@ var StreamActions = {
     });
   },
   refresh() {
-    session.refresh(this.baseURI, this.requestId);
+    const method = this.getAttribute("method");
+    const requestId = this.requestId;
+    const scroll = this.getAttribute("scroll");
+    session.refresh(this.baseURI, { method, requestId, scroll });
   }
 };
 var StreamElement = class _StreamElement extends HTMLElement {
@@ -5847,6 +5860,20 @@ var StreamElement = class _StreamElement extends HTMLElement {
     const existingChildren = this.targetElements.flatMap((e) => [...e.children]).filter((c) => !!c.getAttribute("id"));
     const newChildrenIds = [...this.templateContent?.children || []].filter((c) => !!c.getAttribute("id")).map((c) => c.getAttribute("id"));
     return existingChildren.filter((c) => newChildrenIds.includes(c.getAttribute("id")));
+  }
+  /**
+  * Removes duplicate siblings (by ID)
+  */
+  removeDuplicateTargetSiblings() {
+    this.duplicateSiblings.forEach((c) => c.remove());
+  }
+  /**
+  * Gets the list of duplicate siblings (i.e. those with the same ID)
+  */
+  get duplicateSiblings() {
+    const existingChildren = this.targetElements.flatMap((e) => [...e.parentElement.children]).filter((c) => !!c.id);
+    const newChildrenIds = [...this.templateContent?.children || []].filter((c) => !!c.id).map((c) => c.id);
+    return existingChildren.filter((c) => newChildrenIds.includes(c.id));
   }
   /**
    * Gets the action function to be performed.
@@ -5974,10 +6001,10 @@ if (customElements.get("turbo-stream-source") === void 0) {
   customElements.define("turbo-stream-source", StreamSourceElement);
 }
 (() => {
-  let element = document.currentScript;
-  if (!element) return;
-  if (element.hasAttribute("data-turbo-suppress-warning")) return;
-  element = element.parentElement;
+  const scriptElement = document.currentScript;
+  if (!scriptElement) return;
+  if (scriptElement.hasAttribute("data-turbo-suppress-warning")) return;
+  let element = scriptElement.parentElement;
   while (element) {
     if (element == document.body) {
       return console.warn(
@@ -5991,7 +6018,7 @@ if (customElements.get("turbo-stream-source") === void 0) {
         ——
         Suppress this warning by adding a "data-turbo-suppress-warning" attribute to: %s
       `,
-        element.outerHTML
+        scriptElement.outerHTML
       );
     }
     element = element.parentElement;
@@ -18427,10 +18454,10 @@ function getMaximumSize(canvas, bbWidth, bbHeight, aspectRatio) {
 }
 function retinaScale(chart, forceRatio, forceStyle) {
   const pixelRatio = forceRatio || 1;
-  const deviceHeight = Math.floor(chart.height * pixelRatio);
-  const deviceWidth = Math.floor(chart.width * pixelRatio);
-  chart.height = Math.floor(chart.height);
-  chart.width = Math.floor(chart.width);
+  const deviceHeight = round1(chart.height * pixelRatio);
+  const deviceWidth = round1(chart.width * pixelRatio);
+  chart.height = round1(chart.height);
+  chart.width = round1(chart.width);
   const canvas = chart.canvas;
   if (canvas.style && (forceStyle || !canvas.style.height && !canvas.style.width)) {
     canvas.style.height = `${chart.height}px`;
@@ -20717,19 +20744,24 @@ var DoughnutController = class extends DatasetController {
         labels: {
           generateLabels(chart) {
             const data = chart.data;
+            const { labels: { pointStyle, textAlign, color: color2, useBorderRadius, borderRadius } } = chart.legend.options;
             if (data.labels.length && data.datasets.length) {
-              const { labels: { pointStyle, color: color2 } } = chart.legend.options;
               return data.labels.map((label, i) => {
                 const meta = chart.getDatasetMeta(0);
                 const style = meta.controller.getStyle(i);
                 return {
                   text: label,
                   fillStyle: style.backgroundColor,
-                  strokeStyle: style.borderColor,
                   fontColor: color2,
-                  lineWidth: style.borderWidth,
-                  pointStyle,
                   hidden: !chart.getDataVisibility(i),
+                  lineDash: style.borderDash,
+                  lineDashOffset: style.borderDashOffset,
+                  lineJoin: style.borderJoinStyle,
+                  lineWidth: style.borderWidth,
+                  strokeStyle: style.borderColor,
+                  textAlign,
+                  pointStyle,
+                  borderRadius: useBorderRadius && (borderRadius || style.borderRadius),
                   index: i
                 };
               });
@@ -23941,18 +23973,22 @@ var Registry = class {
 var registry = /* @__PURE__ */ new Registry();
 var PluginService = class {
   constructor() {
-    this._init = [];
+    this._init = void 0;
   }
   notify(chart, hook, args, filter) {
     if (hook === "beforeInit") {
       this._init = this._createDescriptors(chart, true);
       this._notify(this._init, chart, "install");
     }
+    if (this._init === void 0) {
+      return;
+    }
     const descriptors2 = filter ? this._descriptors(chart).filter(filter) : this._descriptors(chart);
     const result = this._notify(descriptors2, chart, hook, args);
     if (hook === "afterDestroy") {
       this._notify(descriptors2, chart, "stop");
       this._notify(this._init, chart, "uninstall");
+      this._init = void 0;
     }
     return result;
   }
@@ -24393,7 +24429,7 @@ function needContext(proxy, names2) {
   }
   return false;
 }
-var version = "4.5.0";
+var version = "4.5.1";
 var KNOWN_POSITIONS = [
   "top",
   "bottom",
@@ -34322,8 +34358,8 @@ Chartkick.use(auto_default);
 
 @hotwired/turbo/dist/turbo.es2017-esm.js:
   (*!
-  Turbo 8.0.17
-  Copyright © 2025 37signals LLC
+  Turbo 8.0.23
+  Copyright © 2026 37signals LLC
    *)
 
 bootstrap/dist/js/bootstrap.esm.js:
@@ -34352,7 +34388,7 @@ chartkick/dist/chartkick.esm.js:
 chart.js/dist/chunks/helpers.dataset.js:
 chart.js/dist/chart.js:
   (*!
-   * Chart.js v4.5.0
+   * Chart.js v4.5.1
    * https://www.chartjs.org
    * (c) 2025 Chart.js Contributors
    * Released under the MIT License
