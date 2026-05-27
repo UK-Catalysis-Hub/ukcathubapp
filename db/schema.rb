@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_25_131630) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,8 +20,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
     t.bigint "record_id"
     t.bigint "blob_id"
     t.timestamptz "created_at"
-    t.index ["blob_id"], name: "idx_26194_index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "idx_26194_index_active_storage_attachments_uniqueness", unique: true
+    t.index ["blob_id"], name: "idx_26857_index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "idx_26857_index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
@@ -33,13 +33,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
     t.bigint "byte_size"
     t.text "checksum"
     t.timestamptz "created_at"
-    t.index ["key"], name: "idx_26187_index_active_storage_blobs_on_key", unique: true
+    t.index ["key"], name: "idx_26850_index_active_storage_blobs_on_key", unique: true
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id"
     t.text "variation_digest"
-    t.index ["blob_id", "variation_digest"], name: "idx_26201_index_active_storage_variant_records_uniqueness", unique: true
+    t.index ["blob_id", "variation_digest"], name: "idx_26864_index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "addresses", force: :cascade do |t|
@@ -172,11 +172,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
   end
 
   create_table "cr_affiliations", force: :cascade do |t|
-    t.string "name"
-    t.integer "article_author_id"
-    t.integer "author_affiliation_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.text "name"
+    t.text "article_author_id"
+    t.text "author_affiliation_id"
+    t.timestamptz "created_at"
+    t.timestamptz "updated_at"
   end
 
   create_table "cr_publications", force: :cascade do |t|
@@ -268,8 +268,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
     t.timestamptz "confirmation_sent_at"
     t.text "unconfirmed_email"
     t.text "username"
-    t.index ["email"], name: "idx_26157_index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "idx_26157_index_users_on_reset_password_token", unique: true
+    t.index ["email"], name: "idx_26820_index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "idx_26820_index_users_on_reset_password_token", unique: true
   end
 
   create_table "xref_client_mappings", force: :cascade do |t|
@@ -287,39 +287,4 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_03_145548) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id", name: "active_storage_attachments_blob_id_fkey"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id", name: "active_storage_variant_records_blob_id_fkey"
-
-  create_view "inst_ctry_stats", sql_definition: <<-SQL
-      SELECT v_ctry_inst.country,
-      count(*) AS inst_count,
-      sum(v_ctry_inst.res_count) AS res_count,
-      sum(v_ctry_inst.pub_count) AS pub_count
-     FROM ( SELECT v_author_inst.country,
-              v_author_inst.affi_name,
-              count(*) AS res_count,
-              sum(v_author_inst.pub_count) AS pub_count
-             FROM ( SELECT article_authors.author_id,
-                      author_affiliations.country,
-                      author_affiliations.short_name AS affi_name,
-                      count(*) AS pub_count
-                     FROM ((authors
-                       JOIN article_authors ON ((article_authors.author_id = authors.id)))
-                       JOIN author_affiliations ON ((author_affiliations.article_author_id = article_authors.id)))
-                    GROUP BY article_authors.author_id, author_affiliations.short_name, author_affiliations.country) v_author_inst
-            GROUP BY v_author_inst.country, v_author_inst.affi_name) v_ctry_inst
-    GROUP BY v_ctry_inst.country;
-  SQL
-  create_view "list_themes", sql_definition: <<-SQL
-      SELECT themes.id,
-      themes.phase,
-      themes.name,
-      themes.short,
-      themes.lead,
-      count(*) AS article_count
-     FROM ((article_themes
-       JOIN themes ON ((article_themes.theme_id = themes.id)))
-       JOIN articles ON ((article_themes.article_id = articles.id)))
-    WHERE (articles.status = 'Added'::text)
-    GROUP BY themes.id, themes.phase, themes.name
-    ORDER BY themes.id;
-  SQL
 end

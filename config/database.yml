@@ -21,7 +21,9 @@ default: &default
 
 development:
   <<: *default
-  database: ukchapprw_development
+  database: <%= ENV["DEV_DATABASE"] %>
+  username: <%= ENV["UKCHAPPRW_DATABASE_USERNAME"] %>
+  password: <%= ENV["UKCHAPPRW_DATABASE_PASSWORD"] %>
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -79,6 +81,6 @@ test:
 #
 production:
   <<: *default
-  database: ukchapprw_production
-  username: cdpdbuser
+  database: <%= ENV["DATABASE_NAME"] %>
+  username: <%= ENV["UKCHAPPRW_DATABASE_USERNAME"] %>
   password: <%= ENV["UKCHAPPRW_DATABASE_PASSWORD"] %>
