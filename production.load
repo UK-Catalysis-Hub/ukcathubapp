@@ -1,6 +1,8 @@
 load database
-     from sqlite://./storage/development.sqlite3
-     into postgresql:///ukchapprw_development
+
+     FROM sqlite://./storage/prod_migrate.sqlite3
+
+     INTO postgresql://username:password@localhost:5432/db_production
 
  with include drop, create tables, create indexes, reset sequences
 

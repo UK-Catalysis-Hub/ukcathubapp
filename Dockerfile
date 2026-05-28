@@ -13,6 +13,11 @@ ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
+ENV DATABASE_PROD=app_production
+ENV PG_USER=postgres
+ENV PG_PASSWORD=postgres
+ENV DATABASE_HOST=db
+
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
