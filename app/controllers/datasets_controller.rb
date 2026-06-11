@@ -11,51 +11,49 @@ class DatasetsController < ApplicationController
 
     orders 'Name (A-Z)'          => { name: :asc },
        'Name (Z-A)'          => { name: :desc },
-       'Date, newest first'  => "COALESCE(startdate, created_at) DESC",
-       'Date, oldest first'  => "COALESCE(startdate, created_at) ASC"
+       'Date, newest first'  => "startdate DESC",
+       'Date, oldest first'  => "startdate ASC"
   end
 
   # GET /datasets or /datasets.json
+  
+  
   def index
     page     = (params[:page].presence || 1).to_i
     per_page = [[(params[:per_page].presence || 10).to_i, 1].max, 100].min
-
+    @search   = DatasetSearch.new(params)
+    scope     = @search.result  # this version of FortyFacets uses `.result`
+    @datasets = scope.paginate(page: page, per_page: per_page)
+    #    render :index
     respond_to do |format|
-      # ---- HTML: keep existing ERB working (search[name], facets, order) ----
-      format.html do
-        @search   = DatasetSearch.new(params[:search] || {})
-        scope     = @search.result                # this version of FortyFacets uses `.result`
-        @datasets = scope.paginate(page: page, per_page: per_page)
-        render :index
-      end
-
-      # ---- JSON: API with q/repository/ds_type/date/year/order/pagination ----
+      # -- HTML: keep existing ERB working (search[name], facets, order) --
+      format.html
+      # -- JSON: API with q/repository/ds_type/date/year/order/pagination --
       format.json do
-        scope = Dataset.all
-
-        if params[:q].present?
-          q = "%#{params[:q].strip}%"
-          scope = scope.where(
-            "#{ilike('name')} OR #{ilike('description')} OR #{ilike('doi')} OR #{ilike('location')}",
-            q: q
-          )
-        end
+      #  scope = Dataset.all
+      #  if params[:q].present?
+      #    q = "%#{params[:q].strip}%"
+      #    scope = scope.where(
+      #      "#{ilike('name')} OR #{ilike('description')} OR #{ilike('doi')} OR #{ilike('location')}",
+      #      q: q
+      #    )
+      #  end
 
         ds_type = params[:data_type].presence || params[:ds_type].presence
-        scope   = scope.where(ds_type: ds_type) if ds_type
-        scope   = scope.where(repository: params[:repository]) if params[:repository].present?
+       # scope   = scope.where(ds_type: ds_type) if ds_type
+       # scope   = scope.where(repository: params[:repository]) if params[:repository].present?
 
-        if params[:date_from].present?
-          scope = scope.where("COALESCE(startdate, created_at) >= ?", params[:date_from])
-        end
-        if params[:date_to].present?
-          scope = scope.where("COALESCE(startdate, created_at) <= ?", params[:date_to])
-        end
-        if params[:year].present?
-          scope = scope.where("#{year_expr} = ?", params[:year].to_i) # DB-safe
-        end
+        #if params[:date_from].present?
+        #  scope = scope.where("COALESCE(startdate, created_at) >= ?", params[:date_from])
+        #end
+        #if params[:date_to].present?
+        #  scope = scope.where("COALESCE(startdate, created_at) <= ?", params[:date_to])
+        #end
+        #if params[:year].present?
+        #  scope = scope.where("#{year_expr} = ?", params[:year].to_i) # DB-safe
+        #end
 
-        scope = scope.order(dataset_order_clause(params[:order]))
+        #scope = scope.order(dataset_order_clause(params[:order]))
         items = scope.paginate(page: page, per_page: per_page)
 
         render json: {
