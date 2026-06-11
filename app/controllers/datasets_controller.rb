@@ -17,7 +17,6 @@ class DatasetsController < ApplicationController
 
   # GET /datasets or /datasets.json
   
-  
   def index
     page     = (params[:page].presence || 1).to_i
     per_page = [[(params[:per_page].presence || 10).to_i, 1].max, 100].min
