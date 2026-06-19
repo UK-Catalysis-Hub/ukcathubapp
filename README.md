@@ -10,7 +10,7 @@ For more details about the of the motivation for the development of the UKCHApp
 see: [UK Catalysis Hub Core Theme](https://ukcatalysishub.co.uk/core/).
 
 ### Funding
-The original project started by UK Catalysis Hub that supported and funded the 
+The UK Catalysis Hub funded the 
 development of this resource through EPSRC grants:  EP/R026939/1, EP/R026815/1, 
 EP/R026645/1, EP/R027129/1, and EP/M013219/1(biocatalysis).
 
