@@ -66,8 +66,11 @@ group :development do
   gem "capistrano", "~> 3.18", require: false
   gem "capistrano-rails", "~> 1.6", require: false
   gem 'capistrano-passenger', '~> 0.2.0'
-  gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4' 
+  gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
+  gem 'capistrano-nvm'
 end
+
+
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]

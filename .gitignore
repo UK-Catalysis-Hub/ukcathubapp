@@ -28,7 +28,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-
+/config/*cap
 /public/packs
 /public/packs-test
 /node_modules
@@ -50,3 +50,4 @@ yarn-debug.log*
 .env
 
 docker-compose.override.*
+*load
