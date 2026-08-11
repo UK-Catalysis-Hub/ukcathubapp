@@ -1,0 +1,20 @@
+# This initializer patch waits for Active Record to load and then checks if
+# lookup_cast_type_from_column is missing. 
+#   - If it is missing, it dynamically adds it back to the abstract database 
+#     adapter using the modern, public type_map.lookup equivalent.
+# Because the SQLite adapter inherits from this abstract class (AbstractAdapter),
+# it will instantly recognise the method and stop crashing.
+
+# required because forty facets uses this method for facet filters
+
+ActiveSupport.on_load(:active_record) do
+  class ActiveRecord::ConnectionAdapters::AbstractAdapter
+    # Re-implement the missing internal method that forty_facets relies on
+    unless method_defined?(:lookup_cast_type_from_column)
+      def lookup_cast_type_from_column(column)
+        type_map.lookup(column.sql_type)
+      end
+    end
+  end
+end
+

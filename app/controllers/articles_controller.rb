@@ -19,6 +19,8 @@ class ArticlesController < ApplicationController
 
   # GET /articles or /articles.json
   def index
+    puts "****** article params *****"
+    puts params
     @search   = ArticleSearch.new(params)
     scope     = @search.result.active.includes(:authors).includes(:themes)   # <-- add includes(:themes)
     @articles = scope.paginate(page: params[:page], per_page: 10)

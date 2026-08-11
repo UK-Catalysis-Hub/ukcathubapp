@@ -1,4 +1,3 @@
-
 class CrossrefPublication
   # verify article object agains CR record
   def self.verify_article(article)
@@ -72,22 +71,23 @@ class CrossrefPublication
     #puts "Articles from crossref #{found_articles.count()}"
     #puts "*"*60
     found_articles.each do |a_doi, an_article|
-      an_article[:status] = 0 # pending
-      # ignore if doi is in cr_publications
-      next if CrPublication.where("doi= '#{a_doi}'").exists?()
-      # if doi arxiv then add, set status = 2 (rejected), comment it is a preprint
-      if a_doi.include?('rxiv') 
-        an_article[:status] = 2 # reject
-        an_article[:note] = "It's a preprint"
-      end
-      # if doi in DB already add, set status = 2 (rejected), comment alredy in DB
-      if Article.where("doi= '#{an_article[:doi]}'").exists?()
-        an_article[:status] = 2 # reject
-        an_article[:note] = "Already in DB"
-      end  
-      # add to cr_pubs
-      new_pub = CrPublication.new(an_article)
-      new_pub.save()
+       puts(an_article.keys)
+       an_article[:status] = 0 # pending
+       # ignore if doi is in cr_publications
+       next if CrPublication.where("doi= '#{a_doi}'").exists?()
+       # if doi arxiv then add, set status = 2 (rejected), comment it is a preprint
+       if a_doi.include?('rxiv')
+         an_article[:status] = 2 # reject
+         an_article[:note] = "It's a preprint"
+       end
+       # if doi in DB already add, set status = 2 (rejected), comment alredy in DB
+       if Article.where("doi= '#{an_article[:doi]}'").exists?()
+         an_article[:status] = 2 # reject
+         an_article[:note] = "Already in DB"
+       end
+       # add to cr_pubs
+       new_pub = CrPublication.new(an_article)
+       new_pub.save()
     end
   end
 
