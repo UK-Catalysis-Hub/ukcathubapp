@@ -396,7 +396,7 @@ class DatasetsController < ApplicationController
     csv_file = params[:file]
     @data_rows = CSV.read(csv_file.path)
     @data_rows.each do |do_row|
-      if do_row[3] != 'do_description' and do_row[7] != nil
+      if do_row[3] != 'description' and do_row[7] != 'title'
         ds_id = do_row[5]
         @dor = Dataset.find_by(location: ds_id)
         art_id = do_row[1]

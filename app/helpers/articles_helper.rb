@@ -213,4 +213,20 @@ module ArticlesHelper
     end
     disp_themes
   end
+  
+  def get_h_index
+    h_index = 0
+    just_refs = Article.select(:referenced_by_count).order(:referenced_by_count=>:desc)
+    just_refs.each_with_index do |item, index|
+      if item.referenced_by_count < index
+        h_index = index-1
+        break
+      end
+    end
+    h_index
+  end
+
+  def get_i10_index
+    Article.where("referenced_by_count>=10").count 
+  end  
 end

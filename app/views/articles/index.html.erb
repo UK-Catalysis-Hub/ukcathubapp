@@ -246,34 +246,40 @@
                <div class="col-sm-4">
                  <div id="citation_summary" class="container">          
                    <table class="table table-sm table-striped table-bordered">
-                     <thead class="thead-light">
+                     <thead class="thead-light" style="text-align: right; vertical-align: middle;">
                        <tr>
                          <th colspan="2">Summary</th>
                        </tr>
                      </thead>
                      <tbody>
                        <tr>
-                         <td> Citations </td>
-                         <td class="text-right">
+                         <td><b> Citations </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;">
                            <%= number_with_delimiter(Article.most_cited.sum(:referenced_by_count)) %>
                          </td>
                        </tr>
                        <tr>
-                         <td> Average: </td>
-                         <td class="text-right">
+                         <td><b> Average: </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;">
                            <%= (Article.most_cited.sum(:referenced_by_count)/(0.0+Article.count)).round(2) %>
                          </td>
                        </tr>
                        <tr>
-                         <td> Maximum:  </td>
-                         <td class="text-right">
-                           <%= Article.most_cited.length() > 0 ? Article.maximum(:referenced_by_count) : 0 %>
+                         <td><b> Maximum:  </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;">
+                           <%= number_with_delimiter(Article.most_cited.length() > 0 ? Article.maximum(:referenced_by_count) : 0) %>
                          </td>
                        </tr>
                        <tr>
-                         <td> Minimum:  </td>
-                         <td class="text-right">
-                           <%= Article.most_cited.length() > 0 ? Article.minimum(:referenced_by_count) : 0 %>
+                         <td><b> h Index:  </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;">
+                           <%= get_h_index %>
+                         </td>
+                       </tr>
+                       <tr>
+                         <td><b> i10 Index: </b></td>
+                         <td class="text-right" style="text-align: right; vertical-align: middle;"">
+                           <%= get_i10_index %>
                          </td>
                        </tr>
                      </tbody>

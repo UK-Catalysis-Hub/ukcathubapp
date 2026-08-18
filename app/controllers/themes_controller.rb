@@ -252,7 +252,7 @@ class ThemesController < ApplicationController
 
     # Strong params
     def theme_params
-      params.require(:theme).permit(:short, :name, :lead, :phase, :used)
+      params.require(:theme).permit(:short, :name, :lead, :phase, :used, :theme_type)
     end
 
     # -------- Phase / ordering helpers (data-driven, no hard-coded I/II/III) --------
