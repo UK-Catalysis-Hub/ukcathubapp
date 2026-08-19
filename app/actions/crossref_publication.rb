@@ -41,7 +41,7 @@ class CrossrefPublication
       or article.article_authors[0].last_name == nil
       Rails.logger.info("3 article #{article.title} does not have authors")
       # puts pub_data
-      #self.get_authors(article, pub_data) # this is not working need the get)authors method
+      #self.get_authors(article, pub_data) # this is not working need the get_authors method
     end
   end
 
@@ -95,4 +95,9 @@ class CrossrefPublication
   # |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
   # V  V  V  V  V  V  V  V  V  V  V  V  V  V  V  V
   # or call the corresponding services
+  # parse affiliations
+  #   handle address parsing for affiliation (Inst, dep, research group, etc.)
+  #   handle ROR and ROR + dep (latest on crossref). i.e. no addresses 
+  # check authors and coauthors
+  # infer themes (Authors/coauthors for group|abstract for Topic)
 end  #Class CrossrefPublication 
