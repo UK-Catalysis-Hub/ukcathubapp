@@ -1,13 +1,13 @@
 class AuthorCollaboration < ApplicationRecord
-  self.primary_key = nil
+  #self.primary_key = nil
   
-  belongs_to :author_source,
+  belongs_to :author_a,
     class_name: "Author",
-    foreign_key: :author_source_id
+    foreign_key: :author_source
     
-  belongs_to :author_target,
+  belongs_to :author_b,
     class_name: "Author",
-    foreign_key: :author_target_id
+    foreign_key: :author_target
     
   def readonly?
     true

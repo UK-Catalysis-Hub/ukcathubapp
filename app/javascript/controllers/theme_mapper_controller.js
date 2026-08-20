@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="theme-mapper"
 export default class extends Controller {
   connect(){
-    //console.log("IssueMapperController is connected!");
+    console.log("IssueMapperController is connected!");
   }
 
   moveTheme(event) {
