@@ -1,6 +1,14 @@
 <div class="container">
   <% if @author.isap or user_signed_in? %>
     <%= render partial: 'authors/author_details', locals: {author: @author, theme_data: @theme_data} %>
+    <p>BEFORE GRAPH</p>
+    <div 
+      id = "collaboration-graph"
+      data-controller = "collaboration-graph"
+      data-collaboration-graph-graph-value ="<%= @graph_data.to_json %>"
+      style="height:400px; width:100%; border:1px solid #ccc;">
+    </div>  
+    <p>AFTER GRAPH</p>
     <% if user_signed_in? %>
       <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
         <li class="nav-item">

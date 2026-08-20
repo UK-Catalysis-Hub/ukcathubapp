@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import CollaborationGraphController from "./collaboration_graph_controller"
+application.register("collaboration-graph", CollaborationGraphController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 

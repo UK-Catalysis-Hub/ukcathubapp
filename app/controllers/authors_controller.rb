@@ -103,7 +103,45 @@ class AuthorsController < ApplicationController
   # GET /authors/1.json
   def show
     @aut_articles = @author.articles.active
-
+    
+    collaborations = AuthorCollaboration.where(
+      "author_source = ? OR author_target = ?",
+      @author.id,
+      @author.id
+    )
+    
+    node_ids = collaborations.flat_map do |edge|
+      [edge.author_source, edge.author_target]
+    end.uniq
+    
+    nodes = Author.where(id: node_ids).map do |author|
+      {
+        data:{
+          id: author.id.to_s,
+          label: author.last_name
+        },
+        classes: (author.id == @author.id ? "central" : nil )
+      }
+    end
+    
+    edges = collaborations.map do |edge|
+      {
+        data: {
+          source: edge.author_source.to_s,
+          target: edge.author_target.to_s,
+          weight: edge.weight
+        }
+      }
+    end
+    puts "*"*80
+    puts "graph values"
+    puts nodes.to_json
+    puts edges.first(5).to_json
+    puts "*"*80
+    @graph_data = {
+      nodes: nodes,
+      edges: edges
+    }
     respond_to do |format|
       format.html
       format.json do
