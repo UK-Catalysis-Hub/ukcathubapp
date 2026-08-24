@@ -104,44 +104,82 @@ class AuthorsController < ApplicationController
   def show
     @aut_articles = @author.articles.active
     
+    # Get collaborations
     collaborations = AuthorCollaboration.where(
       "author_source = ? OR author_target = ?",
       @author.id,
       @author.id
     )
     
+    # Get initil id list for nodes:
     node_ids = collaborations.flat_map do |edge|
       [edge.author_source, edge.author_target]
     end.uniq
     
-    nodes = Author.where(id: node_ids).map do |author|
+    # Get Nodes all nodes:
+    @nodes = Author.where(id: node_ids).map do |author|
       {
-        data:{
-          id: author.id.to_s,
-          label: author.last_name
-        },
-        classes: (author.id == @author.id ? "central" : nil )
+        id: author.id.to_s,
+        label: "#{author.given_name} #{author.last_name}",
+        classes: (author.id == @author.id ? "central" : nil)
       }
     end
+
+    # get primary edges
+    @edges = collaborations.map do |edge|
+       {
+         from: edge.author_source.to_s,
+         to: edge.author_target.to_s,
+         weight: edge.weight,
+         #length: 220 - edge.weight * 20,
+         width: 4,
+         dashes: false,
+         color: "#2B7CE9"
+       }
+    end
     
-    edges = collaborations.map do |edge|
-      {
-        data: {
-          source: edge.author_source.to_s,
-          target: edge.author_target.to_s,
-          weight: edge.weight
+    seen_pairs = Set.new
+    collaborations.each do |one_coll|
+      seen_pairs.add([one_coll.author_source, one_coll.author_target])
+    end
+    # get secondary edges
+    secondary_edges = AuthorCollaboration.where(
+      author_source: node_ids,
+      author_target: node_ids
+    )
+    
+    secondary_edges.each do |an_edge|
+      if an_edge.weight > 1 # if one is through this coauthorship
+        pair = [an_edge.author_source, an_edge.author_target].sort
+        next if seen_pairs.include?(pair)
+        new_edge = {
+          from: an_edge.author_source.to_s,
+          to: an_edge.author_target.to_s,
+          weight: an_edge.weight-1,
+          #length: 220 - ((an_edge.weight-1) * 20),
+          width: 1,
+          dashes: true,
+          color: "#FF0000"
         }
-      }
+        @edges << new_edge
+      end
     end
     puts "*"*80
     puts "graph values"
-    puts nodes.to_json
-    puts edges.first(5).to_json
+    puts @nodes.to_json
+    puts @edges.to_json
     puts "*"*80
     @graph_data = {
-      nodes: nodes,
-      edges: edges
+      nodes: @nodes,
+      edges: @edges
     }
+    @graph_data = <<~JSON
+      [
+        { "data": { "id": "a", "label": "Alice" } },
+        { "data": { "id": "b", "label": "Bob" } },
+        { "data": { "id": "e1", "source": "a", "target": "b", "relationship": "Manager" } }
+      ]
+    JSON
     respond_to do |format|
       format.html
       format.json do
