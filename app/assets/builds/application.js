@@ -595,6 +595,7 @@ var init_src = __esm({
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // node_modules/cytoscape-fcose/node_modules/layout-base/layout-base.js
 var require_layout_base = __commonJS({
   "node_modules/cytoscape-fcose/node_modules/layout-base/layout-base.js"(exports, module) {
@@ -8273,6 +8274,8 @@ var require_cytoscape_fcose = __commonJS({
   }
 });
 
+=======
+>>>>>>> e94c6ab (cytoscape working shows graph may need to implement prunning for 20 top connections)
 =======
 >>>>>>> e94c6ab (cytoscape working shows graph may need to implement prunning for 20 top connections)
 // node_modules/@hotwired/turbo/dist/turbo.es2017-esm.js
@@ -46635,8 +46638,13 @@ sheetfn.appendToStyle = function(style3) {
   return style3;
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 var version = "3.34.3";
 var cytoscape2 = function cytoscape3(options2) {
+=======
+var version = "3.34.1";
+var cytoscape = function cytoscape2(options2) {
+>>>>>>> e94c6ab (cytoscape working shows graph may need to implement prunning for 20 top connections)
 =======
 var version = "3.34.1";
 var cytoscape = function cytoscape2(options2) {
