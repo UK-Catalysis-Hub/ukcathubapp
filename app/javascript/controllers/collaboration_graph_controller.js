@@ -1,52 +1,88 @@
+// app/javascript/controllers/relationship_graph_controller.js
 import { Controller } from "@hotwired/stimulus"
 import cytoscape from "cytoscape"
-import fcose from "cytoscape-fcose"
 
-cytoscape.use(fcose)
-// Connects to data-controller="collaborationgraph"
+// Connects to data-controller="relationship"
 export default class extends Controller {
-  static values ={
-    graph: Object
-  }
-  
+  static targets = [ "container" ]
+  static values = { elements: Array }
+
   connect() {
     console.log("Collaborations graph controller connected")
-    console.log(this.graphValue)
     this.cy = cytoscape({
-      container: this.element,
-      
-      elements: [
-        ...this.graphValue.nodes,
-        ...this.graphValue.edges
-      ],
-      
+      container: this.containerTarget,
+      elements: this.elementsValue,
       style: [
         {
-          selector: "node",
+          selector: 'node',
           style: {
-            label: "data(label)",
-            "background-color": "#2563eb"
+            'background-color': '#4F46E5', // Indigo color
+            'label': 'data(label)',
+            'color': '#1F2937',
+            'font-size': '12px',
+            'text-valign': 'center',
+            'text-halign': 'right',
+            'width': '30px',
+            'height': '30px'
           }
         },
         {
-          selector: "edge",
+          selector: 'edge',
           style: {
-            width: "mapData(weight,1,20,1,8)"
-          }
-        },
-        {
-          selector: ".central",
-          style: {
-            "background-color": "#dc2626",
-            width: 40,
-            height: 40
+            'width': 2,
+            'line-color': '#9CA3AF',
+            'target-arrow-color': '#9CA3AF',
+            //'target-arrow-shape': 'triangle',
+            'curve-style': 'bezier',
+            'label': 'data(relationship)',
+            'font-size': '10px',
+            'color': '#6B7280'
           }
         }
       ],
-      
       layout: {
-        name: "fcose"
+        name: 'null'
+        name: 'cose', // Built-in force-directed physics layout
+        animate: true,
+        nodeRepulsion: function( node ){ return 2048; },
+        idealEdgeLength: function( edge ){ return 64; }
+        
+        // === THE PHYSICS FIXES FOR SPREADING ===
+        nodeRepulsion: (node) => 2048000,  // Increase this massively (Default is ~400000)
+        idealEdgeLength: (edge) => 100,    // Force edges to stretch out further (Default is ~10)
+        edgeElasticity: (edge) => 32,      // Lower numbers make edges less stiff, letting them stretch
+        nestingFactor: 1.2,                // Helps push secondary connections further apart
+        gravity: 1,                        // Set lower to let peripheral nodes drift outwards (Default is ~80)
+  
+        // === OVERLAP PREVENTION ===
+        nodeOverlap: 20,                   // Extra padding space around nodes
+        componentSpacing: 100,             // Distance between disconnected clusters
+        coolingFactor: 0.95,               // Slower cooling means the physics run longer to find space
+        numIter: 1000                      // Gives the engine more time to calculate the spread
+
       }
     })
+    // === THE BLANK CANVAS FIX ===
+    // Force a micro-delay to let the Rails layout engine finish painting the box dimensions
+    setTimeout(() => {
+      if (this.cy) {
+        this.cy.resize() // Forces Cytoscape to recalculate its width and height properties
+        this.cy.invalidateDimensions() // Wipes out stale 0px cache states
+        
+        // Trigger the layout to run explicitly now that dimensions are verified
+        this.cy.layout({ 
+          name: 'cose', 
+          animate: false 
+        }).run() 
+        
+        this.cy.fit() // Snaps the graph perfectly into the center of the frame
+      }
+    }, 50)
+  }    
+  
+  disconnect() {
+    if (this.cy) {
+      this.cy.destroy() // Clean up instances on Turbo page transitions
+    }
   }
 }

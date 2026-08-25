@@ -1,35 +1,12 @@
-var __create = Object.create;
 var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __esm = (fn4, res) => function __init() {
   return fn4 && (res = (0, fn4[__getOwnPropNames(fn4)[0]])(fn4 = 0)), res;
-};
-var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
-var __copyProps = (to2, from2, except, desc) => {
-  if (from2 && typeof from2 === "object" || typeof from2 === "function") {
-    for (let key of __getOwnPropNames(from2))
-      if (!__hasOwnProp.call(to2, key) && key !== except)
-        __defProp(to2, key, { get: () => from2[key], enumerable: !(desc = __getOwnPropDesc(from2, key)) || desc.enumerable });
-  }
-  return to2;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
 
 // node_modules/@rails/actioncable/src/adapters.js
 var adapters_default;
@@ -617,6 +594,7 @@ var init_src = __esm({
   }
 });
 
+<<<<<<< HEAD
 // node_modules/cytoscape-fcose/node_modules/layout-base/layout-base.js
 var require_layout_base = __commonJS({
   "node_modules/cytoscape-fcose/node_modules/layout-base/layout-base.js"(exports, module) {
@@ -8295,6 +8273,8 @@ var require_cytoscape_fcose = __commonJS({
   }
 });
 
+=======
+>>>>>>> e94c6ab (cytoscape working shows graph may need to implement prunning for 20 top connections)
 // node_modules/@hotwired/turbo/dist/turbo.es2017-esm.js
 var turbo_es2017_esm_exports = {};
 __export(turbo_es2017_esm_exports, {
@@ -17291,7 +17271,7 @@ var hashIntsArray = function hashIntsArray2(ints, seed) {
   var i = 0;
   var length = ints.length;
   var iterator = {
-    next: function next2() {
+    next: function next() {
       if (i < length) {
         entry.value = ints[i++];
       } else {
@@ -17310,7 +17290,7 @@ var hashString = function hashString2(str, seed) {
   var i = 0;
   var length = str.length;
   var iterator = {
-    next: function next2() {
+    next: function next() {
       if (i < length) {
         entry.value = str.charCodeAt(i++);
       } else {
@@ -18431,7 +18411,7 @@ var elesfn$r = {
         dist3[n] = Infinity;
       }
     }
-    var next2 = new Array(Nsq);
+    var next = new Array(Nsq);
     var edgeNext = new Array(Nsq);
     for (var _i = 0; _i < edges3.length; _i++) {
       var edge = edges3[_i];
@@ -18446,14 +18426,14 @@ var elesfn$r = {
       var _weight = weightFn(edge);
       if (dist3[st] > _weight) {
         dist3[st] = _weight;
-        next2[st] = t;
+        next[st] = t;
         edgeNext[st] = edge;
       }
       if (!directed) {
         var ts = t * N + s;
         if (!directed && dist3[ts] > _weight) {
           dist3[ts] = _weight;
-          next2[ts] = s;
+          next[ts] = s;
           edgeNext[ts] = edge;
         }
       }
@@ -18466,7 +18446,7 @@ var elesfn$r = {
           var kj = k * N + _j;
           if (dist3[ik] + dist3[kj] < dist3[ij]) {
             dist3[ij] = dist3[ik] + dist3[kj];
-            next2[ij] = next2[ik];
+            next[ij] = next[ik];
           }
         }
       }
@@ -18490,7 +18470,7 @@ var elesfn$r = {
         if (i2 === j2) {
           return fromNode.collection();
         }
-        if (next2[i2 * N + j2] == null) {
+        if (next[i2 * N + j2] == null) {
           return cy.collection();
         }
         var path2 = cy.collection();
@@ -18499,7 +18479,7 @@ var elesfn$r = {
         path2.merge(fromNode);
         while (i2 !== j2) {
           prev = i2;
-          i2 = next2[i2 * N + j2];
+          i2 = next[i2 * N + j2];
           edge2 = edgeNext[prev * N + i2];
           path2.merge(edge2);
           path2.merge(atIndex(i2));
@@ -21714,11 +21694,11 @@ _api.prototype = {
   /*  "The then Method" [Promises/A+ 1.1, 1.2, 2.2]  */
   then: function then(onFulfilled, onRejected) {
     var curr = this;
-    var next2 = new _api();
-    curr.onFulfilled.push(resolver(onFulfilled, next2, "fulfill"));
-    curr.onRejected.push(resolver(onRejected, next2, "reject"));
+    var next = new _api();
+    curr.onFulfilled.push(resolver(onFulfilled, next, "fulfill"));
+    curr.onRejected.push(resolver(onRejected, next, "reject"));
     execute(curr);
-    return next2.proxy;
+    return next.proxy;
   }
 };
 var deliver = function deliver2(curr, state, name, value) {
@@ -21743,19 +21723,19 @@ var execute_handlers = function execute_handlers2(curr, name, value) {
   if (typeof setImmediate === "function") setImmediate(func);
   else setTimeout(func, 0);
 };
-var resolver = function resolver2(cb, next2, method) {
+var resolver = function resolver2(cb, next, method) {
   return function(value) {
     if (typeof cb !== "function")
-      next2[method].call(next2, value);
+      next[method].call(next, value);
     else {
       var result;
       try {
         result = cb(value);
       } catch (e) {
-        next2.reject(e);
+        next.reject(e);
         return;
       }
-      _resolve(next2, result);
+      _resolve(next, result);
     }
   };
 };
@@ -23254,18 +23234,18 @@ var define$1 = {
     };
   }
 };
-var define2 = {};
+var define = {};
 [define$3, define$2, define$1].forEach(function(m) {
-  extend3(define2, m);
+  extend3(define, m);
 });
 var elesfn$i = {
-  animate: define2.animate(),
-  animation: define2.animation(),
-  animated: define2.animated(),
-  clearQueue: define2.clearQueue(),
-  delay: define2.delay(),
-  delayAnimation: define2.delayAnimation(),
-  stop: define2.stop()
+  animate: define.animate(),
+  animation: define.animation(),
+  animated: define.animated(),
+  clearQueue: define.clearQueue(),
+  delay: define.delay(),
+  delayAnimation: define.delayAnimation(),
+  stop: define.stop()
 };
 var elesfn$h = {
   classes: function classes(_classes) {
@@ -24659,7 +24639,7 @@ elesfn$f.ancestors = elesfn$f.parents;
 var fn$5;
 var elesfn$e;
 fn$5 = elesfn$e = {
-  data: define2.data({
+  data: define.data({
     field: "data",
     bindingEvent: "data",
     allowBinding: true,
@@ -24676,7 +24656,7 @@ fn$5 = elesfn$e = {
     },
     updateStyle: true
   }),
-  removeData: define2.removeData({
+  removeData: define.removeData({
     field: "data",
     event: "data",
     triggerFnName: "trigger",
@@ -24689,7 +24669,7 @@ fn$5 = elesfn$e = {
     },
     updateStyle: true
   }),
-  scratch: define2.data({
+  scratch: define.data({
     field: "scratch",
     bindingEvent: "scratch",
     allowBinding: true,
@@ -24700,21 +24680,21 @@ fn$5 = elesfn$e = {
     allowGetting: true,
     updateStyle: true
   }),
-  removeScratch: define2.removeData({
+  removeScratch: define.removeData({
     field: "scratch",
     event: "scratch",
     triggerFnName: "trigger",
     triggerEvent: true,
     updateStyle: true
   }),
-  rscratch: define2.data({
+  rscratch: define.data({
     field: "rscratch",
     allowBinding: false,
     allowSetting: true,
     settingTriggersEvent: false,
     allowGetting: true
   }),
-  removeRscratch: define2.removeData({
+  removeRscratch: define.removeData({
     field: "rscratch",
     triggerEvent: false
   }),
@@ -24864,9 +24844,9 @@ var positionDef = {
   }
 };
 fn$4 = elesfn$c = {
-  position: define2.data(positionDef),
+  position: define.data(positionDef),
   // position but no notification to renderer
-  silentPosition: define2.data(extend3({}, positionDef, {
+  silentPosition: define.data(extend3({}, positionDef, {
     allowBinding: false,
     allowSetting: true,
     settingTriggersEvent: false,
@@ -25134,7 +25114,7 @@ elesfn$b.updateCompoundBounds = function() {
   if (!force && cy.batching()) {
     return this;
   }
-  function update2(parent4) {
+  function update(parent4) {
     if (!parent4.isParent()) {
       return;
     }
@@ -25238,7 +25218,7 @@ elesfn$b.updateCompoundBounds = function() {
     var ele = this[i];
     var _p = ele._private;
     if (!_p.compoundBoundsClean || force) {
-      update2(ele);
+      update(ele);
       if (!cy.batching()) {
         _p.compoundBoundsClean = true;
       }
@@ -26458,7 +26438,7 @@ var elesfn$9 = {
     return this;
   }
 };
-define2.eventAliasesOn(elesfn$9);
+define.eventAliasesOn(elesfn$9);
 var elesfn$8 = {
   nodes: function nodes(selector) {
     return this.filter(function(ele) {
@@ -26925,7 +26905,7 @@ var defineSymbolIterator = function defineSymbolIterator2() {
       var i = 0;
       var length = this.length;
       return _defineProperty$1({
-        next: function next2() {
+        next: function next() {
           if (i < length) {
             entry.value = _this[i++];
           } else {
@@ -27651,13 +27631,13 @@ var defineDagAllHops = function defineDagAllHops2(params) {
     var sEles = [];
     var sElesIds = {};
     for (; ; ) {
-      var next2 = params.outgoing ? eles.outgoers() : eles.incomers();
-      if (next2.length === 0) {
+      var next = params.outgoing ? eles.outgoers() : eles.incomers();
+      if (next.length === 0) {
         break;
       }
       var newNext = false;
-      for (var i = 0; i < next2.length; i++) {
-        var n = next2[i];
+      for (var i = 0; i < next.length; i++) {
+        var n = next[i];
         var nid = n.id();
         if (!sElesIds[nid]) {
           sElesIds[nid] = true;
@@ -27668,7 +27648,7 @@ var defineDagAllHops = function defineDagAllHops2(params) {
       if (!newNext) {
         break;
       }
-      eles = next2;
+      eles = next;
     }
     return this.spawn(sEles, true).filter(selector);
   };
@@ -28981,9 +28961,9 @@ function stepAll(now2, cy) {
     var queue = _p.animation.queue;
     var ranAnis = false;
     if (current.length === 0) {
-      var next2 = queue.shift();
-      if (next2) {
-        current.push(next2);
+      var next = queue.shift();
+      if (next) {
+        current.push(next);
       }
     }
     var callbacks2 = function callbacks3(_callbacks) {
@@ -29054,13 +29034,13 @@ function stepAll(now2, cy) {
 }
 var corefn$8 = {
   // pull in animation functions
-  animate: define2.animate(),
-  animation: define2.animation(),
-  animated: define2.animated(),
-  clearQueue: define2.clearQueue(),
-  delay: define2.delay(),
-  delayAnimation: define2.delayAnimation(),
-  stop: define2.stop(),
+  animate: define.animate(),
+  animation: define.animation(),
+  animated: define.animated(),
+  clearQueue: define.clearQueue(),
+  delay: define.delay(),
+  delayAnimation: define.delayAnimation(),
+  stop: define.stop(),
   addToAnimationPool: function addToAnimationPool(eles) {
     var cy = this;
     if (!cy.styleEnabled()) {
@@ -29167,7 +29147,7 @@ var elesfn = {
     return this;
   }
 };
-define2.eventAliasesOn(elesfn);
+define.eventAliasesOn(elesfn);
 var corefn$7 = {
   png: function png(options2) {
     var renderer3 = this._private.renderer;
@@ -29194,8 +29174,8 @@ var corefn$6 = {
       return;
     }
     var name = options2.name;
-    var Layout2 = cy.extension("layout", name);
-    if (Layout2 == null) {
+    var Layout = cy.extension("layout", name);
+    if (Layout == null) {
       error2("No such layout `" + name + "` found.  Did you forget to import it and `cytoscape.use()` it?");
       return;
     }
@@ -29205,7 +29185,7 @@ var corefn$6 = {
     } else {
       eles = options2.eles != null ? options2.eles : cy.$();
     }
-    var layout4 = new Layout2(extend3({}, options2, {
+    var layout4 = new Layout(extend3({}, options2, {
       cy,
       eles
     }));
@@ -32935,7 +32915,7 @@ corefn$1.centre = corefn$1.center;
 corefn$1.autolockNodes = corefn$1.autolock;
 corefn$1.autoungrabifyNodes = corefn$1.autoungrabify;
 var fn2 = {
-  data: define2.data({
+  data: define.data({
     field: "data",
     bindingEvent: "data",
     allowBinding: true,
@@ -32946,14 +32926,14 @@ var fn2 = {
     allowGetting: true,
     updateStyle: true
   }),
-  removeData: define2.removeData({
+  removeData: define.removeData({
     field: "data",
     event: "data",
     triggerFnName: "trigger",
     triggerEvent: true,
     updateStyle: true
   }),
-  scratch: define2.data({
+  scratch: define.data({
     field: "scratch",
     bindingEvent: "scratch",
     allowBinding: true,
@@ -32964,7 +32944,7 @@ var fn2 = {
     allowGetting: true,
     updateStyle: true
   }),
-  removeScratch: define2.removeData({
+  removeScratch: define.removeData({
     field: "scratch",
     event: "scratch",
     triggerFnName: "trigger",
@@ -33062,12 +33042,12 @@ var Core = function Core2(opts) {
     min: options2.minZoom,
     max: options2.maxZoom
   });
-  var loadExtData = function loadExtData2(extData, next2) {
+  var loadExtData = function loadExtData2(extData, next) {
     var anyIsPromise = extData.some(promise);
     if (anyIsPromise) {
-      return Promise$1.all(extData).then(next2);
+      return Promise$1.all(extData).then(next);
     } else {
-      next2(extData);
+      next(extData);
     }
   };
   if (_p.styleEnabled) {
@@ -41140,7 +41120,7 @@ LTCp.validateLayersElesOrdering = function(lvl, eles) {
     }
   }
 };
-LTCp.updateElementsInLayers = function(eles, update2) {
+LTCp.updateElementsInLayers = function(eles, update) {
   var self2 = this;
   var isEles = element(eles[0]);
   for (var i = 0; i < eles.length; i++) {
@@ -41156,7 +41136,7 @@ LTCp.updateElementsInLayers = function(eles, update2) {
       if (req && self2.getEleLevelForLayerLevel(layer.level) !== req.level) {
         continue;
       }
-      update2(layer, ele, req);
+      update(layer, ele, req);
     }
   }
 };
@@ -44785,18 +44765,18 @@ var ElementDrawingWebGL = /* @__PURE__ */ (function() {
           for (var _i = 0, _arr = [[tex1, true], [tex2, false]]; _i < _arr.length; _i++) {
             var _arr$_i = _slicedToArray(_arr[_i], 2), tex = _arr$_i[0], first2 = _arr$_i[1];
             if (tex.w != 0) {
-              var instance2 = this.instanceCount;
-              this.vertTypeBuffer.getView(instance2)[0] = TEXTURE;
-              var indexView = this.indexBuffer.getView(instance2);
+              var instance = this.instanceCount;
+              this.vertTypeBuffer.getView(instance)[0] = TEXTURE;
+              var indexView = this.indexBuffer.getView(instance);
               indexToVec4(eleIndex, indexView);
-              var atlasIdView = this.atlasIdBuffer.getView(instance2);
+              var atlasIdView = this.atlasIdBuffer.getView(instance);
               atlasIdView[0] = atlasIndex;
-              var texView = this.texBuffer.getView(instance2);
+              var texView = this.texBuffer.getView(instance);
               texView[0] = tex.x;
               texView[1] = tex.y;
               texView[2] = tex.w;
               texView[3] = tex.h;
-              var matrixView = this.transformBuffer.getMatrixView(instance2);
+              var matrixView = this.transformBuffer.getMatrixView(instance);
               this.setTransformMatrix(ele, matrixView, opts, atlasInfo, first2);
               this.instanceCount++;
               if (!first2) this.wrappedCount++;
@@ -44901,13 +44881,13 @@ var ElementDrawingWebGL = /* @__PURE__ */ (function() {
     key: "drawPickingRectangle",
     value: function drawPickingRectangle(ele, eleIndex, type) {
       var opts = this.atlasManager.getRenderTypeOpts(type);
-      var instance2 = this.instanceCount;
-      this.vertTypeBuffer.getView(instance2)[0] = RECTANGLE;
-      var indexView = this.indexBuffer.getView(instance2);
+      var instance = this.instanceCount;
+      this.vertTypeBuffer.getView(instance)[0] = RECTANGLE;
+      var indexView = this.indexBuffer.getView(instance);
       indexToVec4(eleIndex, indexView);
-      var colorView = this.colorBuffer.getView(instance2);
+      var colorView = this.colorBuffer.getView(instance);
       toWebGLColor([0, 0, 0], 1, colorView);
-      var matrixView = this.transformBuffer.getMatrixView(instance2);
+      var matrixView = this.transformBuffer.getMatrixView(instance);
       this.setTransformMatrix(ele, matrixView, opts);
       this.simpleCount++;
       this.instanceCount++;
@@ -44931,12 +44911,12 @@ var ElementDrawingWebGL = /* @__PURE__ */ (function() {
         this.drawTexture(node, eleIndex, type);
         return;
       }
-      var instance2 = this.instanceCount;
-      this.vertTypeBuffer.getView(instance2)[0] = vertType;
+      var instance = this.instanceCount;
+      this.vertTypeBuffer.getView(instance)[0] = vertType;
       if (vertType === ROUND_RECTANGLE || vertType === BOTTOM_ROUND_RECTANGLE) {
         var bb = opts.getBoundingBox(node);
         var radius2 = this._getCornerRadius(node, props.radius, bb);
-        var radiusView = this.cornerRadiusBuffer.getView(instance2);
+        var radiusView = this.cornerRadiusBuffer.getView(instance);
         radiusView[0] = radius2;
         radiusView[1] = radius2;
         radiusView[2] = radius2;
@@ -44946,14 +44926,14 @@ var ElementDrawingWebGL = /* @__PURE__ */ (function() {
           radiusView[2] = 0;
         }
       }
-      var indexView = this.indexBuffer.getView(instance2);
+      var indexView = this.indexBuffer.getView(instance);
       indexToVec4(eleIndex, indexView);
       var opacity = this.renderTarget.picking ? 1 : type === "node-body" ? node.effectiveOpacity() : 1;
       var bgOpacity = this.renderTarget.picking ? 1 : node.pstyle(props.opacity).value * opacity;
       var color2 = node.pstyle(props.color).value;
-      var colorView = this.colorBuffer.getView(instance2);
+      var colorView = this.colorBuffer.getView(instance);
       toWebGLColor(color2, bgOpacity, colorView);
-      var lineWidthView = this.lineWidthBuffer.getView(instance2);
+      var lineWidthView = this.lineWidthBuffer.getView(instance);
       lineWidthView[0] = 0;
       lineWidthView[1] = 0;
       if (props.border) {
@@ -44961,7 +44941,7 @@ var ElementDrawingWebGL = /* @__PURE__ */ (function() {
         if (borderWidth > 0) {
           var borderColor = node.pstyle("border-color").value;
           var borderOpacity = opacity * node.pstyle("border-opacity").value;
-          var borderColorView = this.borderColorBuffer.getView(instance2);
+          var borderColorView = this.borderColorBuffer.getView(instance);
           toWebGLColor(borderColor, borderOpacity, borderColorView);
           var borderPos = node.pstyle("border-position").value;
           if (borderPos === "inside") {
@@ -44977,7 +44957,7 @@ var ElementDrawingWebGL = /* @__PURE__ */ (function() {
           }
         }
       }
-      var matrixView = this.transformBuffer.getMatrixView(instance2);
+      var matrixView = this.transformBuffer.getMatrixView(instance);
       this.setTransformMatrix(node, matrixView, opts);
       this.simpleCount++;
       this.instanceCount++;
@@ -45050,16 +45030,16 @@ var ElementDrawingWebGL = /* @__PURE__ */ (function() {
       var lineWidth = edge.pstyle("width").pfValue;
       var scale$1 = edge.pstyle("arrow-scale").value;
       var size3 = this.r.getArrowWidth(lineWidth, scale$1);
-      var instance2 = this.instanceCount;
-      var transform7 = this.transformBuffer.getMatrixView(instance2);
+      var instance = this.instanceCount;
+      var transform7 = this.transformBuffer.getMatrixView(instance);
       identity3(transform7);
       translate(transform7, transform7, [x2, y2]);
       scale(transform7, transform7, [size3, size3]);
       rotate(transform7, transform7, angle2);
-      this.vertTypeBuffer.getView(instance2)[0] = EDGE_ARROW;
-      var indexView = this.indexBuffer.getView(instance2);
+      this.vertTypeBuffer.getView(instance)[0] = EDGE_ARROW;
+      var indexView = this.indexBuffer.getView(instance);
       indexToVec4(eleIndex, indexView);
-      var colorView = this.colorBuffer.getView(instance2);
+      var colorView = this.colorBuffer.getView(instance);
       toWebGLColor(color2, opacity, colorView);
       this.instanceCount++;
       if (this.instanceCount >= this.maxInstances) {
@@ -45088,15 +45068,15 @@ var ElementDrawingWebGL = /* @__PURE__ */ (function() {
         this.endBatch();
       }
       if (points.length == 4) {
-        var instance2 = this.instanceCount;
-        this.vertTypeBuffer.getView(instance2)[0] = EDGE_STRAIGHT;
-        var indexView = this.indexBuffer.getView(instance2);
+        var instance = this.instanceCount;
+        this.vertTypeBuffer.getView(instance)[0] = EDGE_STRAIGHT;
+        var indexView = this.indexBuffer.getView(instance);
         indexToVec4(eleIndex, indexView);
-        var colorView = this.colorBuffer.getView(instance2);
+        var colorView = this.colorBuffer.getView(instance);
         toWebGLColor(color2, opacity, colorView);
-        var lineWidthBuffer = this.lineWidthBuffer.getView(instance2);
+        var lineWidthBuffer = this.lineWidthBuffer.getView(instance);
         lineWidthBuffer[0] = width2;
-        var sourceTargetView = this.pointAPointBBuffer.getView(instance2);
+        var sourceTargetView = this.pointAPointBBuffer.getView(instance);
         sourceTargetView[0] = points[0];
         sourceTargetView[1] = points[1];
         sourceTargetView[2] = points[2];
@@ -46408,7 +46388,7 @@ function setExtension(type, name, registrant) {
       Collection.prototype[name] = registrant;
     }
   } else if (type === "layout") {
-    var Layout2 = function Layout3(options2) {
+    var Layout = function Layout2(options2) {
       this.options = options2;
       registrant.call(this, options2);
       if (!plainObject(this._private)) {
@@ -46418,7 +46398,7 @@ function setExtension(type, name, registrant) {
       this._private.listeners = [];
       this.createEmitter();
     };
-    var layoutProto = Layout2.prototype = Object.create(registrant.prototype);
+    var layoutProto = Layout.prototype = Object.create(registrant.prototype);
     var optLayoutFns = [];
     for (var i = 0; i < optLayoutFns.length; i++) {
       var fnName = optLayoutFns[i];
@@ -46512,8 +46492,8 @@ function setExtension(type, name, registrant) {
         return this;
       }
     });
-    define2.eventAliasesOn(layoutProto);
-    ext = Layout2;
+    define.eventAliasesOn(layoutProto);
+    ext = Layout;
   } else if (type === "renderer" && name !== "null" && name !== "base") {
     var BaseRenderer3 = getExtension2("renderer", "base");
     var bProto = BaseRenderer3.prototype;
@@ -46654,8 +46634,13 @@ sheetfn.appendToStyle = function(style3) {
   }
   return style3;
 };
+<<<<<<< HEAD
 var version = "3.34.3";
 var cytoscape2 = function cytoscape3(options2) {
+=======
+var version = "3.34.1";
+var cytoscape = function cytoscape2(options2) {
+>>>>>>> e94c6ab (cytoscape working shows graph may need to implement prunning for 20 top connections)
   if (options2 === void 0) {
     options2 = {};
   }
@@ -46665,61 +46650,80 @@ var cytoscape2 = function cytoscape3(options2) {
     return extension.apply(extension, arguments);
   }
 };
-cytoscape2.use = function(ext) {
+cytoscape.use = function(ext) {
   var args = Array.prototype.slice.call(arguments, 1);
-  args.unshift(cytoscape2);
+  args.unshift(cytoscape);
   ext.apply(null, args);
   return this;
 };
-cytoscape2.warnings = function(bool) {
+cytoscape.warnings = function(bool) {
   return warnings(bool);
 };
-cytoscape2.version = version;
-cytoscape2.stylesheet = cytoscape2.Stylesheet = _Stylesheet;
+cytoscape.version = version;
+cytoscape.stylesheet = cytoscape.Stylesheet = _Stylesheet;
 
 // app/javascript/controllers/collaboration_graph_controller.js
-var import_cytoscape_fcose = __toESM(require_cytoscape_fcose());
-cytoscape2.use(import_cytoscape_fcose.default);
 var collaboration_graph_controller_default = class extends Controller {
-  static values = {
-    graph: Object
-  };
+  static targets = ["container"];
+  static values = { elements: Array };
   connect() {
     console.log("Collaborations graph controller connected");
-    console.log(this.graphValue);
-    this.cy = cytoscape2({
-      container: this.element,
-      elements: [
-        ...this.graphValue.nodes,
-        ...this.graphValue.edges
-      ],
+    this.cy = cytoscape({
+      container: this.containerTarget,
+      elements: this.elementsValue,
       style: [
         {
           selector: "node",
           style: {
-            label: "data(label)",
-            "background-color": "#2563eb"
+            "background-color": "#4F46E5",
+            // Indigo color
+            "label": "data(label)",
+            "color": "#1F2937",
+            "font-size": "12px",
+            "text-valign": "center",
+            "text-halign": "right",
+            "width": "30px",
+            "height": "30px"
           }
         },
         {
           selector: "edge",
           style: {
-            width: "mapData(weight,1,20,1,8)"
-          }
-        },
-        {
-          selector: ".central",
-          style: {
-            "background-color": "#dc2626",
-            width: 40,
-            height: 40
+            "width": 2,
+            "line-color": "#9CA3AF",
+            "target-arrow-color": "#9CA3AF",
+            //'target-arrow-shape': 'triangle',
+            "curve-style": "bezier",
+            "label": "data(relationship)",
+            "font-size": "10px",
+            "color": "#6B7280"
           }
         }
       ],
       layout: {
-        name: "fcose"
+        name: "null"
+        //name: 'cose', // Built-in force-directed physics layout
+        //animate: true,
+        //nodeRepulsion: function( node ){ return 2048; },
+        //idealEdgeLength: function( edge ){ return 64; }
       }
     });
+    setTimeout(() => {
+      if (this.cy) {
+        this.cy.resize();
+        this.cy.invalidateDimensions();
+        this.cy.layout({
+          name: "cose",
+          animate: false
+        }).run();
+        this.cy.fit();
+      }
+    }, 50);
+  }
+  disconnect() {
+    if (this.cy) {
+      this.cy.destroy();
+    }
   }
 };
 
@@ -47015,13 +47019,13 @@ function contains2(parent4, child) {
   if (parent4.contains(child)) {
     return true;
   } else if (rootNode && isShadowRoot(rootNode)) {
-    var next2 = child;
+    var next = child;
     do {
-      if (next2 && parent4.isSameNode(next2)) {
+      if (next && parent4.isSameNode(next)) {
         return true;
       }
-      next2 = next2.parentNode || next2.host;
-    } while (next2);
+      next = next.parentNode || next.host;
+    } while (next);
   }
   return false;
 }
@@ -47334,26 +47338,26 @@ var passive = {
   passive: true
 };
 function effect3(_ref) {
-  var state = _ref.state, instance2 = _ref.instance, options2 = _ref.options;
+  var state = _ref.state, instance = _ref.instance, options2 = _ref.options;
   var _options$scroll = options2.scroll, scroll = _options$scroll === void 0 ? true : _options$scroll, _options$resize = options2.resize, resize3 = _options$resize === void 0 ? true : _options$resize;
   var window3 = getWindow(state.elements.popper);
   var scrollParents = [].concat(state.scrollParents.reference, state.scrollParents.popper);
   if (scroll) {
     scrollParents.forEach(function(scrollParent) {
-      scrollParent.addEventListener("scroll", instance2.update, passive);
+      scrollParent.addEventListener("scroll", instance.update, passive);
     });
   }
   if (resize3) {
-    window3.addEventListener("resize", instance2.update, passive);
+    window3.addEventListener("resize", instance.update, passive);
   }
   return function() {
     if (scroll) {
       scrollParents.forEach(function(scrollParent) {
-        scrollParent.removeEventListener("scroll", instance2.update, passive);
+        scrollParent.removeEventListener("scroll", instance.update, passive);
       });
     }
     if (resize3) {
-      window3.removeEventListener("resize", instance2.update, passive);
+      window3.removeEventListener("resize", instance.update, passive);
     }
   };
 }
@@ -48147,7 +48151,7 @@ function popperGenerator(generatorOptions) {
     };
     var effectCleanupFns = [];
     var isDestroyed = false;
-    var instance2 = {
+    var instance = {
       state,
       setOptions: function setOptions7(setOptionsAction) {
         var options3 = typeof setOptionsAction === "function" ? setOptionsAction(state.options) : setOptionsAction;
@@ -48162,7 +48166,7 @@ function popperGenerator(generatorOptions) {
           return m.enabled;
         });
         runModifierEffects();
-        return instance2.update();
+        return instance.update();
       },
       // Sync update – it will always be executed, even if not necessary. This
       // is useful for low frequency updates where sync behavior simplifies the
@@ -48198,7 +48202,7 @@ function popperGenerator(generatorOptions) {
               state,
               options: _options,
               name,
-              instance: instance2
+              instance
             }) || state;
           }
         }
@@ -48207,7 +48211,7 @@ function popperGenerator(generatorOptions) {
       // not necessary (debounced to run at most once-per-tick)
       update: debounce3(function() {
         return new Promise(function(resolve3) {
-          instance2.forceUpdate();
+          instance.forceUpdate();
           resolve3(state);
         });
       }),
@@ -48217,9 +48221,9 @@ function popperGenerator(generatorOptions) {
       }
     };
     if (!areValidElements(reference2, popper2)) {
-      return instance2;
+      return instance;
     }
-    instance2.setOptions(options2).then(function(state2) {
+    instance.setOptions(options2).then(function(state2) {
       if (!isDestroyed && options2.onFirstUpdate) {
         options2.onFirstUpdate(state2);
       }
@@ -48231,7 +48235,7 @@ function popperGenerator(generatorOptions) {
           var cleanupFn = effect4({
             state,
             name,
-            instance: instance2,
+            instance,
             options: options3
           });
           var noopFn = function noopFn2() {
@@ -48246,7 +48250,7 @@ function popperGenerator(generatorOptions) {
       });
       effectCleanupFns = [];
     }
-    return instance2;
+    return instance;
   };
 }
 var createPopper = /* @__PURE__ */ popperGenerator();
@@ -48266,7 +48270,7 @@ var createPopper3 = /* @__PURE__ */ popperGenerator({
 // node_modules/bootstrap/dist/js/bootstrap.esm.js
 var elementMap = /* @__PURE__ */ new Map();
 var Data = {
-  set(element3, key, instance2) {
+  set(element3, key, instance) {
     if (!elementMap.has(element3)) {
       elementMap.set(element3, /* @__PURE__ */ new Map());
     }
@@ -48275,7 +48279,7 @@ var Data = {
       console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`);
       return;
     }
-    instanceMap.set(key, instance2);
+    instanceMap.set(key, instance);
   },
   get(element3, key) {
     if (elementMap.has(element3)) {
@@ -48864,12 +48868,12 @@ var SelectorEngine = {
   },
   // TODO: this is now unused; remove later along with prev()
   next(element3, selector) {
-    let next2 = element3.nextElementSibling;
-    while (next2) {
-      if (next2.matches(selector)) {
-        return [next2];
+    let next = element3.nextElementSibling;
+    while (next) {
+      if (next.matches(selector)) {
+        return [next];
       }
-      next2 = next2.nextElementSibling;
+      next = next.nextElementSibling;
     }
     return [];
   },
@@ -48904,8 +48908,8 @@ var enableDismissTrigger = (component2, method = "hide") => {
       return;
     }
     const target = SelectorEngine.getElementFromSelector(this) || this.closest(`.${name}`);
-    const instance2 = component2.getOrCreateInstance(target);
-    instance2[method]();
+    const instance = component2.getOrCreateInstance(target);
+    instance[method]();
   });
 };
 var NAME$f = "alert";
@@ -49894,16 +49898,16 @@ var Dropdown = class _Dropdown extends BaseComponent {
     }
     event3.preventDefault();
     const getToggleButton = this.matches(SELECTOR_DATA_TOGGLE$3) ? this : SelectorEngine.prev(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.next(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.findOne(SELECTOR_DATA_TOGGLE$3, event3.delegateTarget.parentNode);
-    const instance2 = _Dropdown.getOrCreateInstance(getToggleButton);
+    const instance = _Dropdown.getOrCreateInstance(getToggleButton);
     if (isUpOrDownEvent) {
       event3.stopPropagation();
-      instance2.show();
-      instance2._selectMenuItem(event3);
+      instance.show();
+      instance._selectMenuItem(event3);
       return;
     }
-    if (instance2._isShown()) {
+    if (instance._isShown()) {
       event3.stopPropagation();
-      instance2.hide();
+      instance.hide();
       getToggleButton.focus();
     }
   }
@@ -56289,9 +56293,9 @@ var getValueAxis = (indexAxis) => indexAxis === "x" ? "y" : "x";
 function splineCurve(firstPoint, middlePoint, afterPoint, t) {
   const previous = firstPoint.skip ? middlePoint : firstPoint;
   const current = middlePoint;
-  const next2 = afterPoint.skip ? middlePoint : afterPoint;
+  const next = afterPoint.skip ? middlePoint : afterPoint;
   const d01 = distanceBetweenPoints(current, previous);
-  const d12 = distanceBetweenPoints(next2, current);
+  const d12 = distanceBetweenPoints(next, current);
   let s01 = d01 / (d01 + d12);
   let s12 = d12 / (d01 + d12);
   s01 = isNaN(s01) ? 0 : s01;
@@ -56300,12 +56304,12 @@ function splineCurve(firstPoint, middlePoint, afterPoint, t) {
   const fb = t * s12;
   return {
     previous: {
-      x: current.x - fa * (next2.x - previous.x),
-      y: current.y - fa * (next2.y - previous.y)
+      x: current.x - fa * (next.x - previous.x),
+      y: current.y - fa * (next.y - previous.y)
     },
     next: {
-      x: current.x + fb * (next2.x - previous.x),
-      y: current.y + fb * (next2.y - previous.y)
+      x: current.x + fb * (next.x - previous.x),
+      y: current.y + fb * (next.y - previous.y)
     }
   };
 }
@@ -58236,16 +58240,16 @@ function computeFlexCategoryTraits(index2, ruler, options2, stackCount) {
   const pixels = ruler.pixels;
   const curr = pixels[index2];
   let prev = index2 > 0 ? pixels[index2 - 1] : null;
-  let next2 = index2 < pixels.length - 1 ? pixels[index2 + 1] : null;
+  let next = index2 < pixels.length - 1 ? pixels[index2 + 1] : null;
   const percent = options2.categoryPercentage;
   if (prev === null) {
-    prev = curr - (next2 === null ? ruler.end - ruler.start : next2 - curr);
+    prev = curr - (next === null ? ruler.end - ruler.start : next - curr);
   }
-  if (next2 === null) {
-    next2 = curr + curr - prev;
+  if (next === null) {
+    next = curr + curr - prev;
   }
-  const start3 = curr - (curr - Math.min(prev, next2)) / 2 * percent;
-  const size3 = Math.abs(next2 - prev) / 2 * percent;
+  const start3 = curr - (curr - Math.min(prev, next)) / 2 * percent;
+  const size3 = Math.abs(next - prev) / 2 * percent;
   return {
     chunk: size3 / stackCount,
     ratio: options2.barPercentage,
@@ -60598,14 +60602,14 @@ function getMajorIndices(ticks) {
 }
 function skipMajors(ticks, newTicks, majorIndices, spacing) {
   let count = 0;
-  let next2 = majorIndices[0];
+  let next = majorIndices[0];
   let i;
   spacing = Math.ceil(spacing);
   for (i = 0; i < ticks.length; i++) {
-    if (i === next2) {
+    if (i === next) {
       newTicks.push(ticks[i]);
       count++;
-      next2 = majorIndices[count * spacing];
+      next = majorIndices[count * spacing];
     }
   }
 }
@@ -60613,22 +60617,22 @@ function skip(ticks, newTicks, spacing, majorStart, majorEnd) {
   const start3 = valueOrDefault(majorStart, 0);
   const end2 = Math.min(valueOrDefault(majorEnd, ticks.length), ticks.length);
   let count = 0;
-  let length, i, next2;
+  let length, i, next;
   spacing = Math.ceil(spacing);
   if (majorEnd) {
     length = majorEnd - majorStart;
     spacing = length / Math.floor(length / spacing);
   }
-  next2 = start3;
-  while (next2 < 0) {
+  next = start3;
+  while (next < 0) {
     count++;
-    next2 = Math.round(start3 + count * spacing);
+    next = Math.round(start3 + count * spacing);
   }
   for (i = Math.max(start3, 0); i < end2; i++) {
-    if (i === next2) {
+    if (i === next) {
       newTicks.push(ticks[i]);
       count++;
-      next2 = Math.round(start3 + count * spacing);
+      next = Math.round(start3 + count * spacing);
     }
   }
 }
@@ -68437,7 +68441,7 @@ var TimeSeriesScale = class extends TimeScale {
     const { min: min5, max: max6 } = this;
     const items = [];
     const table = [];
-    let i, ilen, prev, curr, next2;
+    let i, ilen, prev, curr, next;
     for (i = 0, ilen = timestamps.length; i < ilen; ++i) {
       curr = timestamps[i];
       if (curr >= min5 && curr <= max6) {
@@ -68457,10 +68461,10 @@ var TimeSeriesScale = class extends TimeScale {
       ];
     }
     for (i = 0, ilen = items.length; i < ilen; ++i) {
-      next2 = items[i + 1];
+      next = items[i + 1];
       prev = items[i - 1];
       curr = items[i];
-      if (Math.round((next2 + prev) / 2) !== curr) {
+      if (Math.round((next + prev) / 2) !== curr) {
         table.push({
           time: curr,
           pos: i / (ilen - 1)
