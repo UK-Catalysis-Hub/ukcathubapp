@@ -106,7 +106,7 @@ class AuthorsController < ApplicationController
     
     # Get collaborations
     collaborations = AuthorCollaboration.where(
-      "author_source = ? OR author_target = ?",
+      "(author_source = ? OR author_target = ?) AND weight > 1",
       @author.id,
       @author.id
     )
@@ -118,23 +118,23 @@ class AuthorsController < ApplicationController
     
     # Get Nodes all nodes:
     @nodes = Author.where(id: node_ids).map do |author|
-      {
+      { data:{
         id: author.id.to_s,
-        label: "#{author.given_name} #{author.last_name}",
+        label: "#{author.given_name} #{author.last_name}"},
         classes: (author.id == @author.id ? "central" : nil)
       }
     end
 
     # get primary edges
     @edges = collaborations.map do |edge|
-       {
-         from: edge.author_source.to_s,
-         to: edge.author_target.to_s,
-         weight: edge.weight,
+       {data: {
+         source: edge.author_source.to_s,
+         target: edge.author_target.to_s,
+         weight: edge.weight}
          #length: 220 - edge.weight * 20,
-         width: 4,
-         dashes: false,
-         color: "#2B7CE9"
+         #width: 4,
+         #dashes: false,
+         #color: "#2B7CE9"
        }
     end
     
@@ -152,15 +152,16 @@ class AuthorsController < ApplicationController
       if an_edge.weight > 1 # if one is through this coauthorship
         pair = [an_edge.author_source, an_edge.author_target].sort
         next if seen_pairs.include?(pair)
-        new_edge = {
-          from: an_edge.author_source.to_s,
-          to: an_edge.author_target.to_s,
-          weight: an_edge.weight-1,
-          #length: 220 - ((an_edge.weight-1) * 20),
-          width: 1,
-          dashes: true,
-          color: "#FF0000"
-        }
+        new_edge = {data: {
+            source: an_edge.author_source.to_s,
+            target: an_edge.author_target.to_s,
+            weight: an_edge.weight-1,
+            #length: 220 - ((an_edge.weight-1) * 20),
+            #width: 1,
+            #dashes: true,
+            #color: "#FF0000"
+            }
+          }
         @edges << new_edge
       end
     end
@@ -169,17 +170,16 @@ class AuthorsController < ApplicationController
     puts @nodes.to_json
     puts @edges.to_json
     puts "*"*80
-    @graph_data = {
-      nodes: @nodes,
-      edges: @edges
-    }
-    @graph_data = <<~JSON
-      [
-        { "data": { "id": "a", "label": "Alice" } },
-        { "data": { "id": "b", "label": "Bob" } },
-        { "data": { "id": "e1", "source": "a", "target": "b", "relationship": "Manager" } }
-      ]
-    JSON
+    @graph_data = @nodes + @edges
+    
+    #@graph_data = <<~JSON
+    #  [
+    #    { "data": { "id": "a", "label": "Alice" } },
+    #    { "data": { "id": "b", "label": "Bob" } },
+    #    { "data": { "id": "e1", "source": "a", "target": "b", "relationship": "Manager" } }
+    #  ]
+    #JSON
+    puts @graph_data
     respond_to do |format|
       format.html
       format.json do
