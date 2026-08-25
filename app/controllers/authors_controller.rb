@@ -120,22 +120,21 @@ class AuthorsController < ApplicationController
     @nodes = Author.where(id: node_ids).map do |author|
       { data:{
         id: author.id.to_s,
-        label: "#{author.given_name} #{author.last_name}"},
+        label: "#{author.get_abreviated_name}"},
         classes: (author.id == @author.id ? "central" : nil)
       }
     end
 
     # get primary edges
     @edges = collaborations.map do |edge|
-       {data: {
-         source: edge.author_source.to_s,
-         target: edge.author_target.to_s,
-         weight: edge.weight}
-         #length: 220 - edge.weight * 20,
-         #width: 4,
-         #dashes: false,
-         #color: "#2B7CE9"
-       }
+      { data: 
+        {
+          source: edge.author_source.to_s,
+          target: edge.author_target.to_s,
+          weight: edge.weight,
+          is_secondary: false
+        }
+      }
     end
     
     seen_pairs = Set.new
@@ -156,10 +155,7 @@ class AuthorsController < ApplicationController
             source: an_edge.author_source.to_s,
             target: an_edge.author_target.to_s,
             weight: an_edge.weight-1,
-            #length: 220 - ((an_edge.weight-1) * 20),
-            #width: 1,
-            #dashes: true,
-            #color: "#FF0000"
+            is_secondary: true
             }
           }
         @edges << new_edge
@@ -172,15 +168,8 @@ class AuthorsController < ApplicationController
     puts "*"*80
     @graph_data = @nodes + @edges
     
-    #@graph_data = <<~JSON
-    #  [
-    #    { "data": { "id": "a", "label": "Alice" } },
-    #    { "data": { "id": "b", "label": "Bob" } },
-    #    { "data": { "id": "e1", "source": "a", "target": "b", "relationship": "Manager" } }
-    #  ]
-    #JSON
-    puts @graph_data
-    respond_to do |format|
+
+   respond_to do |format|
       format.html
       format.json do
         render json: {

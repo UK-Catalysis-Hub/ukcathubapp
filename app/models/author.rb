@@ -22,4 +22,11 @@ class Author < ApplicationRecord
     full_n = (self.given_name == nil ? self.last_name : self.last_name + ", " +self.given_name) 
     return full_n
   end
+  
+  def get_abreviated_name
+    pr_name = self.given_name ? self.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u') : ""
+    pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).gsub(' .',' ')
+    pr_name += self.last_name
+    return pr_name
+  end
 end

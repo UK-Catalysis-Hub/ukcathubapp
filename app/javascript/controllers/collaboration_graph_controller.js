@@ -21,7 +21,7 @@ export default class extends Controller {
             'color': '#1F2937',
             'font-size': '12px',
             'text-valign': 'center',
-            'text-halign': 'right',
+            'text-halign': 'center',
             'width': '30px',
             'height': '30px'
           }
@@ -30,38 +30,71 @@ export default class extends Controller {
           selector: 'edge',
           style: {
             'width': 2,
-            'line-color': '#9CA3AF',
-            'target-arrow-color': '#9CA3AF',
+            'line-color': '#2B7CE9',
+            //'target-arrow-color': '#9CA3AF',
             //'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
-            'label': 'data(relationship)',
+            //'label': 'data(weight)',
             'font-size': '10px',
             'color': '#6B7280'
           }
-        }
+        },
+        {
+          selector: 'edge[?is_secondary]',
+          style: {
+            'width': 1,
+            'line-color': '#cbd5e1',
+            //'target-arrow-color': '#9CA3AF',
+            //'target-arrow-shape': 'triangle',
+            'line-style': 'dashed',
+            //'label': 'data(weight)',
+            'font-size': '10px',
+            'color': '#6B7280'
+          }
+       }
       ],
       layout: {
-        name: 'null'
         name: 'cose', // Built-in force-directed physics layout
         animate: true,
-        nodeRepulsion: function( node ){ return 2048; },
-        idealEdgeLength: function( edge ){ return 64; }
         
         // === THE PHYSICS FIXES FOR SPREADING ===
-        nodeRepulsion: (node) => 2048000,  // Increase this massively (Default is ~400000)
+        nodeRepulsion: (node) => 204800,  // Increase this massively (Default is ~400000)
         idealEdgeLength: (edge) => 100,    // Force edges to stretch out further (Default is ~10)
         edgeElasticity: (edge) => 32,      // Lower numbers make edges less stiff, letting them stretch
         nestingFactor: 1.2,                // Helps push secondary connections further apart
         gravity: 1,                        // Set lower to let peripheral nodes drift outwards (Default is ~80)
   
         // === OVERLAP PREVENTION ===
-        nodeOverlap: 20,                   // Extra padding space around nodes
+        nodeOverlap: 30,                   // Extra padding space around nodes
         componentSpacing: 100,             // Distance between disconnected clusters
         coolingFactor: 0.95,               // Slower cooling means the physics run longer to find space
         numIter: 1000                      // Gives the engine more time to calculate the spread
-
-      }
+      } 
     })
+    
+  
+    this.cy.nodes().forEach(node => {
+      // 1. Get the number of connected edges (Degree Centrality)
+      const degree = node.degree(); 
+
+      // 2. Map the degree to a dynamic pixel size (e.g., base size of 20px + 4px per edge)
+      // Clamp it to a maximum of 80px so it doesn't take over the screen
+      const dynamicSize = Math.min(20 + (degree * 2), 80);
+
+      // 3. Apply the style dynamically to this specific node instance
+      node.style({
+        'width': `${dynamicSize}px`,
+        'height': `${dynamicSize}px`,
+
+        // Optional: Make heavily connected nodes a deeper/more vibrant color
+        'background-color': degree > 5 ? '#1d4ed8' : '#60a5fa', 
+
+        // Make the text font larger for important nodes
+        'font-size': degree > 5 ? '16px' : '12px'
+      });
+    });  
+    
+    
     // === THE BLANK CANVAS FIX ===
     // Force a micro-delay to let the Rails layout engine finish painting the box dimensions
     setTimeout(() => {
@@ -78,8 +111,8 @@ export default class extends Controller {
         this.cy.fit() // Snaps the graph perfectly into the center of the frame
       }
     }, 50)
-  }    
-  
+  }
+
   disconnect() {
     if (this.cy) {
       this.cy.destroy() // Clean up instances on Turbo page transitions
