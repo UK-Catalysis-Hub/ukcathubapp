@@ -161,11 +161,7 @@ class AuthorsController < ApplicationController
         @edges << new_edge
       end
     end
-    puts "*"*80
-    puts "graph values"
-    puts @nodes.to_json
-    puts @edges.to_json
-    puts "*"*80
+    # move nodes to external method
     @graph_data = @nodes + @edges
     
 
