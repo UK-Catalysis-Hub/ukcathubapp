@@ -1,17 +1,6 @@
 <div class="container">
   <% if @author.isap or user_signed_in? %>
     <%= render partial: 'authors/author_details', locals: {author: @author, theme_data: @theme_data} %>
-    <p>BEFORE GRAPH</p>
-    <div data-controller="collaboration-graph" 
-      data-collaboration-graph-elements-value='<%= raw(@graph_data.to_json) %>'>
-  
-      <!-- 2. The canvas target MUST use the exact format: data-[controller-name]-target="[target-name]" -->
-      <div data-collaboration-graph-target="container" 
-        style="position: relative; width: 50%; height: 300px; border: 1px solid #ddd; background-color: #fafafa;">
-      </div>
-
-    </div>
-    <p>AFTER GRAPH</p>
     <% if user_signed_in? %>
       <ul class="nav nav-tabs" id="publicationsTab" role="tablist">
         <li class="nav-item">
