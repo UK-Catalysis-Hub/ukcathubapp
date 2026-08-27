@@ -33,23 +33,25 @@ class Author < ApplicationRecord
   def get_all_collaborators(filter)
     # Get collaborations
     collaborations = AuthorCollaboration.where(
-      "(author_source = ? OR author_target = ?) AND weight > 1",
+      "(author_source = ? OR author_target = ?) AND weight > ?",
       self.id,
-      self.id
+      self.id,
+      1
     )
 
     # Get initil id list for nodes:
-    node_ids = collaborations.flat_map do |edge|
-      [edge.author_source, edge.author_target]
-    end.uniq
+    node_ids = collaborations.pluck(:author_source, :author_target).flatten.uniq
+
     # Get Nodes all nodes:
     nodes = Author.where(id: node_ids).map do |author|
       { data:{
-        id: author.id.to_s,
-        label: "#{author.get_abreviated_name}"},
+          id: author.id.to_s,
+          label: author.get_abreviated_name
+        },
         classes: (author.id == self.id ? "central" : nil)
       }
     end
+
     # get primary edges
     edges = collaborations.map do |edge|
       { data:
@@ -61,30 +63,29 @@ class Author < ApplicationRecord
         }
       }
     end
-    seen_pairs = Set.new
-    collaborations.each do |one_coll|
-      seen_pairs.add([one_coll.author_source, one_coll.author_target])
-    end
-    # get secondary edges
-    secondary_edges = AuthorCollaboration.where(
-      author_source: node_ids,
-      author_target: node_ids
-    )
 
-    secondary_edges.each do |an_edge|
-      if an_edge.weight > 1 # if one is through this coauthorship
-        pair = [an_edge.author_source, an_edge.author_target].sort
-        next if seen_pairs.include?(pair)
-        new_edge = {data: {
-            source: an_edge.author_source.to_s,
-            target: an_edge.author_target.to_s,
-            weight: an_edge.weight-1,
-            is_secondary: true
-            }
-          }
-        edges << new_edge
-      end
+    seen_pairs = collaborations.each_with_object(Set.new) do |edge, edge_set|
+      edge_set << [edge.author_source, edge.author_target].sort
     end
+
+    # get secondary edges
+    AuthorCollaboration
+      .where(author_source: node_ids, author_target: node_ids)
+      .where("weight>1")
+      .each do |an_edge|
+      pair = [an_edge.author_source, an_edge.author_target].sort
+      next if seen_pairs.include?(pair)
+
+      edges << {
+        data: {
+          source: an_edge.author_source.to_s,
+          target: an_edge.author_target.to_s,
+          weight: an_edge.weight-1,
+          is_secondary: true
+        }
+      }
+    end
+
     nodes + edges
   end
 end
