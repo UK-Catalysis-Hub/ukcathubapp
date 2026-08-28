@@ -30,13 +30,13 @@ class Author < ApplicationRecord
     return pr_name
   end
 
-  def get_all_collaborators(filter)
+  def get_all_collaborators(min_collab = 1, filter)
     # Get collaborations
     collaborations = AuthorCollaboration.where(
       "(author_source = ? OR author_target = ?) AND weight > ?",
       self.id,
       self.id,
-      1
+      min_collab
     )
 
     # Get initial id list for nodes:
@@ -57,7 +57,8 @@ class Author < ApplicationRecord
           label: author.get_abreviated_name,
           active: author.isap,
           full_name: author.get_full,
-          orcid: author.orcid
+          orcid: author.orcid,
+          pub_count: author.articles.count()
         },
         classes: (author.id == self.id ? "central" : nil)
       }
@@ -84,7 +85,7 @@ class Author < ApplicationRecord
     # get secondary edges
     AuthorCollaboration
       .where(author_source: node_ids, author_target: node_ids)
-      .where("weight>1")
+      .where("weight>#{min_collab}")
       .each do |an_edge|
       pair = [an_edge.author_source, an_edge.author_target].sort
       next if seen_pairs.include?(pair)
