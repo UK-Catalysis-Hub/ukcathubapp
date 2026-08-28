@@ -39,11 +39,19 @@ class Author < ApplicationRecord
       1
     )
 
-    # Get initil id list for nodes:
+    # Get initial id list for nodes:
     node_ids = collaborations.pluck(:author_source, :author_target).flatten.uniq
 
+    puts "*"*80
+    puts "Nodes before pluck: #{node_ids.length}"
+    if filter
+      node_ids = Author.isap.where(id: node_ids).pluck(:id)
+    end
+    puts "Nodes after pluck: #{node_ids.length}"
+    puts "*"*80
     # Get Nodes all nodes:
     nodes = Author.where(id: node_ids).map do |author|
+      #next if filter and author.isap
       { data:{
           id: author.id.to_s,
           label: author.get_abreviated_name
@@ -51,9 +59,11 @@ class Author < ApplicationRecord
         classes: (author.id == self.id ? "central" : nil)
       }
     end
-
+    active_ids = node_ids.to_set 
     # get primary edges
-    edges = collaborations.map do |edge|
+    edges = collaborations.filter_map do |edge|
+      next unless active_ids.include?(edge.author_source)
+      next unless active_ids.include?(edge.author_target)
       { data:
         {
           source: edge.author_source.to_s,
@@ -85,7 +95,9 @@ class Author < ApplicationRecord
         }
       }
     end
-
+    puts nodes
+    puts edges
     nodes + edges
+    
   end
 end

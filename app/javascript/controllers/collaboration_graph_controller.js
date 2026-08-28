@@ -31,8 +31,6 @@ export default class extends Controller {
           style: {
             'width': 2,
             'line-color': '#2B7CE9',
-            //'target-arrow-color': '#9CA3AF',
-            //'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
             //'label': 'data(weight)',
             'font-size': '10px',
@@ -44,8 +42,6 @@ export default class extends Controller {
           style: {
             'width': 1,
             'line-color': '#cbd5e1',
-            //'target-arrow-color': '#9CA3AF',
-            //'target-arrow-shape': 'triangle',
             'line-style': 'dashed',
             //'label': 'data(weight)',
             'font-size': '10px',
