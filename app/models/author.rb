@@ -43,12 +43,12 @@ class Author < ApplicationRecord
     node_ids = collaborations.pluck(:author_source, :author_target).flatten.uniq
 
     puts "*"*80
-    puts "Nodes before pluck: #{node_ids.length}"
+    #puts "Nodes before pluck: #{node_ids.length}"
     if filter
       node_ids = Author.isap.where(id: node_ids).pluck(:id)
     end
-    puts "Nodes after pluck: #{node_ids.length}"
-    puts "*"*80
+    #puts "Nodes after pluck: #{node_ids.length}"
+    #puts "*"*80
     # Get Nodes all nodes:
     nodes = Author.where(id: node_ids).map do |author|
       #next if filter and author.isap
@@ -85,7 +85,7 @@ class Author < ApplicationRecord
     # get secondary edges
     AuthorCollaboration
       .where(author_source: node_ids, author_target: node_ids)
-      .where("weight>#{min_collab}")
+      .where("weight>1")
       .each do |an_edge|
       pair = [an_edge.author_source, an_edge.author_target].sort
       next if seen_pairs.include?(pair)
@@ -99,8 +99,8 @@ class Author < ApplicationRecord
         }
       }
     end
-    puts nodes
-    puts edges
+    #puts nodes
+    #puts edges
     nodes + edges
     
   end
