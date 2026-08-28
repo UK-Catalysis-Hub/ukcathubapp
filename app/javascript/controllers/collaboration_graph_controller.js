@@ -65,11 +65,11 @@ export default class extends Controller {
       ],
       layout: {
         name: 'cose', // Built-in force-directed physics layout
-        animate: true,
+        //animate: true,
         
         // === THE PHYSICS FIXES FOR SPREADING ===
-        nodeRepulsion: (node) => 204800,  // Increase this massively (Default is ~400000)
-        idealEdgeLength: (edge) => 100,    // Force edges to stretch out further (Default is ~10)
+        nodeRepulsion: (node) => 500000,  // Increase this massively (Default is ~400000)
+        idealEdgeLength: (edge) => 150,    // Force edges to stretch out further (Default is ~10)
         edgeElasticity: (edge) => 32,      // Lower numbers make edges less stiff, letting them stretch
         nestingFactor: 1.2,                // Helps push secondary connections further apart
         gravity: 1,                        // Set lower to let peripheral nodes drift outwards (Default is ~80)
@@ -77,8 +77,8 @@ export default class extends Controller {
         // === OVERLAP PREVENTION ===
         nodeOverlap: 200,                   // Extra padding space around nodes
         componentSpacing: 100,             // Distance between disconnected clusters
-        coolingFactor: 0.95,               // Slower cooling means the physics run longer to find space
-        numIter: 1000                      // Gives the engine more time to calculate the spread
+        coolingFactor: 0.99,               // Slower cooling means the physics run longer to find space
+        numIter: 3000                      // Gives the engine more time to calculate the spread
       } 
     })
     
@@ -117,14 +117,15 @@ export default class extends Controller {
      
       if (node.data("active")){
         this.popup.innerHTML = `<div class="card_body">
-                             <p><strong>${node.data("full_name")} </strong></p>
-                             <p> ${node.data("orcid")}</p>
-                           </div>`
+                                  <h6>${node.data("full_name")} </h6>
+                                  <div> ${node.data("orcid")}</div>
+                                  <div> Articles: ${node.data("pub_count")}</div>
+                                </div>`
       } else {
         this.popup.innerHTML = `<div class="card_body">
-                             <p><strong>${node.data("label")} </strong></p>
-                             <p> No public details for author</p>
-                           </div>`
+                                  <h6>${node.data("label")} </h6>
+                                  <div> No public details for author</div>
+                                </div>`
       };
       const graphRect = this.containerTarget.getBoundingClientRect()
       const pos = event.renderedPosition
