@@ -54,7 +54,10 @@ class Author < ApplicationRecord
       #next if filter and author.isap
       { data:{
           id: author.id.to_s,
-          label: author.get_abreviated_name
+          label: author.get_abreviated_name,
+          active: author.isap,
+          full_name: author.get_full,
+          orcid: author.orcid
         },
         classes: (author.id == self.id ? "central" : nil)
       }

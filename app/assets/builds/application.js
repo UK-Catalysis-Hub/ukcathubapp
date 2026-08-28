@@ -39001,16 +39001,30 @@ var collaboration_graph_controller_default = class extends Controller {
           }
         },
         {
+          selector: "node[active]",
+          style: {
+            "background-color": "#2563eb",
+            // Indigo color
+            "color": "#111827"
+          }
+        },
+        {
+          selector: "node[!active]",
+          style: {
+            "background-color": "#d1d5db",
+            // Indigo color
+            "color": "#9ca3af"
+          }
+        },
+        {
           selector: "edge",
           style: {
             "width": 2,
             "line-color": "#2B7CE9",
-            //'target-arrow-color': '#9CA3AF',
-            //'target-arrow-shape': 'triangle',
-            "curve-style": "bezier",
+            "curve-style": "bezier"
             //'label': 'data(weight)',
-            "font-size": "10px",
-            "color": "#6B7280"
+            //'font-size': '10px',
+            //'color': '#6B7280'
           }
         },
         {
@@ -39018,12 +39032,10 @@ var collaboration_graph_controller_default = class extends Controller {
           style: {
             "width": 1,
             "line-color": "#cbd5e1",
-            //'target-arrow-color': '#9CA3AF',
-            //'target-arrow-shape': 'triangle',
-            "line-style": "dashed",
+            "line-style": "dashed"
             //'label': 'data(weight)',
-            "font-size": "10px",
-            "color": "#6B7280"
+            //'font-size': '10px',
+            //'color': '#6B7280'
           }
         }
       ],
@@ -39043,7 +39055,7 @@ var collaboration_graph_controller_default = class extends Controller {
         gravity: 1,
         // Set lower to let peripheral nodes drift outwards (Default is ~80)
         // === OVERLAP PREVENTION ===
-        nodeOverlap: 30,
+        nodeOverlap: 200,
         // Extra padding space around nodes
         componentSpacing: 100,
         // Distance between disconnected clusters
@@ -39056,14 +39068,48 @@ var collaboration_graph_controller_default = class extends Controller {
     this.cy.nodes().forEach((node) => {
       const degree = node.degree();
       const dynamicSize = Math.min(20 + degree * 2, 80);
-      node.style({
-        "width": `${dynamicSize}px`,
-        "height": `${dynamicSize}px`,
-        // Optional: Make heavily connected nodes a deeper/more vibrant color
-        "background-color": degree > 5 ? "#1d4ed8" : "#60a5fa",
-        // Make the text font larger for important nodes
-        "font-size": degree > 5 ? "16px" : "12px"
-      });
+      if (node.data("active")) {
+        node.style({
+          "width": `${dynamicSize}px`,
+          "height": `${dynamicSize}px`,
+          // Optional: Make heavily connected nodes a deeper/more vibrant color
+          "background-color": degree > 5 ? "#1d4ed8" : "#60a5fa",
+          // Make the text font larger for important nodes
+          "font-size": degree > 5 ? "16px" : "12px"
+        });
+      } else {
+        node.style({
+          "width": `${dynamicSize}px`,
+          "height": `${dynamicSize}px`
+        });
+      }
+      ;
+    });
+    this.popup = document.getElementById("author-popup");
+    this.cy.on("tap", (event3) => {
+      const node = event3.target;
+      if (node.data("active")) {
+        this.popup.innerHTML = `<div class="card_body">
+                             <p><strong>${node.data("full_name")} </strong></p>
+                             <p> ${node.data("orcid")}</p>
+                           </div>`;
+      } else {
+        this.popup.innerHTML = `<div class="card_body">
+                             <p><strong>${node.data("label")} </strong></p>
+                             <p> No public details for author</p>
+                           </div>`;
+      }
+      ;
+      const graphRect = this.containerTarget.getBoundingClientRect();
+      const pos = event3.renderedPosition;
+      this.popup.style.left = `${graphRect.left + window.scrollX + pos.x + 15}px`;
+      this.popup.style.top = `${graphRect.top + window.scrollY + pos.y + 15}px`;
+      this.popup.style.display = "block";
+    });
+    this.cy.on("tap", (event3) => {
+      if (event3.target === this.cy) {
+        this.popup.style.display = "none";
+      }
     });
     setTimeout(() => {
       if (this.cy) {
