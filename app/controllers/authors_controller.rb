@@ -105,7 +105,7 @@ class AuthorsController < ApplicationController
     @aut_articles = @author.articles.active
     
     # get all collaborators for graph
-    @graph_data = @author.get_all_collaborators(true)
+    @graph_data = @author.get_all_collaborators(false)
     
    respond_to do |format|
       format.html
