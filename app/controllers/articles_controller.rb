@@ -404,6 +404,7 @@ class ArticlesController < ApplicationController
       article.save if changes_found
     end
 
+    # try to stop using this, instead use disambiguation
     def get_researcher_match(new_author)
       plain_ln = new_author.last_name.include?('-') ? new_author.last_name.gsub('-',' ') : "XXXXX%"
       like_name = "XXXX%"

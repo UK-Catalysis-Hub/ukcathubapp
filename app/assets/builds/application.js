@@ -39052,7 +39052,7 @@ var collaboration_graph_controller_default = class extends Controller {
         // Lower numbers make edges less stiff, letting them stretch
         nestingFactor: 1.2,
         // Helps push secondary connections further apart
-        gravity: 1,
+        gravity: 50,
         // Set lower to let peripheral nodes drift outwards (Default is ~80)
         // === OVERLAP PREVENTION ===
         nodeOverlap: 200,
@@ -39061,7 +39061,7 @@ var collaboration_graph_controller_default = class extends Controller {
         // Distance between disconnected clusters
         coolingFactor: 0.99,
         // Slower cooling means the physics run longer to find space
-        numIter: 3e3
+        numIter: 300
         // Gives the engine more time to calculate the spread
       }
     });

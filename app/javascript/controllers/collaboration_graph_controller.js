@@ -72,13 +72,13 @@ export default class extends Controller {
         idealEdgeLength: (edge) => 150,    // Force edges to stretch out further (Default is ~10)
         edgeElasticity: (edge) => 32,      // Lower numbers make edges less stiff, letting them stretch
         nestingFactor: 1.2,                // Helps push secondary connections further apart
-        gravity: 1,                        // Set lower to let peripheral nodes drift outwards (Default is ~80)
+        gravity: 50,                        // Set lower to let peripheral nodes drift outwards (Default is ~80)
   
         // === OVERLAP PREVENTION ===
         nodeOverlap: 200,                   // Extra padding space around nodes
         componentSpacing: 100,             // Distance between disconnected clusters
         coolingFactor: 0.99,               // Slower cooling means the physics run longer to find space
-        numIter: 3000                      // Gives the engine more time to calculate the spread
+        numIter: 300                      // Gives the engine more time to calculate the spread
       } 
     })
     
