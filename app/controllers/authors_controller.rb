@@ -105,6 +105,7 @@ class AuthorsController < ApplicationController
     @aut_articles = @author.articles.active
     
     # get all collaborators for graph
+    # parameter: min collaborations, filter inactive
     @graph_data = @author.get_all_collaborators(1, true)
     
    respond_to do |format|
