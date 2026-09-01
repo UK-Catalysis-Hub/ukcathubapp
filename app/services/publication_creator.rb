@@ -25,7 +25,11 @@ class PublicationCreator < ApplicationService
     
     if @art == nil
       @art = Article.new(:doi => p_doi)
+      
       data_mappings = getPubData(@art, @art.doi)
+      Rails.logger.info "*"*80
+      Rails.logger.info data_mappings
+      Rails.logger.info "*"*80
       is_preprint = check_if_preprint(data_mappings[0])
       if not is_preprint
         save_new_article(@art, data_mappings, p_themes)
