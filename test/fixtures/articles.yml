@@ -3,11 +3,11 @@
 one:
   id: 1
   doi: '10.1039/c3cp52653d'
-  title: ArticleOne
-  pub_year: 1
-  pub_type: MyString
-  publisher: MyString
-  container_title: MyString
+  title: "Molecular dynamics simulations of longer n-alkanes in silicalite: a comparison of framework and hydrocarbon models"
+  pub_year: 2013
+  pub_type: "Article"
+  publisher: "Royal Society of Chemistry"
+  container_title: "Physical Chemistry Chemical Physics"
   volume: MyString
   issue: MyString
   page: MyString
