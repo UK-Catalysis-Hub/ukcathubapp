@@ -110,30 +110,30 @@ class AuthorDisambiguationService
         next if variant == canonical
         add_co_occurrence(canonical, variant, edge_weight)
         count += 1
-        puts "🔗 #{canonical} ↔ #{variant}" if count % 100 == 0
+        puts "#{canonical} ↔ #{variant}" if count % 100 == 0
       end
     end
-    puts "✅ Added #{count} synonym edges from variant map"
+    puts "Added #{count} synonym edges from variant map"
   end
 
   # Save to file using Marshal (fastest)
   def save_to_file(filename)
     File.open(filename, 'wb') do |file|
       Marshal.dump({
-        co_occurrence: @co_occurrence,
-        name_variants: @name_variants
+        co_occurrence: @co_occurrence.transform_values { |h| h.to_a },
+        name_variants: @name_variants.transform_values { |s| s.to_a }
       }, file)
     end
-    puts "✅ Saved graph to #{filename} (#{@co_occurrence.size} nodes)"
+    puts "Saved graph to #{filename} (#{@co_occurrence.size} nodes)"
   end
 
   # Load from Marshal file
   def self.load_from_file(filename)
     data = File.open(filename, 'rb') { |file| Marshal.load(file) }
     instance = new
-    instance.instance_variable_set(:@co_occurrence, data[:co_occurrence])
-    instance.instance_variable_set(:@name_variants, data[:name_variants])
-    puts "✅ Loaded graph from #{filename} (#{data[:co_occurrence].size} nodes)"
+    instance.instance_variable_set(:@co_occurrence, data[:co_occurrence].transform_values { |arr| arr.to_h })
+    instance.instance_variable_set(:@name_variants, data[:name_variants].transform_values { |arr| Set.new(arr) })
+    puts "Loaded graph from #{filename} (#{data[:co_occurrence].size} nodes)"
     instance
   end
 
@@ -144,6 +144,7 @@ class AuthorDisambiguationService
       co_occurrence: @co_occurrence.transform_values { |h| h.to_a },
       name_variants: @name_variants.transform_values { |s| s.to_a }
     }))
+    puts "Saved graph to #{filename} (#{@co_occurrence.size} nodes)"
   end
 
   def self.load_from_json(filename)
@@ -154,6 +155,7 @@ class AuthorDisambiguationService
       data['co_occurrence'].transform_values { |arr| arr.to_h })
     instance.instance_variable_set(:@name_variants,
       data['name_variants'].transform_values { |arr| Set.new(arr) })
+    puts "Loaded graph from #{filename} (#{instance.instance_variable_get(:@co_occurrence).size} nodes)"
     instance
   end
 
