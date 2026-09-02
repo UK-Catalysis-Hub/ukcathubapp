@@ -60,28 +60,6 @@ class AuthorDisambiguationService
     fallback_match(name, known_entities, fallback_threshold)
   end
 
-  private
-
-  def fallback_match(name, known_entities, threshold)
-    best_match = nil
-    best_score = 0
-    known_entities.each do |entity_id, variants|
-      variants.each do |variant|
-        score = jaro_winkler_similarity(name, variant)
-        if score > best_score && score >= threshold
-          best_score = score
-          best_match = entity_id
-        end
-      end
-    end
-    best_match
-  end
-
-  def jaro_winkler_similarity(s, t)
-    # Simplified — use 'fuzzy_match' gem in production
-    s.chars.zip(t.chars).count { |a, b| a == b }.to_f / [s.length, t.length].max
-  end
-
   # List all unique name strings in the graph
   def all_names
     @name_variants.keys.sort
@@ -120,16 +98,85 @@ class AuthorDisambiguationService
     @name_variants.size
   end
 
-  def load_variant_map(map, edge_weight: 3.0)
+  # Count total unique name strings
+  def edge_count
+    @co_occurrence.size
+  end
+
+  def load_variant_map(map, edge_weight = 3.0)
     count = 0
     map.each do |canonical, variants|
       variants.each do |variant|
         next if variant == canonical
-        add_synonym(canonical, variant, edge_weight)
+        add_co_occurrence(canonical, variant, edge_weight)
         count += 1
         puts "🔗 #{canonical} ↔ #{variant}" if count % 100 == 0
       end
     end
     puts "✅ Added #{count} synonym edges from variant map"
   end
+
+  # Save to file using Marshal (fastest)
+  def save_to_file(filename)
+    File.open(filename, 'wb') do |file|
+      Marshal.dump({
+        co_occurrence: @co_occurrence,
+        name_variants: @name_variants
+      }, file)
+    end
+    puts "✅ Saved graph to #{filename} (#{@co_occurrence.size} nodes)"
+  end
+
+  # Load from Marshal file
+  def self.load_from_file(filename)
+    data = File.open(filename, 'rb') { |file| Marshal.load(file) }
+    instance = new
+    instance.instance_variable_set(:@co_occurrence, data[:co_occurrence])
+    instance.instance_variable_set(:@name_variants, data[:name_variants])
+    puts "✅ Loaded graph from #{filename} (#{data[:co_occurrence].size} nodes)"
+    instance
+  end
+
+  # JSON version (human-readable, cross-language)
+  def save_to_json(filename)
+    require 'json'
+    File.write(filename, JSON.pretty_generate({
+      co_occurrence: @co_occurrence.transform_values { |h| h.to_a },
+      name_variants: @name_variants.transform_values { |s| s.to_a }
+    }))
+  end
+
+  def self.load_from_json(filename)
+    require 'json'
+    data = JSON.parse(File.read(filename))
+    instance = new
+    instance.instance_variable_set(:@co_occurrence,
+      data['co_occurrence'].transform_values { |arr| arr.to_h })
+    instance.instance_variable_set(:@name_variants,
+      data['name_variants'].transform_values { |arr| Set.new(arr) })
+    instance
+  end
+
+  private
+
+  def fallback_match(name, known_entities, threshold)
+    best_match = nil
+    best_score = 0
+    known_entities.each do |entity_id, variants|
+      variants.each do |variant|
+        score = jaro_winkler_similarity(name, variant)
+        if score > best_score && score >= threshold
+          best_score = score
+          best_match = entity_id
+        end
+      end
+    end
+    best_match
+  end
+
+  def jaro_winkler_similarity(s, t)
+    # Simplified — use 'fuzzy_match' gem in production
+    s.chars.zip(t.chars).count { |a, b| a == b }.to_f / [s.length, t.length].max
+  end
+
 end
