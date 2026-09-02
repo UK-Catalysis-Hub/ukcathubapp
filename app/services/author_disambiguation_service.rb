@@ -81,4 +81,55 @@ class AuthorDisambiguationService
     # Simplified — use 'fuzzy_match' gem in production
     s.chars.zip(t.chars).count { |a, b| a == b }.to_f / [s.length, t.length].max
   end
+
+  # List all unique name strings in the graph
+  def all_names
+    @name_variants.keys.sort
+  end
+
+  # List all variants grouped by their canonical cluster
+  def all_variants_by_cluster(threshold: 0.3)
+    clusters = cluster_entities(threshold: threshold)
+    clusters.map do |cluster|
+      {
+        canonical: cluster.first,
+        variants: cluster,
+        size: cluster.size
+      }
+    end
+  end
+
+  # Find which cluster a specific name belongs to
+  def find_cluster_for(name, threshold: 0.3)
+    clusters = cluster_entities(threshold: threshold)
+    clusters.find { |cluster| cluster.include?(name) }
+  end
+
+  # Show all names that co-occur with a given name
+  def neighbors_of(name)
+    @co_occurrence[name]&.keys || []
+  end
+
+  # Show all variants (even singleton names with no co-occurrences)
+  def all_variants
+    @name_variants.keys
+  end
+
+  # Count total unique name strings
+  def variant_count
+    @name_variants.size
+  end
+
+  def load_variant_map(map, edge_weight: 3.0)
+    count = 0
+    map.each do |canonical, variants|
+      variants.each do |variant|
+        next if variant == canonical
+        add_synonym(canonical, variant, edge_weight)
+        count += 1
+        puts "🔗 #{canonical} ↔ #{variant}" if count % 100 == 0
+      end
+    end
+    puts "✅ Added #{count} synonym edges from variant map"
+  end
 end
