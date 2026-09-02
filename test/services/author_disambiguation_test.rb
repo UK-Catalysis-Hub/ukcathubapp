@@ -35,7 +35,7 @@ class AuthorDisambiguationTest < ActiveSupport::TestCase
         "Charlie Willians",    # Should match E001 (Charlie Williams + typo)
         "Dr. Charles W.",      # Should match E002 (Charles)
         "William Carlos Jr.",  # Should match E003
-       "Sarah Chen"           # Completely new person - no match
+        "Sarah Chen"           # Completely new person - no match
     ]
   end
   
