@@ -1,6 +1,5 @@
 module AuthorsHelper
   def get_theme_links
-    
     themes_list = []
     themes_list_lnks = ""
     @author.articles.each do |art|
@@ -15,7 +14,6 @@ module AuthorsHelper
         end
       end
     end
-	
     themes_list_lnks
   end
 
