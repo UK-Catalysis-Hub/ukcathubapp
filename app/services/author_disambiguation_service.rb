@@ -54,7 +54,6 @@ class AuthorDisambiguationService
         collaborators: []
       }
     end
-
     entities
   end
 
@@ -63,16 +62,7 @@ class AuthorDisambiguationService
       "SELECT 
          author_source AS author_id, 
          GROUP_CONCAT('[' || author_target || ', ' || weight || ']', ', ') AS colls_list
-         FROM (SELECT 
-            a1.author_id as author_source, a2.author_id as author_target, 
-            count(*) AS weight
-            FROM
-               article_authors a1 JOIN article_authors a2
-               ON a1.article_id = a2.article_id
-               AND a1.author_id <> a2.author_id
-          GROUP BY
-            a1.author_id,
-            a2.author_id)
+         FROM author_collaborations
        GROUP BY author_source;"
     auth_collaborations = {}
     results = ActiveRecord::Base.connection.exec_query(sql_query)
@@ -93,6 +83,34 @@ class AuthorDisambiguationService
     @name_variants[name2] << name2
   end  
 
+  def add_name_variants(name1, variants1)
+    @name_variants[name1] = variants1
+  end
+  
+  def get_name_variants
+    @name_variants
+  end
+  
+  #def match_known_entities(name1)
+  #  normalized = normalize_name(name1)
+  #  @name_variants.each do |entity_id, variants|
+  #    return entity_id if variants.any? do |v|
+  #      normalize_name(v) == normalized
+  #    end
+  #  end
+  #  nil
+  #end
+  
+  def match_known_entities(name1)
+    normalized = normalize_name(name1)
+    @name_variants.each do |entity_id, variants|
+      if variants.any? { |v| normalize_name(v) == normalized }
+        return entity_id
+      end
+    end
+    nil
+  end
+  
   # Jaccard Similarity: statistical measure used to quantify how similar two
   # sets are.
   # It equals the ratio of the intersection size to the union size.
@@ -171,7 +189,11 @@ class AuthorDisambiguationService
     clusters
   end
 
-  def disambiguate(name, known_entities, fallback_threshold: 0.85)
+  def disambiguate(name, known_entities, fallback_threshold: 0.95)
+    ent_id = match_known_entities(name)
+    if ent_id
+      return ent_id
+    end
     if @co_occurrence.key?(name)
       best_entity = nil
       best_score = 0
@@ -182,8 +204,11 @@ class AuthorDisambiguationService
           best_entity = entity_id
         end
       end
+      puts ("found best entity for #{name}")
       return best_entity if best_entity
     end
+    
+    puts ("doing fallback for #{name}")
     fallback_match(name, known_entities, fallback_threshold)
   end
 
@@ -234,7 +259,7 @@ class AuthorDisambiguationService
     end
   end
 
-def build_entities(graph_threshold: 0.3,
+  def build_entities(graph_threshold: 0.3,
                      string_threshold: 0.9)
 
     clusters = cluster_entities_dfs(
@@ -314,8 +339,12 @@ def build_entities(graph_threshold: 0.3,
   end
 
   # Show all names that co-occur with a given name
-  def neighbors_of(name)
+  def neighbours_of(name)
     @co_occurrence[name]&.keys || []
+  end
+
+  def variants_of(name)
+    @name_variants[name].to_a
   end
 
   # Show all variants (even singleton names with no co-occurrences)
@@ -403,13 +432,14 @@ def build_entities(graph_threshold: 0.3,
         end
       end
     end
+
     best_match
   end
 
-  def jaro_winkler_similarity(s, t)
-    # Simplified — use 'fuzzy_match' gem in production
-    s.chars.zip(t.chars).count { |a, b| a == b }.to_f / [s.length, t.length].max
-  end
+  #def jaro_winkler_similarity(s, t)
+  #  # Simplified — use 'fuzzy_match' gem in production
+  #  s.chars.zip(t.chars).count { |a, b| a == b }.to_f / [s.length, t.length].max
+  #end
   def normalize_name(name)
     name
       .downcase
@@ -417,8 +447,8 @@ def build_entities(graph_threshold: 0.3,
       .strip
   end
 
-  #def jaro_winkler_similarity(s, t)
-  #  Amatch::JaroWinkler.new(normalize_name(s)).match(normalize_name(t))
-  #end
+  def jaro_winkler_similarity(s, t)
+    Amatch::JaroWinkler.new(normalize_name(s)).match(normalize_name(t))
+  end
   
 end
