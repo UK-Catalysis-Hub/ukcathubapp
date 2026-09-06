@@ -85,7 +85,7 @@ class Author < ApplicationRecord
     # get secondary edges
     AuthorCollaboration
       .where(author_source: node_ids, author_target: node_ids)
-      .where("weight>1")
+      .where("weight>?", min_collab)
       .each do |an_edge|
       pair = [an_edge.author_source, an_edge.author_target].sort
       next if seen_pairs.include?(pair)
@@ -94,7 +94,7 @@ class Author < ApplicationRecord
         data: {
           source: an_edge.author_source.to_s,
           target: an_edge.author_target.to_s,
-          weight: an_edge.weight-1,
+          weight: an_edge.weight,
           is_secondary: true
         }
       }
@@ -103,5 +103,180 @@ class Author < ApplicationRecord
     #puts edges
     nodes + edges
     
+  end
+  def get_all_collaborators_fix(min_collab = 1, filter=false)
+    # ==========================================================
+    # STEP 1: Get all direct collaborations for this author
+    # ==========================================================
+    #
+    # Includes collaborations where the current author appears
+    # either as source or target.
+    #
+    collaborations = AuthorCollaboration.where(
+      "(author_source = ? OR author_target = ?) AND weight >= ?",
+      id,
+      id,
+      min_collab
+    )
+
+    puts "=" * 80
+    puts "AUTHOR #{id}"
+    puts "Primary collaborations: #{collaborations.count}"
+    puts collaborations.pluck(:author_source, :author_target, :weight)
+    puts "=" * 80
+
+
+    # ==========================================================
+    # STEP 2: Build the set of node ids
+    # ==========================================================
+    #
+    # Extract all author ids appearing in those collaborations.
+    #
+    node_ids = collaborations
+                 .pluck(:author_source, :author_target)
+                 .flatten
+                 .uniq
+
+    # Always include the central author.
+    #
+    # This prevents the graph from becoming empty if:
+    #   - the author has no collaborators
+    #   - collaborators are filtered out
+    #
+    node_ids << id
+    node_ids.uniq!
+    puts "=" * 80
+    puts "Node ids before filter: #{node_ids.size}"
+    puts "=" * 80
+    # ==========================================================
+    # STEP 3: Optionally filter to ISAP authors
+    # ==========================================================
+    #
+    # If filtering is enabled:
+    #   - keep only ISAP authors
+    #   - ALWAYS keep the central author
+    #
+    if filter
+      visible_ids = Author.isap.where(id: node_ids).pluck(:id)
+
+      visible_ids << id
+      visible_ids.uniq!
+
+      node_ids = visible_ids
+    end
+    puts "=" * 80
+    puts "Node ids after filter: #{node_ids.size}"
+    puts node_ids.inspect
+    puts "Contains self? #{node_ids.include?(id)}"
+    puts "=" * 80
+    # Fast lookup structure for edge filtering.
+    active_ids = node_ids.to_set
+
+    # ==========================================================
+    # STEP 4: Build Cytoscape nodes
+    # ==========================================================
+    #
+    authors = Author.where(id: node_ids)
+
+    nodes = authors.map do |author|
+      {
+        data: {
+          id: author.id.to_s,
+          label: author.get_abreviated_name,
+          active: author.isap,
+          full_name: author.get_full,
+          orcid: author.orcid,
+          pub_count: author.articles.count
+        },
+
+        # Highlight the selected author
+        classes: (author.id == id ? "central" : nil)
+      }
+    end
+
+    # ==========================================================
+    # STEP 5: Build primary edges
+    # ==========================================================
+    #
+    # Primary edges are the collaborations directly attached
+    # to the current author.
+    #
+    edges = []
+
+    # Used later to avoid duplicate edges.
+    #
+    # We store pairs in sorted form:
+    #   [2,5]
+    # instead of:
+    #   [5,2]
+    #
+    # so we can treat collaborations as undirected.
+    #
+    seen_pairs = Set.new
+
+    collaborations.each do |collaboration|
+
+      source = collaboration.author_source
+      target = collaboration.author_target
+
+      # Skip if either endpoint was removed by filtering.
+      next unless active_ids.include?(source)
+      next unless active_ids.include?(target)
+
+      pair = [source, target].sort
+
+      seen_pairs << pair
+
+      edges << {
+        data: {
+          source: source.to_s,
+          target: target.to_s,
+          weight: collaboration.weight,
+          is_secondary: false
+        }
+      }
+    end
+   
+    # ==========================================================
+    # STEP 6: Build secondary edges
+    # ==========================================================
+    #
+    # These are collaborations between visible nodes that are
+    # not necessarily connected directly to the central author.
+    #
+    AuthorCollaboration
+      .where(author_source: node_ids)
+      .where(author_target: node_ids)
+      .where("weight >= ?", min_collab)
+      .each do |collaboration|
+
+        source = collaboration.author_source
+        target = collaboration.author_target
+
+        pair = [source, target].sort
+
+        # Skip if already added as a primary edge.
+        next if seen_pairs.include?(pair)
+
+        seen_pairs << pair
+
+        edges << {
+          data: {
+            source: source.to_s,
+            target: target.to_s,
+            weight: collaboration.weight,
+            is_secondary: true
+          }
+        }
+      end
+
+    # ==========================================================
+    # STEP 7: Return Cytoscape data
+    # ==========================================================
+    #
+    # Cytoscape expects a flat array containing both nodes and
+    # edges.
+    #
+    nodes + edges
   end
 end
