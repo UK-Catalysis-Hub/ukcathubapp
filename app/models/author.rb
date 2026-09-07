@@ -19,18 +19,18 @@ class Author < ApplicationRecord
   scope :citations_count, -> {isap.joins(:articles).select("authors.id, authors.last_name ||', '|| authors.given_name as full_name, SUM(articles.referenced_by_count) AS 'Citations'").order("Citations DESC").group("authors.given_name, authors.last_name")}
   scope :country_count, -> {Author.joins(:author_affiliations).select('author_affiliations.country').group(:country).count('*')}
   def get_full
-    full_n = (self.given_name == nil ? self.last_name : self.last_name + ", " +self.given_name) 
+    full_n = (self.given_name == nil ? self.last_name : self.last_name.gsub("'"," ") + ", " +self.given_name) 
     return full_n
   end
   
   def get_abreviated_name
     pr_name = self.given_name ? self.given_name.gsub('á','a').gsub('é','e').gsub('í','i').gsub('ó','o').gsub('ú','u') : ""
     pr_name = pr_name.gsub(/\w+/){|s| "#{s[0].upcase}. "}.sub(/\w+\z/, &:capitalize).gsub(' .',' ')
-    pr_name += self.last_name
+    pr_name += self.last_name.gsub("'"," ")
     return pr_name
   end
 
-  def get_all_collaborators(min_collab = 1, filter)
+  def get_all_collaborators(min_collab = 1, filter = false)
     # Get collaborations
     collaborations = AuthorCollaboration.where(
       "(author_source = ? OR author_target = ?) AND weight > ?",
@@ -47,8 +47,12 @@ class Author < ApplicationRecord
     if filter
       node_ids = Author.isap.where(id: node_ids).pluck(:id)
     end
-    #puts "Nodes after pluck: #{node_ids.length}"
-    #puts "*"*80
+    # get weights for nodes (for colouring)
+    collab_weights = {}
+    collaborations.each do |c|
+      collaborator_id = c.author_source == id ? c.author_target : c.author_source
+      collab_weights[collaborator_id] = c.weight
+    end
     # Get Nodes all nodes:
     nodes = Author.where(id: node_ids).map do |author|
       #next if filter and author.isap
@@ -99,8 +103,7 @@ class Author < ApplicationRecord
         }
       }
     end
-    #puts nodes
-    #puts edges
+
     nodes + edges
     
   end
@@ -118,14 +121,15 @@ class Author < ApplicationRecord
       id,
       min_collab
     )
-
-    puts "=" * 80
-    puts "AUTHOR #{id}"
-    puts "Primary collaborations: #{collaborations.count}"
-    puts collaborations.pluck(:author_source, :author_target, :weight)
-    puts "=" * 80
-
-
+    
+    # get weights for nodes (for colouring)
+    collab_weights = {}
+   
+    collaborations.each do |c|
+      collaborator_id = c.author_source == id ? c.author_target : c.author_source
+      collab_weights[collaborator_id] = c.weight
+    end
+    collab_weights[id] = collab_weights.values.max + 1
     # ==========================================================
     # STEP 2: Build the set of node ids
     # ==========================================================
@@ -136,18 +140,14 @@ class Author < ApplicationRecord
                  .pluck(:author_source, :author_target)
                  .flatten
                  .uniq
-
+    puts node_ids
     # Always include the central author.
     #
     # This prevents the graph from becoming empty if:
     #   - the author has no collaborators
     #   - collaborators are filtered out
-    #
-    node_ids << id
     node_ids.uniq!
-    puts "=" * 80
-    puts "Node ids before filter: #{node_ids.size}"
-    puts "=" * 80
+
     # ==========================================================
     # STEP 3: Optionally filter to ISAP authors
     # ==========================================================
@@ -164,11 +164,7 @@ class Author < ApplicationRecord
 
       node_ids = visible_ids
     end
-    puts "=" * 80
-    puts "Node ids after filter: #{node_ids.size}"
-    puts node_ids.inspect
-    puts "Contains self? #{node_ids.include?(id)}"
-    puts "=" * 80
+
     # Fast lookup structure for edge filtering.
     active_ids = node_ids.to_set
 
@@ -186,7 +182,9 @@ class Author < ApplicationRecord
           active: author.isap,
           full_name: author.get_full,
           orcid: author.orcid,
-          pub_count: author.articles.count
+          pub_count: author.articles.count,
+          collab_count: author.id == id ? collab_weights.values.sum : collab_weights[author.id],
+          strenght: collab_weights[author.id].to_f/collab_weights.values.max.to_f
         },
 
         # Highlight the selected author
