@@ -1,7 +1,9 @@
 // app/javascript/controllers/relationship_graph_controller.js
 import { Controller } from "@hotwired/stimulus"
 import cytoscape from "cytoscape"
+import fcose from 'cytoscape-fcose'
 
+cytoscape.use(fcose);
 // Connects to data-controller="relationship"
 export default class extends Controller {
   static targets = [ "container" ]
@@ -29,14 +31,16 @@ export default class extends Controller {
         {
           selector: 'node[active]',
           style: {
-            'background-color': '#2563eb', // Indigo color
-            'color': '#111827'
+            'background-color': 'mapData(strenght, 0, 1, #60a5fa, #1d4ed8)', // Indigo color
+            'color': '#111827',
+            'width':  '${dynamicSize}px',
+            'height': '${dynamicSize}px',
           }
         },
         {
           selector: 'node[!active]',
           style: {
-            'background-color': '#d1d5db', // Indigo color
+            'background-color': '#d1d5db', // grey
             'color': '#9ca3af'
         }
         },
@@ -63,33 +67,44 @@ export default class extends Controller {
           }
        }
       ],
-      layout: {
-        name: 'cose', // Built-in force-directed physics layout
+//      layout: {
+//        name: 'cose', // Built-in force-directed physics layout
         //animate: true,
         
         // === THE PHYSICS FIXES FOR SPREADING ===
-        nodeRepulsion: (node) => 500000,  // Increase this massively (Default is ~400000)
-        idealEdgeLength: (edge) => 150,    // Force edges to stretch out further (Default is ~10)
-        edgeElasticity: (edge) => 32,      // Lower numbers make edges less stiff, letting them stretch
-        nestingFactor: 1.2,                // Helps push secondary connections further apart
-        gravity: 50,                        // Set lower to let peripheral nodes drift outwards (Default is ~80)
+//        nodeRepulsion: (node) => 50000,  // Increase this massively (Default is ~400000)
+//        idealEdgeLength: (edge) => 150,    // Force edges to stretch out further (Default is ~10)
+//        edgeElasticity: (edge) => 32,      // Lower numbers make edges less stiff, letting them stretch
+//        nestingFactor: 1.2,                // Helps push secondary connections further apart
+//        gravity: 80,                        // Set lower to let peripheral nodes drift outwards (Default is ~80)
   
         // === OVERLAP PREVENTION ===
-        nodeOverlap: 200,                   // Extra padding space around nodes
-        componentSpacing: 100,             // Distance between disconnected clusters
-        coolingFactor: 0.99,               // Slower cooling means the physics run longer to find space
-        numIter: 300                      // Gives the engine more time to calculate the spread
-      } 
+//        nodeOverlap: 200,                   // Extra padding space around nodes
+//        componentSpacing: 200,             // Distance between disconnected clusters
+//        coolingFactor: 0.99,               // Slower cooling means the physics run longer to find space
+//        numIter: 300                      // Gives the engine more time to calculate the spread
+//      } 
+      layout: {
+        name: 'fcose',
+        quality: 'default',
+        animate: false,
+
+        nodeRepulsion: 100000,
+        idealEdgeLength: 150,
+        edgeElasticity: 0.1,
+
+        randomize: true
+      }
     })
     
   
     this.cy.nodes().forEach(node => {
       // 1. Get the number of connected edges (Degree Centrality)
-      const degree = node.degree(); 
+      const degree = node.data("strenght"); 
 
       // 2. Map the degree to a dynamic pixel size (e.g., base size of 20px + 4px per edge)
       // Clamp it to a maximum of 80px so it doesn't take over the screen
-      const dynamicSize = Math.min(20 + (degree * 2), 80);
+      const dynamicSize = Math.min(20 + (degree * 50), 80);
 
       // 3. Apply the style dynamically to this specific node instance
       if (node.data("active")){
@@ -98,7 +113,8 @@ export default class extends Controller {
           'height': `${dynamicSize}px`,
 
           // Optional: Make heavily connected nodes a deeper/more vibrant color
-          'background-color': degree > 5 ? '#1d4ed8' : '#60a5fa', 
+          
+          //'background-color': 'mapData(${node.data("collab_count")}, 1, 20, #cfe8ff, #003f88)', //degree > 5 ? '#1d4ed8' : '#60a5fa', 
 
           // Make the text font larger for important nodes
           'font-size': degree > 5 ? '16px' : '12px'
@@ -120,6 +136,8 @@ export default class extends Controller {
                                   <h6>${node.data("full_name")} </h6>
                                   <div> ${node.data("orcid")}</div>
                                   <div> Articles: ${node.data("pub_count")}</div>
+                                  <div> Collaborations: ${node.data("collab_count")}</div>
+                                  <div> Strength: ${node.data("strenght")}</div>
                                 </div>`
       } else {
         this.popup.innerHTML = `<div class="card_body">
@@ -150,7 +168,7 @@ export default class extends Controller {
         
         // Trigger the layout to run explicitly now that dimensions are verified
         this.cy.layout({ 
-          name: 'cose', 
+          name: 'fcose', 
           animate: false 
         }).run() 
         
