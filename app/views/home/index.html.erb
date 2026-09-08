@@ -5,7 +5,9 @@
     <!--Publications-->
     <%= render partial: 'home/pubs_info'%>
     <!-- Researchers -->
+    <% if user_signed_in? %>
     <%= render partial: 'home/rsrch_info'%>
+    <% end %>
     <!-- Institutions -->
     <%= render partial: 'home/inst_info'%>
     <% if get_theme_section.visible %>
