@@ -47,7 +47,13 @@ yarn-debug.log*
 # ignore the data files
 /db_data
 
+# do not checkin environments
 .env
 
+#do not checkin docker
 docker-compose.override.*
 *load
+
+# Ignore bundled asset build artifacts
+/app/assets/builds/*
+!/app/assets/builds/.keep
