@@ -121,7 +121,6 @@ export default class extends Controller {
                                   <div> ${node.data("orcid")}</div>
                                   <div> Articles: ${node.data("pub_count")}</div>
                                   <div> Collaborations: ${node.data("collab_count")}</div>
-                                  <div> Strength: ${node.data("strenght")}</div>
                                 </div>`
       } else {
         this.popup.innerHTML = `<div class="card_body">
