@@ -184,7 +184,7 @@ class Author < ApplicationRecord
           orcid: author.orcid,
           pub_count: author.articles.count,
           collab_count: author.id == id ? collab_weights.values.sum : collab_weights[author.id],
-          strenght: collab_weights[author.id].to_f/collab_weights.values.max.to_f
+          strenght: (collab_weights[author.id]+2).to_f/collab_weights.values.max.to_f
         },
 
         # Highlight the selected author

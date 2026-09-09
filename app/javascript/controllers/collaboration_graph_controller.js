@@ -18,7 +18,7 @@ export default class extends Controller {
         {
           selector: 'node',
           style: {
-            'background-color': '#4F46E5', // Indigo color
+            //'background-color': '#4F46E5', // Indigo color
             'label': 'data(label)',
             'color': '#1F2937',
             'font-size': '12px',
@@ -31,10 +31,10 @@ export default class extends Controller {
         {
           selector: 'node[active]',
           style: {
-            'background-color': 'mapData(strenght, 0, 1, #60a5fa, #1d4ed8)', // Indigo color
-            'color': '#111827',
-            'width':  '${dynamicSize}px',
-            'height': '${dynamicSize}px',
+            'background-color': 'mapData(strenght, 0, 1, #440154, #fde725)', // Indigo color
+            //'color': '#111827',
+            'width':   'mapData(strenght, 0, 1, 20px, 80px)',
+            'height':  'mapData(strenght, 0, 1, 20px, 80px)',
           }
         },
         {
@@ -67,23 +67,6 @@ export default class extends Controller {
           }
        }
       ],
-//      layout: {
-//        name: 'cose', // Built-in force-directed physics layout
-        //animate: true,
-        
-        // === THE PHYSICS FIXES FOR SPREADING ===
-//        nodeRepulsion: (node) => 50000,  // Increase this massively (Default is ~400000)
-//        idealEdgeLength: (edge) => 150,    // Force edges to stretch out further (Default is ~10)
-//        edgeElasticity: (edge) => 32,      // Lower numbers make edges less stiff, letting them stretch
-//        nestingFactor: 1.2,                // Helps push secondary connections further apart
-//        gravity: 80,                        // Set lower to let peripheral nodes drift outwards (Default is ~80)
-  
-        // === OVERLAP PREVENTION ===
-//        nodeOverlap: 200,                   // Extra padding space around nodes
-//        componentSpacing: 200,             // Distance between disconnected clusters
-//        coolingFactor: 0.99,               // Slower cooling means the physics run longer to find space
-//        numIter: 300                      // Gives the engine more time to calculate the spread
-//      } 
       layout: {
         name: 'fcose',
         quality: 'default',
@@ -97,35 +80,6 @@ export default class extends Controller {
       }
     })
     
-  
-    this.cy.nodes().forEach(node => {
-      // 1. Get the number of connected edges (Degree Centrality)
-      const degree = node.data("strenght"); 
-
-      // 2. Map the degree to a dynamic pixel size (e.g., base size of 20px + 4px per edge)
-      // Clamp it to a maximum of 80px so it doesn't take over the screen
-      const dynamicSize = Math.min(20 + (degree * 30), 80);
-
-      // 3. Apply the style dynamically to this specific node instance
-      if (node.data("active")){
-        node.style({
-          'width': `${dynamicSize}px`,
-          'height': `${dynamicSize}px`,
-
-          // Optional: Make heavily connected nodes a deeper/more vibrant color
-          
-          //'background-color': 'mapData(${node.data("collab_count")}, 1, 20, #cfe8ff, #003f88)', //degree > 5 ? '#1d4ed8' : '#60a5fa', 
-
-          // Make the text font larger for important nodes
-          'font-size': degree > 5 ? '16px' : '12px'
-        });
-      }else{
-        node.style({
-          'width': `${dynamicSize}px`,
-          'height': `${dynamicSize}px`
-          });
-      };
-    });  
     this.popup = document.getElementById("author-popup")
     this.cy.on("tap",(event) => {
       const node = event.target
