@@ -286,18 +286,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_20_144043) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
 
   create_view "inst_ctry_stats", sql_definition: <<-SQL
-    		SELECT country, count(*) as inst_count, SUM(res_count) as res_count, sum(pub_count)  AS pub_count 
+    		SELECT country, count() as inst_count, SUM(res_count) as res_count, sum(pub_count)  AS pub_count 
 			FROM (SELECT country, affi_name, COUNT(*) as res_count, sum(pub_count)  AS pub_count
 				FROM (SELECT author_id, country, short_name AS affi_name, COUNT(*) AS pub_count
 					FROM "authors" 
 					INNER JOIN article_authors ON article_authors.author_id = authors.id 
 					INNER JOIN author_affiliations ON author_affiliations.article_author_id = article_authors.id 
-					GROUP BY author_id, short_name, country) as auth_count
-				GROUP BY country, affi_name) as affi_count
+					GROUP BY author_id, short_name, country)
+				GROUP BY country, affi_name)
 			GROUP BY country
   SQL
   create_view "list_themes", sql_definition: <<-SQL
-      SELECT themes.id, themes.phase, themes.name, themes.short, themes.lead, count(*) AS article_count
+      SELECT themes.id, themes.phase, themes.name, themes.short, themes.lead, count() AS article_count
     FROM article_themes
     INNER JOIN themes on article_themes.theme_id = themes.id
     INNER JOIN articles on article_themes.article_id = articles.id

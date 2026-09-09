@@ -104,7 +104,7 @@ export default class extends Controller {
 
       // 2. Map the degree to a dynamic pixel size (e.g., base size of 20px + 4px per edge)
       // Clamp it to a maximum of 80px so it doesn't take over the screen
-      const dynamicSize = Math.min(20 + (degree * 50), 80);
+      const dynamicSize = Math.min(20 + (degree * 30), 80);
 
       // 3. Apply the style dynamically to this specific node instance
       if (node.data("active")){
