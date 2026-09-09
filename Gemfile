@@ -108,4 +108,5 @@ gem "sidekiq-cron"
 
 gem "amatch" # match names
 
-gem "matrix"
+gem "matrix", "~> 0.4.3" # error when deploying for cplas and ukch
+

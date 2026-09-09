@@ -395,10 +395,8 @@ GEM
     zeitwerk (2.8.3)
 
 PLATFORMS
-  aarch64-linux
   aarch64-linux-gnu
   aarch64-linux-musl
-  arm-linux
   arm-linux-gnu
   arm-linux-musl
   arm64-darwin
@@ -423,7 +421,7 @@ DEPENDENCIES
   google_charts (~> 1.2)
   jbuilder
   jsbundling-rails
-  matrix
+  matrix (~> 0.4.3)
   minitest (~> 5.0, < 6.0)
   puma (>= 5.0)
   rack-cors

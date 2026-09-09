@@ -18,7 +18,7 @@ export default class extends Controller {
         {
           selector: 'node',
           style: {
-            'background-color': '#4F46E5', // Indigo color
+            //'background-color': '#4F46E5', // Indigo color
             'label': 'data(label)',
             'color': '#1F2937',
             'font-size': '12px',
@@ -31,16 +31,15 @@ export default class extends Controller {
         {
           selector: 'node[active]',
           style: {
-            'background-color': 'mapData(strenght, 0, 1, #60a5fa, #1d4ed8)', // Indigo color
-            'color': '#111827',
-            'width':  '${dynamicSize}px',
-            'height': '${dynamicSize}px',
+            'background-color': 'mapData(strenght, 0, 1, #440154, #fde725)', 
+            'width':   'mapData(strenght, 0, 1, 20px, 80px)',
+            'height':  'mapData(strenght, 0, 1, 20px, 80px)',
           }
         },
         {
           selector: 'node[!active]',
           style: {
-            'background-color': '#d1d5db', // grey
+            'background-color': '#d1d5db',
             'color': '#9ca3af'
         }
         },
@@ -50,9 +49,6 @@ export default class extends Controller {
             'width': 2,
             'line-color': '#2B7CE9',
             'curve-style': 'bezier',
-            //'label': 'data(weight)',
-            //'font-size': '10px',
-            //'color': '#6B7280'
           }
         },
         {
@@ -61,83 +57,70 @@ export default class extends Controller {
             'width': 1,
             'line-color': '#cbd5e1',
             'line-style': 'dashed',
-            //'label': 'data(weight)',
-            //'font-size': '10px',
-            //'color': '#6B7280'
           }
        }
       ],
 //      layout: {
-//        name: 'cose', // Built-in force-directed physics layout
-        //animate: true,
-        
-        // === THE PHYSICS FIXES FOR SPREADING ===
-//        nodeRepulsion: (node) => 50000,  // Increase this massively (Default is ~400000)
-//        idealEdgeLength: (edge) => 150,    // Force edges to stretch out further (Default is ~10)
-//        edgeElasticity: (edge) => 32,      // Lower numbers make edges less stiff, letting them stretch
-//        nestingFactor: 1.2,                // Helps push secondary connections further apart
-//        gravity: 80,                        // Set lower to let peripheral nodes drift outwards (Default is ~80)
-  
-        // === OVERLAP PREVENTION ===
-//        nodeOverlap: 200,                   // Extra padding space around nodes
-//        componentSpacing: 200,             // Distance between disconnected clusters
-//        coolingFactor: 0.99,               // Slower cooling means the physics run longer to find space
-//        numIter: 300                      // Gives the engine more time to calculate the spread
-//      } 
+//        name: 'fcose',
+//        quality: 'default',
+//        animate: false,
+
+//        nodeRepulsion: 25000,
+//        idealEdgeLength: 150,
+//        edgeElasticity: 0.1,
+
+//        randomize: true
+//      }
       layout: {
-        name: 'fcose',
-        quality: 'default',
-        animate: false,
+        name: 'cose-bilkent',
+        // 1. Core Visual Settings
+        refresh: 30,             // Number of iterations between consecutive screen redraws
+        fit: true,               // Fits the graph viewport to all nodes
+        padding: 10,             // Padding around the outside perimeter of the graph
+        randomize: true,         // False uses current positions, True generates fresh layouts
+  
+        // 2. Overlap Prevention (Crucial for mixed sizing)
+        nodeDimensionsIncludeLabels: true, // Forces layout to respect text bounds
 
-        nodeRepulsion: 100000,
-        idealEdgeLength: 150,
-        edgeElasticity: 0.1,
+        // 3. Compact Clustering & Tension Tuning
+        // Lower values make edges shorter, pulling nodes tightly together
+        idealEdgeLength: function(edge) {
+          const sourceStr = parseFloat(edge.source().data('strenght')) || 0;
+          const targetStr = parseFloat(edge.target().data('strenght')) || 0;
+          const combinedStrength = (sourceStr + targetStr) / 2;
 
-        randomize: true
+    // Strong central nodes are pulled into tight 40px spans; weak nodes drift out to 90px
+    return 90 - (combinedStrength * 50);
+  },
+
+  // Divides repulsion forces to regulate spacing density (higher = tighter)
+  edgeElasticity: 0.45,
+  
+  // Baseline repulsion coefficient. Lower numbers compress the graph structure.
+  nodeRepulsion: function(node) {
+    const strength = parseFloat(node.data('strenght')) || 0;
+    // Central hubs get low repulsion (1500) so they can bundle close together
+    return 4500 - (strength * 3000); 
+  },
+
+  // 4. Physics Engine Stabilities
+  gravity: 1.5,            // Global gravity pulling everything toward the screen center
+  numIter: 2500,           // Maximum number of iterations to solve placement layout
+  animate: 'end',          // 'end' shows the finished map instantly, true shows fluid movement
+  animationDuration: 1000
       }
     })
-    
-  
-    this.cy.nodes().forEach(node => {
-      // 1. Get the number of connected edges (Degree Centrality)
-      const degree = node.data("strenght"); 
 
-      // 2. Map the degree to a dynamic pixel size (e.g., base size of 20px + 4px per edge)
-      // Clamp it to a maximum of 80px so it doesn't take over the screen
-      const dynamicSize = Math.min(20 + (degree * 50), 80);
-
-      // 3. Apply the style dynamically to this specific node instance
-      if (node.data("active")){
-        node.style({
-          'width': `${dynamicSize}px`,
-          'height': `${dynamicSize}px`,
-
-          // Optional: Make heavily connected nodes a deeper/more vibrant color
-          
-          //'background-color': 'mapData(${node.data("collab_count")}, 1, 20, #cfe8ff, #003f88)', //degree > 5 ? '#1d4ed8' : '#60a5fa', 
-
-          // Make the text font larger for important nodes
-          'font-size': degree > 5 ? '16px' : '12px'
-        });
-      }else{
-        node.style({
-          'width': `${dynamicSize}px`,
-          'height': `${dynamicSize}px`
-          });
-      };
-    });  
     this.popup = document.getElementById("author-popup")
     this.cy.on("tap",(event) => {
       const node = event.target
- 
-     
+
       if (node.data("active")){
         this.popup.innerHTML = `<div class="card_body">
                                   <h6>${node.data("full_name")} </h6>
                                   <div> ${node.data("orcid")}</div>
                                   <div> Articles: ${node.data("pub_count")}</div>
                                   <div> Collaborations: ${node.data("collab_count")}</div>
-                                  <div> Strength: ${node.data("strenght")}</div>
                                 </div>`
       } else {
         this.popup.innerHTML = `<div class="card_body">
@@ -147,31 +130,31 @@ export default class extends Controller {
       };
       const graphRect = this.containerTarget.getBoundingClientRect()
       const pos = event.renderedPosition
-      
+
       this.popup.style.left = `${graphRect.left + window.scrollX + pos.x + 15}px`
       this.popup.style.top = `${graphRect.top + window.scrollY + pos.y + 15}px`
       this.popup.style.display = "block"
     });
-    
+
     this.cy.on("tap", (event) =>{
       if (event.target === this.cy){
         this.popup.style.display = "none"
       }
     })
-    
+
     // === THE BLANK CANVAS FIX ===
     // Force a micro-delay to let the Rails layout engine finish painting the box dimensions
     setTimeout(() => {
       if (this.cy) {
         this.cy.resize() // Forces Cytoscape to recalculate its width and height properties
         this.cy.invalidateDimensions() // Wipes out stale 0px cache states
-        
+
         // Trigger the layout to run explicitly now that dimensions are verified
         this.cy.layout({ 
           name: 'fcose', 
           animate: false 
         }).run() 
-        
+
         this.cy.fit() // Snaps the graph perfectly into the center of the frame
       }
     }, 50)

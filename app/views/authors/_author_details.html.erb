@@ -1,10 +1,12 @@
 <div class="row">
-  <div class="col-md-5">
+
+<div class="col-md-5">
+  <div class="row">
     <div class="rounded border-light bg-light p-3 ">
       <p id="notice"><%= notice %></p>
       <h3> <%= author.last_name %>, <%= author.given_name %></h3>
       <p><%= link_to(author.orcid, author.orcid, target: "_blank", rel: "nofollow" ) %> </p>
-      <p><%= author.articles.active.count %> Articles </p>
+      <p><%= author.articles.count %> Articles </p>
       <% if get_theme_section.visible %>
         <p>
           <strong>Themes:</strong> <%= get_theme_links  %>
@@ -16,27 +18,27 @@
   <% end %>
     </div>
   </div>
-  <div class="col-md-7">
+  <div class="row">
     COLLABORATION NETWORK
     <div data-controller="collaboration-graph" data-collaboration-graph-elements-value='<%= raw(@graph_data.to_json) %>'>
-      <div data-collaboration-graph-target="container" style="position: relative; width: 100%; height: 300px; border: 1px solid #ddd; border-radius: 10px; background-color: light;">
+      <div data-collaboration-graph-target="container" style="position: relative; width: 100%; height: 400px; border: 1px solid #ddd; border-radius: 10px; background-color: light;">
       </div>
     </div>
     <div id="author-popup" class="card shadow p-1" style="display:none; position:absolute; z-index:1000; width:250px; pointer-events:none;"></div>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <%= render partial: 'articles/articles_list', locals: {articles: author.articles.paginate(page: params[:page], per_page: 10) }%>
 
-  
+</div>
+  <div class="col-md-7">
+    <%= render partial: 'articles/articles_list', locals: {articles: author.articles.paginate(page: params[:page], per_page: 5) }%>
   </div>
 </div>
-<div class="rounded border-light bg-light ">
+
+<div class="row rounded border-light bg-light ">
   <div class="container">
     <ul>
-      <li>This author's details have been made public because of explicit consent from the researcher or an authorised proxy.</li>
-      <li>If you do not authorize the display of your information in this medium, please contact the site administrator.</li>
+      <li>Author's details have been made public because of explicit consent from the researcher or an authorised proxy.</li>
+      <li>Contact the site administrator if you do not authorize display of your information.</li>
     </ul>
   </div>
 </div>
+
