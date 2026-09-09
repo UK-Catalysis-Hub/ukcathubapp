@@ -25,18 +25,16 @@
     <div id="author-popup" class="card shadow p-1" style="display:none; position:absolute; z-index:1000; width:250px; pointer-events:none;"></div>
   </div>
 </div>
-<div class="row">
-  <div class="col-md-12">
-    <%= render partial: 'articles/articles_list', locals: {articles: author.articles.paginate(page: params[:page], per_page: 10) }%>
-
-  
-  </div>
-</div>
 <div class="rounded border-light bg-light ">
   <div class="container">
     <ul>
-      <li>This author's details have been made public because of explicit consent from the researcher or an authorised proxy.</li>
+      <li>The author's details have been made public because of explicit consent from the researcher or an authorised proxy.</li>
       <li>If you do not authorize the display of your information in this medium, please contact the site administrator.</li>
     </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <%= render partial: 'articles/articles_list', locals: {articles: author.articles.paginate(page: params[:page], per_page: 10) }%>
   </div>
 </div>
