@@ -24,8 +24,8 @@ export default class extends Controller {
           style: {
             //'background-color': '#4F46E5', // Indigo color
             'label': 'data(label)',
-//            'color': '#1F2937',
-            'color': '#ffffff',             // White text color
+            'color': '#1F2937',
+//            'color': '#ffffff',             // White text color
             'text-outline-color': '#111111', // Heavy dark outline
              'text-outline-width': '2px',    // Thicker outline for maximum contrast
 
