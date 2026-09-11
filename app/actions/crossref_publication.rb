@@ -2,7 +2,7 @@ class CrossrefPublication
   # verify article object agains CR record
   def self.verify_article(article)
     # get the article from crossref
-    Rails.logger.info("** 1 Verifying this:  {#article.title}"}
+    Rails.logger.info("** 1 Verifying this:  {#article.title}")
     digital_object_identifier = article.doi
     if digital_object_identifier != nil
       pub_data = XrefClient.getCRData(digital_object_identifier)
