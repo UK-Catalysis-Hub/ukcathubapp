@@ -409,6 +409,7 @@ DEPENDENCIES
   google_charts (~> 1.2)
   jbuilder
   jsbundling-rails
+  matrix
   minitest (~> 5.0, < 6.0)
   puma (>= 5.0)
   rack-cors
