@@ -1,9 +1,11 @@
 // app/javascript/controllers/relationship_graph_controller.js
 import { Controller } from "@hotwired/stimulus"
 import cytoscape from "cytoscape"
-import fcose from 'cytoscape-fcose'
 
+import fcose from 'cytoscape-fcose'
 cytoscape.use(fcose);
+
+
 // Connects to data-controller="relationship"
 export default class extends Controller {
   static targets = [ "container" ]
@@ -21,6 +23,10 @@ export default class extends Controller {
             //'background-color': '#4F46E5', // Indigo color
             'label': 'data(label)',
             'color': '#1F2937',
+//            'color': '#ffffff',             // White text color
+            'text-outline-color': '#111111', // Heavy dark outline
+             'text-outline-width': '2px',    // Thicker outline for maximum contrast
+
             'font-size': '12px',
             'text-valign': 'center',
             'text-halign': 'center',
@@ -31,9 +37,10 @@ export default class extends Controller {
         {
           selector: 'node[active]',
           style: {
-            'background-color': 'mapData(strenght, 0, 1, #440154, #fde725)', 
-            'width':   'mapData(strenght, 0, 1, 20px, 80px)',
-            'height':  'mapData(strenght, 0, 1, 20px, 80px)',
+            'background-color': 'mapData(strength, 0, 1, #e0f2f1, #0076BE)', 
+            'border-color': '#ffffff',
+            'width':   'mapData(strength, 0, 1, 20px, 80px)',
+            'height':  'mapData(strength, 0, 1, 20px, 80px)',
           }
         },
         {
@@ -60,54 +67,16 @@ export default class extends Controller {
           }
        }
       ],
-//      layout: {
-//        name: 'fcose',
-//        quality: 'default',
-//        animate: false,
-
-//        nodeRepulsion: 25000,
-//        idealEdgeLength: 150,
-//        edgeElasticity: 0.1,
-
-//        randomize: true
-//      }
       layout: {
-        name: 'cose-bilkent',
-        // 1. Core Visual Settings
-        refresh: 30,             // Number of iterations between consecutive screen redraws
-        fit: true,               // Fits the graph viewport to all nodes
-        padding: 10,             // Padding around the outside perimeter of the graph
-        randomize: true,         // False uses current positions, True generates fresh layouts
-  
-        // 2. Overlap Prevention (Crucial for mixed sizing)
-        nodeDimensionsIncludeLabels: true, // Forces layout to respect text bounds
+        name: 'fcose',
+        quality: 'default',
+        animate: false,
 
-        // 3. Compact Clustering & Tension Tuning
-        // Lower values make edges shorter, pulling nodes tightly together
-        idealEdgeLength: function(edge) {
-          const sourceStr = parseFloat(edge.source().data('strenght')) || 0;
-          const targetStr = parseFloat(edge.target().data('strenght')) || 0;
-          const combinedStrength = (sourceStr + targetStr) / 2;
+        nodeRepulsion: 25000,
+        idealEdgeLength: 150,
+        edgeElasticity: 0.1,
 
-    // Strong central nodes are pulled into tight 40px spans; weak nodes drift out to 90px
-    return 90 - (combinedStrength * 50);
-  },
-
-  // Divides repulsion forces to regulate spacing density (higher = tighter)
-  edgeElasticity: 0.45,
-  
-  // Baseline repulsion coefficient. Lower numbers compress the graph structure.
-  nodeRepulsion: function(node) {
-    const strength = parseFloat(node.data('strenght')) || 0;
-    // Central hubs get low repulsion (1500) so they can bundle close together
-    return 4500 - (strength * 3000); 
-  },
-
-  // 4. Physics Engine Stabilities
-  gravity: 1.5,            // Global gravity pulling everything toward the screen center
-  numIter: 2500,           // Maximum number of iterations to solve placement layout
-  animate: 'end',          // 'end' shows the finished map instantly, true shows fluid movement
-  animationDuration: 1000
+        randomize: true
       }
     })
 
@@ -121,7 +90,6 @@ export default class extends Controller {
                                   <div> ${node.data("orcid")}</div>
                                   <div> Articles: ${node.data("pub_count")}</div>
                                   <div> Collaborations: ${node.data("collab_count")}</div>
-                                  <div> Strength: ${node.data("strenght")}</div>
                                 </div>`
       } else {
         this.popup.innerHTML = `<div class="card_body">
@@ -152,7 +120,7 @@ export default class extends Controller {
 
         // Trigger the layout to run explicitly now that dimensions are verified
         this.cy.layout({ 
-          name: 'fcose', 
+          name: 'fcose',
           animate: false 
         }).run() 
 
