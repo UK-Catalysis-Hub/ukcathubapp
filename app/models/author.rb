@@ -105,14 +105,7 @@ class Author < ApplicationRecord
         }
       }
     end
-<<<<<<< HEAD
-    puts nodes
-    puts edges
-=======
-
->>>>>>> be6dced (fixing coll graph for workingerror caused by apostrophes in names)
     nodes + edges
-    
   end
   def get_all_collaborators_fix(min_collab = 1, filter=false)
     # ==========================================================
