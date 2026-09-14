@@ -20,7 +20,6 @@ export default class extends Controller {
         {
           selector: 'node',
           style: {
-            //'background-color': '#4F46E5', // Indigo color
             'label': 'data(label)',
             'color': '#ffffff',             // White text color
             'text-outline-color': '#111111', // Heavy dark outline
