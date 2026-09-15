@@ -5,9 +5,9 @@
      <% if AppConfig.first %>
        <title><%= content_for?(:title) ? yield(:title) : AppConfig.first.browser_tab_name.html_safe %></title>
     <% else %>
-      <title><%= content_for?(:title) ? yield(:title) : "Publications &middot; UK Catalysis Hub".html_safe %></title>  
+      <title><%= content_for?(:title) ? yield(:title) : "Publications &middot; UK Catalysis Hub".html_safe %></title>
     <% end %>
-    
+
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Publications DB from UK Catalysis Hub" %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -19,8 +19,7 @@
       <%= favicon_link_tag rails_blob_path(AppConfig.first.favicon_image) %>
     <% else %>
       <%= favicon_link_tag asset_path('default_favicon.png') %>
-    <% end %>  
-
+    <% end %>
   </head>
 
   <body>
