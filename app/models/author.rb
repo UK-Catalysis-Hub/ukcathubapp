@@ -129,7 +129,7 @@ class Author < ApplicationRecord
       collaborator_id = c.author_source == id ? c.author_target : c.author_source
       collab_weights[collaborator_id] = c.weight
     end
-    collab_weights[id] = collab_weights.values.max + 1
+    collab_weights[id] =  collab_weights == {} ? 1 : collab_weights.values.max + 1 
     # ==========================================================
     # STEP 2: Build the set of node ids
     # ==========================================================
