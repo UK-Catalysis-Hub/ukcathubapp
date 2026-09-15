@@ -23,13 +23,13 @@ export default class extends Controller {
             'label': 'data(label)',
             'color': '#ffffff',             // White text color
             'text-outline-color': '#111111', // Heavy dark outline
-             'text-outline-width': '2px',    // Thicker outline for maximum contrast
+            'text-outline-width': '2px',    // Thicker outline for maximum contrast
 
             'font-size': '12px',
             'text-valign': 'center',
             'text-halign': 'center',
-            'width': '30px',
-            'height': '30px'
+            'width': '20px',
+            'height': '20px'
           }
         },
         {
@@ -37,8 +37,8 @@ export default class extends Controller {
           style: {
             'background-color': 'mapData(strength, 0, 1, #e0f2f1, #0076BE)', 
             'border-color': '#ffffff',
-            'width':   'mapData(strength, 0, 1, 20px, 80px)',
-            'height':  'mapData(strength, 0, 1, 20px, 80px)',
+            'width':   'mapData(strength, 0, 1, 20px, 40px)',
+            'height':  'mapData(strength, 0, 1, 20px, 40px)',
           }
         },
         {
@@ -63,7 +63,18 @@ export default class extends Controller {
             'line-color': '#cbd5e1',
             'line-style': 'dashed',
           }
-       }
+        },
+        {
+          selector: ".central",
+          style: {
+            "background-color": "#36669c",
+            'border-width': '1px', 
+            'border-paint': '#cbd5e1',
+            'font-size': '14px',
+            'width': '45px',
+            'height': '45px'
+          }
+        }
       ],
       layout: {
         name: 'fcose',
