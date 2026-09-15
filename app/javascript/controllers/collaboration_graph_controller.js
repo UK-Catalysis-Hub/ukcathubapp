@@ -20,18 +20,16 @@ export default class extends Controller {
         {
           selector: 'node',
           style: {
-            //'background-color': '#4F46E5', // Indigo color
             'label': 'data(label)',
-            'color': '#1F2937',
-//            'color': '#ffffff',             // White text color
+            'color': '#ffffff',             // White text color
             'text-outline-color': '#111111', // Heavy dark outline
-             'text-outline-width': '2px',    // Thicker outline for maximum contrast
+            'text-outline-width': '2px',    // Thicker outline for maximum contrast
 
             'font-size': '12px',
             'text-valign': 'center',
             'text-halign': 'center',
-            'width': '30px',
-            'height': '30px'
+            'width': '20px',
+            'height': '20px'
           }
         },
         {
@@ -39,8 +37,8 @@ export default class extends Controller {
           style: {
             'background-color': 'mapData(strength, 0, 1, #e0f2f1, #0076BE)', 
             'border-color': '#ffffff',
-            'width':   'mapData(strength, 0, 1, 20px, 80px)',
-            'height':  'mapData(strength, 0, 1, 20px, 80px)',
+            'width':   'mapData(strength, 0, 1, 20px, 40px)',
+            'height':  'mapData(strength, 0, 1, 20px, 40px)',
           }
         },
         {
@@ -64,8 +62,19 @@ export default class extends Controller {
             'width': 1,
             'line-color': '#cbd5e1',
             'line-style': 'dashed',
+           }
+        },
+        {
+          selector: ".central",
+          style: {
+            "background-color": "#36669c",
+            'border-width': '1px', 
+            'border-paint': '#cbd5e1',
+            'font-size': '14px',
+            'width': '45px',
+            'height': '45px'
           }
-       }
+        }
       ],
       layout: {
         name: 'fcose',
@@ -74,8 +83,9 @@ export default class extends Controller {
 
         nodeRepulsion: 25000,
         idealEdgeLength: 150,
-        edgeElasticity: 0.1,
-
+        edgeElasticity: 0.3,
+	gravity: 0.1,
+	
         randomize: true
       }
     })
@@ -110,23 +120,6 @@ export default class extends Controller {
         this.popup.style.display = "none"
       }
     })
-
-    // === THE BLANK CANVAS FIX ===
-    // Force a micro-delay to let the Rails layout engine finish painting the box dimensions
-    setTimeout(() => {
-      if (this.cy) {
-        this.cy.resize() // Forces Cytoscape to recalculate its width and height properties
-        this.cy.invalidateDimensions() // Wipes out stale 0px cache states
-
-        // Trigger the layout to run explicitly now that dimensions are verified
-        this.cy.layout({ 
-          name: 'fcose',
-          animate: false 
-        }).run() 
-
-        this.cy.fit() // Snaps the graph perfectly into the center of the frame
-      }
-    }, 50)
   }
 
   disconnect() {
