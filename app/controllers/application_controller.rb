@@ -2,9 +2,9 @@ class ApplicationController < ActionController::Base
   require 'csv'
 
   # 60 requests over 5 minutes allows natural bursts but stops heavy scrapers
-  rate_limit to: 60, within: 5.minutes,
-             name: "global_json_api",
-             by: -> { tracking_key_for_unauthenticated_bots }
+#  rate_limit to: 60, within: 5.minutes,
+#             name: "global_json_api",
+#             by: -> { tracking_key_for_unauthenticated_bots }
 
   # Keep CSRF protection for HTML requests
   protect_from_forgery with: :exception
