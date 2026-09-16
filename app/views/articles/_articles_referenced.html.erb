@@ -12,13 +12,7 @@
       <% articles.each do |article| %>
         <tr>
           <td>
-            <%
-              if article.title.length > 100 then
-                  a_title = article.title[0,96] + "..."
-              else
-                  a_title = article.title
-              end
-            %>
+            <% a_title = article.title %>
             <%= link_to(a_title.html_safe, article) %>
           </td>
           <td>
